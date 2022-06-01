@@ -11,7 +11,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink, Outlet } from "react-router-dom";
 import { Box } from "@mui/system";
-import SidebarContext from "../context/sidebarContext"
+import {SidebarContext} from "../context/sidebarContext"
 
 const Header = ({ isDarkMode, setIsDarkMode }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,7 +26,7 @@ const Header = ({ isDarkMode, setIsDarkMode }) => {
   const [showSidebar ,setShowSidebar] = React.useState<boolean>(false)
 
 
-  const {setToggle ,setOpen ,setClose} = useContext(SidebarContext)
+  const {setToggleSidebar ,setOpenSidebar ,setCloseSidebar} = useContext(SidebarContext)
 
   return (
     <header >
@@ -37,14 +37,14 @@ const Header = ({ isDarkMode, setIsDarkMode }) => {
         (showHome && !showSidebar) && (
           <GiHamburgerMenu fontSize="2rem" onClick={()=>{
             setShowSidebar(true)
-            setOpen()
+            setOpenSidebar()
           }}/>
         )
 }{
         (showHome && showSidebar) && (  
           <IoMdClose fontSize="2rem" onClick={()=>{
             setShowSidebar(false)
-            setClose()
+            setCloseSidebar()
           }} />
         )
       }

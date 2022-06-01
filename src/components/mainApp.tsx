@@ -1,10 +1,18 @@
 import React, { useContext, useState } from "react";
 import ThemeContext from "../context/colorModeContext";
+import {SidebarContext} from "../context/sidebarContext";
 import Header from "./header";
 import Signup from "./Signup";
 import Login from "./Login";
 import Home from "./home";
+import Sidebar from "./sidebar/sidebar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Notifications from "./notifcations";
+import Todos from "./Todos";
+import Calender from "./Calender";
+import Games from "./Games";
+import About from "./About";
+import { Box } from "@mui/material";
 
 export interface ISignupData {
   firstName: string;
@@ -25,35 +33,50 @@ const Main = (props) => {
     email: "",
     password: "",
   });
+  const { open } = useContext(SidebarContext);
+
+  
+  const boardStyle={
+    width:"100%"
+  }
 
   return (
     <main
       style={{
         transition: "background .4s ease",
         backgroundColor: theme.background,
-        height: "89vh",
+        height: "100vh",
         width: "100%",
-        overflow:"hidden"
+        overflow: "hidden",
       }}
     >
       <BrowserRouter>
         <div className="App">
           <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         </div>
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="signup"
-            element={
-              <Signup
-                userSignupData={userSignupData}
-                setUserSignupData={setUserSignupData}
+        <Box display="flex">
+          {open === "show" && <Sidebar />}
+          <Box className="board" style={boardStyle} >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="signup"
+                element={
+                  <Signup
+                    userSignupData={userSignupData}
+                    setUserSignupData={setUserSignupData}
+                  />
+                }
               />
-            }
-          />
-          <Route path="login" element={<Login />} />
-        </Routes>
+              <Route path="login" element={<Login />} />
+
+              <Route path={"/todos"} element={<Todos />} />
+              <Route path={"/calender"} element={<Calender />} />
+              <Route path={"/games"} element={<Games />} />
+              <Route path={"/about"} element={<About />} />
+            </Routes>
+          </Box>
+        </Box>
       </BrowserRouter>
       {/* <h1 style={{color:theme.foreground , margin:0}}>hay this is main</h1> */}
     </main>

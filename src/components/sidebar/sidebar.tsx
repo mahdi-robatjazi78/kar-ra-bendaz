@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
 import themeContext from "../../context/colorModeContext";
-import { FiChevronRight } from "react-icons/fi";
-import { RiRestaurant2Line } from "react-icons/ri"
-
-
-
+import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { RiRestaurant2Line } from "react-icons/ri";
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   const theme = useContext(themeContext);
 
   const sidebarStyle = {
-    width: 280,
+    minWidth: 250,
+    maxWidth: 250,
     height: "100vh",
     backgroundColor: theme.sidebar,
     margin: "none",
@@ -21,34 +20,32 @@ const Sidebar = () => {
   const mainTabsStyle = {
     cursor: "pointer",
     fontSize: "1.2rem",
+    color: theme.text1,
   };
-
+  const subsetTabsStyle = {
+    color: theme.text3,
+    cursor: "pointer",
+  };
   const [mainTabs, setMainTabs] = useState([
-    { name: "Todos", active: false },
-    { name: "Calender", active: false },
-    { name: "Games", active: false },
-    { name: "About me", active: false },
+    { name: "Todos", link: "todos", active: false },
+    { name: "Calender", link: "calender", active: false },
+    { name: "Games", link: "games", active: false },
+    { name: "About me", link: "about", active: false },
   ]);
   const subsetTabsTodos = {
-    Todos: ["All Todos", "Done", "Trash", "You'r List"],
+    Todos: ["All Todos", "Done", "Trash", "Notes"], 
   };
 
-  const showSubset = (id) => {
+  const showSubset = (id: number) => {
     console.log(id);
 
     setMainTabs((prevState) => {
       return prevState.map((item, index) => {
         if (index === id) {
-          
-          
-          
           return item.active === false
             ? { ...item, active: true }
-            : { ...item, active: false }
-
-
-
-        } else return item;
+            : { ...item, active: false };
+        } else return { ...item, active: false };
       });
     });
   };
@@ -57,6 +54,7 @@ const Sidebar = () => {
     <div style={sidebarStyle}>
       {mainTabs.map((tab, id) => (
         <div key={id}>
+          <Link to={tab.link}>
           <div
             style={{
               display: "flex",
@@ -65,13 +63,22 @@ const Sidebar = () => {
             }}
             onClick={() => showSubset(id)}
           >
-            <strong style={mainTabsStyle}>{tab.name}</strong> <FiChevronRight />{" "}
+              <strong style={mainTabsStyle}>{tab.name}</strong>{" "}
+
+            {tab.active ? (
+              <FiChevronRight color={theme.text1} />
+              ) : (
+                <FiChevronDown color={theme.text1} />
+                )}
           </div>
+          </Link>
           {tab.active && (
             <>
               {subsetTabsTodos.Todos.map((item, index) => (
                 <ul>
-                  <li><strong>{item}</strong> </li>
+                  <li>
+                    <strong style={subsetTabsStyle}>{item}</strong>{" "}
+                  </li>
                 </ul>
               ))}
             </>
