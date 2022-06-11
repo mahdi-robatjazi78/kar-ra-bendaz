@@ -8,13 +8,13 @@ import Home from "./home";
 import Sidebar from "./sidebar/sidebar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Notifications from "./notifcations";
-import Todos from "./Todos";
+import Todos from "./Todos"
 import Calender from "./Calender";
 import Games from "./Games";
 import About from "./About";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
-export interface ISignupData {
+interface ISignupData {
   firstName: string;
   lastName: string;
   email: string;
@@ -55,19 +55,33 @@ const Main = (props) => {
           <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         </div>
         <Box display="flex">
-          {open === "show" && <Sidebar />}
+            <Grid container>
+          {open === "show" && (
+            
+            <Grid item xs={4} md={2}>
+          
+          <Sidebar />
+          
+            </Grid>
+          
+          )}
+
+          <Grid item xs={open==="hide" ? 12 : 8} md={open==="hide" ? 12 :10}>
+
+
           <Box className="board" style={boardStyle} >
+
             <Routes>
               <Route path="/" element={<Home />} />
               <Route
                 path="signup"
                 element={
                   <Signup
-                    userSignupData={userSignupData}
-                    setUserSignupData={setUserSignupData}
+                  userSignupData={userSignupData}
+                  setUserSignupData={setUserSignupData}
                   />
                 }
-              />
+                />
               <Route path="login" element={<Login />} />
 
               <Route path={"/todos"} element={<Todos />} />
@@ -76,6 +90,8 @@ const Main = (props) => {
               <Route path={"/about"} element={<About />} />
             </Routes>
           </Box>
+                </Grid>
+            </Grid>
         </Box>
       </BrowserRouter>
       {/* <h1 style={{color:theme.foreground , margin:0}}>hay this is main</h1> */}

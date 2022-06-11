@@ -1,6 +1,5 @@
-import React, { useState, FC } from "react";
-import { isNullOrUndefined } from "util";
-import { ISidebar } from "../types/sidebar";
+import React, { useState } from "react";
+import { ISidebar } from "../types/types";
 
 // const sidebarDefaults = {
 //   open:"hide",
@@ -12,7 +11,7 @@ import { ISidebar } from "../types/sidebar";
 export const SidebarContext = React.createContext<ISidebar|null>(null);
 
 export const SidebarProvider = ({ children }) => {
-  const [open, setOpen] = useState<ISidebar["open"]>("hide");
+  const [open, setOpen] = useState<ISidebar["open"]>("show");
   const setToggleSidebar = () => {
     setOpen(open === "hide" ? "show" : "hide");
   };

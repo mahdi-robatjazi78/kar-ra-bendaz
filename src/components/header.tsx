@@ -22,8 +22,8 @@ const Header = ({ isDarkMode, setIsDarkMode }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [showHome ,setShowHome] = React.useState<boolean>(false)
-  const [showSidebar ,setShowSidebar] = React.useState<boolean>(false)
+  const [showHome ,setShowHome] = React.useState<boolean>(true)
+  const [showSidebar ,setShowSidebar] = React.useState<boolean>(true)
 
 
   const {setToggleSidebar ,setOpenSidebar ,setCloseSidebar} = useContext(SidebarContext)

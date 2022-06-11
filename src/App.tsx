@@ -7,7 +7,8 @@ import themes from "./theme";
 import ThemeContext from "./context/colorModeContext";
 import {SidebarProvider} from "./context/sidebarContext";
 import Main from "./components/mainApp";
-import { ISidebar } from "./types/sidebar";
+import { ISidebar } from "./types/types";
+import { TodoContextProvider } from "./context/todoContext";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -18,9 +19,10 @@ function App() {
   return (
     <ThemeContext.Provider value={isDarkMode ? themes.dark : themes.light}>
       <SidebarProvider>
-        
-        <Main isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-        </SidebarProvider>
+        <TodoContextProvider>
+          <Main isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+        </TodoContextProvider>
+      </SidebarProvider>
     </ThemeContext.Provider>
   );
 }

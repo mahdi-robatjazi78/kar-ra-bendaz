@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext,useLayoutEffect } from "react";
 
 import ThemeContext from "../context/colorModeContext";
+import {SidebarContext} from "../context/sidebarContext";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,21 +15,27 @@ import Box from "@mui/material/Box";
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {NavLink} from 'react-router-dom'
+
 
 const Login = () => {
   const theme = useContext(ThemeContext);
+  const {setCloseSidebar} = useContext(SidebarContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     alert("login");
-
-    //   event.preventDefault();
-    //   const data = new FormData(event.currentTarget);
-    //   console.log({
-    //     email: data.get('email'),
-    //     password: data.get('password'),
-    //   });
   };
+
+  useLayoutEffect(()=>{
+    setCloseSidebar()
+  },[])
+
+  const navLinkStyles = {
+    color:"red",
+    fontSize:".7rem",
+    letterSpacing:"1px",
+    textDecoration:"none"
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -41,7 +48,7 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "red" }}>
           {/* <LockOutlinedIcon /> */}
         </Avatar>
         <Typography component="h1" variant="h5" style={{ color: theme.text1 }}>
@@ -51,7 +58,14 @@ const Login = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-              // InputLabelProps={{style:{color:theme.text2}}}
+               InputProps={
+            
+              
+                {style: {
+                  color: theme.text1,
+                  letterSpacing: "1px",
+                }}}
+              focused
                 required
                 fullWidth
                 id="email"
@@ -62,7 +76,14 @@ const Login = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-
+               InputProps={
+            
+              
+                {style: {
+                  color: theme.text1,
+                  letterSpacing: "1px",
+                }}}
+                focused
               //  InputLabelProps={{style:{color:theme.text2}}}  
                required
                 fullWidth
@@ -83,16 +104,11 @@ const Login = () => {
           >
             Login
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <NavLink to="/signup" style={navLinkStyles}>
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </NavLink>
             </Grid>
           </Grid>
         </Box>
