@@ -1,8 +1,8 @@
-import React, { useContext,useLayoutEffect } from "react";
+import React, {useState, useContext,useLayoutEffect } from "react";
 
-import ThemeContext from "../context/colorModeContext";
-import {SidebarContext} from "../context/sidebarContext";
-
+import ThemeContext from "../../context/themeContext";
+import {SidebarContext} from "../../context/sidebarContext";
+import {useNavigate} from "react-router-dom"
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,26 +16,53 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import {NavLink} from 'react-router-dom'
-
+// import {loginUser} from '../../services/userService'
+import axios from 'axios'
+import Axios ,{base_url} from '../../services/api'
+import Toast from "../../util/toast";
 
 const Login = () => {
   const theme = useContext(ThemeContext);
   const {setCloseSidebar} = useContext(SidebarContext);
+  const navigate = useNavigate()
+    const [email , setEmail] = useState("")
+    const [password , setPassword] = useState("")
+    
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    alert("login");
-  };
+
+  const handleSubmit =async (event: React.FormEvent<HTMLFormElement>) => {
+    try{
+
+      event.preventDefault()
+      const response = await axios.post(`${base_url}/users/login`, {email,password})
+      Axios.defaults.headers['x-auth-token'] = response.data.data.token
+      localStorage.setItem("user", JSON.stringify(response.data.data))
+      navigate('/')
+
+      console.log()
+
+      Toast(response.data.msg)
+    }catch(error){
+      console.error(error.response)
+      Toast(error.response.data.msg,false)
+
+    }
+    
+
+
+  }
 
   useLayoutEffect(()=>{
     setCloseSidebar()
   },[])
 
   const navLinkStyles = {
-    color:"red",
+    color:theme.text3,
     fontSize:".7rem",
     letterSpacing:"1px",
     textDecoration:"none"
   }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -48,7 +75,7 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "red" }}>
+        <Avatar sx={{ m: 1, bgcolor: theme.text3 }}>
           {/* <LockOutlinedIcon /> */}
         </Avatar>
         <Typography component="h1" variant="h5" style={{ color: theme.text1 }}>
@@ -66,12 +93,14 @@ const Login = () => {
                   letterSpacing: "1px",
                 }}}
               focused
+              value={email}
                 required
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={(e)=>setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -87,11 +116,13 @@ const Login = () => {
               //  InputLabelProps={{style:{color:theme.text2}}}  
                required
                 fullWidth
+                value={password}
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={(e)=>setPassword(e.target.value)}
               />
             </Grid>
 

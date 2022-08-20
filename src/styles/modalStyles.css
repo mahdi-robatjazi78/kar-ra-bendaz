@@ -1,0 +1,199 @@
+.Modal_DrakMode {
+  background-color: #020828;
+  position: relative;
+  border: 2px solid white;
+}
+.Modal_LightMode {
+  background-color: #e1e1e1;
+  position: relative;
+  border: 2px solid black;
+}
+.Modal_TitleBar_Light {
+  font-size: 2rem;
+  color: black;
+  font-family: sans-serif;
+}
+.Modal_TitleBar_Dark {
+  font-size: 2rem;
+  color: white;
+  font-family: sans-serif;
+}
+.Modal_Deny_Button {
+  background-color:red;
+  position:absolute;
+  bottom:1rem;
+  left:1rem;
+  border: 1px solid white !important;
+}
+.Modal_Cancel_Button_Dark_Center {
+  background-color: rgb(0, 48, 99) !important;
+  position:absolute;
+  bottom:1rem;
+  left:50%;
+  transform:translateX(-55%);
+  border: 1px solid white !important;
+}
+.Modal_Cancel_Button_Light_Center {
+  position: absolute;
+  left:50%;
+  transform:translateX(-55%);
+  bottom: 1rem;
+  background-color: rgb(243, 243, 243) !important;
+  color: black !important;
+  border: 1px solid black !important;
+  outline: none !important;
+}
+.Half_Width {
+  width:27% !important;
+}
+.Modal_Confirm_Button_Dark {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: fit-content;
+  background-color: rgb(0, 48, 99) !important;
+  color: white !important;
+  border: 1px solid white !important;
+}
+
+
+.Modal_Confirm_Button_FullWidth_Dark {
+  position: absolute;
+  bottom: 1rem;
+  width: 90%;
+  background-color: rgb(0, 48, 99) !important;
+  color: white !important;
+  border: 1px solid white !important;
+  outline: none !important;
+}
+
+.Modal_Confirm_Button_Light {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: fit-content;
+  background-color: rgb(243, 243, 243) !important;
+  color: black !important;
+  border: 1px solid black !important;
+}
+.Modal_Confirm_Button_FullWidth_Light {
+  position: absolute;
+  bottom: 1rem;
+  width: 90%;
+  background-color: rgb(243, 243, 243) !important;
+  color: black !important;
+  border: 1px solid black !important;
+  outline: none !important;
+}
+.Modal_Cancel_Button {
+  position: absolute;
+  bottom: 1rem;
+  left: 2rem;
+  width: 6rem;
+}
+.Modal_Footer {
+  display: block !important;
+  border: none;
+  height: 1rem;
+}
+.Modal_Footer_With_Spacer {
+  display: block !important;
+  border: none;
+  height: 1rem;
+  margin-top:2rem;
+}
+.Modal_Input_Dark {
+  color: white;
+}
+.Modal_Radio_Container_Dark{
+  margin-top:3rem;
+  background-color: #020828;
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.Modal_Radio_Container_Light{
+  margin-top:3rem;
+  background-color: #e1e1e1;
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.Modal_Radio_Container_Dark > label {
+  color: white;
+margin-right: auto;
+padding: .4rem 0;
+font-size:1rem;
+}
+.Modal_Radio_Container_Light > label {
+  color: black;
+margin-right: auto;
+padding: .4rem 0;
+font-size:1rem;
+}
+
+
+.Modal_Input_Dark > option {
+    color: white;
+    background-color: rgb(0, 48, 99) !important ;
+  }
+.Modal_Input_Light {
+  color: black;
+}
+.Modal_Input_Light >option {
+    color: black;
+    background-color: rgb(243, 243, 243) !important;
+  }
+.Modal_Input_Dark::placeholder {
+  color: gray;
+}
+.Modal_Input_Light::placeholder {
+  color: gray;
+}
+.Modal_Html_Container_Dark{
+  color:red;
+  height:10vh;
+  font-size:1rem;
+  display: flex !important;
+  justify-content: space-around;
+  align-items:center;
+  
+}
+
+.Modal_Html_Container_Light{
+  color:red;
+  height:10vh;
+  font-size:1rem;
+  display: flex !important;
+  justify-content: space-around;
+  align-items:center;
+  
+}
+
+
+.Modal_Html_infoBox_Dark {
+  border:1px solid white;
+  padding:.4rem 1rem;
+  border-radius:.5rem;
+  
+}
+.Modal_Html_infoBox_Light {
+  border:1px solid black;
+  padding:.4rem 1rem;
+  border-radius:.5rem;
+}
+
+.form-check{
+  display: flex;
+  justify-content: flex-start;
+  overflow-y:scroll;
+  line-height:2rem;
+}
+
+#exit-todos-modal{
+  margin-top:1rem;
+  max-height:10rem;
+  overflow-y: scroll;
+}
+ 

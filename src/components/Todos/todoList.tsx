@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./todos.css";
-import ThemeContext from "../../context/colorModeContext";
+import ThemeContext from "../../context/themeContext";
 import CardIcons from "./cardIcons";
 import {
   Card,
@@ -32,7 +32,14 @@ const getCardStyles = (todo: any) => {
 };
 
 const TodoList = (props) => {
-  const { todoList, getAllTodos, setSelectedEditTask } = props;
+  const {
+    todoList,
+    getAllTodos,
+    setSelectedEditTask,
+    deleteTodo,
+    editTodo,
+    setTodoDone,
+  } = props;
   const theme = useContext(ThemeContext);
   const { open } = useContext(SidebarContext);
   const [hover, setHover] = useState(null);
@@ -42,7 +49,7 @@ const TodoList = (props) => {
 
   useEffect(() => {
     const board = document.getElementsByClassName("board");
-    setWidth(board[0].clientWidth);
+    setWidth(board[0].clientWidth - 38);
   }, [windowWidth, open]);
 
   const textShadow = {
@@ -52,34 +59,8 @@ const TodoList = (props) => {
   };
 
   return (
-    <Box >
-      {!todoList.length ? (
-        <Box
-        // style={{position:"relative",backgroundColor:"gray" ,width:"100%" , height:"100vh"}}
-        
-        sx={{
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center",
-            height:"80vh",
-            width:"70vw"
-            
-            
-            }}
-            >
-          <Typography color="red" fontSize="2rem" 
-          
-          style={{
-            
-              position:"absolute",
-              top:"50%",
-              left:"50%",
-              transform:"translate(-50%,-50%)"
-            }}
-          
-          >Empty List 😢</Typography>
-        </Box>
-      ) : (
+    <Box>
+    
         <Grid
           container
           spacing={2}
@@ -112,11 +93,17 @@ const TodoList = (props) => {
                   cursor: "pointer",
                   minHeight: "6rem",
                   maxHeight: "6rem",
+                  overflowY: hover || hover === 0 ? "hidden" : "scroll",
                 }}
                 onMouseLeave={() => setHover(null)}
                 onClick={() => setHover(index)}
               >
-                <CardContent style={{ position: "relative" }}>
+                <CardContent
+                  style={{
+                    position: "relative",
+                    wordWrap: "break-word",
+                  }}
+                >
                   <Typography
                     sx={
                       index === hover
@@ -138,6 +125,9 @@ const TodoList = (props) => {
                         todo={todoList[hover]}
                         getAllTodos={getAllTodos}
                         setSelectedEditTask={setSelectedEditTask}
+                        deleteTodo={deleteTodo}
+                        editTodo={editTodo}
+                        setTodoDone={setTodoDone}
                       />
                     </span>
                   )}
@@ -146,7 +136,7 @@ const TodoList = (props) => {
             </Grid>
           ))}
         </Grid>
-      )}
+      
     </Box>
   );
 };

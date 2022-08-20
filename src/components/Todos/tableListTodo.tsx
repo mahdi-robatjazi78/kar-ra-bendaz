@@ -11,7 +11,7 @@ import {
   Paper,
 } from "@mui/material";
 import themes from "../../theme";
-import ThemeContext from "../../context/colorModeContext";
+import ThemeContext from "../../context/themeContext";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin3Fill } from "react-icons/ri";
 import { MdOutlineDownloadDone } from "react-icons/md";
@@ -19,47 +19,60 @@ import { SidebarContext } from "../../context/sidebarContext";
 
 const TableListTodo = (props) => {
   const { open } = useContext(SidebarContext);
-  const { todo, getAllTodos, setSelectedEditTask } = props;
+  const {
+    todos,
+    getAllTodos,
+    setSelectedEditTask,
+    deleteTodo,
+    editTodo,
+    setTodoDone,
+  } = props;
 
   const theme = useContext(ThemeContext);
-
+  const iconStyle = {
+    padding: "0 .7rem",
+  };
   return (
     <Box>
       <TableContainer>
         <Table
-          sx={{ width: open === "hide" ? "100vw" : "84vw" }}
+          sx={{ width: open === "hide" ? "90vw" : "84vw" }}
           aria-label="a dense table"
         >
           <TableHead>
-            <TableRow>
               <TableCell sx={{ color: theme.text1 }}>Title</TableCell>
-              <TableCell sx={{ color: theme.text1 }} align="left">
-                Actions
-              </TableCell>
-            </TableRow>
+              <TableCell sx={{ color: theme.text1 }} align="left">Actions</TableCell>
           </TableHead>
           <TableBody>
-            {todo.map((row) => (
+            {todos.map((row) => (
               <TableRow
                 key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  ...(row.flag === "isDone" && { background: "#E6FFE9"   }),
+                }}
+                // style={row.flag === "isDone" && {background:"gray"}}
               >
                 <TableCell
-                  sx={{ color: theme.text1 }}
-                  component="th"
-                  scope="row"
+                  sx={{ color:  row.flag === "isDone" ? "black" : theme.text1, }}
+    
+                 
                 >
                   {row.body}
                 </TableCell>
 
                 <TableCell
-                  sx={{ color: theme.text1 }}
-                  component="th"
-                  scope="row"
+                  sx={{ color:  row.flag === "isDone" ? "black" : theme.text1, }}
                 >
-                  <FaEdit />
-                  <RiDeleteBin3Fill />
-                  <MdOutlineDownloadDone />
+                  <FaEdit style={iconStyle} onClick={() => editTodo(row)} />
+                  <RiDeleteBin3Fill
+                    style={iconStyle}
+                    onClick={() => deleteTodo(row)}
+                  />
+                  <MdOutlineDownloadDone
+                    style={iconStyle}
+                    onClick={() => setTodoDone(row)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
