@@ -13,11 +13,13 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "../../util/toast";
 import { SelectedCategoryContext } from "../../context/selectCategoryContext";
-import "../../styles/modalStyles.css";
+
 
 const MySwal = withReactContent(Swal);
 
-const SettingBar = ({ showAddCategoModalKeyboard, userSelectedCategory ,getSelectedCategoryData,todoList , getAllTodos }) => {
+const SettingBar = ({ 
+  // showAddCategoModalKeyboard,
+   userSelectedCategory ,getSelectedCategoryData,todoList , getAllTodos }) => {
   const theme = useContext(ThemeContext);
   const { selected, newCategorySelected } = useContext(SelectedCategoryContext);
   const {
@@ -75,9 +77,9 @@ const SettingBar = ({ showAddCategoModalKeyboard, userSelectedCategory ,getSelec
       const response = await Axios.post("/category/new", { title });
       Toast(response.data.msg);
       updateCategoryOn();
-    } catch (error) {
+    } catch (error) { 
       console.log(error.response);
-      Toast(error.data.msg, false);
+      Toast(error.response.data.msg, false);
     }
   };
 
@@ -157,11 +159,11 @@ const SettingBar = ({ showAddCategoModalKeyboard, userSelectedCategory ,getSelec
     listenToInputModal();
   }
 
-  useEffect(() => {
-    if (showAddCategoModalKeyboard) {
-      showAddCategoryModal();
-    }
-  }, [showAddCategoModalKeyboard]);
+  // useEffect(() => {
+  //   if (showAddCategoModalKeyboard) {
+  //     showAddCategoryModal();
+  //   }
+  // }, [showAddCategoModalKeyboard]);
 
   const selectedSettingStyle = {
     background: theme.sidebar,

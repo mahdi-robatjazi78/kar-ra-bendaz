@@ -1,0 +1,51 @@
+$active-item-sidebar-color:rgb(0, 89, 183);
+
+#sidebar {
+    height: 100vh;
+    margin: none;
+    padding: 2rem 0;
+    overflow: hidden;
+    transition:all 1s ease;
+
+
+    #listCategories{
+    list-style:none;
+    padding-left:5px;
+    font-size:1rem;
+    
+    
+    
+    .active-item{
+        background-color: var(--secondSidebar);
+    }
+    .hover-todo-mode{
+        border:2px dashed orange;
+    }
+    
+    
+    .list-category-items{
+        padding:.5rem 0;
+        cursor:pointer;
+        padding-left:10px;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+        font-size:1.1rem;
+        font-family:sans-serif;
+        letter-spacing: 1px;
+        line-height:2rem;
+        border-bottom:1px solid var(--header);
+    
+    .task-title-style{
+    }   
+    
+    .task-count-style{
+        border-radius: 25%;
+        padding:3px;
+        margin-right:.5rem;
+        text-align: center;
+    }
+}
+    
+    
+}}

@@ -2,31 +2,12 @@ import React, { useEffect, useContext } from "react";
 import ThemeContext from "../context/themeContext";
 import { Box } from "@mui/material";
 import { BsFillSunFill, BsFillMoonStarsFill } from "react-icons/bs";
-// import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
-import useKeyPress from "../hooks/useKeyPress";
+ 
 
 const DarkLight = () => {
 
   const {isDarkMode,toggleDark,setDark,setLight} = useContext(ThemeContext)
-
-  const darkModeKeyboard = useKeyPress('d')
-  const lightModeKeyboard = useKeyPress('l')
-
-
-  useEffect(() => {
-
-
-
-
-    if(darkModeKeyboard){
-      setDark()
-    }
-    if(lightModeKeyboard){
-      setLight()
-    }
-  }, [darkModeKeyboard,lightModeKeyboard])
-  
-
+ 
 
   return (
     <Box style={{cursor:"pointer"}}>

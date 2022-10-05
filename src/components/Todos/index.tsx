@@ -10,8 +10,7 @@ import Axios from "../../services/api";
 import { SelectedCategoryContext } from "../../context/selectCategoryContext";
 import { UpdateCategory } from "../../context/updatationContext";
 import Toast from "../../util/toast";
-import EmptyListAnimation from "../../util/emptyList/emptyListAnimation";
-import useKeyPress from '../../hooks/useKeyPress'
+import EmptyListAnimation from "../../util/emptyList/emptyListAnimation"; 
 
 interface ITodoStructure {
   title: string;
@@ -77,12 +76,7 @@ const Todos = () => {
     
   }, [selected]);
 
-
-
-  const showAddTaskModalKeyboard = useKeyPress("n")
-  const showAddCategoModalKeyboard = useKeyPress("c")
-
-
+ 
 
   const getAllTodos = async () => {
 
@@ -175,7 +169,7 @@ const Todos = () => {
     
       
       <SettingBar 
-      showAddCategoModalKeyboard={showAddCategoModalKeyboard}
+      // showAddCategoModalKeyboard={showAddCategoModalKeyboard}
        userSelectedCategory={userSelectedCategory}  
        getSelectedCategoryData={getSelectedCategoryData}
        todoList={todoListCopy}
@@ -224,7 +218,7 @@ const Todos = () => {
           selectedEditTask={selectedEditTask}
           status={status}
           setStatus={setStatus}
-          showAddTaskModalKeyboard={showAddTaskModalKeyboard}
+          // showAddTaskModalKeyboard={showAddTaskModalKeyboard}
         />
         </Box>
       </Box>

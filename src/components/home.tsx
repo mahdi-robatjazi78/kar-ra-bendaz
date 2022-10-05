@@ -7,8 +7,7 @@ import { SidebarContext } from "../context/sidebarContext";
 import Welcome from "./welcome";
 import { useLocation, Routes, Route, useNavigate } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
-import Todos from "./Todos";
-import useKeyPress from '../hooks/useKeyPress'
+import Todos from "./Todos"; 
 
 interface IPerson {
   person: {
@@ -32,19 +31,7 @@ const Home = ({ setShowBurger }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
-  const homeKeyboard = useKeyPress('h')
-  const profileKeyboard = useKeyPress('p')
-  const todoKeyboard = useKeyPress('t')
-
-  if(homeKeyboard && location.pathname !== "/"){
-    navigate('/')
-  }
-  if(profileKeyboard && location.pathname !== "/profile"){
-    navigate('/profile')
-  }
-  if(todoKeyboard && location.pathname !== "/todos"){
-    navigate('/todos')
-  }
+  
 
   const theme = useContext(ThemeContext);
   const [userSignupData, setUserSignupData] = useState<ISignupData>({

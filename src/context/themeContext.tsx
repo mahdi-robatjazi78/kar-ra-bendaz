@@ -59,8 +59,37 @@ export const ThemeContextProvider =({children}:any)=>{
 
 
         useEffect(()=>{
-            if(isDarkMode)setSelectedTheme(themes.dark)
-            if(!isDarkMode)setSelectedTheme(themes.light)
+            if(isDarkMode){
+                
+                setSelectedTheme(themes.dark)
+                document.documentElement.style.setProperty("--foreground" ,  themes.dark.foreground)
+                document.documentElement.style.setProperty("--background" ,  themes.dark.background)
+                document.documentElement.style.setProperty("--sidebar" ,  themes.dark.sidebar)
+                document.documentElement.style.setProperty("--secondSidebar" , themes.dark.secondSidebar)
+                document.documentElement.style.setProperty("--text1" , themes.dark.text1)
+                document.documentElement.style.setProperty("--text2" , themes.dark.text2)
+                document.documentElement.style.setProperty("--text3" , themes.dark.text3)
+                document.documentElement.style.setProperty("--header" , themes.dark.header)
+                 
+            
+            }
+            if(!isDarkMode){
+
+
+                document.documentElement.style.setProperty("--foreground" ,  themes.light.foreground)
+                document.documentElement.style.setProperty("--background" ,  themes.light.background)
+                document.documentElement.style.setProperty("--sidebar" ,  themes.light.sidebar)
+                document.documentElement.style.setProperty("--secondSidebar" , themes.light.secondSidebar)
+                document.documentElement.style.setProperty("--text1" , themes.light.text1)
+                document.documentElement.style.setProperty("--text2" , themes.light.text2)
+                document.documentElement.style.setProperty("--text3" , themes.dark.text3)
+                document.documentElement.style.setProperty("--header" , themes.light.header)
+
+                
+                setSelectedTheme(themes.light)
+            
+            
+            }
 
         },[isDarkMode])
 

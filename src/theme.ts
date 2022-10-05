@@ -2,11 +2,12 @@ const themes = {
   light: {
     foreground: "#000000",
     background: "#eeeeee",
-    sidebar: "rgb(195, 208, 238)",
-    secondSidebar:"rgb(203, 191, 255)",
+    sidebar: "rgb(212, 247, 255)",
+    secondSidebar:"rgb(255, 107, 107)",
     text1:"rgb(49, 62, 69)",
     text2:"rgb(204, 0, 51)",  
     text3:"rgb(83, 83, 83)",
+    header:"rgb(40, 44, 52)"
   },
   dark: {
     foreground: "rgb(80, 88, 91)",
@@ -16,6 +17,7 @@ const themes = {
     text1:"rgb(240, 240, 240)",
     text2:"rgb(195, 195, 195)",
     text3:"rgb(228, 226, 165)",
+    header:"rgb(40, 44, 52)"
   }
 };
 

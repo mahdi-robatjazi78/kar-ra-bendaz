@@ -8,11 +8,11 @@ import Axios   from "../../services/api";
 import { UpdateCategory } from "../../context/updatationContext";
 import { SelectedCategoryContext } from "../../context/selectCategoryContext";
 
-import "./sidebarStyles.css";
+// import "./sidebarStyles.css";
 import Toast from "../../util/toast";
 const Sidebar = () => {
   const theme = useContext(themeContext);
-  const { newCategorySelected } = useContext(SelectedCategoryContext);
+  const { newCategorySelected ,selected } = useContext(SelectedCategoryContext);
   const {
     show,
     setThreeColAll,
@@ -103,13 +103,13 @@ const Sidebar = () => {
               {categoryList.map((item) => (
                 <li
                   key={item.uuid}
-                  className="list-category-items"
+                  className={`list-category-items ${selected === item.uuid ? "active-item" : ""}  `}
                   style={subsetTabsStyle}
                   onClick={() => {
                     newCategorySelected(item.uuid , item.title);
                   }}
                 >
-                  <div>{item.title}</div>
+                  <div className="task-title-style">{item.title}</div>
                   <div
                     style={{
                       width:

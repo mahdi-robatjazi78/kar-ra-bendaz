@@ -3,7 +3,6 @@ import axios from 'axios'
 import CustomeHistory from "./customeHistory"
 import withReactContent from 'sweetalert2-react-content'
 import Swal  from 'sweetalert2';
-import "../styles/modalStyles.css"
 
 
 
@@ -27,7 +26,8 @@ const handleLogoutUser = async ()=>{
 
 
 const instance = axios.create({
-    baseURL:"https://hardcore-visvesvaraya-fovq7genw.iran.liara.run",
+    // baseURL:"https://hardcore-visvesvaraya-fovq7genw.iran.liara.run",
+    baseURL:"http://localhost:8888",
     timeout:1000,
 })
 
@@ -104,9 +104,6 @@ instance.interceptors.response.use(function (response) {
       }
   });
 
-  
-
-
-
-export const base_url = "https://hardcore-visvesvaraya-fovq7genw.iran.liara.run"
+// export const base_url = "https://hardcore-visvesvaraya-fovq7genw.iran.liara.run"
+export const base_url = "http://localhost:8888" 
 export default instance

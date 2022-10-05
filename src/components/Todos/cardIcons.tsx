@@ -7,7 +7,7 @@ import { Box, Tooltip, IconButton } from "@mui/material";
 import Swal from "sweetalert2";
 import Axios from "../../services/api";
 import { UpdateCategory } from "../../context/updatationContext";
-import "../../styles/modalStyles.css"
+
 
 
 

@@ -8,7 +8,7 @@ import { SelectedCategoryContext } from "../../context/selectCategoryContext";
 import useWindowSize from "../../hooks/useWindowSize";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import "../../styles/modalStyles.css";
+
 import { RiCloseCircleFill } from "react-icons/ri";
 const MySwal = withReactContent(Swal);
 
@@ -20,7 +20,7 @@ const InputNewTask = (props) => {
     selectedEditTask,
     status,
     setStatus,
-    showAddTaskModalKeyboard,
+    // showAddTaskModalKeyboard,
   } = props;
 
   const { open } = useContext(SidebarContext);
@@ -120,13 +120,7 @@ const InputNewTask = (props) => {
       setStatus("");
     }
   };
-
-  useEffect(() => {
-    if (showAddTaskModalKeyboard) {
-      ShowAddTaskModal("add");
-    }
-  }, [showAddTaskModalKeyboard]);
-
+ 
   return (
     <Box>
         {(userSelectedCategory.category

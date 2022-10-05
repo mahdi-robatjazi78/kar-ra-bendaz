@@ -1,15 +1,16 @@
-#sidebar {
+ #sidebar {
     height: 100vh;
     margin: none;
     padding: 2rem 0;
     overflow: hidden;
     transition:all 1s ease;
+
 }
-#listCategories{
+    #listCategories{
     list-style:none;
     padding-left:5px;
     font-size:1rem;
-}
+} 
 
 .list-category-items{
     padding:.5rem 0;
