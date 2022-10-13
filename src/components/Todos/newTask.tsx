@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import ThemeContext from "../../context/themeContext";
-import { Box, IconButton, Tooltip } from "@mui/material";
-import Axios from "../../services/api";
+import ThemeContext from "@context/themeContext";
+import { SidebarContext } from "@context/sidebarContext";
+import { SelectedCategoryContext } from "@context/selectCategoryContext";
+import { AppDataContext } from "@context/appDataContext";
+import Axios from "@services/api";
+import useWindowSize from "@hooks/useWindowSize";
 import { HiPlus } from "react-icons/hi";
-import { SidebarContext } from "../../context/sidebarContext";
-import { SelectedCategoryContext } from "../../context/selectCategoryContext";
-import useWindowSize from "../../hooks/useWindowSize";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 
@@ -14,7 +15,6 @@ const MySwal = withReactContent(Swal);
 
 const InputNewTask = (props) => {
   const {
-    getAllTodos,
     userSelectedCategory,
     Submit,
     selectedEditTask,
@@ -24,6 +24,7 @@ const InputNewTask = (props) => {
   } = props;
 
   const { open } = useContext(SidebarContext);
+  const { blurTrue,blurFalse } = useContext(AppDataContext);
   const theme = useContext(ThemeContext);
   const { newCategorySelected ,selected} = useContext(SelectedCategoryContext);
   const InputRef = useRef(null);
@@ -75,6 +76,9 @@ const InputNewTask = (props) => {
       if(selected !== "all-task" && modalStatus === "add"){
         categoryTitle = await getInformationOfCategory(selected)
       }
+
+      blurTrue()
+
       const { value: text } = await MySwal.fire({
         customClass: {
           popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
@@ -110,14 +114,15 @@ const InputNewTask = (props) => {
         Submit(text, modalStatus , false );
       }else if(selectedCategoryElement && selectedCategoryElement.checked == true){
         Submit(text, modalStatus , true );
-        
       }
-
+        
+      blurFalse()
 
 
     } catch (error) {
       console.log(error);
       setStatus("");
+      blurFalse()
     }
   };
  
@@ -157,7 +162,7 @@ const InputNewTask = (props) => {
         <span></span>
       )}
       <Box position="absolute" right="2rem" top=".8rem">
-        <Tooltip title="Add New Task < n >">
+        <Tooltip title="Add New Task">
           <Box borderRadius="25%" style={{ backgroundColor: theme.text1 }}>
             <IconButton
               onClick={() => {

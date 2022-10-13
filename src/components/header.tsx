@@ -57,32 +57,9 @@ const Header = ({ ShowBurger, setShowBurger }) => {
 
 
   return (
-    <header>
-      <div className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-        {/* {ShowBurger && !showSidebar && (
-          <GiHamburgerMenu
-            fontSize="2rem"
-            onClick={() => {
-              setShowSidebar(true);
-              setOpenSidebar();
-            }}
-          />
-        )}
-        {ShowBurger && showSidebar && (
-          <IoMdClose
-            fontSize="2rem"
-            onClick={() => {
-              setShowSidebar(false);
-              setCloseSidebar();
-            }}
-          />
-        )} */}
-
-
+    <header className="App-header">
+      
         <Burger />
-
 
         <DarkLight />
         <NavLink style={{ color: "white" }} to={"/"}>
@@ -186,7 +163,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
           )}
         </Box>
         <Outlet />
-      </div>
+   
     </header>
   );
 };

@@ -2,14 +2,11 @@ import React, { useContext } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin3Fill, RiFolderAddFill } from "react-icons/ri";
 import { MdOutlineDownloadDone } from "react-icons/md";
-import ThemeContext from "../../context/themeContext";
 import { Box, Tooltip, IconButton } from "@mui/material";
 import Swal from "sweetalert2";
-import Axios from "../../services/api";
-import { UpdateCategory } from "../../context/updatationContext";
-
-
-
+import Axios from "@services/api";
+import ThemeContext from "@context/themeContext";
+import { AppDataContext } from "@/context/appDataContext";
 
 const CardIcons = ({
   todo,
@@ -19,9 +16,9 @@ const CardIcons = ({
   editTodo,
   setTodoDone,
 }) => {
-  const { updateCategoryOn } = useContext(UpdateCategory);
-  const theme = useContext(ThemeContext);
 
+  const theme = useContext(ThemeContext);
+  const {blurTrue , blurFalse  ,updateCategoryOn}  = useContext(AppDataContext)
   const iconsStyle = {
     fontSize: "1.7rem",
     color: todo.flag !== "isDone" ? theme.text3 : "black",
@@ -30,20 +27,19 @@ const CardIcons = ({
 
   const addToCategory = async (todo) => {
     try {
-      console.log("todo>>>", todo);
-
+    
       const resp = await Axios.get("/category/getAll");
-      console.log("resp >>", resp);
       const allCategories = resp.data.list;
-
-      console.log("allCategories", allCategories);
-
+      
+      
+      blurTrue()
       const selectedCategoryIndex = await Swal.fire({
         title: "Select a category",
         input: "select",
         inputOptions: allCategories.map((item) => item.title),
         inputPlaceholder: "Category List",
         showCancelButton: true,
+        showCloseButton:true,
         customClass:{
           popup : theme.isDarkMode ? "Modal_DrakMode" :"Modal_LightMode",
           title:theme.isDarkMode ? "Modal_TitleBar_Dark":"Modal_TitleBar_Light",
@@ -54,22 +50,29 @@ const CardIcons = ({
         },
       });
 
-      const response = await Axios.put("/todos/add-to-category", {
+      await Axios.put("/todos/add-to-category", {
         todoId: todo._id,
         categoId: allCategories[selectedCategoryIndex.value].uuid,
       });
 
       updateCategoryOn();
       getAllTodos();
-
-      console.log(response.data.msg);
+      blurFalse()
+       
     } catch (error) {
-      console.log(error.response);
+      console.log(error)
+      console.log(error?.response);
+      blurFalse()
     }
   };
 
 
   const showModalDelete =async(todo)=>{
+    try{
+      blurTrue()
+
+
+   
     const result = await Swal.fire({
       icon: 'warning',
       title: 'Are you Sure ?',
@@ -77,6 +80,7 @@ const CardIcons = ({
       confirmButtonText:"Yes Delete It...",
       confirmButtonColor:"red",
       showCancelButton:true,
+      showCloseButton:true,
       customClass:{
         popup : theme.isDarkMode ? "Modal_DrakMode" :"Modal_LightMode",
         title:theme.isDarkMode ? "Modal_TitleBar_Dark":"Modal_TitleBar_Light",
@@ -89,6 +93,13 @@ const CardIcons = ({
     if(result.isConfirmed){
       deleteTodo(todo)
     }
+
+
+    blurFalse()
+  }catch(error){
+    console.log(error)
+    blurFalse()
+  }
   }
 
   return (

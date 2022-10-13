@@ -5,7 +5,7 @@ import { RiRestaurant2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { TodoContext } from "../../context/todoContext";
 import Axios   from "../../services/api";
-import { UpdateCategory } from "../../context/updatationContext";
+import {AppDataContext} from '@context/appDataContext' 
 import { SelectedCategoryContext } from "../../context/selectCategoryContext";
 
 // import "./sidebarStyles.css";
@@ -23,8 +23,10 @@ const Sidebar = () => {
     setTableDone,
   } = useContext(TodoContext);
 
-  const { updateCategory, updateCategoryOn, updateCategoryOff } =
-    useContext(UpdateCategory);
+  
+  const {updateCategory,
+    updateCategoryOff}  = useContext(AppDataContext)
+
 
   const sidebarStyle = {
     backgroundColor: theme.sidebar,

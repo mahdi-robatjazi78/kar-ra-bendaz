@@ -4,15 +4,16 @@ import ThemeContext from "../../context/themeContext";
 import CardIcons from "./cardIcons";
 import {
   Card,
-  CardContent,
-  CardActions,
+  CardContent, 
   Typography,
   Grid,
   Box,
 } from "@mui/material";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import useWindowSize from "@hooks/useWindowSize";
 import { SidebarContext } from "../../context/sidebarContext";
 import { TodoContext } from "../../context/todoContext";
+import { AppDataContext } from "@context/appDataContext";
+
 
 const getCardStyles = (todo: any) => {
   return {
@@ -32,21 +33,14 @@ const getCardStyles = (todo: any) => {
 };
 
 const TodoList = (props) => {
-  const {
-    todoList,
-    getAllTodos,
-    setSelectedEditTask,
-    deleteTodo,
-    editTodo,
-    setTodoDone,
-  } = props;
+ 
   const theme = useContext(ThemeContext);
   const { open } = useContext(SidebarContext);
   const [hover, setHover] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
   const [width, setWidth] = useState<any>(0);
   const { show } = useContext(TodoContext);
-
+  const {blurTrue , todoList , setDrawerState}  = useContext(AppDataContext)
   useEffect(() => {
     const board = document.getElementsByClassName("board");
     setWidth(board[0].clientWidth - 38);
@@ -95,9 +89,23 @@ const TodoList = (props) => {
                   maxHeight: "6rem",
                   overflowY: hover || hover === 0 ? "hidden" : "scroll",
                 }}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => setHover(index)}
-              >
+                // onMouseLeave={() => setHover(null)}
+                // onClick={() => setHover(index)}
+                onClick={
+                  ()=>{
+                    setDrawerState({
+                      state:"todo",
+                      open:true,
+                      item:todo
+                    })
+
+                    blurTrue()
+
+                  }
+                }
+
+
+>
                 <CardContent
                   style={{
                     position: "relative",
@@ -119,7 +127,7 @@ const TodoList = (props) => {
                   >
                     {todo.body}
                   </Typography>
-                  {index === hover && (
+                  {/* {index === hover && (
                     <span>
                       <CardIcons
                         todo={todoList[hover]}
@@ -128,9 +136,10 @@ const TodoList = (props) => {
                         deleteTodo={deleteTodo}
                         editTodo={editTodo}
                         setTodoDone={setTodoDone}
+                        setOpenDrawer={setOpenDrawer}
                       />
                     </span>
-                  )}
+                  )} */}
                 </CardContent>
               </Card>
             </Grid>

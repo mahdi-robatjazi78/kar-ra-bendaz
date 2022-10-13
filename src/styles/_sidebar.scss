@@ -1,4 +1,3 @@
-$active-item-sidebar-color:rgb(0, 89, 183);
 
 #sidebar {
     height: 100vh;
@@ -6,7 +5,7 @@ $active-item-sidebar-color:rgb(0, 89, 183);
     padding: 2rem 0;
     overflow: hidden;
     transition:all 1s ease;
-
+    overflow-y:auto;
 
     #listCategories{
     list-style:none;
@@ -29,14 +28,15 @@ $active-item-sidebar-color:rgb(0, 89, 183);
         padding-left:10px;
         display: flex;
         justify-content: space-between;
-        font-weight: 500;
-        font-size:1.1rem;
-        font-family:sans-serif;
-        letter-spacing: 1px;
+
         line-height:2rem;
         border-bottom:1px solid var(--header);
     
     .task-title-style{
+        font-weight: 500;
+        font-size:1.1rem;
+        font-family:sans-serif;
+        letter-spacing: 1px;
     }   
     
     .task-count-style{

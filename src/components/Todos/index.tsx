@@ -1,16 +1,18 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import ThemeContext from "../../context/themeContext";
+import { SelectedCategoryContext} from "@context/selectCategoryContext";
 import InputNewTask from "./newTask";
 import TodoList from "./todoList";
 import { Box, Typography } from "@mui/material";
-import { TodoContext } from "../../context/todoContext";
 import TableListTodo from "./tableListTodo";
 import SettingBar from "./settingBar";
-import Axios from "../../services/api";
-import { SelectedCategoryContext } from "../../context/selectCategoryContext";
-import { UpdateCategory } from "../../context/updatationContext";
-import Toast from "../../util/toast";
-import EmptyListAnimation from "../../util/emptyList/emptyListAnimation"; 
+import Axios from "@services/api";
+import Toast from "@utils/toast";
+import EmptyListAnimation from "@utils/emptyList/emptyListAnimation"; 
+import TodoDrawer from "./TodoDrawer";
+
+import { AppDataContext } from "@context/appDataContext";
+import { TodoContext } from "@context/todoContext";
+import ThemeContext from "@context/themeContext";
 
 interface ITodoStructure {
   title: string;
@@ -24,9 +26,10 @@ const Todos = () => {
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
   const { selected } = useContext(SelectedCategoryContext);
-  const { updateCategoryOn } = useContext(UpdateCategory);
-  const [todoList, setTodoList] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const { updateCategoryOn } = useContext(AppDataContext);
+  const { getAllTodos , todoList } = useContext(AppDataContext);
+  // const [todoList, setTodoList] = useState([]);
+
   const [todoListCopy, setTodoListCopy] = useState([]);
   const [selectedEditTask, setSelectedEditTask] = useState<ITodoStructure>({
     title: "",
@@ -78,19 +81,19 @@ const Todos = () => {
 
  
 
-  const getAllTodos = async () => {
+  // const getAllTodos = async () => {
 
-    console.log("selcted>>>>" , selected)
+  //   console.log("selcted>>>>" , selected)
 
-    try {
-      const result = await Axios.get(`/todos/getAll?category=${selected || "all-task"}`)
-      setTodoList(result.data.todos.reverse());
-    } catch (error) {
-      console.log(error);
-      console.log(error.response);
-      // Toast(error.response.msg, false);
-    }
-  };
+  //   try {
+  //     const result = await Axios.get(`/todos/getAll?category=${selected || "all-task"}`)
+  //     setTodoList(result.data.todos.reverse());
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log(error.response);
+  //     // Toast(error.response.msg, false);
+  //   }
+  // };
 
   const Submit = async (newTask,modalStatus , intoCategory=false) => {
     try {
@@ -186,6 +189,8 @@ const Todos = () => {
         <Box
           style={{ minHeight: "80vh", maxHeight: "80vh", overflowY: "scroll" }}
         >
+          <TodoDrawer />
+
           {!todoListCopy.length ? (
             <Box>
               <EmptyListAnimation text="Empty List 😐" />
@@ -207,6 +212,7 @@ const Todos = () => {
               deleteTodo={deleteTodo}
               editTodo={editTodo}
               setTodoDone={setTodoDone}
+              
             />
           )}
         </Box>

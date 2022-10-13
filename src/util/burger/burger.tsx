@@ -13,7 +13,7 @@ const Burger = () => {
     const navigate = useNavigate()
     const {newCategorySelected} = useContext(SelectedCategoryContext)
 
-  console.log("location" , location)
+ 
 
 
     useEffect(()=>{
