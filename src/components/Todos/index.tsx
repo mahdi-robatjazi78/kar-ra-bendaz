@@ -1,6 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { SelectedCategoryContext} from "@context/selectCategoryContext";
-import InputNewTask from "./newTask";
+import TodoPageFooter from "./todoListFooter";
 import TodoList from "./todoList";
 import { Box, Typography } from "@mui/material";
 import TableListTodo from "./tableListTodo";
@@ -25,25 +24,14 @@ interface ITodoStructure {
 const Todos = () => {
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
-  const { selected } = useContext(SelectedCategoryContext);
-  const { updateCategoryOn } = useContext(AppDataContext);
+  const { updateCategoryOn ,selected } = useContext(AppDataContext);
   const { getAllTodos , todoList } = useContext(AppDataContext);
   // const [todoList, setTodoList] = useState([]);
 
   const [todoListCopy, setTodoListCopy] = useState([]);
-  const [selectedEditTask, setSelectedEditTask] = useState<ITodoStructure>({
-    title: "",
-    _id: "",
-    body: "",
-    flag: "",
-    date: "",
-  });
-  const [status, setStatus] = useState("");
+
   const [userSelectedCategory , setUserSelectedCategory] = useState({})
-  // const [showAddTaskModalKeyboard , setShowAddTaskModalKeyboard] = useState(false)
-  // const [showAddCategoModalKeyboard , setShowAddCategoModalKeyboard] = useState(false)
-
-
+ 
   const getSelectedCategoryData = async()=>{
     try{
       
@@ -71,7 +59,7 @@ const Todos = () => {
 
   useEffect(() => {
     getAllTodos();
-    if(selected === "all-todos"){
+    if(selected === "other"){
       setUserSelectedCategory({})
     }else{
       getSelectedCategoryData() 
@@ -86,7 +74,7 @@ const Todos = () => {
   //   console.log("selcted>>>>" , selected)
 
   //   try {
-  //     const result = await Axios.get(`/todos/getAll?category=${selected || "all-task"}`)
+  //     const result = await Axios.get(`/todos/getAll?category=${selected || "other"}`)
   //     setTodoList(result.data.todos.reverse());
   //   } catch (error) {
   //     console.log(error);
@@ -95,41 +83,7 @@ const Todos = () => {
   //   }
   // };
 
-  const Submit = async (newTask,modalStatus , intoCategory=false) => {
-    try {
-
-      console.log("status ,>>>s" , modalStatus)
-
-
-      if (modalStatus === "add") {
-        const response = await Axios.post("/todos/newTodo", {
-          todo: newTask,
-          ...(intoCategory && {categoId:selected})
-        });
-        console.log(response);
-        getAllTodos();
-        updateCategoryOn()
-        Toast(response.data.msg);
-      } else {
-        const response = await Axios.put("/todos/update-body", {
-          id: selectedEditTask._id,
-          body: newTask,
-        });
-        console.log(response);
-        // setNewTask("");
-        setStatus("add");
-        getAllTodos();
-     
-      }
-    } catch (error) {
-      console.log(error);
-      if(error.response){
-        
-          console.log(error.response);
-        Toast(error.response.msg, false);
-      }
-    }
-  };
+  
 
   const setTodoDone = async (todo) => {
     try {
@@ -162,10 +116,7 @@ const Todos = () => {
     }
   };
 
-  const editTodo = (todo) => {
-    setSelectedEditTask(todo);
-    setStatus("edit");
-  };
+ 
 
   return (
     <Box display="flex">
@@ -199,31 +150,29 @@ const Todos = () => {
             <TableListTodo
               todos={todoListCopy}
               getAllTodos={getAllTodos}
-              setSelectedEditTask={setSelectedEditTask}
+              
               deleteTodo={deleteTodo}
-              editTodo={editTodo}
+              // editTodo={editTodo}
               setTodoDone={setTodoDone}
             />
           ) : (
             <TodoList
               todoList={todoListCopy}
               getAllTodos={getAllTodos}
-              setSelectedEditTask={setSelectedEditTask}
-              deleteTodo={deleteTodo}
-              editTodo={editTodo}
+               
+              // editTodo={editTodo}
               setTodoDone={setTodoDone}
               
             />
           )}
         </Box>
         <Box position="relative" width="100%">
-        <InputNewTask
+        <TodoPageFooter
           getAllTodos={getAllTodos}
           userSelectedCategory={userSelectedCategory}
-          Submit={Submit}
-          selectedEditTask={selectedEditTask}
-          status={status}
-          setStatus={setStatus}
+
+         
+          
           // showAddTaskModalKeyboard={showAddTaskModalKeyboard}
         />
         </Box>

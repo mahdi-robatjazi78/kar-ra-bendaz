@@ -9,12 +9,13 @@ import Axios from "@services/api";
 import { TodoContext } from "@context/todoContext";
  
 import ThemeContext from "@context/themeContext";
-import { SelectedCategoryContext } from "@context/selectCategoryContext";
-import { AppDataContext, AppDataContextProvider } from "@context/appDataContext";
+
+import { AppDataContext } from "@context/appDataContext";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
-
+import ShowModalNewCategory from './TodoModals/CateogryNewEdit'
+import CategoryModalActions from "./TodoModals/categoryModalActions";
 const MySwal = withReactContent(Swal);
 
 const SettingBar = ({
@@ -25,9 +26,8 @@ const SettingBar = ({
   getAllTodos,
 }) => {
   const theme = useContext(ThemeContext);
-  const { blurTrue, blurFalse } = useContext(AppDataContext);
-
-  const { selected, newCategorySelected } = useContext(SelectedCategoryContext);
+  const { blurTrue, blurFalse , selected, newCategorySelected } = useContext(AppDataContext);
+ 
   const {
     show,
     setThreeColAll,
@@ -77,6 +77,13 @@ const SettingBar = ({
   };
 
   const { updateCategoryOn, updateCategoryOff } = useContext(AppDataContext);
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState({
+    show:false,
+    state:"add",
+    prevText:""    
+  });
+const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
+
 
   const submitNewCategory = async (title) => {
     try {
@@ -118,48 +125,48 @@ const SettingBar = ({
     );
   };
 
-  const showAddCategoryModal = async () => {
-    blurTrue();
-    try {
-      const result = await MySwal.fire({
-        title: "New Category",
-        input: "text",
-        customClass: {
-          popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
-          title: theme.isDarkMode
-            ? "Modal_TitleBar_Dark"
-            : "Modal_TitleBar_Light",
-          confirmButton: theme.isDarkMode
-            ? "Modal_Confirm_Button_Dark"
-            : "Modal_Confirm_Button_Light",
-          cancelButton: "Modal_Cancel_Button",
-          footer: "Modal_Footer",
-          input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
-        },
-        showCancelButton: true,
-        inputAttributes: {
-          autocapitalize: "off",
-        },
+  // const showAddCategoryModal = async () => {
+  //   blurTrue();
+  //   try {
+  //     const result = await MySwal.fire({
+  //       title: "New Category",
+  //       input: "text",
+  //       customClass: {
+  //         popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
+  //         title: theme.isDarkMode
+  //           ? "Modal_TitleBar_Dark"
+  //           : "Modal_TitleBar_Light",
+  //         confirmButton: theme.isDarkMode
+  //           ? "Modal_Confirm_Button_Dark"
+  //           : "Modal_Confirm_Button_Light",
+  //         cancelButton: "Modal_Cancel_Button",
+  //         footer: "Modal_Footer",
+  //         input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
+  //       },
+  //       showCancelButton: true,
+  //       inputAttributes: {
+  //         autocapitalize: "off",
+  //       },
 
-        preConfirm(inputValue) {
-          submitNewCategory(inputValue);
-          blurFalse();
-        },
+  //       preConfirm(inputValue) {
+  //         submitNewCategory(inputValue);
+  //         blurFalse();
+  //       },
 
-        showCloseButton: true,
-        confirmButtonText: "Ok",
-        showLoaderOnConfirm: true,
+  //       showCloseButton: true,
+  //       confirmButtonText: "Ok",
+  //       showLoaderOnConfirm: true,
 
-        allowOutsideClick: () => !Swal.isLoading(),
-      });
+  //       allowOutsideClick: () => !Swal.isLoading(),
+  //     });
 
-      blurFalse();
-      // listenToInputModal();
-    } catch (error) {
-      console.log(error);
-      blurFalse();
-    }
-  };
+  //     blurFalse();
+  //     // listenToInputModal();
+  //   } catch (error) {
+  //     console.log(error);
+  //     blurFalse();
+  //   }
+  // };
 
   const selectedSettingStyle = {
     background: theme.sidebar,
@@ -173,256 +180,7 @@ const SettingBar = ({
     marginTop: 7,
   };
 
-  const CategoryModalAction = async () => {
-    try {
-      blurTrue();
-      const result = await MySwal.fire({
-        title: userSelectedCategory.category.title,
-        showCloseButton: true,
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Edit Name",
-        denyButtonText: "Delete",
-        cancelButtonText: "Edit Todos",
 
-        customClass: {
-          popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
-          title: theme.isDarkMode
-            ? "Modal_TitleBar_Dark"
-            : "Modal_TitleBar_Light",
-          confirmButton: theme.isDarkMode
-            ? "Modal_Confirm_Button_Dark Half_Width"
-            : "Modal_Confirm_Button_Light Half_Width",
-          cancelButton: theme.isDarkMode
-            ? "Modal_Cancel_Button_Dark_Center Half_Width"
-            : "Modal_Cancel_Button_Light_Center Half_Width",
-          footer: "Modal_Footer_With_Spacer",
-          input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
-          htmlContainer: theme.isDarkMode
-            ? "Modal_Html_Container_Dark"
-            : "Modal_Html_Container_Light",
-          denyButton: "Modal_Deny_Button Half_Width",
-        },
-
-        html: `
-        
-       
-          <div class=${
-            theme.isDarkMode
-              ? "Modal_Html_infoBox_Dark"
-              : "Modal_Html_infoBox_Light"
-          }>
-            <div>
-              Todo Count 
-            </div>
-            <div>
-            ${userSelectedCategory.task_count}
-            </div>
-          </div>
-          <div  class=${
-            theme.isDarkMode
-              ? "Modal_Html_infoBox_Dark"
-              : "Modal_Html_infoBox_Light"
-          }>
-            <div>
-              Is Done Todo
-            </div>
-            <div>
-            ${userSelectedCategory.isDone_tasks_count}
-            </div>
-          </div>
-          <div  class=${
-            theme.isDarkMode
-              ? "Modal_Html_infoBox_Dark"
-              : "Modal_Html_infoBox_Light"
-          }>
-            <div>
-              Is Expire
-            </div>
-            <div>
-              ?
-            </div>
-          </div>
-
-   
-        `,
-      });
-
-      if (typeof result.dismiss === "string" && result.isDismissed) {
-        if (result.dismiss === "cancel") {
-          await MySwal.fire({
-            title: "Exit Todos from Category",
-
-            html: `
-              <div id="exit-todos-modal">
-            ${todoList
-              .map(
-                (item) =>
-                  ` <div class="form-check">
-                <input class="form-check-input-task" type="checkbox" id=${
-                  item._id
-                } />
-                <label class="form-check-label" for=${item._id}>
-                  ${
-                    item.body.length < 30
-                      ? item.body
-                      : item.body.slice(0, 30) + "..."
-                  }
-                </label>
-              </div>`
-              )
-              .join("")}
-            </div>`,
-            focusConfirm: false,
-            preConfirm: () => {
-              const list = document.getElementsByClassName(
-                "form-check-input-task"
-              ) as HTMLCollectionOf<HTMLElement>;
-              const ArrayListCheckbox = Array.from(list);
-
-              const selectedTodosForExitOfCategory = [];
-
-              for (const checkbox of ArrayListCheckbox) {
-                const checkboxElement = checkbox as HTMLInputElement;
-                if (checkboxElement.checked) {
-                  selectedTodosForExitOfCategory.push(checkboxElement.id);
-                }
-              }
-
-              console.log(
-                "selectedTodosForExitOfCategory",
-                selectedTodosForExitOfCategory
-              );
-
-              if (selectedTodosForExitOfCategory.length) {
-                Axios.put("/todos/exit-from-category", {
-                  todos: selectedTodosForExitOfCategory,
-                  category: userSelectedCategory.category.uuid,
-                }).then((response) => {
-                  updateCategoryOn();
-                  getAllTodos(selected);
-                  Toast(response.data.msg);
-                });
-              }
-            },
-            showCancelButton: true,
-            customClass: {
-              popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
-              title: theme.isDarkMode
-                ? "Modal_TitleBar_Dark"
-                : "Modal_TitleBar_Light",
-              confirmButton: theme.isDarkMode
-                ? "Modal_Confirm_Button_Dark Half_Width"
-                : "Modal_Confirm_Button_Light Half_Width",
-              cancelButton: "Modal_Cancel_Button",
-              footer: "Modal_Footer_With_Spacer",
-              // input: theme.isDarkMode
-              //   ? "Modal_Radio_Container_Dark"
-              //   : "Modal_Radio_Container_Light",
-              denyButton: "Modal_Deny_Button Half_Width",
-            },
-          });
-        }
-      }
-
-      const inputOptions = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            onlyCategory: "Remove Category Only",
-            withAllTodos: "Remove The Category And Clear All The Tasks In It",
-          });
-        }, 10);
-      });
-
-      if (result.isDenied) {
-        const { value: option } = await MySwal.fire({
-          title: "Delete Category",
-          showCancelButton: true,
-          input: "radio",
-          inputOptions: inputOptions,
-          inputValidator: (value) => {
-            if (!value) {
-              return "You need to choose something!";
-            }
-          },
-          customClass: {
-            popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
-            title: theme.isDarkMode
-              ? "Modal_TitleBar_Dark"
-              : "Modal_TitleBar_Light",
-            confirmButton: theme.isDarkMode
-              ? "Modal_Confirm_Button_Dark Half_Width"
-              : "Modal_Confirm_Button_Light Half_Width",
-            cancelButton: "Modal_Cancel_Button",
-            footer: "Modal_Footer_With_Spacer",
-            input: theme.isDarkMode
-              ? "Modal_Radio_Container_Dark"
-              : "Modal_Radio_Container_Light",
-            denyButton: "Modal_Deny_Button Half_Width",
-          },
-        });
-
-        if (option) {
-          console.log(option);
-
-          if (option === "onlyCategory") {
-            const response = await Axios.delete(
-              `/category/deleteOnlyCategory?id=${userSelectedCategory.category.uuid}`
-            );
-            updateCategoryOn();
-            newCategorySelected();
-            Toast(response.data.msg);
-          } else if (option === "withAllTodos") {
-            const response = await Axios.delete(
-              `/category/deleteCategoryWithTodos?id=${userSelectedCategory.category.uuid}`
-            );
-            updateCategoryOn();
-            newCategorySelected();
-            Toast(response.data.msg);
-          }
-        }
-      }
-
-      if (result.isConfirmed) {
-        await MySwal.fire({
-          title: "Edit Category Name",
-          input: "text",
-          inputPlaceholder: userSelectedCategory.category.title,
-          customClass: {
-            popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
-            title: theme.isDarkMode
-              ? "Modal_TitleBar_Dark"
-              : "Modal_TitleBar_Light",
-            confirmButton: theme.isDarkMode
-              ? "Modal_Confirm_Button_Dark"
-              : "Modal_Confirm_Button_Light",
-            cancelButton: "Modal_Cancel_Button",
-            footer: "Modal_Footer",
-            input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
-          },
-          showCancelButton: true,
-          inputAttributes: {
-            autocapitalize: "off",
-          },
-
-          preConfirm(inputValue) {
-            editCategoryName(inputValue);
-          },
-          showCloseButton: true,
-          confirmButtonText: "Ok",
-          showLoaderOnConfirm: true,
-
-          allowOutsideClick: () => !Swal.isLoading(),
-        });
-        listenToInputModal();
-      }
-
-      blurFalse();
-    } catch (error) {
-      console.log(error);
-      blurFalse();
-    }
-  };
 
   return (
     <Box
@@ -437,7 +195,11 @@ const SettingBar = ({
         <Tooltip arrow placement="right" title="New Category">
           <Box
             onClick={() => {
-              showAddCategoryModal();
+              setShowAddCategoryModal({
+                prevText:"",
+                show:true,
+                state:"add"
+              });
             }}
           >
             <FaRegPlusSquare fontSize="1.2rem" style={iconStyle} />
@@ -525,12 +287,12 @@ const SettingBar = ({
           </Box>
         </Tooltip>
 
-        {selected !== "all-task" || !selected ? (
+        {selected !== "other" || !selected ? (
           <Box position="absolute" left="10px" bottom="6rem">
             <Tooltip arrow placement="right" title="Category Info">
               <Box
                 onClick={() => {
-                  CategoryModalAction();
+                  setShowCategoryModalActions(true);
                 }}
                 margin=".6rem auto"
               >
@@ -542,6 +304,36 @@ const SettingBar = ({
           <span></span>
         )}
       </Box>
+
+
+
+      {
+        showAddCategoryModal.show && (
+          <ShowModalNewCategory 
+            setShowAddCategoryModal={setShowAddCategoryModal}        
+            showAddCategoryModal={showAddCategoryModal}
+            userSelectedCategory={userSelectedCategory}
+            getSelectedCategoryData={getSelectedCategoryData}
+          />
+        )
+        
+      }
+
+
+      {
+        showCategoryModalActions && (
+
+           <CategoryModalActions
+            userSelectedCategory={userSelectedCategory}
+            setShowAddCategoryModal={setShowAddCategoryModal}
+            setShowCategoryModalActions={setShowCategoryModalActions}
+           />
+        )
+
+      }
+
+
+
     </Box>
   );
 };

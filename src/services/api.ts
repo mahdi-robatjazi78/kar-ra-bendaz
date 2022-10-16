@@ -3,7 +3,7 @@ import axios from 'axios'
 import CustomeHistory from "./customeHistory"
 import withReactContent from 'sweetalert2-react-content'
 import Swal  from 'sweetalert2';
-
+import Toast from '@utils/toast'
 
 
 const MySwal = withReactContent(Swal)
@@ -94,8 +94,11 @@ instance.interceptors.response.use(function (response) {
 
   return response
   }, function (error) {
-    console.log("error>>>" , error)
-    console.log("error>>>status" , error.response.status)
+    console.log("error in api>>>" , error)
+ 
+    Toast(error.response.data.msg|| error.response.data.error, false)
+
+
 
       if(error.response.status === 401 || error.response.status === 403){
         localStorage.removeItem('user')

@@ -13,6 +13,11 @@ export const AppDataContextProvider = ({ children }) => {
   const updateCategoryOn = ()=>setUpdateCategory(true)
   const updateCategoryOff = ()=>setUpdateCategory(false)
   
+
+  const [selected,setSelected] = useState('other')
+  const newCategorySelected = (categoryId = "other")=>{
+      setSelected(categoryId)
+  }
   
   
   const [todoList, setTodoList] = useState([]);
@@ -25,7 +30,7 @@ export const AppDataContextProvider = ({ children }) => {
 
 
 
-  const getAllTodos = async (selected = "all-task") => {
+  const getAllTodos = async () => {
     console.log("selcted>>>>", selected);
 
     try {
@@ -42,7 +47,6 @@ export const AppDataContextProvider = ({ children }) => {
 
   const editTodoBody = async (id , body)=>{
     try{
-
       const response = await Axios.put("/todos/update-body", {
         id: id,
         body: body,
@@ -55,8 +59,6 @@ export const AppDataContextProvider = ({ children }) => {
     }catch(error){
       console.log(error.response)
     }
-
-
   }  
 
 
@@ -77,8 +79,10 @@ export const AppDataContextProvider = ({ children }) => {
         setDrawerState,
 
 
-        updateCategory , updateCategoryOn , updateCategoryOff
+        updateCategory , updateCategoryOn , updateCategoryOff,
 
+
+        selected  , newCategorySelected
       }}
     >
       {children}

@@ -1,8 +1,8 @@
 import React , {useState,useContext,useEffect} from 'react'
-import { SidebarContext } from '../../context/sidebarContext'
 import {useLocation , useNavigate} from "react-router-dom"
 
-import {SelectedCategoryContext} from "../../context/selectCategoryContext"
+import { SidebarContext } from '../../context/sidebarContext'
+import {AppDataContext} from "@context/appDataContext"
 
 
 import "./burgerStyles.css"
@@ -11,7 +11,7 @@ const Burger = () => {
     const [open , setOpen]= useState(false)
     const location = useLocation()
     const navigate = useNavigate()
-    const {newCategorySelected} = useContext(SelectedCategoryContext)
+    const {newCategorySelected} = useContext(AppDataContext)
 
  
 

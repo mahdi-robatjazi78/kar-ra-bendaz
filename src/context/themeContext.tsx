@@ -82,7 +82,7 @@ export const ThemeContextProvider =({children}:any)=>{
                 document.documentElement.style.setProperty("--secondSidebar" , themes.light.secondSidebar)
                 document.documentElement.style.setProperty("--text1" , themes.light.text1)
                 document.documentElement.style.setProperty("--text2" , themes.light.text2)
-                document.documentElement.style.setProperty("--text3" , themes.dark.text3)
+                document.documentElement.style.setProperty("--text3" , themes.light.text3)
                 document.documentElement.style.setProperty("--header" , themes.light.header)
 
                 

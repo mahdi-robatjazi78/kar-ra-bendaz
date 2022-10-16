@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useContext } from "react";
+import React, { useState,useEffect, useContext ,useRef } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { AppDataContext } from "@context/appDataContext";
@@ -22,19 +22,25 @@ const TodoDrawer = (props) => {
   });
   let open = drawerState.open;
   const [width , height] = useWindowSize()
-
+  const textAreaRef = useRef(null)
   useEffect(()=>{
+
+    if(drawerState.open === true && textAreaRef.current){
+    
+    if(textAreaRef.current){
+      alert("here")
+    }
+  }
+
+
     if(drawerState.open === false){
         setTodoTextEdited(false)
     } 
   },[drawerState.open])
-
-
-   
-
+ 
 
   return (
-    <Box id="drawer-parent" sx={modalOpen.status && { zIndex: 3 }}>
+    <Box id="drawer-parent" sx={modalOpen.status ? { zIndex: 3 }:{}}>
       <Drawer
         anchor={anchor}
         elevation={16}
@@ -61,7 +67,9 @@ const TodoDrawer = (props) => {
             <TextareaAutosize
               id="textAreaTodoDrawer"
               aria-label="minimum height"
-              minRows={12}
+              minRows={24}
+              maxRows={30}
+              ref={textAreaRef}
               placeholder="Edit Note"
               value={drawerState?.item?.body}
               onChange={(e)=>{
@@ -77,17 +85,20 @@ const TodoDrawer = (props) => {
             />
             <Box id="text-area-footer">
               <Button
-                variant={todoTextEdited ? "contained" :"outlined"}
+                id="button-edit-todo"
+                disabled={todoTextEdited ? false :true}
                 onClick={()=>{
-                  editTodoBody(drawerState?.item?._id , drawerState?.item?.body)
+                  editTodoBody(drawerState?.item?._id , drawerState?.item?.body);
+                  setTimeout(()=>{
+                    setTodoTextEdited(false)
+                  },500)
                 }}
               >
                 Edit todo
               </Button>
             </Box>
           </Box>
-            {
-            }
+           
           <Box id="drawer-box-footer">
             {drawerState?.item?.flag !== "isDone" && (
               <Box className="drawer-icon-box">
@@ -105,17 +116,13 @@ const TodoDrawer = (props) => {
                 </Tooltip>
               </Box>
             )}
-            {!drawerState?.item?.categoId && (
+            {drawerState?.item?.categoId === "other" && (
               <Box className="drawer-icon-box">
                 <Tooltip arrow title="Add To Category">
                   <IconButton
                     onClick={() => {
                       setModalOpen({ status: true, modal: "add-to-category" });
-                      setDrawerState({
-                        open: false,
-                        item: {},
-                        state: "",
-                      });
+                      
                     }}
                   >
                     <RiFolderAddFill className="drawer-footer-icon" />

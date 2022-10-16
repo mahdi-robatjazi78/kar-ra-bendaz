@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
- 
+
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
@@ -8,11 +8,12 @@ import Swal from "sweetalert2";
 
 const ShowModalAddToCategory = (props) => {
   const { todo, setModalOpen } = props;
-  const { blurFalse , getAllTodos ,updateCategoryOn } = useContext(AppDataContext);
- 
+  const { blurFalse, getAllTodos, updateCategoryOn, drawerState, setDrawerState } =
+    useContext(AppDataContext);
+
   const theme = useContext(ThemeContext);
 
-  const addToCategoryModal = async () => {
+  const addToCategoryModal = async (id) => {
     try {
       const resp = await Axios.get("/category/getAll");
       const allCategories = resp.data.list;
@@ -41,26 +42,30 @@ const ShowModalAddToCategory = (props) => {
       console.log("after", allCategories, selectedCategoryIndex);
 
       if (selectedCategoryIndex.value) {
-        await Axios.put("/todos/add-to-category", {
-          todoId: todo._id,
+        const response = await Axios.put("/todos/add-to-category", {
+          todoId: id,
           categoId: allCategories[selectedCategoryIndex.value].uuid,
         });
         updateCategoryOn();
-        getAllTodos()
+        getAllTodos();
+        Toast(response.data.msg);
       }
 
       setModalOpen({ status: false, modal: "" });
       blurFalse();
     } catch (error) {
-      console.log(error);
-      console.log(error?.response);
       setModalOpen({ status: false, modal: "" });
       blurFalse();
     }
   };
 
   useEffect(() => {
-    addToCategoryModal();
+    addToCategoryModal(drawerState?.item?._id);
+    setDrawerState({
+      open: false,
+      item: {},
+      state: "",
+    });
   }, []);
 
   return <></>;
