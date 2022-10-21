@@ -3,7 +3,7 @@ import ThemeContext from "@context/themeContext";
 import { SidebarContext } from "@context/sidebarContext";
 import { AppDataContext } from "@/context/appDataContext";
 import Header from "./header";
-import Sidebar from "./sidebar/sidebar";
+import Sidebar from "./sidebar";
 import { BrowserRouter } from "react-router-dom";
 import Todos from "./Todos";
 import Home from "./home"

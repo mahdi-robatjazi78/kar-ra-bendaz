@@ -33,8 +33,7 @@ const ShowModalNewTodo = (props) => {
         ...(intoCategory && { categoId: selected }),
       });
       console.log(response);
-      getAllTodos();
-      updateCategoryOn();
+      getAllTodos(); 
       Toast(response.data.msg);
     } catch (error) {
       console.log(error);

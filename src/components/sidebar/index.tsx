@@ -1,26 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import themeContext from "../../context/themeContext";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
-import { RiRestaurant2Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { TodoContext } from "../../context/todoContext";
-import Axios from "../../services/api";
+import themeContext from "@context/themeContext";
+import Axios from "@services/api";
 import { AppDataContext } from "@context/appDataContext";
+import { useDrop } from 'react-dnd'
+import SidebarItem from "./sidebarItem"
 
-// import "./sidebarStyles.css";
-import Toast from "../../util/toast";
+
+
 const Sidebar = () => {
   const theme = useContext(themeContext);
-
-  const {
-    show,
-    setThreeColAll,
-    setThreeColDone,
-    setOneColAll,
-    setOneColDone,
-    setTableAll,
-    setTableDone,
-  } = useContext(TodoContext);
 
   const {
     updateCategory,
@@ -34,13 +22,20 @@ const Sidebar = () => {
     backgroundColor: theme.sidebar,
   };
 
-  const subsetTabsStyle = {
-    color: theme.text3,
-  };
+
 
   type ITodoState = "all" | "done";
   const [todoState, setTodoState] = useState<ITodoState>("all");
   const [categoryList, setCategoryList] = useState([]);
+
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: "todo-box",
+    drop: (item) => ({ name: 'category-box', type:"todo" , id : "other" }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }))
 
   const showSubset = async () => {
     try {
@@ -52,6 +47,7 @@ const Sidebar = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     showSubset();
   }, []);
@@ -62,15 +58,42 @@ const Sidebar = () => {
     }
   }, [updateCategory]);
 
+
+
+  const isActive = canDrop && isOver;
+  let borderColor = "";
+  if (isActive) {
+    borderColor = "green";
+  } else if (canDrop) {
+    borderColor = "darkkhaki";
+  }
+
+  const subsetTabsStyle = {
+    color: theme.text3,
+  };
+  
   return (
     <div id="sidebar" style={sidebarStyle}>
       {categoryList.length ? (
         <ul id="listCategories">
           <li
+            ref={drop} style={{ 
+              
+              marginBottom:"5px",
+              ...subsetTabsStyle,
+              ...(borderColor && {
+                border:`1px dashed ${borderColor}`
+
+              })
+              
+              
+              }} data-testid="dustbin"
+
+
             className={`list-category-items ${
               selected === "other" ? "active-item" : ""
             }  `}
-            style={subsetTabsStyle}
+             
             onClick={() => {
               newCategorySelected();
             }}
@@ -78,32 +101,15 @@ const Sidebar = () => {
             <div className="task-title-style">All</div>
 
           </li>
-          {categoryList.map((item) => (
-            <li
+          {categoryList.map((item,index) => (
+            <SidebarItem  
               key={item.uuid}
-              className={`list-category-items ${
-                selected === item.uuid ? "active-item" : ""
-              }  `}
-              style={subsetTabsStyle}
-              onClick={() => {
-                newCategorySelected(item.uuid);
-              }}
-            >
-              <div className="task-title-style">{item.title}</div>
-              <div
-                style={{
-                  width: item.task_count.length > 1 ? "fit-content" : "1.2rem",
-                }}
-                className="task-count-style"
-              >
-                {item.task_count}
-              </div>
-            </li>
+              item={item}
+
+            />
           ))}
         </ul>
-      ) : (
-        <span></span>
-      )}
+      ) : (<span></span>)}
     </div>
   );
 };

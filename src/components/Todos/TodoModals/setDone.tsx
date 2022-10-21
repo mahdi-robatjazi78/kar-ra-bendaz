@@ -13,8 +13,7 @@ const SetDoneAction = (props) => {
     try {
       const response = await Axios.put("/todos/done", { id });
  
-      if (response.status === 200) {
-        getAllTodos()
+      if (response.status === 200) { 
         setDrawerState({
           ...drawerState , 
           item:{

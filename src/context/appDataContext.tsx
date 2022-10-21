@@ -38,6 +38,8 @@ export const AppDataContextProvider = ({ children }) => {
         `/todos/getAll?category=${selected}`
       );
       setTodoList(result.data.todos.reverse());
+      updateCategoryOn();
+
     } catch (error) {
       console.log(error);
       console.log(error.response);

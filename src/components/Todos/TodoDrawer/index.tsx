@@ -116,7 +116,7 @@ const TodoDrawer = (props) => {
                 </Tooltip>
               </Box>
             )}
-            {drawerState?.item?.categoId === "other" && (
+            {(drawerState?.item?.categoId === "other" || drawerState?.item?.categoId == null) && (
               <Box className="drawer-icon-box">
                 <Tooltip arrow title="Add To Category">
                   <IconButton

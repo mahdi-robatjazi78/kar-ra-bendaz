@@ -55,7 +55,7 @@ const CardIcons = ({
         categoId: allCategories[selectedCategoryIndex.value].uuid,
       });
 
-      updateCategoryOn();
+     
       getAllTodos();
       blurFalse()
        

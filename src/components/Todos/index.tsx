@@ -106,8 +106,7 @@ const Todos = () => {
       const response = await Axios.delete(`/todos/delete/${todo._id}`);
 
       console.log(response);
-
-      updateCategoryOn();
+ 
       getAllTodos();
 
       Toast(response.data.msg);

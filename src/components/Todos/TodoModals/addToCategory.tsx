@@ -45,8 +45,7 @@ const ShowModalAddToCategory = (props) => {
         const response = await Axios.put("/todos/add-to-category", {
           todoId: id,
           categoId: allCategories[selectedCategoryIndex.value].uuid,
-        });
-        updateCategoryOn();
+        }); 
         getAllTodos();
         Toast(response.data.msg);
       }

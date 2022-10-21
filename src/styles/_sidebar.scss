@@ -30,13 +30,14 @@
         justify-content: space-between;
 
         line-height:2rem;
-        border-bottom:1px solid var(--header);
+        // border-bottom:1px solid var(--header);
     
     .task-title-style{
         font-weight: 500;
         font-size:1.1rem;
         font-family:sans-serif;
         letter-spacing: 1px;
+        user-select: none;
     }   
     
     .task-count-style{
@@ -44,6 +45,8 @@
         padding:3px;
         margin-right:.5rem;
         text-align: center;
+        user-select: none;
+
     }
 }
     

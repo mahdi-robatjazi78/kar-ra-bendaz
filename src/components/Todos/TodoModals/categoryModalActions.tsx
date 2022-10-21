@@ -144,8 +144,7 @@ const CategoryModalActions = (props)  =>{
                 Axios.put("/todos/exit-from-category", {
                   todos: selectedTodosForExitOfCategory,
                   category: userSelectedCategory.category.uuid,
-                }).then((response) => {
-                  updateCategoryOn();
+                }).then((response) => { 
                   getAllTodos(selected);
                   Toast(response.data.msg);
                 });
