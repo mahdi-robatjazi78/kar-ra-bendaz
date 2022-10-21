@@ -1,10 +1,8 @@
-import React , {useContext} from 'react'
 import axios from 'axios'
 import CustomeHistory from "./customeHistory"
 import withReactContent from 'sweetalert2-react-content'
 import Swal  from 'sweetalert2';
-import "../styles/modalStyles.css"
-
+import Toast from '@utils/toast'
 
 
 const MySwal = withReactContent(Swal)
@@ -27,7 +25,8 @@ const handleLogoutUser = async ()=>{
 
 
 const instance = axios.create({
-    baseURL:"https://hardcore-visvesvaraya-fovq7genw.iran.liara.run",
+    // baseURL:"https://hardcore-visvesvaraya-fovq7genw.iran.liara.run",
+    baseURL:"http://localhost:8888",
     timeout:1000,
 })
 
@@ -70,22 +69,14 @@ const showAlertExpirationAccout =()=>{
 instance.interceptors.request.use(function(request){
   const user = JSON.parse(localStorage.getItem('user'))
   if(user){
-
     request.headers.common['x-auth-token'] = user.token
-    request.headers.common["Content-Type"] ="application/json"
-    
+    request.headers.common["Content-Type"] ="application/json" 
   }
-
-
   else{
     localStorage.removeItem('user')
     showAlertExpirationAccout()
   }
   return request
-
-  
-
-
 })
 
 
@@ -94,19 +85,16 @@ instance.interceptors.response.use(function (response) {
 
   return response
   }, function (error) {
-    console.log("error>>>" , error)
-    console.log("error>>>status" , error.response.status)
+    console.log("error in api>>>" , error)
+    Toast(error.response.data.msg|| error.response.data.error, false)
 
-      if(error.response.status === 401 || error.response.status === 403){
+    if(error.response.status === 401 || error.response.status === 403){
         localStorage.removeItem('user')
         showAlertExpirationAccout()
         
       }
   });
 
-  
-
-
-
-export const base_url = "https://hardcore-visvesvaraya-fovq7genw.iran.liara.run"
+// export const base_url = "https://hardcore-visvesvaraya-fovq7genw.iran.liara.run"
+export const base_url = "http://localhost:8888" 
 export default instance

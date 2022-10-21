@@ -7,11 +7,10 @@ import { RiUserAddLine, RiLogoutCircleRLine } from "react-icons/ri";
 import { SiHomeassistant } from "react-icons/si";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
-import { IoMdClose } from "react-icons/io";
 import axios from 'axios'
 import {
   base_url
-} from '../services/api'
+} from '@services/api'
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink, Outlet , useNavigate } from "react-router-dom";
@@ -57,32 +56,9 @@ const Header = ({ ShowBurger, setShowBurger }) => {
 
 
   return (
-    <header>
-      <div className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-        {/* {ShowBurger && !showSidebar && (
-          <GiHamburgerMenu
-            fontSize="2rem"
-            onClick={() => {
-              setShowSidebar(true);
-              setOpenSidebar();
-            }}
-          />
-        )}
-        {ShowBurger && showSidebar && (
-          <IoMdClose
-            fontSize="2rem"
-            onClick={() => {
-              setShowSidebar(false);
-              setCloseSidebar();
-            }}
-          />
-        )} */}
-
-
+    <header className="App-header">
+      
         <Burger />
-
 
         <DarkLight />
         <NavLink style={{ color: "white" }} to={"/"}>
@@ -186,7 +162,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
           )}
         </Box>
         <Outlet />
-      </div>
+   
     </header>
   );
 };

@@ -1,36 +1,33 @@
-import React, { useState, useContext } from "react";
-import "./App.css";
+import React from "react";
 import { Toaster } from "react-hot-toast";
-import { ThemeProvider, useTheme, createTheme } from "@mui/material/styles";
-import Header from "./components/header";
-import themes from "./theme";
-import {ThemeContextProvider} from "./context/themeContext";
-import { UpdatationContextProvider } from "./context/updatationContext";
-import { SidebarProvider } from "./context/sidebarContext";
-import Main from "./components/mainApp";
-import { ISidebar } from "./types/types";
-import { TodoContextProvider } from "./context/todoContext";
-import CustomeRouter from "./services/customeRouter";
-import CustomeHistory from "./services/customeHistory";
-import { SelectedCategoryContextProvider } from "./context/selectCategoryContext";
+import { ThemeContextProvider } from "@context/themeContext";
+import { SidebarProvider } from "@context/sidebarContext";
+import { TodoContextProvider } from "@context/todoContext";
+import { AppDataContextProvider } from "@context/appDataContext";
+import Main from "@compo/mainApp";
+import CustomeRouter from "@services/customeRouter";
+import CustomeHistory from "@services/customeHistory";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function App() {
-
   // const darkModeTheme = createTheme(getDesignTokens("dark"));
 
   return (
     <CustomeRouter history={CustomeHistory}>
       <ThemeContextProvider>
-        <SelectedCategoryContextProvider>
-          <UpdatationContextProvider>
-            <SidebarProvider>
-              <TodoContextProvider>
-                <Toaster position="bottom-center" reverseOrder={true} />
-                <Main />
-              </TodoContextProvider>
-            </SidebarProvider>
-          </UpdatationContextProvider>
-        </SelectedCategoryContextProvider>
+        <AppDataContextProvider>
+              <SidebarProvider>
+                <TodoContextProvider>
+                  <Toaster position="bottom-center" reverseOrder={true} />
+
+                  <DndProvider backend={HTML5Backend}>
+                  <Main />
+
+                  </DndProvider>
+                </TodoContextProvider>
+              </SidebarProvider>
+        </AppDataContextProvider>
       </ThemeContextProvider>
     </CustomeRouter>
   );
