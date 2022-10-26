@@ -20,6 +20,9 @@ const Sidebar = () => {
 
   const sidebarStyle = {
     backgroundColor: theme.sidebar,
+    minWidth:"230px",
+    maxWidth:"230px",  
+    // height:'100vh',
   };
 
 

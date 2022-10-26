@@ -36,39 +36,29 @@ const TodoList = (prop:any) => {
   const theme = useContext(ThemeContext); 
   const { open } = useContext(SidebarContext);
   const [hover, setHover] = useState(null);
-  const [windowWidth, windowHeight] = useWindowSize();
-  const [width, setWidth] = useState<any>(0); 
-  const [testCopy ,setTestCopy] = useState([])
+  const [windowWidth, windowHeight] = useWindowSize(); 
   const {blurTrue , todoList , setDrawerState}  = useContext(AppDataContext)
  
  
 
-  useEffect(() => {
-    const board = document.getElementsByClassName("board");
-    setWidth(board[0].clientWidth - 38);
-  }, [windowWidth, open]);
-
-
-
+ 
   useEffect(()=>{
-    setTestCopy(todoList)
+    console.log("rerender >   > todo list")
   },[todoList])
 
 
-
   return (
-    <Box> 
+    <Box id="todoList"> 
       <Grid
         container
         spacing={2}
         style={{
-          // height: "77vh",
-          width: width + 16 + "px",
+          // height: "77vh", 
           padding: "1rem",
         }}
       >
-        {testCopy.map(({_id , categoId , body , flag}, index:number , todos) => (
-          <TodoBox id={_id} categoId={categoId} body={body} flag={flag} index={index} hover={hover} todos={todos} />
+        {todoList.map(({_id  , body , flag}, index:number , todos) => (
+          <TodoBox id={_id} body={body} flag={flag} index={index} hover={hover} todos={todos} />
         ))}
       </Grid>
     </Box>

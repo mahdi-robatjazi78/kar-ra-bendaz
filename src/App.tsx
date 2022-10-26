@@ -7,8 +7,6 @@ import { AppDataContextProvider } from "@context/appDataContext";
 import Main from "@compo/mainApp";
 import CustomeRouter from "@services/customeRouter";
 import CustomeHistory from "@services/customeHistory";
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function App() {
   // const darkModeTheme = createTheme(getDesignTokens("dark"));
@@ -21,10 +19,10 @@ function App() {
                 <TodoContextProvider>
                   <Toaster position="bottom-center" reverseOrder={true} />
 
-                  <DndProvider backend={HTML5Backend}>
+                  
                   <Main />
 
-                  </DndProvider>
+                
                 </TodoContextProvider>
               </SidebarProvider>
         </AppDataContextProvider>

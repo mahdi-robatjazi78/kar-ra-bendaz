@@ -55,7 +55,7 @@ const TodoPageFooter = (props) => {
             style={{
               color: theme.text1,
               position: "absolute",
-              top: "0",
+              
               left: "2rem",
               background: theme.secondSidebar,
               padding: "6px 6px 6px 12px",
@@ -79,7 +79,7 @@ const TodoPageFooter = (props) => {
       ) : (
         <span></span>
       )}
-      <Box position="absolute" right="2rem" top=".8rem">
+      <Box position="absolute" right="2rem" >
         <Tooltip title="Add New Task">
           <Box borderRadius="25%" style={{ backgroundColor: theme.text1 }}>
             <IconButton
