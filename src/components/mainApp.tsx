@@ -26,21 +26,11 @@ const Main = () => {
           blurPage ?{filter:"blur(10px)"}:{} 
         }>
           <Header ShowBurger={ShowBurger} setShowBurger={setShowBurger}  />
-          <Box display="flex">
-            <Grid container>
-              {open === "show" && (
-                <Grid item xs={4} md={2}>
-                  <Sidebar />
-                </Grid>
-              )}
-              <Grid item xs={open==="hide" ? 12 : 8} md={open==="hide" ? 12 :10}>
-                <Home setShowBurger={setShowBurger} />
-              </Grid>
-            </Grid>
-          </Box>
-        </div>
-      {/* </BrowserRouter>   */}
-      {/* <h1 style={{color:theme.foreground , margin:0}}>hay this is main</h1> */}
+  
+          <Home setShowBurger={setShowBurger} />
+        
+   
+        </div> 
     </main>
   );
 };

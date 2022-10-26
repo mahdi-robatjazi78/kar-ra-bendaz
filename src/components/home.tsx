@@ -44,8 +44,7 @@ const Home = ({ setShowBurger }) => {
   // const [person ,setPerson] =useState<string[]> (['mahdi robatjazi','zahra mashkani'])
 
   return (
-    <div style={{ color: theme.text1, display: "flex" }}>
-      <Box className="board" style={boardStyle}>
+    
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route
@@ -62,8 +61,6 @@ const Home = ({ setShowBurger }) => {
 
           <Route path="todos" element={<Todos />} />
         </Routes>
-      </Box>
-    </div>
   );
 };
 

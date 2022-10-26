@@ -17,7 +17,7 @@ interface DropResult {
 }
 
 const TodoBox = (props: any) => {
-  const { id ,flag, body, index, hover , categoId  ,todos} = props;
+  const { id ,flag, body, index, hover ,todos} = props;
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
   const { blurTrue, todoList, setDrawerState,getAllTodos } = useContext(AppDataContext);
@@ -29,8 +29,36 @@ const TodoBox = (props: any) => {
     fontSize: 14,
   };
 
+
+
+
+
+
+  const getTodoCategoryId = (todoId)=>{
+
+
+    const result = todoList.filter(item=>item._id === todoId)
+
+    let todo = result[0]
+
+
+
+    console.log(" getTodoCategoryId >>>> ",result)
+    console.log(" getTodoCategoryId >>>>1 ",result[0])
+    console.log(" getTodoCategoryId >>>>2 ",todo.categoId)
+    return todo.categoId
+
+  }
+
+
+
+
+
+
+
+
  
-  const addToCategoryWithDragDrop = async (item , dropResult) => {
+  const addToCategoryWithDragDrop = async (item:any , dropResult:any) => {
     console.log("drop here TODO ITEM" ,item); 
     console.log("drop  RESULT CATEGORY" ,dropResult);
     
@@ -38,7 +66,7 @@ const TodoBox = (props: any) => {
     if(dropResult?.id == null  || dropResult?.id === "other"){
       const response = await Axios.put("/todos/assign-to-another-category" ,{
         todoId : id , 
-        prevCategoId : categoId,  
+        prevCategoId : getTodoCategoryId(id),  
         newCategoId : "other"
       })
 
@@ -46,16 +74,17 @@ const TodoBox = (props: any) => {
     }
     else{
       
-        const response = await Axios.put("/todos/assign-to-another-category" ,{
-          todoId :id , 
-          prevCategoId :categoId || "other",   
-          newCategoId : dropResult?.id
-        })
-  
-        Toast(response.data.msg)
-      }
+      const response = await Axios.put("/todos/assign-to-another-category" ,{
+        todoId :id , 
+        prevCategoId : getTodoCategoryId(id) || "other",   
+        newCategoId : dropResult?.id
+      })
+
+      Toast(response.data.msg)
+    }
+
+    getAllTodos()   
         
-      getAllTodos()   
   }catch(error){
     console.log(error)
   }
@@ -86,7 +115,7 @@ const TodoBox = (props: any) => {
       xs={12}
       sm={show[0] === "1col" ? 12 : 6}
       md={show[0] === "1col" ? 12 : 6}
-      lg={show[0] === "1col" ? 12 : 4}
+      lg={show[0] === "1col" ? 12 : 3}
     >
       <Card
         ref={drag}

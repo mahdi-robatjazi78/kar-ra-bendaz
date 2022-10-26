@@ -31,13 +31,15 @@ export const AppDataContextProvider = ({ children }) => {
 
 
   const getAllTodos = async () => {
-    console.log("selcted>>>>", selected);
-
+    
     try {
+      setTodoList([ ])
       const result = await Axios.get(
         `/todos/getAll?category=${selected}`
       );
-      setTodoList(result.data.todos.reverse());
+
+      let todos = result.data.todos.reverse();
+      setTodoList(todos);
       updateCategoryOn();
 
     } catch (error) {
