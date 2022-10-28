@@ -41,8 +41,7 @@ const Sidebar = () => {
   }))
 
   const showSubset = async () => {
-    try {
-      console.log("function update category here");
+    try { 
       const response = await Axios.get("/category/getAll");
       setCategoryList(response.data.list);
       updateCategoryOff();

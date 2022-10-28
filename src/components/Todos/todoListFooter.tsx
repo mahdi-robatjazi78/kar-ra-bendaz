@@ -20,44 +20,22 @@ const TodoPageFooter = (props) => {
   // const InputRef = useRef(null);
   const theme = useContext(ThemeContext);
   const [showModalAddTodo , setShowModalAddTodo] = useState(false)
-
  
-
-  // const listenToInputModal = () => {
-  //   const textAreaElement =
-  //     document.getElementsByClassName("swal2-textarea")[0];
-  //     if(textAreaElement){
-  //   textAreaElement.addEventListener(
-  //     "keyup",
-  //     function (event: KeyboardEvent): void {
-  //       if (event.ctrlKey && event.key === "Enter") {
-  //         MySwal.clickConfirm();
-  //       }
-  //     }
-  //   );}
-  // };
-
-
-
-
-
-
-
+  
  
   return (
-    <Box>
+    <Box style={{width:"100%" ,height:"20vh" , position:"relative"}}>
         {(userSelectedCategory.category
         &&
         
         userSelectedCategory.category.title) ? (
-        <Box>
+        <Box  >
           <h3
             style={{
-              color: theme.text1,
-              position: "absolute",
-              
+              color: theme.isDarkMode ? "black" : "white",
+              position: "absolute", 
               left: "2rem",
-              background: theme.secondSidebar,
+              background: theme.text1,
               padding: "6px 6px 6px 12px",
               borderRadius: "10px",
               fontSize: ".8rem",
@@ -69,7 +47,7 @@ const TodoPageFooter = (props) => {
                 onClick={() => newCategorySelected()}
                 style={{ 
                   fontSize:"1rem",
-                  color: theme.text1,
+                  color: theme.isDarkMode ? "black" : "white",
               
                 }}
               />
@@ -79,7 +57,7 @@ const TodoPageFooter = (props) => {
       ) : (
         <span></span>
       )}
-      <Box position="absolute" right="2rem" >
+      <Box position="absolute" right="2rem" top=".7rem" >
         <Tooltip title="Add New Task">
           <Box borderRadius="25%" style={{ backgroundColor: theme.text1 }}>
             <IconButton

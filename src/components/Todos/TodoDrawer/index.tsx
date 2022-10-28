@@ -11,7 +11,7 @@ import ShowModalAddToCategory from "../TodoModals/addToCategory";
 import SetDoneAction from '../TodoModals/setDone'
 import useWindowSize from "@hooks/useWindowSize"
 
-const TodoDrawer = (props) => {
+const TodoDrawer = () => {
   const anchor = "right";
   const { blurFalse, drawerState, setDrawerState , editTodoBody } = useContext(AppDataContext);
   const [doneAction , setDoneActionState]  = useState(false)

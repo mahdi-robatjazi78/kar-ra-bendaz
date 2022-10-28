@@ -2,8 +2,7 @@
     height: 100vh;
     margin: none;
     padding: 2rem 0;
-    overflow: hidden;
-    transition:all 1s ease;
+    overflow: hidden; 
 
 }
     #listCategories{

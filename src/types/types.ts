@@ -1,8 +1,11 @@
 export interface ISidebar {
   open:"show" | "hide",
-  setToggleSidebar?:()=>void
-  setOpenSidebar?:()=>void
-  setCloseSidebar?:()=>void
+
+  setToggleSidebar?:()=>void,
+  setOpenSidebar?:()=>void,
+  setCloseSidebar?:()=>void,
+  lastSelectedCategory:"all",
+  setLastSelectedCategory?:(val:string)=>void,
 }
 
 export interface ITodosShow {
@@ -14,3 +17,5 @@ export interface ITodosShow {
   setTableAll?:()=>void,
   setTableDone?:()=>void
 }
+
+ 

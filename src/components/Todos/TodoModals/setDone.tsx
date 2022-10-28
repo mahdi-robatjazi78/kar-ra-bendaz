@@ -6,7 +6,7 @@ import Axios from "@/services/api";
  
 
 const SetDoneAction = (props) => {
-  const { getAllTodos,drawerState ,setDrawerState } = useContext(AppDataContext);
+  const { getAllTodos,drawerState ,setDrawerState} = useContext(AppDataContext);
   const { id ,setDoneActionState } = props;
 
   const setTodoDone = async () => {
@@ -23,11 +23,13 @@ const SetDoneAction = (props) => {
         
         })
         Toast(response.data.msg);
+        getAllTodos()
         setDoneActionState(false)
       }
     } catch (error) {
       console.log(error);
       Toast(error.response.data, false);
+
       setDoneActionState(false)
     }
   };

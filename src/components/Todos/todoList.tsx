@@ -31,21 +31,9 @@ import TodoBox from './todoBox'
 //   };
 // };
 
-const TodoList = (prop:any) => {
- 
-  const theme = useContext(ThemeContext); 
-  const { open } = useContext(SidebarContext);
-  const [hover, setHover] = useState(null);
-  const [windowWidth, windowHeight] = useWindowSize(); 
-  const {blurTrue , todoList , setDrawerState}  = useContext(AppDataContext)
- 
- 
-
- 
-  useEffect(()=>{
-    console.log("rerender >   > todo list")
-  },[todoList])
-
+const TodoList = (props:any) => {
+  const {todoList} = props  
+  
 
   return (
     <Box id="todoList"> 
@@ -58,7 +46,7 @@ const TodoList = (prop:any) => {
         }}
       >
         {todoList.map(({_id  , body , flag}, index:number , todos) => (
-          <TodoBox id={_id} body={body} flag={flag} index={index} hover={hover} todos={todos} />
+          <TodoBox id={_id} body={body} flag={flag} index={index} todos={todos} />
         ))}
       </Grid>
     </Box>

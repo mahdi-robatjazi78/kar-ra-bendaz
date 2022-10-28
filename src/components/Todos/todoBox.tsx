@@ -1,10 +1,10 @@
-import React, { useContext ,useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { TodoContext } from "@context/todoContext";
 import { AppDataContext } from "@context/appDataContext";
 import ThemeContext from "../../context/themeContext";
-import Axios from '@services/api'
+import Axios from "@services/api";
 import Toast from "@utils/toast";
 
 export interface BoxProps {
@@ -17,88 +17,56 @@ interface DropResult {
 }
 
 const TodoBox = (props: any) => {
-  const { id ,flag, body, index, hover ,todos} = props;
+  const { id, flag, body, index, todos } = props;
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
-  const { blurTrue, todoList, setDrawerState,getAllTodos } = useContext(AppDataContext);
+  const { blurTrue, todoList, setDrawerState, getAllTodos } = useContext(
+    AppDataContext
+  );
  
 
-  const textShadow = {
-    color: "transparent",
-    textShadow: " 0 0 8px #000",
-    fontSize: 14,
+  const getTodoCategoryId = (todoId) => {
+    const result = todoList.filter((item) => item._id === todoId);
+
+    let todo = result[0]; 
+    return todo.categoId;
   };
 
-
-
-
-
-
-  const getTodoCategoryId = (todoId)=>{
-
-
-    const result = todoList.filter(item=>item._id === todoId)
-
-    let todo = result[0]
-
-
-
-    console.log(" getTodoCategoryId >>>> ",result)
-    console.log(" getTodoCategoryId >>>>1 ",result[0])
-    console.log(" getTodoCategoryId >>>>2 ",todo.categoId)
-    return todo.categoId
-
-  }
-
-
-
-
-
-
-
-
+  const addToCategoryWithDragDrop = async (item: any, dropResult: any) => {
  
-  const addToCategoryWithDragDrop = async (item:any , dropResult:any) => {
-    console.log("drop here TODO ITEM" ,item); 
-    console.log("drop  RESULT CATEGORY" ,dropResult);
-    
-    try{
-    if(dropResult?.id == null  || dropResult?.id === "other"){
-      const response = await Axios.put("/todos/assign-to-another-category" ,{
-        todoId : id , 
-        prevCategoId : getTodoCategoryId(id),  
-        newCategoId : "other"
-      })
 
-      Toast(response.data.msg)
+    try {
+      if (dropResult?.id == null || dropResult?.id === "other") {
+        const response = await Axios.put("/todos/assign-to-another-category", {
+          todoId: id,
+          prevCategoId: getTodoCategoryId(id),
+          newCategoId: "other",
+        });
+
+        Toast(response.data.msg);
+      } else {
+        const response = await Axios.put("/todos/assign-to-another-category", {
+          todoId: id,
+          prevCategoId: getTodoCategoryId(id) || "other",
+          newCategoId: dropResult?.id,
+        });
+
+        Toast(response.data.msg);
+      }
+
+      getAllTodos();
+    } catch (error) {
+      console.log(error);
     }
-    else{
-      
-      const response = await Axios.put("/todos/assign-to-another-category" ,{
-        todoId :id , 
-        prevCategoId : getTodoCategoryId(id) || "other",   
-        newCategoId : dropResult?.id
-      })
-
-      Toast(response.data.msg)
-    }
-
-    getAllTodos()   
-        
-  }catch(error){
-    console.log(error)
-  }
-
   };
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "todo-box",
-    item: {todo:todos[index]},
+    item: { todo: todos[index] },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        addToCategoryWithDragDrop(item,dropResult)
-        
+        addToCategoryWithDragDrop(item, dropResult);
       }
     },
     collect: (monitor) => ({
@@ -124,7 +92,7 @@ const TodoBox = (props: any) => {
           userSelect: "none",
           opacity,
           background:
-            flag === "isDone" ? "#E6FFE9" : "rgba( 255, 255, 255, 0.25 )",
+            flag === "isDone" ? "rgb(163, 206, 168)" : "rgba( 255, 255, 255, 0.25 )",
           boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
           backdropFilter: "blur( 4px )",
           WebkitBackdropFilter: "blur( 4px )",
@@ -133,10 +101,7 @@ const TodoBox = (props: any) => {
           cursor: "pointer",
           minHeight: "6rem",
           maxHeight: "6rem",
-          overflowY: hover || hover === 0 ? "hidden" : "scroll",
         }}
-        // onMouseLeave={() => setHover(null)}
-        // onClick={() => setHover(index)}
         onClick={() => {
           setDrawerState({
             state: "todo",
@@ -154,32 +119,13 @@ const TodoBox = (props: any) => {
           }}
         >
           <Typography
-            sx={
-              index === hover
-                ? textShadow
-                : {
-                    fontSize: 14,
-                    color: flag === "isDone" ? "black" : theme.text1,
-                  }
-            }
-            gutterBottom
-            // className={}
+            sx={{
+              fontSize: 14,
+              color: flag === "isDone" ? "black" : theme.text1,
+            }}
           >
             {body}
           </Typography>
-          {/* {index === hover && (
-              <span>
-                <CardIcons
-                  todo={todoList[hover]}
-                  getAllTodos={getAllTodos}
-                  setSelectedEditTask={setSelectedEditTask}
-                  deleteTodo={deleteTodo}
-                  editTodo={editTodo}
-                  setTodoDone={setTodoDone}
-                  setOpenDrawer={setOpenDrawer}
-                />
-              </span>
-            )} */}
         </CardContent>
       </Card>
     </Grid>

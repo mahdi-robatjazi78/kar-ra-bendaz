@@ -109,7 +109,7 @@ const Todos = () => {
            <TodoDrawer /> 
           <Box display="flex" flexDirection="column" style={{width:"100%"}}>
             <Box
-              style={{ height:"80vh", overflowY:"auto"}}
+              style={{ height:"80vh", overflowY:"auto" , position:"relative"}}
              
              >
             {!todoListCopy.length ? (
@@ -133,13 +133,12 @@ const Todos = () => {
               />
             )}
             </Box>
-            <Box position="relative" 
-             >
+             
+             
               <TodoPageFooter
                 getAllTodos={getAllTodos}
                 userSelectedCategory={userSelectedCategory}
-              />
-            </Box>
+              /> 
           </Box>
         </Box>
       </Box>

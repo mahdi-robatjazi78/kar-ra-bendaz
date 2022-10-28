@@ -11,13 +11,13 @@ const themes = {
   },
   dark: {
     foreground: "rgb(80, 88, 91)",
-    background: "rgb(10,25,41)",
-    sidebar: "rgb(0, 37, 76)",
-    secondSidebar:"rgb(0, 89, 183)",
+    background: "rgb(1, 21, 83)",
+    sidebar: "rgb(51, 76, 122)",
+    secondSidebar:"rgb(0, 18, 59)",
     text1:"rgb(240, 240, 240)",
     text2:"rgb(195, 195, 195)",
     text3:"rgb(228, 226, 165)",
-    header:"rgb(40, 44, 52)"
+    header:"rgb(0, 18, 59)"
   }
 };
 
