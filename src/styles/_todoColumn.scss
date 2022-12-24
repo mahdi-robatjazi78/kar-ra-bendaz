@@ -1,0 +1,25 @@
+#todo-page-container {
+  display: flex;
+  .board {
+    color: var(--text1);
+    display: flex;
+    .todo-page-box {
+      #todo-grid-list {
+        padding: 1rem;
+
+        .todo-box-grid {
+          .todo-box {
+            user-select: none;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            min-height: 6rem;
+            max-height: 6rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -84,23 +84,17 @@ const TodoBox = (props: any) => {
       sm={show[0] === "1col" ? 12 : 6}
       md={show[0] === "1col" ? 12 : 6}
       lg={show[0] === "1col" ? 12 : 3}
+      className="todo-box-grid"
     >
       <Card
+        className="todo-box"
+        data-testid="box"
         ref={drag}
-        data-testid={`box`}
-        style={{
-          userSelect: "none",
+        sx={{
           opacity,
           background:
             flag === "isDone" ? "rgb(163, 206, 168)" : "rgba( 255, 255, 255, 0.25 )",
-          boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
-          backdropFilter: "blur( 4px )",
-          WebkitBackdropFilter: "blur( 4px )",
-          // borderRadius: "1rem",
-          border: "1px solid rgba( 255, 255, 255, 0.18 )",
-          cursor: "pointer",
-          minHeight: "6rem",
-          maxHeight: "6rem",
+        
         }}
         onClick={() => {
           setDrawerState({

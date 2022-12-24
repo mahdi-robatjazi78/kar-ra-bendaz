@@ -1,150 +1,170 @@
-import React, {useState, useContext,useLayoutEffect } from "react";
-
+import React, { useState, useContext, useLayoutEffect } from "react";
 import ThemeContext from "../../context/themeContext";
-import {SidebarContext} from "../../context/sidebarContext";
-import {useNavigate} from "react-router-dom"
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import { SidebarContext } from "../../context/sidebarContext";
+import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-// import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import {NavLink} from 'react-router-dom'
-// import {loginUser} from '../../services/userService'
-import axios from 'axios'
-import Axios ,{base_url} from '../../services/api'
-import Toast from "../../util/toast";
+import {
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Button,
+  Avatar,
+} from "@mui/material";
+import { NavLink } from "react-router-dom";
+import axios from "axios";
+import Axios, { base_url } from "../../services/api";
+import Toast from "../../util/toast"; 
+import CButton from "@/styled-component/Cbutton";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
   const theme = useContext(ThemeContext);
-  const {setCloseSidebar} = useContext(SidebarContext);
-  const navigate = useNavigate()
-    const [email , setEmail] = useState("")
-    const [password , setPassword] = useState("")
-    
+  const { setCloseSidebar } = useContext(SidebarContext);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [focus, setFocus] = useState("username");
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+
+    validationSchema: Yup.object({
+
+      username: Yup.string()
+      .min(3 , "Must Greater than 3 charachters")
+      .max(35, 'Must be 35 characters or less')
+      .required('this field is Required'),
 
 
-  const handleSubmit =async (event: React.FormEvent<HTMLFormElement>) => {
-    try{
-
-      event.preventDefault()
-      const response = await axios.post(`${base_url}/users/login`, {email,password})
-      Axios.defaults.headers['x-auth-token'] = response.data.data.token
-      localStorage.setItem("user", JSON.stringify(response.data.data))
-      navigate('/')
-
-      console.log()
-
-      Toast(response.data.msg)
-    }catch(error){
-      console.log("error login")
-      Toast(error.response.data.msg,false)
-
-    }
-    
+      password: Yup.string()
+      .min(4, 'Must Greater than 3 charachters ')
+      .max(20, 'Must be 20 characters or less')
+      .required('this field is Required'),
+    }),
 
 
-  }
 
-  useLayoutEffect(()=>{
-    setCloseSidebar()
-  },[])
 
-  const navLinkStyles = {
-    color:theme.text3,
-    fontSize:".7rem",
-    letterSpacing:"1px",
-    textDecoration:"none"
-  }
 
+    onSubmit: async(values) => {
+      try{
+
+            const response = await axios.post(`${base_url}/users/login`, {email:values.username,password:values.password})
+            Axios.defaults.headers['x-auth-token'] = response.data.data.token
+            localStorage.setItem("user", JSON.stringify(response.data.data))
+            navigate('/')
+            Toast(response.data.msg)
+          }catch(error){
+            console.log("error login")
+            Toast(error.response.data.msg,false)
+      
+          }
+    },
+  });
+
+  console.log("formik:::" , formik )
+
+  // const handleSubmit =async (event: React.FormEvent<HTMLFormElement>) => {
+  //   try{
+
+  //     event.preventDefault()
+  //     const response = await axios.post(`${base_url}/users/login`, {email,password})
+  //     Axios.defaults.headers['x-auth-token'] = response.data.data.token
+  //     localStorage.setItem("user", JSON.stringify(response.data.data))
+  //     navigate('/')
+  //     Toast(response.data.msg)
+  //   }catch(error){
+  //     console.log("error login")
+  //     Toast(error.response.data.msg,false)
+
+  //   }
+  // }
+
+  useLayoutEffect(() => {
+    setCloseSidebar();
+  }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box className={theme.isDarkMode ? "parentLoginSignupDark" :"parentLoginSignupLight"}>
+    <Container component="main" maxWidth="md">
       <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: theme.text3 }}>
-          {/* <LockOutlinedIcon /> */}
-        </Avatar>
-        <Typography component="h1" variant="h5" style={{ color: theme.text1 }}>
-          Login
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-               InputProps={
-            
-              
-                {style: {
-                  color: theme.text1,
-                  letterSpacing: "1px",
-                }}}
-              focused
-              value={email}
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={(e)=>setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-               InputProps={
-            
-              
-                {style: {
-                  color: theme.text1,
-                  letterSpacing: "1px",
-                }}}
-                focused
-              //  InputLabelProps={{style:{color:theme.text2}}}  
-               required
-                fullWidth
-                value={password}
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                onChange={(e)=>setPassword(e.target.value)}
-              />
-            </Grid>
+      <Grid container>
+        <Grid xs={12}  item className="enterUserPages">
+          <Box className="container">
+            <Avatar sx={{ mt: "3em", bgcolor: theme.borders }}>
+              {/* <LockOutlinedIcon /> */}
+            </Avatar>
+            <Typography
+              component="h1"
+              variant="h5"
+              style={{ color: theme.text1 }}
+            >
+              Login
+            </Typography>
+            <form onSubmit={formik.handleSubmit} style={{ marginTop:"2rem" }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField 
+                    className={formik.errors.username ? "errorStateField" : ""}
+                    fullWidth 
+                    label="Username"
+                    name="username"
+                    // autoComplete="new-password"
+                    InputLabelProps={{style:{color:theme.borders}}}
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
+                    error={formik.errors.username !=="" && formik.touched.username}
+                    helperText={formik.errors.username}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                  
+                  key=""
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    InputLabelProps={{style:{color:theme.borders}}}
 
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Login
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <NavLink to="/signup" style={navLinkStyles}>
-                {"Don't have an account? Sign Up"}
-              </NavLink>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                    error={formik.touched.password && formik.errors.password !== ""}
+                    helperText={formik.errors.password}
+                  />
+                </Grid>
+              </Grid>
+              <CButton
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={formik.errors.password || formik.errors.username}
+              >
+                Login
+              </CButton>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <NavLink to="/signup" className="linkStyles">
+                    {"Don't have an account? Sign Up"}
+                  </NavLink>
+                </Grid>
+              </Grid>
+            </form>
+
+            
+          </Box>
+        </Grid>
+      </Grid>
     </Container>
+ </Box>
   );
 };
 

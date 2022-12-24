@@ -1,7 +1,9 @@
 const themes = {
   light: {
     foreground: "#000000",
-    background: "#eeeeee",
+    background: "#e1e1e1",
+    borders:"blue",
+    errorBorder:"#b12222",
     sidebar: "rgb(212, 247, 255)",
     secondSidebar:"rgb(255, 107, 107)",
     text1:"rgb(49, 62, 69)",
@@ -12,7 +14,9 @@ const themes = {
   dark: {
     foreground: "rgb(80, 88, 91)",
     background: "rgb(1, 21, 83)",
-    sidebar: "rgb(51, 76, 122)",
+    borders:"orange",
+    errorBorder:"rgb(255, 95, 95)",
+    sidebar: "rgb(1, 34, 76)",
     secondSidebar:"rgb(0, 18, 59)",
     text1:"rgb(240, 240, 240)",
     text2:"rgb(195, 195, 195)",

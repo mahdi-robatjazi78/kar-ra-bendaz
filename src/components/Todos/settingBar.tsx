@@ -85,30 +85,11 @@ const SettingBar = ({
 const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
 
 
-  const selectedSettingStyle = {
-    background: theme.sidebar,
-    // padding:6,
-    borderRadius: ".4rem",
-    cursor: "pointer",
-    width: 35,
-    height: 35,
-  };
-  const iconStyle = {
-    marginTop: 7,
-  };
-
-
-
   return (
     <Box
-      sx={{
-        height: "100vh",
-        minWidth: "2.5rem",
-        background: theme.secondSidebar,
-        position: "relative",
-      }}
+      id='setting-bar-container'
     >
-      <Box textAlign="center" margin="3rem 0">
+      <Box className="setting-bar-section" >
         <Tooltip arrow placement="right" title="New Category">
           <Box
             onClick={() => {
@@ -119,88 +100,73 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
               });
             }}
           >
-            <FaRegPlusSquare fontSize="1.2rem" style={iconStyle} />
+            <FaRegPlusSquare className="icon-style" />
           </Box>
         </Tooltip>
       </Box>
 
-      <Box textAlign="center" margin="3rem 0">
+      <Box className="setting-bar-section">
         <Tooltip arrow placement="right" title="Single Column">
           <Box
             onClick={() => showTodos("1col")}
-            style={
+            className={
               show[0] === "1col"
-                ? selectedSettingStyle
-                : {
-                    cursor: "pointer",
-                  }
+                ? "selected-setting"
+                : "unselected-setting"
             }
-            margin=".6rem auto"
           >
-            <FaRegSquare fontSize="1.2rem" style={iconStyle} />
+            <FaRegSquare className="icon-style" />
           </Box>
         </Tooltip>
         <Tooltip arrow placement="right" title="3 Columns">
           <Box
             onClick={() => showTodos("3col")}
-            style={
+            className={
               show[0] === "3col"
-                ? selectedSettingStyle
-                : {
-                    cursor: "pointer",
-                  }
+                ? "selected-setting"
+                : "unselected-setting"
             }
-            margin=".6rem auto"
           >
-            <FiColumns fontSize="1.3rem" style={iconStyle} />
+            <FiColumns  className="icon-style2" />
           </Box>
         </Tooltip>
         <Tooltip arrow placement="right" title="Table">
           <Box
             onClick={() => showTodos("table")}
-            style={
+            className={
               show[0] === "table"
-                ? selectedSettingStyle
-                : {
-                    cursor: "pointer",
-                  }
+              ? "selected-setting"
+              : "unselected-setting"
             }
-            margin=".6rem auto"
           >
-            <BsTable fontSize="1.2rem" style={iconStyle} />
+            <BsTable className="icon-style" />
           </Box>
         </Tooltip>
       </Box>
 
-      <Box textAlign="center" margin="3rem 0">
+      <Box className="setting-bar-section">
         <Tooltip arrow placement="right" title="All">
           <Box
             onClick={() => showTodos("all")}
-            style={
+            className={
               show[1] === "all"
-                ? selectedSettingStyle
-                : {
-                    cursor: "pointer",
-                  }
+              ? "selected-setting"
+              : "unselected-setting"
             }
-            margin=".6rem auto"
           >
-            <CgList fontSize="1.3rem" style={iconStyle} />
+            <CgList className="icon-style2" />
           </Box>
         </Tooltip>
         <Tooltip arrow placement="right" title="Is Done">
           <Box
             onClick={() => showTodos("done")}
-            style={
+            className={
               show[1] === "done"
-                ? selectedSettingStyle
-                : {
-                    cursor: "pointer",
-                  }
+              ? "selected-setting"
+              : "unselected-setting"
             }
-            margin=".6rem auto"
           >
-            <MdDoneOutline fontSize="1.3rem" style={iconStyle} />
+            <MdDoneOutline className="icon-style2" />
           </Box>
         </Tooltip>
 
@@ -213,7 +179,7 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
                 }}
                 margin=".6rem auto"
               >
-                <BsInfoSquare fontSize="1.3rem" style={iconStyle} />
+                <BsInfoSquare className="icon-style2" />
               </Box>
             </Tooltip>
           </Box>

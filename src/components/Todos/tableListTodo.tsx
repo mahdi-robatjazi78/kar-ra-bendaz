@@ -44,9 +44,9 @@ const TableListTodo = (props) => {
               <TableCell sx={{ color: theme.text1 }} align="left">Actions</TableCell>
           </TableHead>
           <TableBody>
-            {todos.map((row) => (
+            {todos.map((row , idx) => (
               <TableRow
-                key={row.name}
+                key={idx}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
                   ...(row.flag === "isDone" && { background: "#E6FFE9"   }),

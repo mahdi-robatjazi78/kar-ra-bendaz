@@ -1,37 +1,29 @@
-#main{
-    transition: all 1s ease;
-    background-color: var(--background);
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
+#main {
+  transition: all 1s ease;
+  background-color: var(--background);
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
 
-    #App {
+  #App {
+    .App-header {
+      background-color: var(--header);
+      min-height: 10vh;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      font-size: calc(10px + 2vmin);
+      color: white;
 
-      .App-header {
-        background-color: var(--header);
-        min-height: 10vh;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        font-size: calc(10px + 2vmin);
-        color: white;
-
-        @keyframes App-logo-spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
+      @keyframes App-logo-spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
           transform: rotate(360deg);
         }
+      }
     }
-    
-
-
-
-   
-    
-}
-
-    }
+  }
 }

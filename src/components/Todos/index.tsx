@@ -16,6 +16,7 @@ import { TodoContext } from "@context/todoContext";
 import ThemeContext from "@context/themeContext";
 import Sidebar from "../sidebar";
 import { SidebarContext } from "@/context/sidebarContext";
+import useWindowSize from "@/hooks/useWindowSize";
 
 interface ITodoStructure {
   title: string;
@@ -38,7 +39,9 @@ const Todos = () => {
   // const [todoList, setTodoList] = useState([]);
   const { open } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
-
+  const dimentions  = useWindowSize()
+  const [widthBoard , setWidthBoard] = useState(0)
+  
   const [userSelectedCategory, setUserSelectedCategory] = useState({});
 
   const getSelectedCategoryData = async () => {
@@ -94,11 +97,25 @@ const Todos = () => {
     }
   };
 
+
+useEffect(()=>{
+   // for handeling dimentions of todo board
+  let wb = dimentions[0]
+  if(wb){
+    let b = wb - (open === "show"  ? 270 : 40);
+    setWidthBoard(b)
+  }
+}, [dimentions ,open])
+
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <Box display="flex">
+      <Box id="todo-page-container">
         {open === "show" && <Sidebar />}
-        <Box style={{ color: theme.text1, display: "flex" ,width:"100%" }} className="board">
+        <Box className="board"  
+          // style={{width:"100%"}}
+        
+        >
           <SettingBar
             userSelectedCategory={userSelectedCategory}
             getSelectedCategoryData={getSelectedCategoryData}
@@ -106,11 +123,15 @@ const Todos = () => {
             getAllTodos={getAllTodos}
           />
 
-           <TodoDrawer /> 
-          <Box display="flex" flexDirection="column" style={{width:"100%"}}>
+            
+          <Box className="todo-page-box" 
+            style={{
+              width: widthBoard +"px"
+            }}
+          
+          >
             <Box
-              style={{ height:"80vh", overflowY:"auto" , position:"relative"}}
-             
+              style={{ height:"80vh", overflowY:"auto" , width:"100%"}}
              >
             {!todoListCopy.length ? (
               <Box>
@@ -133,8 +154,6 @@ const Todos = () => {
               />
             )}
             </Box>
-             
-             
               <TodoPageFooter
                 getAllTodos={getAllTodos}
                 userSelectedCategory={userSelectedCategory}
@@ -142,6 +161,7 @@ const Todos = () => {
           </Box>
         </Box>
       </Box>
+      <TodoDrawer />
     </DndProvider>
   );
 };

@@ -4,6 +4,8 @@ import themes from '../theme'
 interface ITheme {
     foreground:string,
     background:string,
+    borders:string,
+    errorBorder:string,
     sidebar:string,
     secondSidebar:string,
     text1:string,
@@ -19,6 +21,8 @@ interface ITheme {
 const ThemeContext = React.createContext<ITheme>({
     foreground:"",
     background:"",
+    borders:"",
+    errorBorder:"",
     sidebar:"",
     secondSidebar:"",
     text1:"",
@@ -29,9 +33,6 @@ const ThemeContext = React.createContext<ITheme>({
     setDark:Function,
     setLight:Function,
 });
-
-
-
 export const ThemeContextProvider =({children}:any)=>{
     
     const [isDarkMode, setIsDarkMode] = useState <boolean>(
@@ -41,6 +42,8 @@ export const ThemeContextProvider =({children}:any)=>{
         const [selectedTheme , setSelectedTheme]  = useState({
             foreground:"",
             background:"",
+            borders:"",
+            errorBorder:"",
             sidebar:"",
             secondSidebar:"",
             text1:"",
@@ -64,6 +67,8 @@ export const ThemeContextProvider =({children}:any)=>{
                 setSelectedTheme(themes.dark)
                 document.documentElement.style.setProperty("--foreground" ,  themes.dark.foreground)
                 document.documentElement.style.setProperty("--background" ,  themes.dark.background)
+                document.documentElement.style.setProperty("--borders" ,  themes.dark.borders)
+                document.documentElement.style.setProperty("--errorBorder" ,  themes.dark.errorBorder)
                 document.documentElement.style.setProperty("--sidebar" ,  themes.dark.sidebar)
                 document.documentElement.style.setProperty("--secondSidebar" , themes.dark.secondSidebar)
                 document.documentElement.style.setProperty("--text1" , themes.dark.text1)
@@ -78,6 +83,8 @@ export const ThemeContextProvider =({children}:any)=>{
 
                 document.documentElement.style.setProperty("--foreground" ,  themes.light.foreground)
                 document.documentElement.style.setProperty("--background" ,  themes.light.background)
+                document.documentElement.style.setProperty("--errorBorder" ,  themes.light.errorBorder)
+                document.documentElement.style.setProperty("--borders" ,  themes.light.borders)
                 document.documentElement.style.setProperty("--sidebar" ,  themes.light.sidebar)
                 document.documentElement.style.setProperty("--secondSidebar" , themes.light.secondSidebar)
                 document.documentElement.style.setProperty("--text1" , themes.light.text1)
