@@ -7,40 +7,47 @@
   .setting-bar-section {
     text-align: center;
     margin: 3rem 0;
-    .selected-setting{
+    .selected-setting {
       background: var(--sidebar);
-      border-radius: .4rem;
+      border-radius: 0.4rem;
       cursor: pointer;
       width: 35px;
       height: 35px;
-      border:1px solid orange;
-      margin:.6rem auto;
-      .icon-style{
-        margin-top:7px;
+      border: 1px solid orange;
+      margin: 0.6rem auto;
+      .icon-style {
+        margin-top: 7px;
         font-size: 1.2rem;
-    }
+        color: var(--text1);
+      }
 
-    .icon-style2{
-        margin-top:7px;
+      .icon-style2 {
+        margin-top: 7px;
         font-size: 1.2rem;
+        color: var(--text1);
+      }
     }
-    }
-    .unselected-setting{
+    .unselected-setting {
       cursor: pointer;
-      margin:.6rem auto;
-      .icon-style{
-        margin-top:7px;
+      margin: 0.6rem auto;
+      .icon-style {
+        margin-top: 7px;
         font-size: 1.2rem;
-    }
+        color: gray;
+      }
 
-    .icon-style2{
-        margin-top:7px;
+      .icon-style2 {
+        margin-top: 7px;
         font-size: 1.2rem;
+        color: gray;
+      }
     }
+  .selected-category-info-box {
+      position:absolute; left:10px; bottom:6rem;
+      
+      .unselected-setting{
+        margin:.6rem auto;
+      }
     }
-    
-
-    
   }
-  
 }

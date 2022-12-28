@@ -5,7 +5,7 @@ const themes = {
     borders:"blue",
     errorBorder:"#b12222",
     sidebar: "rgb(212, 247, 255)",
-    secondSidebar:"rgb(255, 107, 107)",
+    secondSidebar:"rgb(40, 44, 52)",
     text1:"rgb(49, 62, 69)",
     text2:"rgb(204, 0, 51)",  
     text3:"rgb(83, 83, 83)",

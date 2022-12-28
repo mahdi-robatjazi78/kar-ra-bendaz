@@ -13,6 +13,7 @@ const muiOverridedTheme = createTheme({
                         '-webkit-box-shadow': '0 0 0 100px var(--background) inset',
                         '-webkit-text-fill-color': 'var(--text1)'
                     },
+                    color: 'var(--text1)'
                 }
             }
         },
@@ -25,12 +26,10 @@ const muiOverridedTheme = createTheme({
                         fontSize:"1.1rem"
                     },
 
-
-
-                        '&:-webkit-autofill': {
-                            boxShadow: '0 0 0 1000px white inset',
-                            backgroundColor: 'red !important'
-                        },
+                    '&:-webkit-autofill': {
+                        boxShadow: '0 0 0 1000px white inset',
+                        backgroundColor: 'red !important'
+                    },
                     '& input:valid + fieldset': {
                         borderColor: 'var(--borders)',
                         borderWidth: 1,
@@ -57,24 +56,6 @@ const muiOverridedTheme = createTheme({
                 },
             }
         },
-
-        // MuiButton: {
-        //     styleOverrides: {
-        //         root: {
-        //             alignItems: "center",
-        //             backgroundImage:" linear-gradient(144deg,var(--borders),#521CF7 40%,var(--background))",
-        //             border: 0,
-        //             borderRadius: 8,
-        //             boxShadow: "var(--text1) 0 5px 30px -5px",
-        //             cursor: "pointer",
-        //         }
-
-        //     }
-
-
-        // }
-
-
 
     }
 

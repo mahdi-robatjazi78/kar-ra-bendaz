@@ -15,7 +15,6 @@
       justify-content: space-around;
       font-size: calc(10px + 2vmin);
       color: white;
-
       @keyframes App-logo-spin {
         from {
           transform: rotate(0deg);
@@ -24,6 +23,25 @@
           transform: rotate(360deg);
         }
       }
+
+      .header-link{
+        color:white;
+
+        svg{
+          font-size:2rem;
+        }
+      } 
+        #user-profile-icon-menu{
+          ul.MuiList{
+            background-color: var(--background);
+            color:var(--text1);
+  
+            
+              li{
+              }
+          }
+        }
+    
     }
   }
 }

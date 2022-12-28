@@ -8,6 +8,7 @@ import Welcome from "./welcome";
 import { useLocation, Routes, Route, useNavigate } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
 import Todos from "./Todos"; 
+import { useHotkeys } from 'react-hotkeys-hook';
 
 interface IPerson {
   person: {
@@ -31,7 +32,9 @@ const Home = ({ setShowBurger }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
-  
+  useHotkeys('alt+ctrl+h', () =>navigate("/"))
+  useHotkeys('alt+ctrl+t', () =>navigate("/todos"))
+  useHotkeys('alt+ctrl+p', () =>navigate("/profile"))
 
   const theme = useContext(ThemeContext);
   const [userSignupData, setUserSignupData] = useState<ISignupData>({

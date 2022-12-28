@@ -61,9 +61,8 @@ const Header = ({ ShowBurger, setShowBurger }) => {
         <Burger />
 
         <DarkLight />
-        <NavLink style={{ color: "white" }} to={"/"}>
+        <NavLink className="header-link" to={"/"}>
           <SiHomeassistant
-            fontSize="2rem"
             onClick={() => {
               setShowBurger(true);
             }}
@@ -81,7 +80,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
 
           {user && user.email ? (
             <Menu
-              id="basic-menu"
+              id="user-profile-icon-menu"
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
@@ -96,7 +95,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
                 >
                   <Box display="flex" justifyContent="space-between">
                     <Box>Profile</Box>
-                    <CgProfile style={{ padding: ".2rem" }} />
+                    <CgProfile style={{ padding: ".2rem",fontSize:"1.5rem" }} />
                   </Box>
                 </NavLink>
               </MenuItem>
@@ -108,7 +107,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
                 >
                   <Box display="flex" justifyContent="space-between">
                     <Box>Edit Profile</Box>
-                    <FiEdit style={{ padding: ".2rem" }} />
+                    <FiEdit style={{ padding: ".2rem",fontSize:"1.5rem" }} />
                   </Box>
                 </NavLink>
               </MenuItem>
@@ -120,7 +119,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
                 >
                   <Box display="flex" justifyContent="space-between">
                     <Box>Logout</Box>
-                    <RiLogoutCircleRLine style={{ padding: ".2rem" }} />
+                    <RiLogoutCircleRLine style={{ padding: ".2rem",fontSize:"1.5rem" }} />
                   </Box>
                 </Box>
               </MenuItem>
@@ -135,14 +134,14 @@ const Header = ({ ShowBurger, setShowBurger }) => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem style={{ width: "15rem", display: "block" }}>
+              <MenuItem style={{ width: "15rem", display: "block"}}>
                 <NavLink
                   style={{ color: "black", textDecoration: "none" }}
                   to={"/signup"}
                 >
                   <Box display="flex" justifyContent="space-between">
                     <Box>Register</Box>
-                    <BiLogInCircle style={{ padding: ".2rem" }} />
+                    <BiLogInCircle style={{ padding: ".2rem" ,fontSize:"1.5rem"}} />
                   </Box>
                 </NavLink>
               </MenuItem>
@@ -154,7 +153,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
                 >
                   <Box display="flex" justifyContent="space-between">
                     <Box>Login</Box>{" "}
-                    <RiUserAddLine style={{ padding: ".2rem" }} />
+                    <RiUserAddLine style={{ padding: ".2rem" ,fontSize:"1.5rem" }} />
                   </Box>
                 </NavLink>
               </MenuItem>

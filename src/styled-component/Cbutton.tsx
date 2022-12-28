@@ -9,16 +9,16 @@ const CButton = styled(Button)`
     var(--borders),
     #521cf7 40%,
     var(--background)
-  );
-  color: white;
-  &:disabled{
-    background-image: linear-gradient(
-      144deg,
-     #d1d1d1,
-      #d1d1d1 40%,
-      #d1d1d1
     );
+  color:var(--text1);
+
+
+  
+  &:disabled{
+    background-image:linear-gradient(144deg , gray , gray);
+    // background-color:gray;
     border:1px solid gray;
+    color:black;
   }
 
 `;

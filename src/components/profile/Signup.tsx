@@ -1,4 +1,4 @@
-import React, { useContext,useLayoutEffect, FC } from "react";
+import React, { useContext, useLayoutEffect, FC } from "react";
 import ThemeContext from "../../context/themeContext";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
@@ -11,209 +11,257 @@ import Box from "@mui/material/Box";
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {NavLink} from "react-router-dom";
-import {useNavigate} from 'react-router-dom'
-import {base_url} from '../../services/api'
-import {SidebarContext} from '../../context/sidebarContext'
+import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { base_url } from "../../services/api";
+import { SidebarContext } from "../../context/sidebarContext";
+import CButton from "@/styled-component/Cbutton";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-interface ISignupData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  gender:string
-}
+// interface ISignupData {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   gender: string;
+// }
 
-interface IProps {
-  userSignupData: ISignupData;
-  setUserSignupData: React.Dispatch<React.SetStateAction<ISignupData>>;
-}
+// interface IProps {
+//   userSignupData: ISignupData;
+//   setUserSignupData: React.Dispatch<React.SetStateAction<ISignupData>>;
+// }
 
-const Signup: FC<IProps> = ({ userSignupData, setUserSignupData }) => {
-  const navigate = useNavigate()
+const Signup= ({ userSignupData, setUserSignupData }) => {
+  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
-  const {setCloseSidebar} = useContext(SidebarContext)
-  
-  
-  
-  const handleChangeInput = (
-    event
-  ) => {
-    setUserSignupData({
-      ...userSignupData,
-      [event.target.name]: event.target.value,
-    });
+  const { setCloseSidebar } = useContext(SidebarContext);
+
+  // const handleChangeInput = (event) => {
+  //   setUserSignupData({
+  //     ...userSignupData,
+  //     [event.target.name]: event.target.value,
+  //   });
+  // };
+
+  useLayoutEffect(() => {
+    setCloseSidebar();
+  }, []);
 
 
-  };
-  
-  
-  useLayoutEffect(()=>{
-    setCloseSidebar()
-  },[])
-  
-  const navLinkStyles = {
-    color:theme.text3,
-    fontSize:".7rem",
-    letterSpacing:"1px",
-    textDecoration:"none"
-  }
-  
-  
-  
-  
-  const submitForm = async(e)=>{
-    e.preventDefault()
-    try{
-      const response = await axios.post(`${base_url}/users/new`, userSignupData)
-      navigate("/login")
-    }catch(error){
-      console.error(error.response)
-    }
+  // const submitForm = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       `${base_url}/users/new`,
+  //       userSignupData
+  //     );
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.error(error.response);
+  //   }
+  // };
 
-  }
 
+
+
+  const formik = useFormik({
+
+   
+
+
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      username: "",
+      password: "",
+    },
+
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .min(3, "Must Greater than 3 charachters")
+        .max(35, "Must be 35 characters or less")
+        .required("this field is Required"),
+
+      password: Yup.string()
+        .min(4, "Must Greater than 3 charachters ")
+        .max(20, "Must be 20 characters or less")
+        .required("this field is Required"),
+    }),
+
+
+
+    validateOnChange: false, // this one
+    validateOnBlur: true, // and this one
+
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(
+          `${base_url}/users/new`,
+          {
+            firstName:values.firstName,
+            lastName:values.lastName,
+            gender:"female",
+            email: values.username,
+            password: values.password,
+          });
+        
+        navigate("/login");
+      } catch (error) {
+        console.error(error.response);
+      }
+    },
+  }); 
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box
+    className={
+      theme.isDarkMode ? "parentLoginSignupDark" : "parentLoginSignupLight"
+    }
+  >
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          color: theme.text1,
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: theme.text3 }}>
-          {/* <LockOutlinedIcon /> */}
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <Box component="form" onSubmit={submitForm} noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+      <Grid container >
+        <Grid xs={12} item className="enterUserPages">
+        <Box className="container">
+          <Avatar  sx={{ mt: "2em", bgcolor: theme.borders }}>
+            {/* <LockOutlinedIcon /> */}
+          </Avatar>
+          <Typography component="h1" variant="h5" style={{ color: theme.text1 }}>
+            Sign Up
+          </Typography>
+        
+        <form 
+         onSubmit={formik.handleSubmit}
+         style={{ marginTop: "2rem" }} 
+        > 
+        <Grid container>
+            <Grid item xs={12}>
+              <Box display="flex" style={{gap:'.8rem'}}>
               <TextField
-               InputProps={
-            
-              
-                 {style: {
-                   color: theme.text1,
-                   letterSpacing: "1px",
-                 }}}
-              focused
+               className={
+                  formik.errors.username ? "errorStateField" : ""
+                }
+                margin="normal"
+                
                 autoComplete="given-name"
                 name="firstName"
-                required
                 fullWidth
                 id="firstName"
                 label="First Name"
                 autoFocus
                 style={{ borderColor: "red" }}
-                onBlur={handleChangeInput}
+                onChange={formik.handleChange}
+                value={formik.values.firstName}
+                error={
+                  formik.errors.firstName !== "" && formik.touched.firstName
+                }
+                helperText={formik.errors.firstName}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-               InputProps={
             
-              
-                 {style: {
-                   color: theme.text1,
-                   letterSpacing: "1px",
-                 }}}
-              focused
-                required
+              <TextField
+               className={
+                  formik.errors.username ? "errorStateField" : ""
+                }
+                margin="normal"
+                
                 fullWidth
                 id="lastName"
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
-                onBlur={handleChangeInput}
+                onChange={formik.handleChange}
+                value={formik.values.lastName}
+                error={
+                  formik.errors.lastName !== "" && formik.touched.lastName
+                }
+                helperText={formik.errors.lastName}
               />
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <TextField
-               InputProps={
-            
-              
-                 {style: {
-                   color: theme.text1,
-                   letterSpacing: "1px",
-                 }}}
-              focused
+                className={
+                  formik.errors.username ? "errorStateField" : ""
+                }
+                
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                inputProps={{
-                  type: "email",
-                  autoComplete: "none",
-                }}
-                onBlur={handleChangeInput}
+                label="Username"
+                name="username"
+                autoComplete="username"
+                key="Username"
+                margin="normal"
+                variant="outlined"
+                onChange={formik.handleChange}
+                value={formik.values.username}
+                error={
+                  formik.errors.username !== "" && formik.touched.username
+                }
+                helperText={formik.errors.username}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-               InputProps={
-            
-              
-                 {style: {
-                   color: theme.text1,
-                   letterSpacing: "1px",
-                 }}}
-              focused
+              className={
+                formik.errors.password ? "errorStateField" : ""
+              }
+                autoComplete="new-password"
+                key="password"
+                margin="normal"
+                
                 required
                 fullWidth
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
-                // autoComplete="new-password"
-                onBlur={handleChangeInput}
+                onChange={formik.handleChange}
+                      value={formik.values.password}
+                      error={
+                        formik.touched.password && formik.errors.password !== ""
+                      }
+                      helperText={formik.errors.password}
               />
             </Grid>
-            <Box >
-      {/* <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="male"
-        name="gender"
-        row
-        style={{color:theme.text3 , paddingLeft:"1.5rem"}}
-        onChange={(event)=>{
-          setUserSignupData({...userSignupData , gender:event.target.checked})
-        }}
-      >
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-      </RadioGroup> */}
-
-
-
-            </Box>
-          </Grid>
-          <Button
+            {/*<Box>
+              <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="male"
+                  name="gender"
+                  row
+                  style={{color:theme.text3 , paddingLeft:"1.5rem"}}
+                  onChange={(event)=>{
+                    setUserSignupData({...userSignupData , gender:event.target.checked})
+                  }}
+                >
+                  <FormControlLabel value="male" control={<Radio />} label="Male" />
+                  <FormControlLabel value="female" control={<Radio />} label="Female" />
+              </RadioGroup>
+            </Box> */}
+          
+          <CButton
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            
           >
             Sign Up
-          </Button>
+          </CButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <NavLink to="/login" style={navLinkStyles}>
+              <NavLink to="/login"  className="linkStyles">
                 Already have an account? Sign in
               </NavLink>
             </Grid>
           </Grid>
+          </Grid>
+        </form> 
         </Box>
-      </Box>
+      </Grid>
+      </Grid> 
     </Container>
+    </Box>
   );
 };
 

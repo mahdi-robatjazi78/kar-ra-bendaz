@@ -8,7 +8,8 @@ import Axios from "@services/api";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
 import TodoDrawer from "./TodoDrawer";
-
+import ShowModalNewTodo from "./TodoModals/newTodo";
+import { useHotkeys } from 'react-hotkeys-hook';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppDataContext } from "@context/appDataContext";
@@ -39,10 +40,19 @@ const Todos = () => {
   // const [todoList, setTodoList] = useState([]);
   const { open } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
-  const dimentions  = useWindowSize()
-  const [widthBoard , setWidthBoard] = useState(0)
-  
+  const dimentions = useWindowSize();
+  const [widthBoard, setWidthBoard] = useState(0);
+  const [showModalAddTodo, setShowModalAddTodo] = useState(false);
   const [userSelectedCategory, setUserSelectedCategory] = useState({});
+  const [showCategoryModalActions, setShowCategoryModalActions] = useState(
+    false
+  );
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState({
+    show: false,
+    state: "add",
+    prevText: "",
+  });
+  
 
   const getSelectedCategoryData = async () => {
     try {
@@ -97,71 +107,82 @@ const Todos = () => {
     }
   };
 
+  useEffect(() => {
+    // for handeling dimentions of todo board
+    let wb = dimentions[0];
+    if (wb) {
+      let b = wb - (open === "show" ? 270 : 40);
+      setWidthBoard(b);
+    }
+  }, [dimentions, open]);
 
-useEffect(()=>{
-   // for handeling dimentions of todo board
-  let wb = dimentions[0]
-  if(wb){
-    let b = wb - (open === "show"  ? 270 : 40);
-    setWidthBoard(b)
-  }
-}, [dimentions ,open])
+  useHotkeys('alt+n', () =>setShowModalAddTodo(true))
+  useHotkeys('alt+c', () =>setShowAddCategoryModal({ show: true,
+    state: "add",
+    prevText: "",}))
 
+  
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
-        {open === "show" && <Sidebar />}
-        <Box className="board"  
-          // style={{width:"100%"}}
-        
-        >
+        <Box display="flex">
+          {open === "show" && <Sidebar />}
+
           <SettingBar
             userSelectedCategory={userSelectedCategory}
             getSelectedCategoryData={getSelectedCategoryData}
-            todoList={todoListCopy}
-            getAllTodos={getAllTodos}
+            showCategoryModalActions={showCategoryModalActions}
+            setShowCategoryModalActions={setShowCategoryModalActions}
+            showAddCategoryModal={showAddCategoryModal}
+setShowAddCategoryModal={setShowAddCategoryModal}
           />
+        </Box>
 
-            
-          <Box className="todo-page-box" 
+        <Box
+          className="board"
+          // style={{width:"100%"}}
+        >
+          <Box
+            className="todo-page-box"
             style={{
-              width: widthBoard +"px"
+              width: widthBoard + "px",
             }}
-          
           >
-            <Box
-              style={{ height:"80vh", overflowY:"auto" , width:"100%"}}
-             >
-            {!todoListCopy.length ? (
-              <Box>
-                <EmptyListAnimation text="Empty List 😐" />
-              </Box>
-            ) : show[0] === "table" ? (
-              <TableListTodo
-                todos={todoListCopy}
-                getAllTodos={getAllTodos}
-                deleteTodo={deleteTodo}
-                // editTodo={editTodo}
-                setTodoDone={setTodoDone}
-              />
-            ) : (
-              <TodoList
-                todoList={todoListCopy}
-                getAllTodos={getAllTodos}
-                // editTodo={editTodo}
-                setTodoDone={setTodoDone}
-              />
-            )}
+            <Box style={{ height: "80vh", overflowY: "auto", width: "100%" }}>
+              {!todoListCopy.length ? (
+                <Box>
+                  <EmptyListAnimation text="Empty List 😐" />
+                </Box>
+              ) : show[0] === "table" ? (
+                <TableListTodo
+                  todos={todoListCopy}
+                  getAllTodos={getAllTodos}
+                  deleteTodo={deleteTodo}
+                  // editTodo={editTodo}
+                  setTodoDone={setTodoDone}
+                />
+              ) : (
+                <TodoList
+                  todoList={todoListCopy}
+                  getAllTodos={getAllTodos}
+                  // editTodo={editTodo}
+                  setTodoDone={setTodoDone}
+                />
+              )}
             </Box>
-              <TodoPageFooter
-                getAllTodos={getAllTodos}
-                userSelectedCategory={userSelectedCategory}
-              /> 
+            <TodoPageFooter
+              userSelectedCategory={userSelectedCategory}
+              showModalAddTodo={showModalAddTodo}
+              setShowModalAddTodo={setShowModalAddTodo}
+            />
           </Box>
         </Box>
       </Box>
       <TodoDrawer />
+      {showModalAddTodo ? (
+        <ShowModalNewTodo setShowModalAddTodo={setShowModalAddTodo} />
+      ) : null}
     </DndProvider>
   );
 };

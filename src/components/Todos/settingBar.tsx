@@ -7,14 +7,14 @@ import { FaRegSquare, FaRegPlusSquare } from "react-icons/fa";
 import { BsTable, BsInfoSquare } from "react-icons/bs";
 import Axios from "@services/api";
 import { TodoContext } from "@context/todoContext";
- 
+
 import ThemeContext from "@context/themeContext";
 
 import { AppDataContext } from "@context/appDataContext";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
-import ShowModalNewCategory from './TodoModals/CateogryNewEdit'
+import ShowModalNewCategory from "./TodoModals/CateogryNewEdit";
 import CategoryModalActions from "./TodoModals/categoryModalActions";
 const MySwal = withReactContent(Swal);
 
@@ -22,12 +22,16 @@ const SettingBar = ({
   // showAddCategoModalKeyboard,
   userSelectedCategory,
   getSelectedCategoryData,
-  todoList,
-  getAllTodos,
+  showCategoryModalActions,
+setShowCategoryModalActions,
+showAddCategoryModal,
+setShowAddCategoryModal
 }) => {
   const theme = useContext(ThemeContext);
-  const { blurTrue, blurFalse , selected, newCategorySelected } = useContext(AppDataContext);
- 
+  const { blurTrue, blurFalse, selected, newCategorySelected } = useContext(
+    AppDataContext
+  );
+
   const {
     show,
     setThreeColAll,
@@ -77,26 +81,20 @@ const SettingBar = ({
   };
 
   const { updateCategoryOn, updateCategoryOff } = useContext(AppDataContext);
-  const [showAddCategoryModal, setShowAddCategoryModal] = useState({
-    show:false,
-    state:"add",
-    prevText:""    
-  });
-const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
-
+  
+  
 
   return (
-    <Box
-      id='setting-bar-container'
-    >
-      <Box className="setting-bar-section" >
+    <Box id="setting-bar-container">
+      <Box className="setting-bar-section">
         <Tooltip arrow placement="right" title="New Category">
           <Box
+            className="unselected-setting"
             onClick={() => {
               setShowAddCategoryModal({
-                prevText:"",
-                show:true,
-                state:"add"
+                prevText: "",
+                show: true,
+                state: "add",
               });
             }}
           >
@@ -110,9 +108,7 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
           <Box
             onClick={() => showTodos("1col")}
             className={
-              show[0] === "1col"
-                ? "selected-setting"
-                : "unselected-setting"
+              show[0] === "1col" ? "selected-setting" : "unselected-setting"
             }
           >
             <FaRegSquare className="icon-style" />
@@ -122,21 +118,17 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
           <Box
             onClick={() => showTodos("3col")}
             className={
-              show[0] === "3col"
-                ? "selected-setting"
-                : "unselected-setting"
+              show[0] === "3col" ? "selected-setting" : "unselected-setting"
             }
           >
-            <FiColumns  className="icon-style2" />
+            <FiColumns className="icon-style2" />
           </Box>
         </Tooltip>
         <Tooltip arrow placement="right" title="Table">
           <Box
             onClick={() => showTodos("table")}
             className={
-              show[0] === "table"
-              ? "selected-setting"
-              : "unselected-setting"
+              show[0] === "table" ? "selected-setting" : "unselected-setting"
             }
           >
             <BsTable className="icon-style" />
@@ -149,9 +141,7 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
           <Box
             onClick={() => showTodos("all")}
             className={
-              show[1] === "all"
-              ? "selected-setting"
-              : "unselected-setting"
+              show[1] === "all" ? "selected-setting" : "unselected-setting"
             }
           >
             <CgList className="icon-style2" />
@@ -161,9 +151,7 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
           <Box
             onClick={() => showTodos("done")}
             className={
-              show[1] === "done"
-              ? "selected-setting"
-              : "unselected-setting"
+              show[1] === "done" ? "selected-setting" : "unselected-setting"
             }
           >
             <MdDoneOutline className="icon-style2" />
@@ -171,13 +159,16 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
         </Tooltip>
 
         {selected !== "other" || !selected ? (
-          <Box position="absolute" left="10px" bottom="6rem">
+          <Box 
+            className="selected-category-info-box"
+         >
             <Tooltip arrow placement="right" title="Category Info">
               <Box
                 onClick={() => {
                   setShowCategoryModalActions(true);
                 }}
-                margin=".6rem auto"
+                className="unselected-setting"
+                
               >
                 <BsInfoSquare className="icon-style2" />
               </Box>
@@ -188,35 +179,22 @@ const [showCategoryModalActions, setShowCategoryModalActions] = useState(false);
         )}
       </Box>
 
+      {showAddCategoryModal.show && (
+        <ShowModalNewCategory
+          setShowAddCategoryModal={setShowAddCategoryModal}
+          showAddCategoryModal={showAddCategoryModal}
+          userSelectedCategory={userSelectedCategory}
+          getSelectedCategoryData={getSelectedCategoryData}
+        />
+      )}
 
-
-      {
-        showAddCategoryModal.show && (
-          <ShowModalNewCategory 
-            setShowAddCategoryModal={setShowAddCategoryModal}        
-            showAddCategoryModal={showAddCategoryModal}
-            userSelectedCategory={userSelectedCategory}
-            getSelectedCategoryData={getSelectedCategoryData}
-          />
-        )
-        
-      }
-
-
-      {
-        showCategoryModalActions && (
-
-           <CategoryModalActions
-            userSelectedCategory={userSelectedCategory}
-            setShowAddCategoryModal={setShowAddCategoryModal}
-            setShowCategoryModalActions={setShowCategoryModalActions}
-           />
-        )
-
-      }
-
-
-
+      {showCategoryModalActions && (
+        <CategoryModalActions
+          userSelectedCategory={userSelectedCategory}
+          setShowAddCategoryModal={setShowAddCategoryModal}
+          setShowCategoryModalActions={setShowCategoryModalActions}
+        />
+      )}
     </Box>
   );
 };
