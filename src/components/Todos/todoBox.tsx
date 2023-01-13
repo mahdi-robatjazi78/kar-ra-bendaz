@@ -34,7 +34,6 @@ const TodoBox = (props: any) => {
 
   const addToCategoryWithDragDrop = async (item: any, dropResult: any) => {
  
-
     try {
       if (dropResult?.id == null || dropResult?.id === "other") {
         const response = await Axios.put("/todos/assign-to-another-category", {
@@ -81,9 +80,17 @@ const TodoBox = (props: any) => {
       key={index}
       item
       xs={12}
-      sm={show[0] === "1col" ? 12 : 6}
-      md={show[0] === "1col" ? 12 : 6}
-      lg={show[0] === "1col" ? 12 : 3}
+
+      sm={show[0]=== "1col" ?12 :
+        show[2]=== 2 ? 6:
+        show[2]=== 3 ? 4:
+        show[2]=== 4 ? 3:
+        show[2]=== 5 ? 2.4: 2
+    }
+
+      // sm={show[0] === "1col" ? 12 : 6}
+      // md={show[0] === "1col" ? 12 : 6}
+      // lg={show[0] === "1col" ? 12 : 3}
       className="todo-box-grid"
     >
       <Card

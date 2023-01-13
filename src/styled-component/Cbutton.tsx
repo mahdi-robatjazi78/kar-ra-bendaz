@@ -11,14 +11,15 @@ const CButton = styled(Button)`
     var(--background)
     );
   color:var(--text1);
+  width: 25%;
 
 
   
   &:disabled{
-    background-image:linear-gradient(144deg , gray , gray);
-    // background-color:gray;
+
+    background: rgb(100 150 200 / 22%);
+    width: 25%;
     border:1px solid gray;
-    color:black;
   }
 
 `;

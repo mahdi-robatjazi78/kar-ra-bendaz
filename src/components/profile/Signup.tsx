@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, FC } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import ThemeContext from "../../context/themeContext";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
@@ -18,7 +18,17 @@ import { SidebarContext } from "../../context/sidebarContext";
 import CButton from "@/styled-component/Cbutton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { motion } from "framer-motion";
+import {
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
+import { FaRegUser } from "react-icons/fa";
+import { BsKey } from "react-icons/bs";
+import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 // interface ISignupData {
 //   firstName: string;
 //   lastName: string;
@@ -32,7 +42,7 @@ import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 //   setUserSignupData: React.Dispatch<React.SetStateAction<ISignupData>>;
 // }
 
-const Signup= ({ userSignupData, setUserSignupData }) => {
+const Signup = ({ userSignupData, setUserSignupData }) => {
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const { setCloseSidebar } = useContext(SidebarContext);
@@ -48,28 +58,19 @@ const Signup= ({ userSignupData, setUserSignupData }) => {
     setCloseSidebar();
   }, []);
 
+  const YupObjectValidationFields = Yup.object({}).shape({
+    username: Yup.string()
+      .min(3, "Must Greater than 3 charachters")
+      .max(35, "Must be 35 characters or less")
+      .required("Username is Required"),
 
-  // const submitForm = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post(
-  //       `${base_url}/users/new`,
-  //       userSignupData
-  //     );
-  //     navigate("/login");
-  //   } catch (error) {
-  //     console.error(error.response);
-  //   }
-  // };
-
-
-
+    password: Yup.string()
+      .min(4, "Must Greater than 3 charachters ")
+      .max(20, "Must be 20 characters or less")
+      .required("Password is Required"),
+  });
 
   const formik = useFormik({
-
-   
-
-
     initialValues: {
       firstName: "",
       lastName: "",
@@ -77,154 +78,197 @@ const Signup= ({ userSignupData, setUserSignupData }) => {
       password: "",
     },
 
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .min(3, "Must Greater than 3 charachters")
-        .max(35, "Must be 35 characters or less")
-        .required("this field is Required"),
-
-      password: Yup.string()
-        .min(4, "Must Greater than 3 charachters ")
-        .max(20, "Must be 20 characters or less")
-        .required("this field is Required"),
-    }),
-
-
-
-    validateOnChange: false, // this one
-    validateOnBlur: true, // and this one
+    validateOnMount: false,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validationSchema: YupObjectValidationFields,
 
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          `${base_url}/users/new`,
-          {
-            firstName:values.firstName,
-            lastName:values.lastName,
-            gender:"female",
-            email: values.username,
-            password: values.password,
-          });
-        
+        await axios.post(`${base_url}/users/new`, {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          gender: "female",
+          email: values.username,
+          password: values.password,
+        });
+
         navigate("/login");
       } catch (error) {
         console.error(error.response);
       }
     },
-  }); 
+  });
 
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <Box
-    className={
-      theme.isDarkMode ? "parentLoginSignupDark" : "parentLoginSignupLight"
-    }
-  >
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <Grid container >
-        <Grid xs={12} item className="enterUserPages">
-        <Box className="container">
-          <Avatar  sx={{ mt: "2em", bgcolor: theme.borders }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
-          <Typography component="h1" variant="h5" style={{ color: theme.text1 }}>
-            Sign Up
-          </Typography>
-        
-        <form 
-         onSubmit={formik.handleSubmit}
-         style={{ marginTop: "2rem" }} 
-        > 
+      className={
+        theme.isDarkMode ? "parentLoginSignupDark" : "parentLoginSignupLight"
+      }
+    >
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
         <Grid container>
-            <Grid item xs={12}>
-              <Box display="flex" style={{gap:'.8rem'}}>
-              <TextField
-               className={
-                  formik.errors.username ? "errorStateField" : ""
-                }
-                margin="normal"
-                
-                autoComplete="given-name"
-                name="firstName"
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                style={{ borderColor: "red" }}
-                onChange={formik.handleChange}
-                value={formik.values.firstName}
-                error={
-                  formik.errors.firstName !== "" && formik.touched.firstName
-                }
-                helperText={formik.errors.firstName}
-              />
-            
-              <TextField
-               className={
-                  formik.errors.username ? "errorStateField" : ""
-                }
-                margin="normal"
-                
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-                onChange={formik.handleChange}
-                value={formik.values.lastName}
-                error={
-                  formik.errors.lastName !== "" && formik.touched.lastName
-                }
-                helperText={formik.errors.lastName}
-              />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                className={
-                  formik.errors.username ? "errorStateField" : ""
-                }
-                
-                required
-                fullWidth
-                label="Username"
-                name="username"
-                autoComplete="username"
-                key="Username"
-                margin="normal"
-                variant="outlined"
-                onChange={formik.handleChange}
-                value={formik.values.username}
-                error={
-                  formik.errors.username !== "" && formik.touched.username
-                }
-                helperText={formik.errors.username}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-              className={
-                formik.errors.password ? "errorStateField" : ""
-              }
-                autoComplete="new-password"
-                key="password"
-                margin="normal"
-                
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={formik.handleChange}
+          <Grid xs={12} item className="enterUserPages">
+            <motion.div
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ ease: "easeOut", duration: 0.3 }}
+              className="container"
+            >
+              <Avatar sx={{ mt: "2em", bgcolor: theme.borders }}>
+                {/* <LockOutlinedIcon /> */}
+              </Avatar>
+              <Typography
+                component="h1"
+                variant="h5"
+                style={{ color: theme.text1 }}
+              >
+                Sign Up
+              </Typography>
+
+              <form
+                onSubmit={formik.handleSubmit}
+                style={{ marginTop: "2rem", maxWidth: "24rem" }}
+              >
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Box display="flex" style={{ gap: ".8rem" }}>
+                      <TextField
+                        // className={
+                        //   formik.errors.username ? "errorStateField" : ""
+                        // }
+                        margin="normal"
+                        autoComplete="given-name"
+                        name="firstName"
+                        fullWidth
+                        id="firstName"
+                        label="First Name"
+                        autoFocus
+                        style={{ borderColor: "red" }}
+                        onChange={formik.handleChange}
+                        value={formik.values.firstName}
+                        // error={
+                        //   formik.errors.firstName !== "" &&
+                        //   formik.touched.firstName
+                        // }
+                        // helperText={formik.errors.firstName}
+                        size="small"
+                      />
+
+                      <TextField
+                        // className={
+                        //   formik.errors.username ? "errorStateField" : ""
+                        // }
+                        margin="normal"
+                        fullWidth
+                        id="lastName"
+                        label="Last Name"
+                        name="lastName"
+                        autoComplete="family-name"
+                        onChange={formik.handleChange}
+                        value={formik.values.lastName}
+                        // error={
+                        //   formik.errors.lastName !== "" &&
+                        //   formik.touched.lastName
+                        // }
+                        // helperText={formik.errors.lastName}
+                        size="small"
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      className={
+                        formik.touched.password && formik.errors.username
+                          ? "errorStateField"
+                          : ""
+                      }
+                      required
+                      fullWidth
+                      label="Username"
+                      name="username"
+                      autoComplete="username"
+                      key="Username"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      value={formik.values.username}
+                      error={
+                        formik.touched.username && formik.errors.username
+                          ? true
+                          : false
+                      }
+                      helperText={
+                        formik.touched.username ? formik.errors.username : ""
+                      }
+                      size="small"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FaRegUser style={{ color: theme.borders }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      className={
+                        formik.errors.password && formik.touched.password
+                          ? "errorStateField"
+                          : ""
+                      } 
+                      key="password"
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={formik.handleChange}
                       value={formik.values.password}
                       error={
-                        formik.touched.password && formik.errors.password !== ""
+                        formik.touched.password && formik.errors.password
+                          ? true
+                          : false
                       }
-                      helperText={formik.errors.password}
-              />
-            </Grid>
-            {/*<Box>
+                      helperText={
+                        formik.touched.password ? formik.errors.password : ""
+                      }
+                      size="small"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <BsKey style={{ color: theme.borders }} />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {!showPassword ? (
+                              <IconButton onClick={() => setShowPassword(true)}>
+                                <HiOutlineEye
+                                  style={{ color: theme.borders }}
+                                />{" "}
+                              </IconButton>
+                            ) : (
+                              <IconButton
+                                onClick={() => setShowPassword(false)}
+                              >
+                                <HiOutlineEyeOff
+                                  style={{ color: theme.borders }}
+                                />{" "}
+                              </IconButton>
+                            )}
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+                {/*<Box>
               <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
                   defaultValue="male"
@@ -239,28 +283,34 @@ const Signup= ({ userSignupData, setUserSignupData }) => {
                   <FormControlLabel value="female" control={<Radio />} label="Female" />
               </RadioGroup>
             </Box> */}
-          
-          <CButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </CButton>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <NavLink to="/login"  className="linkStyles">
-                Already have an account? Sign in
-              </NavLink>
-            </Grid>
+
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="flex-end"
+                >
+                  <CButton
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={formik.errors.password || formik.errors.username}
+                  >
+                    Sign Up
+                  </CButton>
+
+                  <NavLink
+                    to="/login"
+                    className="linkStyles"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Already have an account? Sign in
+                  </NavLink>
+                </Box>
+              </form>
+            </motion.div>
           </Grid>
-          </Grid>
-        </form> 
-        </Box>
-      </Grid>
-      </Grid> 
-    </Container>
+        </Grid>
+      </Container>
     </Box>
   );
 };

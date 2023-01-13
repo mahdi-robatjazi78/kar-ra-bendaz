@@ -1,0 +1,28 @@
+.selected-list-todo-view-column > .MuiPaper-root {
+  margin-left: 1.6rem;
+  background-color: var(--secondSidebar);
+  border: 1px solid gray;
+}
+
+.selected-list-todo-view-column-parent {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width:50px
+}
+.todo-view-item {
+  padding: 0.5rem 1rem;
+  color:var(--text2);
+  margin:5px;
+  cursor:pointer;
+  user-select: none;
+  font-weight: bold;
+}
+
+.todo-view-item-active {
+  background: var(--sidebar);
+  border-radius: 0.4rem;
+  border: 1px solid orange;
+  color:var(--text3)
+
+}

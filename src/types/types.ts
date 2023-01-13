@@ -9,9 +9,9 @@ export interface ISidebar {
 }
 
 export interface ITodosShow {
-  show:["3col" | "1col" | "table" , "all" | "done"] 
-  setThreeColAll?:()=>void,
-  setThreeColDone?:()=>void,
+  show:["3col" | "1col" | "table" , "all" | "done" , null|2|3|4|5|6] 
+  setThreeColAll?:(number:number) =>void,
+  setThreeColDone?:(number:number) =>void,
   setOneColAll?:()=>void,
   setOneColDone?:()=>void,
   setTableAll?:()=>void,

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import TodoPageFooter from "./todoListFooter";
 import TodoList from "./todoList";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import TableListTodo from "./tableListTodo";
 import SettingBar from "./settingBar";
 import Axios from "@services/api";
@@ -38,7 +38,7 @@ const Todos = () => {
     drawerState,
   } = useContext(AppDataContext);
   // const [todoList, setTodoList] = useState([]);
-  const { open } = useContext(SidebarContext);
+  const { open ,setCloseSidebar} = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
@@ -114,6 +114,12 @@ const Todos = () => {
       let b = wb - (open === "show" ? 270 : 40);
       setWidthBoard(b);
     }
+
+    if(wb < 550){
+      if(open === "show"){
+        setCloseSidebar()
+      }
+    }
   }, [dimentions, open]);
 
   useHotkeys('alt+n', () =>setShowModalAddTodo(true))
@@ -135,7 +141,7 @@ const Todos = () => {
             showCategoryModalActions={showCategoryModalActions}
             setShowCategoryModalActions={setShowCategoryModalActions}
             showAddCategoryModal={showAddCategoryModal}
-setShowAddCategoryModal={setShowAddCategoryModal}
+            setShowAddCategoryModal={setShowAddCategoryModal}
           />
         </Box>
 
