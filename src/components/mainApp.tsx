@@ -6,7 +6,7 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import { BrowserRouter } from "react-router-dom";
 import Todos from "./Todos";
-import Home from "./home"
+import RouteBox from "./routeBox"
 import { Box, Grid } from "@mui/material";
 
 const Main = () => {
@@ -27,7 +27,7 @@ const Main = () => {
         }>
           <Header ShowBurger={ShowBurger} setShowBurger={setShowBurger}  />
   
-          <Home setShowBurger={setShowBurger} />
+          <RouteBox setShowBurger={setShowBurger} />
         
    
         </div> 

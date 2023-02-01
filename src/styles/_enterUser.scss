@@ -17,22 +17,6 @@
     align-items: center;
 
     .MuiGrid-root {
-      div {
-        // input{
-        //   color: var(--text1);
-        //   letter-spacing: 1px;
-        // }
-        label{
-          color:var(--borders) 
-
-        }
-        fieldset{
-          border-color: var(--borders);
-          legend{
-            width:5rem
-          }
-        }
-      }
 
       .errorStateField{
         fieldset{

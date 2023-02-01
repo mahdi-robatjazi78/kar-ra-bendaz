@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap');
+
+%font-styles{
+  color:var(--text1);
+  font-family: 'Noto Sans', sans-serif;
+  font-size:.8rem;
+}
+
+#home-page {
+  @extend %font-styles;
+    .add-space-box{
+      display: inline-block;
+      padding:1rem;
+      margin:1rem;
+      border:1px solid var(--borders);
+      border-radius: 12px 12px 12px 0;
+      width:220px;
+      max-height:190px;
+      .add-space-icon-box{
+        padding-bottom:5px;
+        border-bottom:1px solid var(--borders);
+
+        .add-space-icon{
+          font-size: 1.2rem;
+          color:var(--borders);
+          
+        }
+      }
+
+      .add-space-item-box{
+        padding:10px 0;
+        .add-space-item{
+          @extend %font-styles;
+          user-select: none;
+          padding:10px 10px;
+          cursor:pointer;
+          &:hover{
+            background-color:var(--text3);
+            color:black;
+
+          }
+        }
+        .add-space-item-text{
+          .small-back-icon{
+            font-size:1rem;
+            color:var(--text3);
+            margin-bottom:5px;
+          }
+        }
+      }
+    }
+
+
+
+
+}

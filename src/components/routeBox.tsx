@@ -4,7 +4,7 @@ import Signup from "./profile/Signup";
 import Login from "./profile/Login";
 import Profile from "./profile/Profile";
 import { SidebarContext } from "../context/sidebarContext";
-import Welcome from "./welcome";
+import HomePage from "./home";
 import { useLocation, Routes, Route, useNavigate } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
 import Todos from "./Todos"; 
@@ -28,7 +28,7 @@ interface ISignupData {
 const boardStyle = {
   width: "100%",
 };
-const Home = ({ setShowBurger }) => {
+const RouteBox = ({ setShowBurger }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
@@ -44,12 +44,13 @@ const Home = ({ setShowBurger }) => {
     password: "",
     gender: "",
   });
-  // const [person ,setPerson] =useState<string[]> (['mahdi robatjazi','zahra mashkani'])
+
+
 
   return (
     
         <Routes>
-          <Route path="/" element={<Welcome />} />
+          <Route path="/" element={<HomePage />} />
           <Route
             path="signup"
             element={
@@ -67,4 +68,4 @@ const Home = ({ setShowBurger }) => {
   );
 };
 
-export default Home;
+export default RouteBox;

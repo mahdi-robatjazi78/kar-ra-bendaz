@@ -2,18 +2,26 @@ import { createTheme, styled } from '@mui/material/styles';
 
 
 const muiOverridedTheme = createTheme({
-
-
+  
     components:{
 
+
+
+
+   
+      
+      
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {
                     '&:-webkit-autofill': {
                         '-webkit-box-shadow': '0 0 0 100px var(--background) inset',
-                        '-webkit-text-fill-color': 'var(--text1)'
-                    },
-                    color: 'var(--text1)'
+                        '-webkit-text-fill-color': 'var(--text1)',
+                        
+                      },
+                      color: 'var(--text1)',
+                      fontFamily: 'Noto Sans, sans-serif',
+                      letterSpacing:"1px"
                 }
             }
         },
@@ -21,8 +29,9 @@ const muiOverridedTheme = createTheme({
             styleOverrides: {
                 root: {
                     "& .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root.Mui-focused": {
-                        color: "var(--borders)",
-                        letterSpacing:"1px",
+                      
+                      color: "var(--borders)",
+                      letterSpacing:"1px",
                         fontSize:"1.1rem"
                     },
 
@@ -31,6 +40,8 @@ const muiOverridedTheme = createTheme({
                         backgroundColor: 'red !important'
                     },
                     '& input:valid + fieldset': {
+                      color: "var(--borders)",
+
                         borderColor: 'var(--borders)',
                         borderWidth: 1,
                     },
@@ -53,6 +64,10 @@ const muiOverridedTheme = createTheme({
                         borderLeftWidth: 5,
                         padding: '4px !important', // override inline-style
                     },
+                    label:{
+                      color:"var(--borders)",
+                      backgroundColor:"var(--background)"
+                    }
                 },
             }
         },

@@ -27,9 +27,6 @@ export const AppDataContextProvider = ({ children }) => {
     item: {},
   });
 
-
-
-
   const getAllTodos = async () => {
     
     try {
@@ -73,19 +70,13 @@ export const AppDataContextProvider = ({ children }) => {
       value={{
         getAllTodos,
         editTodoBody,
-
         blurPage,
         blurTrue,
         blurFalse,
-
         todoList,
         drawerState,
         setDrawerState,
-
-
         updateCategory , updateCategoryOn , updateCategoryOff,
-
-
         selected  , newCategorySelected
       }}
     >

@@ -8,7 +8,6 @@ import { BsTable, BsInfoSquare } from "react-icons/bs";
 import Axios from "@services/api";
 import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
-import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
@@ -27,7 +26,6 @@ const SettingBar = ({
   showAddCategoryModal,
   setShowAddCategoryModal,
 }) => {
-  const theme = useContext(ThemeContext);
   const { blurTrue, blurFalse, selected, newCategorySelected } = useContext(
     AppDataContext
   );

@@ -23,7 +23,7 @@ const TodoBox = (props: any) => {
   const { blurTrue, todoList, setDrawerState, getAllTodos } = useContext(
     AppDataContext
   );
- 
+
 
   const getTodoCategoryId = (todoId) => {
     const result = todoList.filter((item) => item._id === todoId);
@@ -87,20 +87,17 @@ const TodoBox = (props: any) => {
         show[2]=== 4 ? 3:
         show[2]=== 5 ? 2.4: 2
     }
-
-      // sm={show[0] === "1col" ? 12 : 6}
-      // md={show[0] === "1col" ? 12 : 6}
-      // lg={show[0] === "1col" ? 12 : 3}
       className="todo-box-grid"
     >
+       
       <Card
         className="todo-box"
         data-testid="box"
         ref={drag}
         sx={{
           opacity,
-          background:
-            flag === "isDone" ? "rgb(163, 206, 168)" : "rgba( 255, 255, 255, 0.25 )",
+          background:flag === "isDone" ? "rgb(163, 206, 168)" : "rgba( 255, 255, 255, 0.25 )",
+          border:"2px solid gray",
         
         }}
         onClick={() => {
