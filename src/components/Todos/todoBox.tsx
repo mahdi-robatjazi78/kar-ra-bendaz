@@ -24,16 +24,14 @@ const TodoBox = (props: any) => {
     AppDataContext
   );
 
-
   const getTodoCategoryId = (todoId) => {
     const result = todoList.filter((item) => item._id === todoId);
 
-    let todo = result[0]; 
+    let todo = result[0];
     return todo.categoId;
   };
 
   const addToCategoryWithDragDrop = async (item: any, dropResult: any) => {
- 
     try {
       if (dropResult?.id == null || dropResult?.id === "other") {
         const response = await Axios.put("/todos/assign-to-another-category", {
@@ -80,25 +78,32 @@ const TodoBox = (props: any) => {
       key={index}
       item
       xs={12}
-
-      sm={show[0]=== "1col" ?12 :
-        show[2]=== 2 ? 6:
-        show[2]=== 3 ? 4:
-        show[2]=== 4 ? 3:
-        show[2]=== 5 ? 2.4: 2
-    }
+      sm={
+        show[0] === "1col"
+          ? 12
+          : show[2] === 2
+          ? 6
+          : show[2] === 3
+          ? 4
+          : show[2] === 4
+          ? 3
+          : show[2] === 5
+          ? 2.4
+          : 2
+      }
       className="todo-box-grid"
     >
-       
       <Card
         className="todo-box"
         data-testid="box"
         ref={drag}
         sx={{
           opacity,
-          background:flag === "isDone" ? "rgb(163, 206, 168)" : "rgba( 255, 255, 255, 0.25 )",
-          border:"2px solid gray",
-        
+          background:
+            flag === "isDone"
+              ? "rgb(163, 206, 168)"
+              : "rgba( 255, 255, 255, 0.25 )",
+          border: "2px solid gray",
         }}
         onClick={() => {
           setDrawerState({

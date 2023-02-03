@@ -38,6 +38,8 @@ module.exports = {
   devServer: {
     port: 3000, // you can change the port
     historyApiFallback: true,
+    hot: true,
+    liveReload: true,
     
   },
   module: {

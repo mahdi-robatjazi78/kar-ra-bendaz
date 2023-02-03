@@ -5,17 +5,30 @@
   font-family: 'Noto Sans', sans-serif;
   font-size:.8rem;
 }
+%box-styles{
+  user-select: none;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  
+  cursor: pointer;
+}
 
 #home-page {
   @extend %font-styles;
+  display: flex;
+  height:100%;
+  width:100%;
     .add-space-box{
       display: inline-block;
       padding:1rem;
       margin:1rem;
-      border:1px solid var(--borders);
+      border:1.5px solid var(--borders);
       border-radius: 12px 12px 12px 0;
       width:220px;
-      max-height:190px;
+      height:190px;
+
+      @extend %box-styles;
       .add-space-icon-box{
         padding-bottom:5px;
         border-bottom:1px solid var(--borders);
@@ -38,13 +51,6 @@
             background-color:var(--text3);
             color:black;
 
-          }
-        }
-        .add-space-item-text{
-          .small-back-icon{
-            font-size:1rem;
-            color:var(--text3);
-            margin-bottom:5px;
           }
         }
       }

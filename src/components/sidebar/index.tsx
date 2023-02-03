@@ -15,15 +15,9 @@ const Sidebar = () => {
     updateCategoryOff,
     newCategorySelected,
     selected,
-    todoList,
+    headerPosition,
   } = useContext(AppDataContext);
 
-  const sidebarStyle = {
-    backgroundColor: theme.sidebar,
-    minWidth:"230px",
-    maxWidth:"230px",  
-    // height:'100vh',
-  };
 
 
 
@@ -75,7 +69,17 @@ const Sidebar = () => {
   };
   
   return (
-    <div id="sidebar" style={sidebarStyle}>
+    <div id="sidebar"
+    style={
+      headerPosition === "bottom" ? {
+        height : "calc(100vh - 70px)",
+        marginTop:"auto"
+      }:{
+        height:"100vh"
+      }
+      
+    }
+    >
       {categoryList.length ? (
         <ul id="listCategories">
           <li

@@ -6,11 +6,14 @@
   overflow: hidden;
 
   #App {
+
+
+    display:flex;
+    height:100%;
+
     .App-header {
       background-color: var(--header);
-      min-height: 10vh;
       display: flex;
-      flex-direction: row;
       align-items: center;
       justify-content: space-around;
       font-size: calc(10px + 2vmin);
@@ -35,13 +38,12 @@
           ul.MuiList{
             background-color: var(--background);
             color:var(--text1);
-  
-            
-              li{
-              }
           }
         }
     
     }
+
+
+
   }
 }

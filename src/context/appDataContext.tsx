@@ -8,18 +8,21 @@ export const AppDataContextProvider = ({ children }) => {
   const blurTrue = () => setBlurPage(true);
   const blurFalse = () => setBlurPage(false);
 
- 
-  const [updateCategory ,setUpdateCategory] = useState(false)
-  const updateCategoryOn = ()=>setUpdateCategory(true)
-  const updateCategoryOff = ()=>setUpdateCategory(false)
-  
+  const [headerPosition, setHeaderPosition] = useState("top");
+  const goHeaderTop = () => setHeaderPosition("top");
+  const goHeaderBottom = () => setHeaderPosition("bottom");
+  const goHeaderLeft = () => setHeaderPosition("left");
+  const goHeaderRight = () => setHeaderPosition("right");
 
-  const [selected,setSelected] = useState('other')
-  const newCategorySelected = (categoryId = "other")=>{
-      setSelected(categoryId)
-  }
-  
-  
+  const [updateCategory, setUpdateCategory] = useState(false);
+  const updateCategoryOn = () => setUpdateCategory(true);
+  const updateCategoryOff = () => setUpdateCategory(false);
+
+  const [selected, setSelected] = useState("other");
+  const newCategorySelected = (categoryId = "other") => {
+    setSelected(categoryId);
+  };
+
   const [todoList, setTodoList] = useState([]);
   const [drawerState, setDrawerState] = useState({
     open: false,
@@ -28,42 +31,33 @@ export const AppDataContextProvider = ({ children }) => {
   });
 
   const getAllTodos = async () => {
-    
     try {
-      setTodoList([ ])
-      const result = await Axios.get(
-        `/todos/getAll?category=${selected}`
-      );
+      setTodoList([]);
+      const result = await Axios.get(`/todos/getAll?category=${selected}`);
 
       let todos = result.data.todos.reverse();
       setTodoList(todos);
       updateCategoryOn();
-
     } catch (error) {
       console.log(error);
       console.log(error.response);
-    
     }
   };
 
-  const editTodoBody = async (id , body)=>{
-    try{
+  const editTodoBody = async (id, body) => {
+    try {
       const response = await Axios.put("/todos/update-body", {
         id: id,
         body: body,
       });
       updateCategoryOn();
-      getAllTodos()
-      console.log(response) 
-      Toast(response.data.msg)
-      
-    }catch(error){
-      console.log(error.response)
+      getAllTodos();
+      console.log(response);
+      Toast(response.data.msg);
+    } catch (error) {
+      console.log(error.response);
     }
-  }  
-
-
-
+  };
 
   return (
     <AppDataContext.Provider
@@ -76,8 +70,16 @@ export const AppDataContextProvider = ({ children }) => {
         todoList,
         drawerState,
         setDrawerState,
-        updateCategory , updateCategoryOn , updateCategoryOff,
-        selected  , newCategorySelected
+        updateCategory,
+        updateCategoryOn,
+        updateCategoryOff,
+        selected,
+        newCategorySelected,
+        headerPosition,
+        goHeaderTop,
+        goHeaderBottom,
+        goHeaderLeft,
+        goHeaderRight,
       }}
     >
       {children}

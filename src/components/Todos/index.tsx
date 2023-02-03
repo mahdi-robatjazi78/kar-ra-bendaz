@@ -9,7 +9,7 @@ import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
 import TodoDrawer from "./TodoDrawer";
 import ShowModalNewTodo from "./TodoModals/newTodo";
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys } from "react-hotkeys-hook";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppDataContext } from "@context/appDataContext";
@@ -36,9 +36,10 @@ const Todos = () => {
     getAllTodos,
     todoList,
     drawerState,
+    headerPosition,
   } = useContext(AppDataContext);
   // const [todoList, setTodoList] = useState([]);
-  const { open ,setCloseSidebar} = useContext(SidebarContext);
+  const { open, setCloseSidebar } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
@@ -52,7 +53,6 @@ const Todos = () => {
     state: "add",
     prevText: "",
   });
-  
 
   const getSelectedCategoryData = async () => {
     try {
@@ -115,19 +115,17 @@ const Todos = () => {
       setWidthBoard(b);
     }
 
-    if(wb < 550){
-      if(open === "show"){
-        setCloseSidebar()
+    if (wb < 550) {
+      if (open === "show") {
+        setCloseSidebar();
       }
     }
   }, [dimentions, open]);
 
-  useHotkeys('alt+n', () =>setShowModalAddTodo(true))
-  useHotkeys('alt+c', () =>setShowAddCategoryModal({ show: true,
-    state: "add",
-    prevText: "",}))
-
-  
+  useHotkeys("alt+n", () => setShowModalAddTodo(true));
+  useHotkeys("alt+c", () =>
+    setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
+  );
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -151,11 +149,22 @@ const Todos = () => {
         >
           <Box
             className="todo-page-box"
-            style={{
-              width: widthBoard + "px",
-            }}
+            style={
+              headerPosition === "top"
+                ? { justifyContent: "start" }
+                : headerPosition === "bottom"
+                ? { justifyContent: "end" }
+                : {}
+            }
           >
-            <Box style={{ height: "80vh", overflowY: "auto", width: "100%" }}>
+            <Box
+              className="todo-list"
+              style={
+                headerPosition === "top" || headerPosition === "bottom"
+                  ? { height: "83%" }
+                  : { height: "100%" }
+              }
+            >
               {!todoListCopy.length ? (
                 <Box>
                   <EmptyListAnimation text="Empty List 😐" />

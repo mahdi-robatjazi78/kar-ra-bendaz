@@ -1,0 +1,14 @@
+.d-flex-between{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.d-flex-around{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.icon-styles{
+    font-size:1rem;
+    color:var(--text3);
+}

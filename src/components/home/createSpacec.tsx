@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, IconButton, TextField, Typography } from "@mui/material";
 import { BiMessageSquareAdd } from "react-icons/bi";
-import { IoMdArrowRoundBack } from "react-icons/io"; 
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const CreateSpace = () => {
   const [showCreateItems, setShowCreateItems] = useState({
@@ -10,14 +10,23 @@ const CreateSpace = () => {
   });
   const [title, setTitle] = useState("");
 
-
-
-
-  
   return (
     <Box className="add-space-box">
-      <Box className="add-space-icon-box">
-        <BiMessageSquareAdd className="add-space-icon" />
+      <Box className="add-space-icon-box d-flex-between">
+        <IconButton>
+          {" "}
+          <BiMessageSquareAdd className="add-space-icon" />{" "}
+        </IconButton>
+        {!showCreateItems.state && (
+          <IconButton
+            onClick={() => {
+              setTitle("");
+              setShowCreateItems({ state: true, item: "" });
+            }}
+          >
+            <IoMdArrowRoundBack className="icon-styles" />
+          </IconButton>
+        )}
       </Box>
       <Box className="add-space-item-box">
         {showCreateItems.state ? (
@@ -41,13 +50,6 @@ const CreateSpace = () => {
           </>
         ) : (
           <Box className="add-space-item-text">
-            <IconButton
-              onClick={() => {
-                setTitle("")
-                setShowCreateItems({ state: true, item: "" })}}
-            >
-              <IoMdArrowRoundBack className="small-back-icon" />
-            </IconButton>
             <TextField
               variant="outlined"
               fullWidth
@@ -57,12 +59,12 @@ const CreateSpace = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               label={`${showCreateItems.item} title`}
-              sx={
-                {"& label":{
+              sx={{
+                "& label": {
                   fontSize: ".7rem",
                   lineHeight: "1.4rem",
-                }}
-              }
+                },
+              }}
             />
           </Box>
         )}

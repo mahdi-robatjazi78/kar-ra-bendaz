@@ -26,7 +26,7 @@ const SettingBar = ({
   showAddCategoryModal,
   setShowAddCategoryModal,
 }) => {
-  const { blurTrue, blurFalse, selected, newCategorySelected } = useContext(
+  const { blurTrue, blurFalse, selected, headerPosition  } = useContext(
     AppDataContext
   );
 
@@ -140,7 +140,19 @@ const SettingBar = ({
   };
 
   return (
-    <Box id="setting-bar-container">
+    <Box id="setting-bar-container"
+    style={
+
+     headerPosition === "bottom" ? {
+       marginTop:"auto",
+        height : "calc(100vh - 70px)",
+      }:{
+        height:"100vh"
+      }
+      
+    }
+    
+    >
       <Box className="setting-bar-section">
         <Tooltip arrow placement="right" title="New Category">
           <Box
