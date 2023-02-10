@@ -11,7 +11,7 @@ const ShowModalNewTodo = (props) => {
   const { setShowModalAddTodo } = props;
 
   const theme = useContext(ThemeContext);
-  const { selected, getAllTodos, blurFalse, updateCategoryOn, blurTrue } =
+  const { selected, getAllTodos, blurFalse, selectedWorkspace, blurTrue } =
     useContext(AppDataContext);
 
   const getInformationOfCategory = async (selectedCategoryId) => {
@@ -30,9 +30,9 @@ const ShowModalNewTodo = (props) => {
     try {
       const response = await Axios.post("/todos/newTodo", {
         todo: newTask,
+        ws:selectedWorkspace.id,
         ...(intoCategory && { categoId: selected }),
       });
-      console.log(response);
       getAllTodos(); 
       Toast(response.data.msg);
     } catch (error) {

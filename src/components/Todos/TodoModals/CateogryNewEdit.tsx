@@ -17,10 +17,11 @@ const ShowModalNewCategory = (props) => {
   const theme = useContext(ThemeContext);
   const { selected, getAllTodos, blurFalse, updateCategoryOn, blurTrue } =
     useContext(AppDataContext);
+    const {selectedWorkspace} = useContext(AppDataContext)
 
   const submitNewCategory = async (title) => {
     try {
-      const response = await Axios.post("/category/new", { title });
+      const response = await Axios.post("/category/new", { title , ws:selectedWorkspace.id });
       Toast(response.data.msg);
       updateCategoryOn();
     } catch (error) {

@@ -7,10 +7,9 @@ import { AppDataContextProvider } from "@context/appDataContext";
 import Main from "@compo/mainApp";
 import CustomeRouter from "@services/customeRouter";
 import CustomeHistory from "@services/customeHistory";
-import {ThemeProvider} from "@mui/material/styles"
+import { ThemeProvider } from "@mui/material/styles";
 // @ts-ignore
-import muiOverridedTheme from "./muiTheme.ts"
-
+import muiOverridedTheme from "./muiTheme.ts";
 
 function App() {
   // const darkModeTheme = createTheme(getDesignTokens("dark"));
@@ -19,17 +18,15 @@ function App() {
     <CustomeRouter history={CustomeHistory}>
       <ThemeContextProvider>
         <AppDataContextProvider>
-              <SidebarProvider>
-                <TodoContextProvider>
-                  <Toaster position="bottom-center" reverseOrder={true} />
+          <SidebarProvider>
+            <TodoContextProvider>
+              <Toaster position="bottom-center" reverseOrder={true} />
 
-                   <ThemeProvider theme={muiOverridedTheme}>
-
-                  <Main />
-
-                   </ThemeProvider>
-                </TodoContextProvider>
-              </SidebarProvider>
+              <ThemeProvider theme={muiOverridedTheme}>
+                <Main />
+              </ThemeProvider>
+            </TodoContextProvider>
+          </SidebarProvider>
         </AppDataContextProvider>
       </ThemeContextProvider>
     </CustomeRouter>

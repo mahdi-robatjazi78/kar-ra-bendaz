@@ -4,6 +4,7 @@ import Axios from "@services/api";
 import { AppDataContext } from "@context/appDataContext";
 import { useDrop } from 'react-dnd'
 import SidebarItem from "./sidebarItem"
+import { Typography } from "@mui/material";
 
 
 
@@ -16,6 +17,7 @@ const Sidebar = () => {
     newCategorySelected,
     selected,
     headerPosition,
+    selectedWorkspace
   } = useContext(AppDataContext);
 
 
@@ -36,7 +38,7 @@ const Sidebar = () => {
 
   const showSubset = async () => {
     try { 
-      const response = await Axios.get("/category/getAll");
+      const response = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
       setCategoryList(response.data.list);
       updateCategoryOff();
     } catch (error) {
@@ -80,6 +82,16 @@ const Sidebar = () => {
       
     }
     >
+    {
+      selectedWorkspace?.title && (
+        <Typography className="ws-title"  component={"h4"}>
+          {selectedWorkspace?.title}
+        </Typography>
+      )
+    }
+
+
+
       {categoryList.length ? (
         <ul id="listCategories">
           <li

@@ -8,14 +8,14 @@ import Swal from "sweetalert2";
 
 const ShowModalAddToCategory = (props) => {
   const { todo, setModalOpen } = props;
-  const { blurFalse, getAllTodos, updateCategoryOn, drawerState, setDrawerState } =
+  const { blurFalse, getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
     useContext(AppDataContext);
 
   const theme = useContext(ThemeContext);
 
   const addToCategoryModal = async (id) => {
     try {
-      const resp = await Axios.get("/category/getAll");
+      const resp = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
       const allCategories = resp.data.list;
 
       const selectedCategoryIndex = await Swal.fire({

@@ -11,11 +11,11 @@ const ShowModalDelete = (props) => {
 
   
   const theme = useContext(ThemeContext);
-  const { getAllTodos , setDrawerState, blurFalse ,updateCategoryOn } = useContext(AppDataContext);
-
+  const { getAllTodos , setDrawerState, blurFalse ,updateCategoryOn , selectedWorkspace } = useContext(AppDataContext);
+  
   const deleteTodo = async () => {
     try {
-      const response = await Axios.delete(`/todos/delete/${todo._id}`);
+      const response = await Axios.delete(`/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`);
       console.log(response);
       updateCategoryOn();
       getAllTodos();

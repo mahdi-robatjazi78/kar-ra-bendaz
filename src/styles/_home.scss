@@ -10,23 +10,23 @@
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  
   cursor: pointer;
 }
 
 #home-page {
   @extend %font-styles;
-  display: flex;
   height:100%;
   width:100%;
+  padding:2rem;
+  
+  .MuiGrid-root{
+      grid-gap:1rem;
     .add-space-box{
-      display: inline-block;
       padding:1rem;
-      margin:1rem;
       border:1.5px solid var(--borders);
       border-radius: 12px 12px 12px 0;
-      width:220px;
-      height:190px;
+      width:100%;
+      height:200px;
 
       @extend %box-styles;
       .add-space-icon-box{
@@ -50,13 +50,12 @@
           &:hover{
             background-color:var(--text3);
             color:black;
-
           }
         }
       }
     }
 
-
+  }
 
 
 }

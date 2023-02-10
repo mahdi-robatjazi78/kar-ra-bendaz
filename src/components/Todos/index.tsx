@@ -19,6 +19,8 @@ import Sidebar from "../sidebar";
 import { SidebarContext } from "@/context/sidebarContext";
 import useWindowSize from "@/hooks/useWindowSize";
 
+
+
 interface ITodoStructure {
   title: string;
   body: string;
@@ -37,6 +39,7 @@ const Todos = () => {
     todoList,
     drawerState,
     headerPosition,
+    selectedWorkspace,
   } = useContext(AppDataContext);
   // const [todoList, setTodoList] = useState([]);
   const { open, setCloseSidebar } = useContext(SidebarContext);
@@ -73,13 +76,16 @@ const Todos = () => {
   }, [show, todoList]);
 
   useEffect(() => {
-    getAllTodos();
-    if (selected === "other") {
-      setUserSelectedCategory({});
-    } else {
-      getSelectedCategoryData();
+    if(selectedWorkspace.id){
+
+      getAllTodos();
+      if (selected === "other") {
+        setUserSelectedCategory({});
+      } else {
+        getSelectedCategoryData();
+      }
     }
-  }, [selected]);
+  }, [selected ,selectedWorkspace]);
 
   const setTodoDone = async (todo) => {
     try {
@@ -97,7 +103,7 @@ const Todos = () => {
 
   const deleteTodo = async (todo) => {
     try {
-      const response = await Axios.delete(`/todos/delete/${todo._id}`);
+      const response = await Axios.delete(`/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`);
 
       getAllTodos();
 

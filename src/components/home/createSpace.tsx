@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Box, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import { BiMessageSquareAdd } from "react-icons/bi";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import Axios from "@services/api";
+import Toast from "../../util/toast";
 
 const CreateSpace = () => {
   const [showCreateItems, setShowCreateItems] = useState({
@@ -9,6 +11,26 @@ const CreateSpace = () => {
     item: "",
   });
   const [title, setTitle] = useState("");
+  const sendData = async()=>{
+
+    if(title.length > 2){
+      if(showCreateItems.item === "workspace"){
+
+       try{
+        const response = await Axios.post("/ws/new" , {title})
+        Toast(response.data.msg)
+
+       }
+       catch(error){
+        console.log(error.response)
+       } 
+        
+      }
+    }
+
+  }
+
+
 
   return (
     <Box className="add-space-box">
@@ -49,6 +71,7 @@ const CreateSpace = () => {
             </Typography>
           </>
         ) : (
+          <>
           <Box className="add-space-item-text">
             <TextField
               variant="outlined"
@@ -67,6 +90,8 @@ const CreateSpace = () => {
               }}
             />
           </Box>
+          <Button disabled={title.length < 3} onClick={()=>sendData()}>Send</Button>
+        </>
         )}
       </Box>
     </Box>

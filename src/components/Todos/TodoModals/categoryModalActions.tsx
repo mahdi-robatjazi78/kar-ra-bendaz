@@ -12,7 +12,7 @@ const CategoryModalActions = (props)  =>{
 
     const {userSelectedCategory ,setShowAddCategoryModal,setShowCategoryModalActions} = props
     const MySwal = withReactContent(Swal);
-    const { blurFalse,blurTrue, getAllTodos, updateCategoryOn, todoList,newCategorySelected, selected } =
+    const { blurFalse,blurTrue, getAllTodos, updateCategoryOn, todoList,newCategorySelected, selected , selectedWorkspace } =
       useContext(AppDataContext);
   
     const theme = useContext(ThemeContext);
@@ -209,18 +209,17 @@ const CategoryModalActions = (props)  =>{
         });
 
         if (option) {
-          console.log(option);
 
           if (option === "onlyCategory") {
             const response = await Axios.delete(
-              `/category/deleteOnlyCategory?id=${userSelectedCategory.category.uuid}`
+              `/category/deleteOnlyCategory?id=${userSelectedCategory.category.uuid}&ws=${selectedWorkspace.id}`
             );
             updateCategoryOn();
             newCategorySelected();
             Toast(response.data.msg);
           } else if (option === "withAllTodos") {
             const response = await Axios.delete(
-              `/category/deleteCategoryWithTodos?id=${userSelectedCategory.category.uuid}`
+              `/category/deleteCategoryWithTodos?id=${userSelectedCategory.category.uuid}&ws=${selectedWorkspace.id}`
             );
             updateCategoryOn();
             newCategorySelected();

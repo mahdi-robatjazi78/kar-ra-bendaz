@@ -18,7 +18,7 @@ const CardIcons = ({
 }) => {
 
   const theme = useContext(ThemeContext);
-  const {blurTrue , blurFalse  ,updateCategoryOn}  = useContext(AppDataContext)
+  const {blurTrue , blurFalse  ,updateCategoryOn ,selectedWorkspace}  = useContext(AppDataContext)
   const iconsStyle = {
     fontSize: "1.7rem",
     color: todo.flag !== "isDone" ? theme.text3 : "black",
@@ -28,7 +28,7 @@ const CardIcons = ({
   const addToCategory = async (todo) => {
     try {
     
-      const resp = await Axios.get("/category/getAll");
+      const resp = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
       const allCategories = resp.data.list;
       
       
