@@ -125,7 +125,7 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                 variant="h5"
                 style={{ color: theme.text1 }}
               >
-                Sign Up
+                Signup
               </Typography>
 
               <form
@@ -287,24 +287,28 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                 <Box
                   display="flex"
                   justifyContent="space-between"
-                  alignItems="flex-end"
+                  alignItems="center"
+                  style={{marginTop:"1.5rem"}}
                 >
+
+
+                <NavLink
+                    to="/login"
+                    className="linkStyles"
+                  >
+                    Already have an account? go to Login
+                  </NavLink>
+
+
                   <CButton
                     type="submit"
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
                     disabled={formik.errors.password || formik.errors.username}
                   >
-                    Sign Up
+                    <span className="submit-button-text">Signup</span>
                   </CButton>
 
-                  <NavLink
-                    to="/login"
-                    className="linkStyles"
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    Already have an account? Sign in
-                  </NavLink>
+                
                 </Box>
               </form>
             </motion.div>

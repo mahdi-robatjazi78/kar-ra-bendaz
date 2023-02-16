@@ -199,19 +199,22 @@ const Login = () => {
                     />
                   </Grid>
                 </Grid>
-                <Box display="flex" justifyContent="space-between" alignItems={"flex-end"}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" style={{marginTop:"1.5rem"}}>
+
+
+                <NavLink to="/signup" className="linkStyles">
+                  {"Don't have an account? go to Signup"}
+                </NavLink> 
+
 
                 <CButton
                   type="submit"
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
                   disabled={formik.errors.password || formik.errors.username}
                   >
-                  Login
+                  <span className="submit-button-text">Login</span>
                 </CButton>
-                  <NavLink to="/signup" className="linkStyles" style={{marginBottom:"1rem"}}>
-                    {"Don't have an account? Sign Up"}
-                  </NavLink>
+                
                   
                   </Box>
                  

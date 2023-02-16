@@ -8,8 +8,12 @@ import Main from "@compo/mainApp";
 import CustomeRouter from "@services/customeRouter";
 import CustomeHistory from "@services/customeHistory";
 import { ThemeProvider } from "@mui/material/styles";
-// @ts-ignore
-import muiOverridedTheme from "./muiTheme.ts";
+import MuiTextFieldCustomizedTheme from "./styles/mui/textField";
+import MuiSwitchCustomizedTheme from './styles/mui/switch'
+import CombineCustomizedStyles from './styles/mui'
+
+
+
 
 function App() {
   // const darkModeTheme = createTheme(getDesignTokens("dark"));
@@ -22,7 +26,7 @@ function App() {
             <TodoContextProvider>
               <Toaster position="bottom-center" reverseOrder={true} />
 
-              <ThemeProvider theme={muiOverridedTheme}>
+              <ThemeProvider theme={CombineCustomizedStyles}>
                 <Main />
               </ThemeProvider>
             </TodoContextProvider>
