@@ -40,7 +40,6 @@ const instance = axios.create({
 const showAlertExpirationAccout = () => {
   const darkMode = JSON.parse(localStorage.getItem("darkmode"));
 
-  console.log("dark mode >>>", darkMode);
 
   MySwal.fire({
     title: "Expiration Token",
@@ -54,12 +53,9 @@ const showAlertExpirationAccout = () => {
       confirmButton: darkMode
         ? "Modal_Confirm_Button_FullWidth_Dark"
         : "Modal_Confirm_Button_FullWidth_Light",
-      footer: "Modal_Footer",
-      input: darkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
     },
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log("here");
       handleLogoutUser();
       CustomeHistory.replace("/login");
     }

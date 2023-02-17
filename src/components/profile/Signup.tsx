@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../../services/api";
 import { SidebarContext } from "../../context/sidebarContext";
-import CButton from "@/styled-component/Cbutton";
+import CButton from "@/styles/styled/Cbutton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";

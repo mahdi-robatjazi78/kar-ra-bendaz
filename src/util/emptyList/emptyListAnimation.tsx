@@ -2,9 +2,9 @@ import React from "react";
 import { Typography } from "@mui/material";
 import "./emptylist.css";
 
-const EmptyListAnimation = ({ text }) => {
+const EmptyListAnimation = ({ text , fontSize="3rem" }) => {
   return (
-    <Typography color="red" fontSize="3rem" className="jt">
+    <Typography color="red" fontSize={fontSize} className="jt">
       <span className="jt__row">
         <span className="jt__text">{text}</span>
       </span>

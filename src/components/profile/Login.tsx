@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import Axios, { base_url } from "../../services/api";
 import Toast from "../../util/toast";
-import CButton from "@/styled-component/Cbutton";
+import CButton from "@/styles/styled/Cbutton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaRegUser } from "react-icons/fa";

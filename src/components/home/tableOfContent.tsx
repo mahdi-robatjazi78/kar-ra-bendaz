@@ -27,13 +27,10 @@ import { CgArrowsShrinkH } from "react-icons/cg";
 import { IoCloseSharp, IoReloadOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import Toast from "@/util/toast";
-import { styled } from '@mui/material/styles';
-import{ tableCellClasses } from '@mui/material/TableCell';
-
-
-
-
-
+import { styled } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
+import StyledSwitchComponent from "../../styles/styled/CustomeSwitch";
+import EmptyListAnimation from "@/util/emptyList/emptyListAnimation";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,29 +49,24 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box>{children}</Box>}
     </div>
   );
 }
 
 const AddOrSearchUi = (props) => {
-  const { state, space, backToIcons , getWorkspaceAndBoardsData } = props;
+  const { state, space, backToIcons, getWorkspaceAndBoardsData } = props;
 
   const [value, setValue] = useState("");
-  const handlekeydown = (e)=>{
+  const handlekeydown = (e) => {
     if (e.keyCode == 13) {
-      if(state === "add"){
-        AddWorkspace()
-      }
-      else{
-        SearchInWorkspace()
+      if (state === "add") {
+        AddWorkspace();
+      } else {
+        SearchInWorkspace();
       }
     }
-  }
+  };
   const handleChangeValue = (e) => {
     setValue(e.target.value);
   };
@@ -93,55 +85,31 @@ const AddOrSearchUi = (props) => {
     }
   };
 
-
-  const AddWorkspace = async()=>{
-    try{
-      if(value){
-
-        const response = await Axios.post("/ws/new" , {title : value})
-        getWorkspaceAndBoardsData()
-        Toast(response.data.msg)
-        backToIcons()
+  const AddWorkspace = async () => {
+    try {
+      if (value) {
+        const response = await Axios.post("/ws/new", { title: value });
+        getWorkspaceAndBoardsData();
+        Toast(response.data.msg);
+        backToIcons();
       }
-     }
-     catch(error){
-      console.log(error.response)
-     } 
-  }
-
-
-
-  const SearchInWorkspace = async()=>{
-    if(value){
-      getWorkspaceAndBoardsData(true , value)
+    } catch (error) {
+      console.log(error.response);
     }
-  }
+  };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const SearchInWorkspace = async () => {
+    if (value) {
+      getWorkspaceAndBoardsData(true, value);
+    }
+  };
 
   return (
     <Box>
       <TextField
+        autoFocus
         type="text"
+        size="small"
         variant="standard"
         label={<>{getLabel()}</>}
         value={value}
@@ -152,37 +120,42 @@ const AddOrSearchUi = (props) => {
             <>
               <InputAdornment position="end">
                 <Tooltip title={state === "add" ? "Add" : "Search"}>
-                  
-                    {state === "add" ? 
+                  {state === "add" ? (
                     <IconButton
-                    onClick={()=>{
-                      if(space === "workspace"){
-                        AddWorkspace()
-                      }
-                    }}
-                    ><RiAddLine className="add-space-icon" /></IconButton> :
-                     <IconButton
-                      onClick={()=>{
-                        if(space === "workspace"){
-                          SearchInWorkspace()
+                      onClick={() => {
+                        if (space === "workspace") {
+                          AddWorkspace();
                         }
                       }}
-                     ><FiSearch className="add-space-icon" /> </IconButton>}
-                  
+                    >
+                      <RiAddLine className="add-space-icon" />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      onClick={() => {
+                        if (space === "workspace") {
+                          SearchInWorkspace();
+                        }
+                      }}
+                    >
+                      <FiSearch className="add-space-icon" />{" "}
+                    </IconButton>
+                  )}
                 </Tooltip>
               </InputAdornment>
 
               <InputAdornment position="end">
                 <Tooltip title={"Close"}>
-                  <IconButton onClick={()=>{
-                    if(state === "add"){
-                      backToIcons()
-                    }
-                    else if(state === 'search'){
-                      getWorkspaceAndBoardsData()
-                      backToIcons()
-                    }
-                  }}>
+                  <IconButton
+                    onClick={() => {
+                      if (state === "add") {
+                        backToIcons();
+                      } else if (state === "search") {
+                        getWorkspaceAndBoardsData();
+                        backToIcons();
+                      }
+                    }}
+                  >
                     <IoCloseSharp className="add-space-icon" />
                   </IconButton>
                 </Tooltip>
@@ -207,34 +180,34 @@ const TableOfContent = () => {
   const [workspacesList, setWorkspaceList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
-  const getWorkspaceAndBoardsData = async (searchMode = false , searchText="") => {
+  const getWorkspaceAndBoardsData = async (
+    searchMode = false,
+    searchText = ""
+  ) => {
     try {
-
-      if(searchMode === false){
-      setLoading(true);
-      const resp = await Axios.get("/ws/get-all?searchText=");
-      const list = resp.data.workspaces;
-      setWorkspaceList(list);
-      const selected = list.filter((item) => item.active);
-      localStorage.setItem(
-        "selectedWs",
-        JSON.stringify({ title: selected[0].title, id: selected[0].id })
-      );
-      setLoading(false);
-      }else{
+      if (searchMode === false) {
+        setLoading(true);
+        const resp = await Axios.get("/ws/get-all?searchText=");
+        const list = resp.data.workspaces;
+        setWorkspaceList(list);
+        const selected = list.filter((item) => item.active);
+        localStorage.setItem(
+          "selectedWs",
+          JSON.stringify({ title: selected[0].title, id: selected[0].id })
+        );
+        setLoading(false);
+      } else {
         setLoading(true);
 
         const resp = await Axios.get(`/ws/get-all?searchText=${searchText}`);
         const list = resp.data.workspaces;
         setWorkspaceList(list);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     getWorkspaceAndBoardsData();
@@ -257,51 +230,36 @@ const TableOfContent = () => {
     }
   };
 
+  const StyledTableCell = styled(TableCell)({
+    [`&.${tableCellClasses.head}`]: {
+      padding: ".4rem",
+      color: theme.text2,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+      padding: ".4rem .4rem .4rem .7rem",
+      color: theme.text1,
+    },
+  });
 
-
-
-console.log("theme >>> " ,theme.background)
-
-
-
-
-
-    
-const StyledTableCell = styled(TableCell)({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor:"red",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    padding:".4rem",
-    color: theme.text1,
-  },
-});
-
-const StyledTableRow = styled(TableRow)({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.isDarkMode ?`#011a69`:"rgb(215,215,215)",
+  const StyledTableRow = styled(TableRow)({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.isDarkMode ? `#011a69` : "rgb(215,215,215)",
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
-  }
-);
-
+  });
 
   return (
-    <Box
-      className="add-space-box"
-      style={{ height: "26rem" }}
-    >
+    <Box className="add-space-box" style={{ height: "26rem"  , position:'relative'}}>
       <Box className="add-space-icon-box d-flex-between">
         <IconButton>
           <MdWorkspacesOutline className="add-space-icon" />
         </IconButton>
         {state === "icons" ? (
           <Box>
-            
             <Tooltip title={value == 0 ? "Add new workspace" : "Add new board"}>
               <IconButton onClick={() => setState("add")}>
                 <RiAddLine className="add-space-icon" />
@@ -320,8 +278,8 @@ const StyledTableRow = styled(TableRow)({
               </IconButton>
             </Tooltip>
             <Tooltip title="Reload">
-              <IconButton onClick={()=>getWorkspaceAndBoardsData()}>
-              <IoReloadOutline className="add-space-icon" />
+              <IconButton onClick={() => getWorkspaceAndBoardsData()}>
+                <IoReloadOutline className="add-space-icon" />
               </IconButton>
             </Tooltip>
           </Box>
@@ -331,7 +289,6 @@ const StyledTableRow = styled(TableRow)({
             space={value == 0 ? "workspace" : "board"}
             backToIcons={backToIcons}
             getWorkspaceAndBoardsData={getWorkspaceAndBoardsData}
-
           />
         ) : state === "pagination" ? (
           <></>
@@ -341,7 +298,6 @@ const StyledTableRow = styled(TableRow)({
       </Box>
       <Box className="add-space-item-box">
         <Tabs
-          centered
           variant="scrollable"
           value={value}
           onChange={handleChange}
@@ -350,8 +306,8 @@ const StyledTableRow = styled(TableRow)({
             "& .MuiButtonBase-root": {
               color: theme.text1,
               fontSize: ".8rem",
-              marginTop:".5rem",
-              marginBottom:".5rem",
+              marginTop: ".5rem",
+              marginBottom: ".5rem",
             },
 
             "& .MuiButtonBase-root:hover": {
@@ -359,13 +315,10 @@ const StyledTableRow = styled(TableRow)({
               fontSize: ".8rem",
             },
 
-
-
-
             "& .Mui-selected": {
               color: theme.borders,
               borderRadius: "10px",
-              border:`1px solid ${theme.borders}`,
+              border: `1px solid ${theme.borders}`,
               fontSize: ".8rem",
             },
 
@@ -378,79 +331,55 @@ const StyledTableRow = styled(TableRow)({
           <Tab value={1} label="Note Boadrds" />
         </Tabs>
 
-        <TabPanel value={value} index={0} >
-
-
-
-         
-        {loading ? (
-                <Box display="flex" justifyContent={"space-around"} >
-                  {
-                Array(16)
-                  .fill("t")
-                  .map((item) => (
-                    <Skeleton variant="rectangular" width={20} height={20} />
-
-                  ))
-                      }
-
-                    </Box>
-
-
-
-              ) :(
-
-              
-
-          <TableContainer sx={{ maxHeight: 270 , padding:0 }}>
-
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ color: theme.text2, fontWeight: "bold" }}>
-                  Title
-                </TableCell>
-                <TableCell style={{ color: theme.text2, fontWeight: "bold" }}>
-                  Categories
-                </TableCell>
-                <TableCell style={{ color: theme.text2, fontWeight: "bold" }}>
-                  Todos
-                </TableCell>
-                <TableCell style={{ color: theme.text2, fontWeight: "bold" }}>
-                  Active
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-          
+        <TabPanel value={value} index={0}>
+          {loading ? (
+            <Box display="flex" justifyContent={"space-around"}>
+              {Array(16)
+                .fill("t")
+                .map((item) => (
+                  <Skeleton variant="rectangular" width={20} height={20} />
+                ))}
+            </Box>
+          ) : (
+            <TableContainer sx={{ maxHeight: 270, padding: 0 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell
+                      style={{ color: theme.text2, fontWeight: "bold" }}
+                    >
+                      Title
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{ color: theme.text2, fontWeight: "bold" }}
+                    >
+                      Categories
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{ color: theme.text2, fontWeight: "bold" }}
+                    >
+                      Todos
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{ color: theme.text2, fontWeight: "bold" }}
+                    >
+                      Active
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
                   {!workspacesList || !workspacesList.length ? (
-                    <Typography variant="h4" component="h4" className="central">
-                      no data
-                    </Typography>
+                    <Box style={{width:"100%" , height:120 , position:'absolute' , bottom:50}}>
+                            <EmptyListAnimation text="Empty List 📝" fontSize="2rem" />
+                          </Box>
                   ) : (
-                    <>
+                    <TableBody>
                       {workspacesList.map((item) => (
                         <StyledTableRow>
-                          <StyledTableCell
-                            // style={{ color: theme.text1, fontStyle: "italic" }}
-                          >
-                            {item.title}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            // style={{ color: theme.text1, fontStyle: "italic" }}
-                          >
-                            {item.categorySum}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            // style={{ color: theme.text1, fontStyle: "italic" }}
-                          >
-                            {item.todoSum}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            // style={{ color: theme.text1, fontStyle: "italic" }}
-                          >
-                            <Switch
-                              style={{ padding: "12px" }}
+                          <StyledTableCell>{item.title}</StyledTableCell>
+                          <StyledTableCell>{item.categorySum}</StyledTableCell>
+                          <StyledTableCell>{item.todoSum}</StyledTableCell>
+                          <StyledTableCell>
+                            <StyledSwitchComponent
                               checked={item.active}
                               name="active-sys-log"
                               color="primary"
@@ -464,17 +393,11 @@ const StyledTableRow = styled(TableRow)({
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
-                    </>
+                      </TableBody>
                   )}
-              
-            </TableBody>
-          </Table>
-          </TableContainer>
-              )}
-
-
-
-
+              </Table>
+            </TableContainer>
+          )}
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two
