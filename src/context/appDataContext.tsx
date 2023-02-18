@@ -24,12 +24,13 @@ export const AppDataContextProvider = ({ children }) => {
   }
   
   const selectedWs = JSON.parse(window.localStorage.getItem("selectedWs"))
+
   const [selectedWorkspace, setSelectedWorkspace] = useState<ISelectedWorkspace>({id:"",title:""});
   useEffect(()=>{
-    if(selectedWs.id && selectedWs.id !== selectedWorkspace.id){
+    if(selectedWs?.id && selectedWs?.id !== selectedWorkspace.id){
       setSelectedWorkspace({id:selectedWs?.id , title :selectedWs.title})
     }
-  } , [selectedWs.id])
+  } , [selectedWs?.id])
   
   const [selected, setSelected] = useState("other");
   const newCategorySelected = (categoryId = "other") => {
