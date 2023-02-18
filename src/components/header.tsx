@@ -39,7 +39,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
   const handleLogoutUser = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-      const response = await axios.put(`${base_url}/users/logout`, {
+      const response = await axios.put(`${base_url}/api/users/logout`, {
         email: user.email,
       });
       console.log("response logout", response);

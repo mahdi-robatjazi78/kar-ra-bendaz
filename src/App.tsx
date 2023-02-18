@@ -8,25 +8,21 @@ import Main from "@compo/mainApp";
 import CustomeRouter from "@services/customeRouter";
 import CustomeHistory from "@services/customeHistory";
 import { ThemeProvider } from "@mui/material/styles";
-import MuiTextFieldCustomizedTheme from "./styles/mui/textField";
-import MuiSwitchCustomizedTheme from './styles/mui/switch'
 import CombineCustomizedStyles from './styles/mui'
 
-
-
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
 function App() {
-  // const darkModeTheme = createTheme(getDesignTokens("dark"));
-
   return (
+    <Provider store={store}>
     <CustomeRouter history={CustomeHistory}>
       <ThemeContextProvider>
         <AppDataContextProvider>
           <SidebarProvider>
             <TodoContextProvider>
               <Toaster position="bottom-center" reverseOrder={true} />
-
-              <ThemeProvider theme={CombineCustomizedStyles}>
+                <ThemeProvider theme={CombineCustomizedStyles}>
                 <Main />
               </ThemeProvider>
             </TodoContextProvider>
@@ -34,6 +30,7 @@ function App() {
         </AppDataContextProvider>
       </ThemeContextProvider>
     </CustomeRouter>
+    </Provider>
   );
 }
 

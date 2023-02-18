@@ -85,7 +85,7 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
 
     onSubmit: async (values) => {
       try {
-        await axios.post(`${base_url}/users/new`, {
+        await axios.post(`${base_url}/api/users/new`, {
           firstName: values.firstName,
           lastName: values.lastName,
           gender: "female",

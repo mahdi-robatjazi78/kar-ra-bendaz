@@ -58,7 +58,7 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${base_url}/users/login`, {
+        const response = await axios.post(`${base_url}/api/users/login`, {
           email: values.username,
           password: values.password,
         });
