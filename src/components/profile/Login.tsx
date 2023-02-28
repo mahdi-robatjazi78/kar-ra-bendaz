@@ -25,10 +25,13 @@ import { FaRegUser } from "react-icons/fa";
 import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { motion } from "framer-motion"
+import { useDispatch } from "react-redux";
+import { setMeData, setUserToken } from "@/redux/features/userSlice";
 
 
 const Login = () => {
   const theme = useContext(ThemeContext);
+  const dispatch = useDispatch()
   const { setCloseSidebar } = useContext(SidebarContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -58,12 +61,21 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${base_url}/api/users/login`, {
+        const response = await axios.post(`${base_url}/users/login`, {
           email: values.username,
           password: values.password,
         });
+        
+        dispatch(setUserToken({
+          token:response.data.data.token
+        }))
+        const {email ,fname,lname ,gender , userName} = response.data.data
+        dispatch(setMeData({
+          email ,fname,lname ,gender , userName,
+        }))
         Axios.defaults.headers["x-auth-token"] = response.data.data.token;
         localStorage.setItem("user", JSON.stringify(response.data.data));
+
         navigate("/");
         Toast(response.data.msg);
       } catch (error) {

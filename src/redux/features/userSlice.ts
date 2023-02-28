@@ -25,18 +25,17 @@ const initialState: IUser = {
   }
 }
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
   name: 'user-slice',
   initialState,
   reducers: {
 
-    setUserToken : (t)=>{
-      
-
+    setUserToken : (state , action)=>{
+      state.token = action.payload.token
     },
-    setMeData:(data)=>{
+    setMeData:(state , action)=>{
 
-      console.log(data)
+      state.me = action.payload
 
 
     }
@@ -45,6 +44,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-// export const { setUserToken, decrement, incrementByAmount } = counterSlice.actions
+export const { setUserToken,setMeData } = userSlice.actions
 
-export default counterSlice.reducer
+export default userSlice.reducer

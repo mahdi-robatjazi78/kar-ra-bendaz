@@ -3,6 +3,7 @@ import CustomeHistory from "./customeHistory";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
+import UnAuthenticatedModal from "@/components/modal/unAuthenticated";
 
 let base_url :string ;
 
@@ -16,13 +17,12 @@ if (process.env.NODE_ENV === "development") {
 
 const MySwal = withReactContent(Swal);
 
-const handleLogoutUser = async () => {
+export const handleLogoutUser = async () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
-    const response = await axios.put(`${base_url}/api/users/logout`, {
+    const response = await axios.put(`${base_url}/users/logout`, {
       email: user.email,
     });
-    console.log("response logout", response);
     if (response.status === 200) {
       localStorage.removeItem("user");
     }
@@ -30,6 +30,18 @@ const handleLogoutUser = async () => {
     console.log(error.response);
   }
 };
+
+
+
+export const handleResponseError = (error)=>{
+  if(error.status === 401 || error.status === 403){
+    UnAuthenticatedModal()
+  }
+}
+
+
+
+
 
 const instance = axios.create({
   // baseURL:"https://hardcore-visvesvaraya-fovq7genw.iran.liara.run",
