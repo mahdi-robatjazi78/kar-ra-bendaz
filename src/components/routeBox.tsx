@@ -27,8 +27,8 @@ interface ISignupData {
 }
 const RouteBox = ({ setShowBurger }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const location = useLocation();
+ 
+ 
   useHotkeys("alt+ctrl+h", () => navigate("/"));
   useHotkeys("alt+ctrl+t", () => navigate("/todos"));
   useHotkeys("alt+ctrl+p", () => navigate("/profile"));

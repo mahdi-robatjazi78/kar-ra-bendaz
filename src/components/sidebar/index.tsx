@@ -5,12 +5,12 @@ import { AppDataContext } from "@context/appDataContext";
 import { useDrop } from 'react-dnd'
 import SidebarItem from "./sidebarItem"
 import { Typography } from "@mui/material";
-
+import { useSelector } from "react-redux";
 
 
 const Sidebar = () => {
   const theme = useContext(themeContext);
-
+  const {active_ws : ActiveWs} = useSelector(state=>state.todoPageConfig)
   const {
     updateCategory,
     updateCategoryOff,
@@ -38,7 +38,7 @@ const Sidebar = () => {
 
   const showSubset = async () => {
     try { 
-      const response = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
+      const response = await Axios.get(`/category/getAll?ws=${ActiveWs.id}`);
       setCategoryList(response.data.list);
       updateCategoryOff();
     } catch (error) {
@@ -47,8 +47,10 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    showSubset();
-  }, []);
+    if(ActiveWs?.id){
+      showSubset();
+    }
+  }, [ActiveWs.id]);
 
   useEffect(() => {
     if (updateCategory) {

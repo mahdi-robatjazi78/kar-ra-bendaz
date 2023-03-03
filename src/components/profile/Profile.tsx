@@ -6,12 +6,16 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ThemeContext from "../../context/themeContext";
-
+import {useSelector} from 'react-redux'
 
 
 export default function Profile() {
   const theme = React.useContext(ThemeContext);
-    const user = JSON.parse(localStorage.getItem("user"))
+  const {auth} = useSelector(state=>state.auth)
+
+
+
+
   return (
     <Box
     
@@ -40,12 +44,12 @@ export default function Profile() {
         <CardContent
         style={{padding:0}}
         >
-          <img style={{height:"100%"}} src={user.gender==="male" ? "/male.jpg" :"/female.jpg"} />
+          <img style={{height:"100%"}} src={auth.gender==="male" ? "/male.jpg" :"/female.jpg"} />
         </CardContent>
         <Box sx={{ pl: 1, pt: 7, color: theme.text1 }}>
-          <h3>{user.fname}</h3>
-          <h3>{user.lname}</h3>
-          <h3>{user.email}</h3>
+          <h3>{auth.fname}</h3>
+          <h3>{auth.lname}</h3>
+          <h3>{auth.email}</h3>
 
         </Box>
       </Box>

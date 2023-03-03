@@ -8,58 +8,45 @@ import { BrowserRouter } from "react-router-dom";
 import Todos from "./Todos";
 import RouteBox from "./routeBox";
 import { Box, Grid } from "@mui/material";
-import { setMeData, setUserToken } from "@/redux/features/userSlice";
+import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
+import { SetActiveWs } from "@/redux/features/todoPageConfigSlice";
 
 const Main = () => {
   const theme = useContext(ThemeContext);
   const [ShowBurger, setShowBurger] = React.useState<boolean>(true);
   const { open } = useContext(SidebarContext);
   const { blurPage, headerPosition } = useContext(AppDataContext);
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector(state=>state.auth)
+
+
+
   const dispatch = useDispatch();
 
-  const checkProfileEssentials = () => {
-    const localStorageUserData = JSON.parse(localStorage.getItem("user"));
+  
+  const checkProfileDataEssentials = () =>{
+    if(!auth.token){
+      const authLocalStorage = JSON.parse(localStorage.getItem("auth"))
+      
+      const token = authLocalStorage?.token
+      if(token){
 
-    if (!localStorageUserData?.token && auth?.token) {
-      // fill localstorage from redux
-      const data = {
-        email: auth?.me?.email,
-        fname: auth?.me?.fname,
-        lname: auth?.me?.lname,
-        gender: auth?.me?.gender,
-        userName: auth?.me?.userName,
-        token: auth?.token,
-      };
-
-      localStorage.setItem("user", JSON.stringify(data));
-    }
-
-    if (!auth?.token) {
-      // fill redux from localstorage
-      if (localStorageUserData?.token) {
-        dispatch(
-          setUserToken({
-            token: localStorageUserData?.token,
-          })
-        );
+        const {email ,fname,lname ,gender , userName} = authLocalStorage.me
+        dispatch(SetUserToken({
+          token
+        }))
+        dispatch(SetMeData({
+          email ,fname,lname ,gender , userName,
+        }))
+        
       }
-     
+      
     }
-    if (!auth?.me?.email && localStorageUserData?.email) {
-      const { email, fname, lname, gender, userName } = localStorageUserData;
-      dispatch(
-        setMeData({
-          email,
-          fname,
-          lname,
-          gender,
-          userName,
-        })
-      );
-    }
-  };
-  checkProfileEssentials();
+  }
+
+  checkProfileDataEssentials()
+
+
+
 
   return (
     <main id="main">

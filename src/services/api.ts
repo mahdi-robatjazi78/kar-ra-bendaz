@@ -4,27 +4,28 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
 import UnAuthenticatedModal from "@/components/modal/unAuthenticated";
+import { store } from "@/redux/store";
 
-let base_url :string ;
+let base_url :string = `http://localhost:8888` ;
 
-if (process.env.NODE_ENV === "development") {
-  console.log("Looks like we are in development mode! 🙄");
-  base_url = `http://localhost:8888`;
-} else {
-  console.log("Looks like we are in production mode! 👍");
-  base_url = `http://45.156.186.14:8888`;
-}
+// if (process.env.NODE_ENV === "development") {
+//   console.log("Looks like we are in development mode! 🙄");
+//   base_url = `http://localhost:8888`;
+// } else {
+//   console.log("Looks like we are in production mode! 👍");
+//   base_url = `http://45.156.186.14:8888`;
+// }
 
 const MySwal = withReactContent(Swal);
 
 export const handleLogoutUser = async () => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const response = await axios.put(`${base_url}/users/logout`, {
-      email: user.email,
-    });
+    const response = await axios.put(`${base_url}/users/logout`);
     if (response.status === 200) {
-      localStorage.removeItem("user");
+      localStorage.removeItem("auth")
+      store.dispatch(LogoutAction())
+    
+    
     }
   } catch (error) {
     console.log(error.response);
@@ -52,7 +53,6 @@ const instance = axios.create({
 const showAlertExpirationAccout = () => {
   const darkMode = JSON.parse(localStorage.getItem("darkmode"));
 
-
   MySwal.fire({
     title: "Expiration Token",
     html: `You'r Token Has Been Expire`,
@@ -75,14 +75,12 @@ const showAlertExpirationAccout = () => {
 };
 
 instance.interceptors.request.use(function(request) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user) {
-    request.headers.common["x-auth-token"] = user.token;
+    const auth = JSON.parse(localStorage.getItem("auth"))
+    request.headers.common["x-auth-token"] = auth.token;
     request.headers.common["Content-Type"] = "application/json";
-  } else {
-    localStorage.removeItem("user");
-    showAlertExpirationAccout();
-  }
+    if(!auth?.token){
+      showAlertExpirationAccout();
+    }
   return request;
 });
 
@@ -91,11 +89,9 @@ instance.interceptors.response.use(
     return response;
   },
   function(error) {
-    console.log("error in api>>>", error);
     Toast(error.response.data.msg || error.response.data.error, false);
 
     if (error.response.status === 401 || error.response.status === 403) {
-      localStorage.removeItem("user");
       showAlertExpirationAccout();
     }
   }

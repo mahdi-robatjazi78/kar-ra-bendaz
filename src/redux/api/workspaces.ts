@@ -1,15 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { base_url, handleResponseError } from "@services/api";
-
+import {  handleResponseError } from "@services/api";
+const base_url = `http://localhost:8888`
 // Define a service using a base URL and expected endpoints
 
 
-export const ServiceRTK = createApi({
+export const WorkspacesRtkService = createApi({
   reducerPath: "workspaces",
-  baseQuery: fetchBaseQuery({ baseUrl: base_url+"/ws/" , prepareHeaders(headers  ,{getState}){
+  baseQuery: fetchBaseQuery({ baseUrl: base_url+"/ws/" , prepareHeaders(headers,{getState}){
     const state : any = getState();
-    
-    
+
     if(!headers.has("x-auth-token")){
       headers.set("x-auth-token", state?.auth?.token)
     }
@@ -66,4 +65,4 @@ export const ServiceRTK = createApi({
 });
 
 
-export const { useWsListQuery , useStoreNewWsMutation , useActiveWsMutation , useRenameWsMutation } = ServiceRTK;
+export const { useWsListQuery , useStoreNewWsMutation , useActiveWsMutation , useRenameWsMutation } = WorkspacesRtkService;

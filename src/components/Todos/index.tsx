@@ -18,16 +18,13 @@ import ThemeContext from "@context/themeContext";
 import Sidebar from "../sidebar";
 import { SidebarContext } from "@/context/sidebarContext";
 import useWindowSize from "@/hooks/useWindowSize";
-
-
-
-interface ITodoStructure {
-  title: string;
-  body: string;
-  date: string;
-  flag: string;
-  _id: string;
-}
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchActiveWs,
+  GetOutCompleted,
+  ITodoPage
+} from "@/redux/features/todoPageConfigSlice";
+import { useNavigate } from "react-router-dom";
 
 const Todos = () => {
   const theme = useContext(ThemeContext);
@@ -57,6 +54,12 @@ const Todos = () => {
     prevText: "",
   });
 
+  const {
+    active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
+    get_out: GetOutFromTodoPage,
+} = useSelector((state) => state.todoPageConfig);
+
+  const dispatch = useDispatch();
   const getSelectedCategoryData = async () => {
     try {
       const category = await Axios.get(`/category/getInfo?uuid=${selected}`);
@@ -65,6 +68,19 @@ const Todos = () => {
       console.log(error.response);
     }
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!ActiveWorkspaceID) {
+      dispatch(fetchActiveWs());
+    }
+  }, [ActiveWorkspaceID]);
+  useEffect(() => {
+    if (GetOutFromTodoPage) {
+      dispatch(GetOutCompleted());
+      navigate("/");
+    }
+  }, [GetOutFromTodoPage]);
 
   useEffect(() => {
     if (show[1] === "all") {
@@ -76,8 +92,7 @@ const Todos = () => {
   }, [show, todoList]);
 
   useEffect(() => {
-    if(selectedWorkspace.id){
-
+    if (selectedWorkspace.id) {
       getAllTodos();
       if (selected === "other") {
         setUserSelectedCategory({});
@@ -85,7 +100,7 @@ const Todos = () => {
         getSelectedCategoryData();
       }
     }
-  }, [selected ,selectedWorkspace]);
+  }, [selected, selectedWorkspace]);
 
   const setTodoDone = async (todo) => {
     try {
@@ -103,7 +118,9 @@ const Todos = () => {
 
   const deleteTodo = async (todo) => {
     try {
-      const response = await Axios.delete(`/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`);
+      const response = await Axios.delete(
+        `/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`
+      );
 
       getAllTodos();
 

@@ -26,7 +26,7 @@ import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { motion } from "framer-motion"
 import { useDispatch } from "react-redux";
-import { setMeData, setUserToken } from "@/redux/features/userSlice";
+import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 
 
 const Login = () => {
@@ -65,16 +65,21 @@ const Login = () => {
           email: values.username,
           password: values.password,
         });
+        const {email ,fname,lname ,gender ,token, userName} = response.data
         
-        dispatch(setUserToken({
-          token:response.data.data.token
+        dispatch(SetUserToken({
+          token
         }))
-        const {email ,fname,lname ,gender , userName} = response.data.data
-        dispatch(setMeData({
+        dispatch(SetMeData({
           email ,fname,lname ,gender , userName,
         }))
-        Axios.defaults.headers["x-auth-token"] = response.data.data.token;
-        localStorage.setItem("user", JSON.stringify(response.data.data));
+        
+        localStorage.setItem("auth" , JSON.stringify({
+          token : token,
+          me:{
+            email ,fname,lname ,gender , userName,
+          }
+        }))
 
         navigate("/");
         Toast(response.data.msg);

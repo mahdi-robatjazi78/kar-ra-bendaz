@@ -13,7 +13,6 @@ const MySwal = withReactContent(Swal);
 const showAlertExpirationAccout = () => {
     const darkMode = JSON.parse(localStorage.getItem("darkmode"));
   
-  
     MySwal.fire({
       title: "Expiration Token",
       html: `You'r Token Has Been Expire`,

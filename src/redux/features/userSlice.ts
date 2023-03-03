@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-
+import axios from '../../services/api'
 export interface IUserData {
     email:String,
     fname:String,
@@ -15,13 +14,13 @@ export interface IUser {
 }
 
 const initialState: IUser = {
-  token: "",
+  token: null,
   me:{
-    email:"",
-    fname:"",
-    gender:"",
-    lname:"",
-    userName:"",
+    email:null,
+    fname:null,
+    gender:null,
+    lname:null,
+    userName:null,
   }
 }
 
@@ -30,20 +29,28 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
 
-    setUserToken : (state , action)=>{
+    SetUserToken : (state , action)=>{
+      axios.defaults.headers.common["x-auth-token"] = action.payload.token;
       state.token = action.payload.token
     },
-    setMeData:(state , action)=>{
-
+    SetMeData:(state , action)=>{
       state.me = action.payload
-
-
+    },
+    LogoutAction :(state , action)=>{
+      state.token = null
+      state.me = {
+        email:null,
+        fname:null,
+        gender:null,
+        lname:null,
+        userName:null,
+      }
     }
     
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserToken,setMeData } = userSlice.actions
+export const { SetUserToken,SetMeData ,LogoutAction } = userSlice.actions
 
 export default userSlice.reducer

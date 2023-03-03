@@ -38,7 +38,9 @@ import {
   useStoreNewWsMutation,
   useActiveWsMutation,
   useRenameWsMutation,
-} from "../../redux/api/service";
+} from "../../redux/api/workspaces";
+import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
+import { useDispatch } from "react-redux";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -215,7 +217,7 @@ const TableOfContent = () => {
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
-
+    const dispatch = useDispatch()
   const AddWorkspace = () => {
     if (inputText) {
       storeNewWs({ title: inputText })
@@ -239,7 +241,11 @@ const TableOfContent = () => {
   };
 
   const handleActiveWorkspace = (checked, id) => {
-    activeWs({ id, active: checked });
+    activeWs({ id, active: checked }).unwrap()
+    .then((res) => {})
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   useEffect(() => {
@@ -253,14 +259,18 @@ const TableOfContent = () => {
   }, [respStoreNewWs.isSuccess]);
 
   useEffect(() => {
-    // AFTER ACTIVE OR DISACTIVE REQUEST
+    // AFTER ACTIVE OR DIACTIVE REQUEST
     if (respActiveWs.isSuccess) {
       Toast(respActiveWs?.data?.msg);
-      const selected = respActiveWs?.data?.list?.filter((item) => item?.active);
-      localStorage.setItem(
-        "selectedWs",
-        JSON.stringify({ title: selected[0].title, id: selected[0].id })
-      );
+      if(respActiveWs?.data?.activeWorkspace?.id){
+        dispatch(SetActiveWs({
+          id:respActiveWs?.data?.activeWorkspace?.id,
+          title:respActiveWs?.data?.activeWorkspace?.title
+        }))
+        
+      }else{
+        dispatch(UnActiveWs())
+      }
       backToIcons();
       setInputText("");
       refetch();
