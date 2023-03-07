@@ -10,6 +10,9 @@ import { Box, Grid } from "@mui/material";
 import Todos from "./Todos";
 import NoteBoard from "./notes";
 import { useHotkeys } from "react-hotkeys-hook";
+import {useSelector} from 'react-redux'
+import { RootState } from "@/redux/store";
+
 
 interface IPerson {
   person: {
@@ -27,7 +30,7 @@ interface ISignupData {
 }
 const RouteBox = ({ setShowBurger }) => {
   const navigate = useNavigate();
- 
+  const  settings = useSelector((state:RootState)=>state.settings)
  
   useHotkeys("alt+ctrl+h", () => navigate("/"));
   useHotkeys("alt+ctrl+t", () => navigate("/todos"));
@@ -43,6 +46,14 @@ const RouteBox = ({ setShowBurger }) => {
   });
 
   return (
+    <Box
+      style={
+        {
+          filter:settings.blur.body ? "blur(6px)" : "blur(0)"
+        }
+      }
+    
+    >
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route
@@ -60,6 +71,7 @@ const RouteBox = ({ setShowBurger }) => {
       <Route path="todos" element={<Todos />} />
       <Route path="notes" element={<NoteBoard />} />
     </Routes>
+    </Box>
   );
 };
 

@@ -25,20 +25,33 @@ import {
   ITodoPage
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
+import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
+import { useLazyGetTodoIndexQuery } from "@/redux/api/todos";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const Todos = () => {
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
+  const navigate = useNavigate();
+  const dispatch : AppDispatch = useDispatch();
+  const {
+    active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
+    active_category : {id:ActiveCategoryID , title : ActiveCategoryTitle},
+    get_out: GetOutFromTodoPage,
+  } = useSelector((state:RootState) => state.todoPageConfig);
+  
+
+
   const {
     updateCategoryOn,
     selected,
     getAllTodos,
-    todoList,
+    // todoList,
     drawerState,
     headerPosition,
     selectedWorkspace,
   } = useContext(AppDataContext);
-  // const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState([]);
   const { open, setCloseSidebar } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
   const dimentions = useWindowSize();
@@ -54,12 +67,10 @@ const Todos = () => {
     prevText: "",
   });
 
-  const {
-    active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
-    get_out: GetOutFromTodoPage,
-} = useSelector((state) => state.todoPageConfig);
 
-  const dispatch = useDispatch();
+const [triggerGetCategoryIndex , categoryRequest] = useLazyGetCategoryIndexQuery()
+const [triggerGetTodoIndex , todosRequest] = useLazyGetTodoIndexQuery()
+
   const getSelectedCategoryData = async () => {
     try {
       const category = await Axios.get(`/category/getInfo?uuid=${selected}`);
@@ -68,19 +79,37 @@ const Todos = () => {
       console.log(error.response);
     }
   };
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (!ActiveWorkspaceID) {
       dispatch(fetchActiveWs());
+    }else {
+      triggerGetCategoryIndex(ActiveWorkspaceID)
+      triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:ActiveCategoryID ? ActiveCategoryID : "other"})
     }
-  }, [ActiveWorkspaceID]);
+  }, [ActiveWorkspaceID])
+
+useEffect(()=>{
+
+  if (!ActiveCategoryID) {
+    triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:"other"})
+
+  }else {
+    triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:ActiveCategoryID})
+
+  }
+
+},[ActiveCategoryID])
+  
+  ;
   useEffect(() => {
     if (GetOutFromTodoPage) {
       dispatch(GetOutCompleted());
       navigate("/");
     }
   }, [GetOutFromTodoPage]);
+
 
   useEffect(() => {
     if (show[1] === "all") {
@@ -91,22 +120,31 @@ const Todos = () => {
     }
   }, [show, todoList]);
 
-  useEffect(() => {
-    if (selectedWorkspace.id) {
-      getAllTodos();
-      if (selected === "other") {
-        setUserSelectedCategory({});
-      } else {
-        getSelectedCategoryData();
-      }
+  useEffect(()=>{
+    if(todosRequest?.data?.todos?.length){
+      setTodoList(todosRequest?.data?.todos)
     }
-  }, [selected, selectedWorkspace]);
+  },[todosRequest?.data?.todos])
+
+
+  // get all todos from context
+
+  // useEffect(() => {
+  //   if (selectedWorkspace.id) {
+  //     getAllTodos();
+  //     if (selected === "other") {
+  //       setUserSelectedCategory({});
+  //     } else {
+  //       getSelectedCategoryData();
+  //     }
+  //   }
+  // }, [selected, selectedWorkspace]);
 
   const setTodoDone = async (todo) => {
     try {
       const response = await Axios.put("/todos/done", { id: todo._id });
       if (response.status === 200) {
-        getAllTodos();
+        // getAllTodos();
 
         Toast(response.data.msg);
       }
@@ -122,7 +160,7 @@ const Todos = () => {
         `/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`
       );
 
-      getAllTodos();
+      // getAllTodos();
 
       Toast(response.data.msg);
     } catch (error) {
@@ -154,7 +192,12 @@ const Todos = () => {
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box display="flex">
-          {open === "show" && <Sidebar />}
+          {open === "show" && <Sidebar 
+            categoryList={categoryRequest?.data?.list}
+            loading={categoryRequest?.isLoading}
+            success={categoryRequest?.isSuccess}
+            
+          />}
 
           <SettingBar
             userSelectedCategory={userSelectedCategory}

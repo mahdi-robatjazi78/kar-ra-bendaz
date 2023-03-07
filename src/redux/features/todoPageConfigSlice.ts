@@ -1,14 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "../../services/api"
+import axios from "../../services/api";
 
 export interface IActiveWs {
   id: String | null;
   title: String | null;
 }
 
+export interface IActiveCategory {
+  id: String | null;
+  title: String | null;
+}
+
 export interface ITodoPage {
   active_ws: IActiveWs;
-  get_out:Boolean,
+  active_category: IActiveWs;
+  get_out: Boolean;
 }
 
 const initialState: ITodoPage = {
@@ -16,7 +22,11 @@ const initialState: ITodoPage = {
     id: null,
     title: null,
   },
-  get_out:false,
+  active_category: {
+    id: null,
+    title: null,
+  },
+  get_out: false,
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -35,11 +45,23 @@ export const todoPageConfigSlice = createSlice({
         title: null,
       };
     },
-    NoActiveWorkspace:(state)=>{
-      state.get_out = true
+    SetActiveCategory: (state, action) => {
+      state.active_category = {
+        id: action.payload.id,
+        title: action.payload.title,
+      };
     },
-    GetOutCompleted:(state)=>{
-      state.get_out = false
+    UnActiveCategory: (state) => {
+      state.active_category = {
+        id: null,
+        title: null,
+      };
+    },
+    NoActiveWorkspace: (state) => {
+      state.get_out = true;
+    },
+    GetOutCompleted: (state) => {
+      state.get_out = false;
     },
   },
 
@@ -48,37 +70,40 @@ export const todoPageConfigSlice = createSlice({
     builder.addCase(fetchActiveWs.fulfilled, (state, action) => {
       state.active_ws = {
         id: action.payload.activeWorkspace.id,
-        title: action.payload.activeWorkspace.title
-      }
-    })
+        title: action.payload.activeWorkspace.title,
+      };
+    });
     builder.addCase(fetchActiveWs.rejected, (state, action) => {
       state.active_ws = {
         id: null,
-        title: null
-      }
+        title: null,
+      };
       state.get_out = true;
-      
-    })
+    });
   },
-
 });
 
 export const fetchActiveWs = createAsyncThunk(
-  'todoPageConfig/ActiveWs',
+  "todoPageConfig/ActiveWs",
   async () => {
-    try{
-
-      const response = await axios.get("/ws/get-active")
-      console.log("response >>>  "  ,response);
-      if(response.data.activeWorkspace){
-        return response.data
+    try {
+      const response = await axios.get("/ws/get-active");
+      console.log("response >>>  ", response);
+      if (response.data.activeWorkspace) {
+        return response.data;
       }
-    }catch(error){
-      return Promise.reject(error.reponse.data.msg)
+    } catch (error) {
+      return Promise.reject(error.reponse.data.msg);
     }
   }
-)
+);
 
-
-export const { SetActiveWs, UnActiveWs ,NoActiveWorkspace , GetOutCompleted  } = todoPageConfigSlice.actions;
+export const {
+  SetActiveWs,
+  UnActiveWs,
+  SetActiveCategory,
+  UnActiveCategory,
+  NoActiveWorkspace,
+  GetOutCompleted,
+} = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

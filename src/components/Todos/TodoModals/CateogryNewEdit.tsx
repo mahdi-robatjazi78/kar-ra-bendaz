@@ -1,10 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import { useStoreNewCategoryMutation } from "@/redux/api/categories";
+import { useLazyGetTodoIndexQuery } from "@/redux/api/todos";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import {useDispatch} from 'react-redux'
+import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
+
 
 const ShowModalNewCategory = (props) => {
   const MySwal = withReactContent(Swal);
@@ -15,20 +22,40 @@ const ShowModalNewCategory = (props) => {
     getSelectedCategoryData    
 } = props;
   const theme = useContext(ThemeContext);
-  const { selected, getAllTodos, blurFalse, updateCategoryOn, blurTrue } =
-    useContext(AppDataContext);
-    const {selectedWorkspace} = useContext(AppDataContext)
+  const { selected, getAllTodos, updateCategoryOn ,selectedWorkspace} =useContext(AppDataContext);
+  const dispatch : AppDispatch = useDispatch()
 
-  const submitNewCategory = async (title) => {
-    try {
-      const response = await Axios.post("/category/new", { title , ws:selectedWorkspace.id });
-      Toast(response.data.msg);
-      updateCategoryOn();
-    } catch (error) {
-      console.log(error.response);
-      Toast(error.response.data.msg, false);
-    }
+
+const [triggerGetTodoIndex , todosRequest] = useLazyGetTodoIndexQuery()
+const {
+  active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
+  active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
+} = useSelector((state:RootState) => state.todoPageConfig);
+
+
+  const [storeNewCategory, respStoreNewCategory] = useStoreNewCategoryMutation();
+  const submitNewCategory = (title) => {
+      storeNewCategory({ title ,  ws:ActiveWorkspaceID })
+      .unwrap()
+      .then((res) => {})
+      .catch((err) => {})
   };
+
+
+
+  useEffect(() => {
+    // AFTER STORE CATEGORY REQUEST
+    console.log("respStoreNewCategory   >>> > " ,respStoreNewCategory);
+    if (respStoreNewCategory.isSuccess) {
+
+      Toast(respStoreNewCategory.data.msg);
+      triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:ActiveCategoryID})
+    }
+  }, [respStoreNewCategory.isSuccess]);
+
+
+
+
 
   const editCategoryName = async (title) => {
     try {
@@ -48,7 +75,7 @@ const ShowModalNewCategory = (props) => {
   };
 
   const ShowAddCategoryModal = async () => {
-    blurTrue();
+    dispatch(setBlurPage())
     try {
       const result = await MySwal.fire({
         title:
@@ -61,13 +88,11 @@ const ShowModalNewCategory = (props) => {
             ? showAddCategoryModal.prevText
             : "",
         customClass: {
-          popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
+          popup: theme.isDarkMode ? "Modal_DrakMode CategoryCreateEditModal" : "Modal_LightMode CategoryCreateEditModal",
           title: theme.isDarkMode
             ? "Modal_TitleBar_Dark"
             : "Modal_TitleBar_Light",
-          confirmButton: theme.isDarkMode
-            ? "Modal_Confirm_Button_Dark"
-            : "Modal_Confirm_Button_Light",
+          confirmButton:"Modal_Confirm_Button",
           cancelButton: "Modal_Cancel_Button",
           footer: "Modal_Footer",
           input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
@@ -82,7 +107,7 @@ const ShowModalNewCategory = (props) => {
             ? submitNewCategory(inputValue)
             : editCategoryName(inputValue);
 
-          blurFalse();
+          dispatch(deactiveBlur())
           setShowAddCategoryModal({
             show: false,
             state: "add",
@@ -96,7 +121,7 @@ const ShowModalNewCategory = (props) => {
 
         allowOutsideClick: () => !Swal.isLoading(),
       });
-      blurFalse();
+      dispatch(deactiveBlur())
       setShowAddCategoryModal({
         show: false,
         state: "add",
@@ -105,7 +130,8 @@ const ShowModalNewCategory = (props) => {
       // listenToInputModal();
     } catch (error) {
       console.log(error);
-      blurFalse();
+      dispatch(deactiveBlur())
+
       setShowAddCategoryModal({
         show: false,
         state: "add",
@@ -114,6 +140,7 @@ const ShowModalNewCategory = (props) => {
     }
   };
   useEffect(() => {
+    
     ShowAddCategoryModal();
   }, []);
 

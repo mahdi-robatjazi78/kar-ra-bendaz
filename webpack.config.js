@@ -50,6 +50,11 @@ module.exports = {
       //   exclude: /node_modules/,
       // },
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+      {
         test: /\.(js|ts|tsx|jsx)$/, // .js and .jsx files
         exclude: /node_modules/, // excluding the node_modules folder
         use: {

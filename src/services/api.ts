@@ -5,16 +5,10 @@ import Swal from "sweetalert2";
 import Toast from "@utils/toast";
 import UnAuthenticatedModal from "@/components/modal/unAuthenticated";
 import { store } from "@/redux/store";
+import { setBlurPage } from "@/redux/features/settingSlice";
+import { LogoutAction } from "@/redux/features/userSlice";
 
 let base_url :string = `http://localhost:8888` ;
-
-// if (process.env.NODE_ENV === "development") {
-//   console.log("Looks like we are in development mode! 🙄");
-//   base_url = `http://localhost:8888`;
-// } else {
-//   console.log("Looks like we are in production mode! 👍");
-//   base_url = `http://45.156.186.14:8888`;
-// }
 
 const MySwal = withReactContent(Swal);
 
@@ -36,6 +30,7 @@ export const handleLogoutUser = async () => {
 
 export const handleResponseError = (error)=>{
   if(error.status === 401 || error.status === 403){
+    store.dispatch(setBlurPage())
     UnAuthenticatedModal()
   }
 }
@@ -50,36 +45,13 @@ const instance = axios.create({
   timeout: 1000,
 });
 
-const showAlertExpirationAccout = () => {
-  const darkMode = JSON.parse(localStorage.getItem("darkmode"));
-
-  MySwal.fire({
-    title: "Expiration Token",
-    html: `You'r Token Has Been Expire`,
-    icon: "info",
-    confirmButtonText: "Go To Login",
-
-    customClass: {
-      popup: darkMode ? "Modal_DrakMode" : "Modal_LightMode",
-      title: darkMode ? "Modal_TitleBar_Dark" : "Modal_TitleBar_Light",
-      confirmButton: darkMode
-        ? "Modal_Confirm_Button_FullWidth_Dark"
-        : "Modal_Confirm_Button_FullWidth_Light",
-    },
-  }).then((result) => {
-    if (result.isConfirmed) {
-      handleLogoutUser();
-      CustomeHistory.replace("/login");
-    }
-  });
-};
-
 instance.interceptors.request.use(function(request) {
     const auth = JSON.parse(localStorage.getItem("auth"))
     request.headers.common["x-auth-token"] = auth.token;
     request.headers.common["Content-Type"] = "application/json";
     if(!auth?.token){
-      showAlertExpirationAccout();
+      store.dispatch(setBlurPage())
+      UnAuthenticatedModal()
     }
   return request;
 });
@@ -92,7 +64,8 @@ instance.interceptors.response.use(
     Toast(error.response.data.msg || error.response.data.error, false);
 
     if (error.response.status === 401 || error.response.status === 403) {
-      showAlertExpirationAccout();
+      store.dispatch(setBlurPage())
+      UnAuthenticatedModal()
     }
   }
 );

@@ -2,9 +2,13 @@ import React , {useContext} from "react";
 import { AppDataContext } from "@context/appDataContext";
 import { useDrop } from 'react-dnd'
 import ThemeContext from "@context/themeContext";
+import { SetActiveCategory } from "@/redux/features/todoPageConfigSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch , useSelector } from "react-redux";
 const SidebarItem = (props:any) => {
 
-  
+  const dispatch :AppDispatch = useDispatch()
+  const {active_category : ActiveCategory} = useSelector((state:RootState)=>state.todoPageConfig)
   const {item} = props
   const theme = useContext(ThemeContext);
 
@@ -47,7 +51,7 @@ const SidebarItem = (props:any) => {
   return (
     <li
       className=
-      {`list-category-items ${selected === item.uuid ? "active-item" : ""}  `}
+      {`list-category-items ${ActiveCategory.id && ActiveCategory.id === item.uuid ? "active-item" : ""}  `}
       ref={drop}
       style={{ ...subsetTabsStyle,
         
@@ -58,6 +62,12 @@ const SidebarItem = (props:any) => {
         }) }} data-testid="category-box"
       onClick=
       {() => {
+        
+        dispatch(SetActiveCategory({
+          id:item.uuid,
+          title:item.title
+        }))
+        
         newCategorySelected(item.uuid);
       }}
       >

@@ -1,21 +1,25 @@
 import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
-
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import {useDispatch} from 'react-redux'
+import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
 
 const ShowModalAddToCategory = (props) => {
   const { todo, setModalOpen } = props;
-  const { blurFalse, getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
+  const { getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
     useContext(AppDataContext);
-
   const theme = useContext(ThemeContext);
+  const dispatch : AppDispatch = useDispatch()
+
 
   const addToCategoryModal = async (id) => {
     try {
-      const resp = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
+      const resp = await Axios.get(`/category/index?ws=${selectedWorkspace.id}`);
       const allCategories = resp.data.list;
 
       const selectedCategoryIndex = await Swal.fire({
@@ -39,8 +43,6 @@ const ShowModalAddToCategory = (props) => {
         },
       });
 
-      console.log("after", allCategories, selectedCategoryIndex);
-
       if (selectedCategoryIndex.value) {
         const response = await Axios.put("/todos/add-to-category", {
           todoId: id,
@@ -51,10 +53,8 @@ const ShowModalAddToCategory = (props) => {
       }
 
       setModalOpen({ status: false, modal: "" });
-      blurFalse();
     } catch (error) {
       setModalOpen({ status: false, modal: "" });
-      blurFalse();
     }
   };
 

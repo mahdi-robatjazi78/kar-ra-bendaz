@@ -17,5 +17,12 @@ export interface ITodosShow {
   setTableAll?:()=>void,
   setTableDone?:()=>void
 }
-
+export interface ITodoStructure {
+  body:string,
+  date:Date,
+  expireTime:string,
+  flag:string,
+  categoId:string,
+  ws:string,
+}
  

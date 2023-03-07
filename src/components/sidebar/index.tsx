@@ -5,15 +5,21 @@ import { AppDataContext } from "@context/appDataContext";
 import { useDrop } from 'react-dnd'
 import SidebarItem from "./sidebarItem"
 import { Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
 
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+
+  const {categoryList,
+    loading,
+    success} = props
+
+  const {active_ws : ActiveWs , active_category : ActiveCategory} = useSelector((state:RootState)=>state.todoPageConfig)
+  const dispatch : AppDispatch = useDispatch()
   const theme = useContext(themeContext);
-  const {active_ws : ActiveWs} = useSelector(state=>state.todoPageConfig)
   const {
-    updateCategory,
-    updateCategoryOff,
     newCategorySelected,
     selected,
     headerPosition,
@@ -25,7 +31,6 @@ const Sidebar = () => {
 
   type ITodoState = "all" | "done";
   const [todoState, setTodoState] = useState<ITodoState>("all");
-  const [categoryList, setCategoryList] = useState([]);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "todo-box",
@@ -36,28 +41,24 @@ const Sidebar = () => {
     }),
   }))
 
-  const showSubset = async () => {
-    try { 
-      const response = await Axios.get(`/category/getAll?ws=${ActiveWs.id}`);
-      setCategoryList(response.data.list);
-      updateCategoryOff();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const showSubset = async () => {
+  //   try { 
+  //     const response = await Axios.get(`/category/index?ws=${ActiveWs.id}`);
+  //     setCategoryList(response.data.list);
+  //     updateCategoryOff();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if(ActiveWs?.id){
-      showSubset();
-    }
-  }, [ActiveWs.id]);
+  // useEffect(() => {
+  //   if(ActiveWs?.id){
+  //     showSubset();
+  //   }
+  // }, [ActiveWs.id]);
 
-  useEffect(() => {
-    if (updateCategory) {
-      showSubset();
-    }
-  }, [updateCategory]);
-
+  // useEffect(() => {
+  //   }
 
 
   const isActive = canDrop && isOver;
@@ -94,7 +95,7 @@ const Sidebar = () => {
 
 
 
-      {categoryList.length ? (
+      {categoryList?.length ? (
         <ul id="listCategories">
           <li
             ref={drop} style={{ 
@@ -111,11 +112,14 @@ const Sidebar = () => {
 
 
             className={`list-category-items ${
-              selected === "other" ? "active-item" : ""
+              !ActiveCategory.id ? "active-item" : ""
             }  `}
              
             onClick={() => {
-              newCategorySelected();
+              // newCategorySelected();
+              dispatch(UnActiveCategory())
+
+
             }}
           >
             <div className="task-title-style">All</div>

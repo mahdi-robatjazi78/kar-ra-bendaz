@@ -10,6 +10,9 @@ import ShowModalDelete from "../TodoModals/delete";
 import ShowModalAddToCategory from "../TodoModals/addToCategory";
 import SetDoneAction from '../TodoModals/setDone'
 import useWindowSize from "@hooks/useWindowSize"
+import {useDispatch} from "react-redux"
+import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+
 
 const TodoDrawer = () => {
   const anchor = "right";
@@ -23,19 +26,17 @@ const TodoDrawer = () => {
   let open = drawerState.open;
   const [width , height] = useWindowSize()
   const textAreaRef = useRef(null)
+  const dispatch = useDispatch()
+  
   useEffect(()=>{
 
-    if(drawerState.open === true && textAreaRef.current){
-    
-    if(textAreaRef.current){
-      alert("here")
-    }
-  }
-
+    console.log("drawerState.open " , drawerState.open)
 
     if(drawerState.open === false){
-        setTodoTextEdited(false)
-    } 
+      setTodoTextEdited(false)
+    }else{
+      dispatch(setBlurPage())
+    }
   },[drawerState.open])
  
 
@@ -59,7 +60,7 @@ const TodoDrawer = () => {
             item: {},
           });
 
-          blurFalse();
+          dispatch(deactiveBlur())
         }}
       >
         <Box id="drawer-box">

@@ -10,18 +10,15 @@ import RouteBox from "./routeBox";
 import { Box, Grid } from "@mui/material";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 import { SetActiveWs } from "@/redux/features/todoPageConfigSlice";
+import { RootState } from "@/redux/store";
 
 const Main = () => {
   const theme = useContext(ThemeContext);
   const [ShowBurger, setShowBurger] = React.useState<boolean>(true);
   const { open } = useContext(SidebarContext);
-  const { blurPage, headerPosition } = useContext(AppDataContext);
-  const auth = useSelector(state=>state.auth)
-
-
-
+  const { headerPosition } = useContext(AppDataContext);
+  const auth = useSelector((state : RootState)=>state.auth)
   const dispatch = useDispatch();
-
   
   const checkProfileDataEssentials = () =>{
     if(!auth.token){
@@ -63,7 +60,6 @@ const Main = () => {
             ? "row-reverse"
             : "row"
         }
-        style={blurPage ? { filter: "blur(10px)" } : {}}
       >
         <Header ShowBurger={ShowBurger} setShowBurger={setShowBurger} />
         <RouteBox setShowBurger={setShowBurger} />

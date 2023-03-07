@@ -20,7 +20,7 @@ export const WorkspacesRtkService = createApi({
   tagTypes: ['Workspace'],
   endpoints: (builder) => ({
     wsList: builder.query({
-      query: (searchText="") => `get-all?searchText=${searchText}`,
+      query: (searchText="") => `index?searchText=${searchText}`,
       transformErrorResponse:(error)=>{
        handleResponseError(error)
       }

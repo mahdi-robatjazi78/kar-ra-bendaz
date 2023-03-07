@@ -9,11 +9,16 @@ import CustomeRouter from "@services/customeRouter";
 import CustomeHistory from "@services/customeHistory";
 import { ThemeProvider } from "@mui/material/styles";
 import CombineCustomizedStyles from './styles/mui'
-
-import { store } from './redux/store'
+import { store , AppDispatch , RootState } from './redux/store'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { Provider } from 'react-redux'
 
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+
 function App() {
+
   return (
     <Provider store={store}>
     <CustomeRouter history={CustomeHistory}>

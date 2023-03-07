@@ -5,11 +5,14 @@ import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import { AppDispatch, RootState } from "@/redux/store";
+import {useDispatch} from 'react-redux'
+import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
 
 const ShowModalNewTodo = (props) => {
   const MySwal = withReactContent(Swal);
   const { setShowModalAddTodo } = props;
-
+  const dispatch : AppDispatch = useDispatch()
   const theme = useContext(ThemeContext);
   const { selected, getAllTodos, blurFalse, selectedWorkspace, blurTrue } =
     useContext(AppDataContext);
@@ -19,7 +22,6 @@ const ShowModalNewTodo = (props) => {
       const result = await Axios.get(
         `/category/getInfo?uuid=${selectedCategoryId}`
       );
-      console.log(result.data.category.title);
       return result.data.category.title;
     } catch (error) {
       console.log(error);
@@ -46,6 +48,7 @@ const ShowModalNewTodo = (props) => {
 
   const ShowAddTaskModal = async () => {
     try {
+      dispatch(setBlurPage())
       let categoryTitle = "";
       if (selected !== "other") {
         categoryTitle = await getInformationOfCategory(selected);
@@ -59,9 +62,7 @@ const ShowModalNewTodo = (props) => {
           title: theme.isDarkMode
             ? "Modal_TitleBar_Dark"
             : "Modal_TitleBar_Light",
-          confirmButton: theme.isDarkMode
-            ? "Modal_Confirm_Button_Dark"
-            : "Modal_Confirm_Button_Light",
+          confirmButton: "Modal_Confirm_Button",
           cancelButton: "Modal_Cancel_Button",
           footer: "Modal_Footer",
           input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
@@ -82,8 +83,6 @@ const ShowModalNewTodo = (props) => {
         showCancelButton: true,
       });
 
-      console.log("text", text);
-
       if (text != undefined) {
         const selectedCategoryElement: HTMLInputElement =
           document.querySelector("#Selected-Category-Id");
@@ -99,15 +98,16 @@ const ShowModalNewTodo = (props) => {
           Submit(text, true);
         }
 
-        blurFalse();
+        
+        dispatch(deactiveBlur())
         setShowModalAddTodo(false);
       } else {
-        blurFalse();
+        dispatch(deactiveBlur())
         setShowModalAddTodo(false);
       }
     } catch (error) {
       console.log(error);
-      blurFalse();
+      dispatch(deactiveBlur())
       setShowModalAddTodo(false);
     }
   };

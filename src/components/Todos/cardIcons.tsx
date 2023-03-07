@@ -28,7 +28,7 @@ const CardIcons = ({
   const addToCategory = async (todo) => {
     try {
     
-      const resp = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
+      const resp = await Axios.get(`/category/index?ws=${selectedWorkspace.id}`);
       const allCategories = resp.data.list;
       
       
