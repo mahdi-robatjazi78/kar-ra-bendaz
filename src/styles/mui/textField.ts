@@ -6,9 +6,9 @@ const TextFieldStyles = {
         input: {
           "&:-webkit-autofill": {
             "-webkit-box-shadow": "0 0 0 100px var(--background) inset",
-            "-webkit-text-fill-color": "var(--text1)",
+            "-webkit-text-fill-color": "var(--text3)",
           },
-          color: "var(--text1)",
+          color: "var(--text3)",
           fontFamily: "Noto Sans, sans-serif",
           letterSpacing: "1px",
         },
@@ -32,8 +32,7 @@ const TextFieldStyles = {
           },
 
           "&:-webkit-autofill": {
-            boxShadow: "0 0 0 1000px white inset",
-            backgroundColor: "red !important",
+            boxShadow: "0 0 0 1000px white inset", 
           },
           "& input:valid + fieldset": {
             color: "var(--borders)",
@@ -49,6 +48,22 @@ const TextFieldStyles = {
             "&.Mui-focused fieldset": {
               borderColor: "var(--borders)",
             },
+          },
+          "& .css-115jmo2-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":{
+            borderColor:'var(--borders)',
+            filter:"brightness(.5)",
+          },
+          "& .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root.Mui-disabled":{
+            color:'var(--borders)',
+            filter:"brightness(.5)",
+            background:"none !important",
+          },
+          "& .css-1l11c4l-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled":{
+            textFillColor:"#b9b9b973",
+            fontSize:".8rem",
+            fontFamily: "Noto Sans, sans-serif",
+            letterSpacing: "1px",
+
           },
 
           "& .MuiInputBase-root": {
@@ -85,7 +100,8 @@ const TextFieldStyles = {
             paddingRight:".5rem",
             fontSize:".8rem",
             fontFamily: "Noto Sans, sans-serif",
-
+            letterSpacing:"1px",
+           
           },
         },
       },

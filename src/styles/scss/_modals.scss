@@ -14,15 +14,13 @@
 
 .Modal_DrakMode {
 
-  // zIndex:9999;
   background-color: var(--header);
   position: relative;
   border: 2px solid var(--borders);
   border-radius:10px;
 }
 .Modal_LightMode {
-  // zIndex:9999;
-  background-color:transparent;
+  background-color: var(--background);
   position: relative;
   border: 2px solid var(--borders);
   border-radius:10px;

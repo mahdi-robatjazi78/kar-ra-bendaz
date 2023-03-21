@@ -7,14 +7,13 @@ import SettingBar from "./settingBar";
 import Axios from "@services/api";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
-import TodoDrawer from "./TodoDrawer";
+import TodoPageDrawer from "./drawer";
 import ShowModalNewTodo from "./TodoModals/newTodo";
 import { useHotkeys } from "react-hotkeys-hook";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppDataContext } from "@context/appDataContext";
 import { TodoContext } from "@context/todoContext";
-import ThemeContext from "@context/themeContext";
 import Sidebar from "../sidebar";
 import { SidebarContext } from "@/context/sidebarContext";
 import useWindowSize from "@/hooks/useWindowSize";
@@ -22,42 +21,51 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchActiveWs,
   GetOutCompleted,
-  ITodoPage
+  DrawerOpen,
+  DrawerClose,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
-import { useLazyGetTodoIndexQuery } from "@/redux/api/todos";
+import {
+  useLazyGetTodoIndexQuery,
+  useTodoDeleteMutation,
+  useTodoAssignToCategoryMutation,
+  useChangeBodyMutation,
+} from "@/redux/api/todos";
 import { AppDispatch, RootState } from "@/redux/store";
+import { deactiveBlur } from "@/redux/features/settingSlice";
 
 const Todos = () => {
-  const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
   const navigate = useNavigate();
-  const dispatch : AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const {
     active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
-    active_category : {id:ActiveCategoryID , title : ActiveCategoryTitle},
+    active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
     get_out: GetOutFromTodoPage,
-  } = useSelector((state:RootState) => state.todoPageConfig);
-  
+    drawer:{item : {_id : DrawerTodoId}}
+  } = useSelector((state: RootState) => state.todoPageConfig);
 
+  const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
+  const [
+    todoAssignRequest,
+    todoAssignResponse,
+  ] = useTodoAssignToCategoryMutation();
 
   const {
     updateCategoryOn,
     selected,
-    getAllTodos,
-    // todoList,
     drawerState,
     headerPosition,
     selectedWorkspace,
   } = useContext(AppDataContext);
   const [todoList, setTodoList] = useState([]);
+  const [categoList, setCategoList] = useState([]);
   const { open, setCloseSidebar } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
-  const [userSelectedCategory, setUserSelectedCategory] = useState({});
   const [showCategoryModalActions, setShowCategoryModalActions] = useState(
     false
   );
@@ -67,42 +75,60 @@ const Todos = () => {
     prevText: "",
   });
 
+  const [
+    triggerGetCategoryIndex,
+    categoryResponse,
+  ] = useLazyGetCategoryIndexQuery();
+  const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
+  const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
-const [triggerGetCategoryIndex , categoryRequest] = useLazyGetCategoryIndexQuery()
-const [triggerGetTodoIndex , todosRequest] = useLazyGetTodoIndexQuery()
-
-  const getSelectedCategoryData = async () => {
-    try {
-      const category = await Axios.get(`/category/getInfo?uuid=${selected}`);
-      setUserSelectedCategory(category.data);
-    } catch (error) {
-      console.log(error.response);
-    }
+  const UpdateOnlyTodos = () => {
+    triggerGetTodoIndex({
+      wsID: ActiveWorkspaceID,
+    }).unwrap().then((resp)=>{
+      setTodoListCopy(resp?.todos);
+    });
   };
-  
+  const UpdateOnlyCategories = () => {
+    triggerGetCategoryIndex(ActiveWorkspaceID).unwrap().then((resp)=>{
+      setCategoList(resp?.list);
+
+    });
+  };
+  const UpdateTodoAndCategories = () => {
+    UpdateOnlyTodos();
+    UpdateOnlyCategories();
+  };
+
+  const DeleteTodoOperation = () => {
+    todoDeleteRequest({ id: DrawerTodoId , ws: ActiveWorkspaceID })
+        UpdateTodoAndCategories();
+        dispatch(deactiveBlur());
+    
+  };
+
+  const HandleTodoAssignToCategory = (todoId, categoId) => {
+    todoAssignRequest({ todoId, categoId })
+      .then((resp) => {
+        Toast(resp.data.msg);
+        UpdateTodoAndCategories();
+      })
+      .catch((error) => {});
+  };
+
+  const HandleTodoChangeBody = (todoId, todoBody) => {
+    changeBodyRequest({ todoId, todoBody })
+    UpdateOnlyTodos();
+  };
 
   useEffect(() => {
     if (!ActiveWorkspaceID) {
       dispatch(fetchActiveWs());
-    }else {
-      triggerGetCategoryIndex(ActiveWorkspaceID)
-      triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:ActiveCategoryID ? ActiveCategoryID : "other"})
+    } else {
+      UpdateTodoAndCategories();
     }
-  }, [ActiveWorkspaceID])
+  }, [ActiveWorkspaceID]);
 
-useEffect(()=>{
-
-  if (!ActiveCategoryID) {
-    triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:"other"})
-
-  }else {
-    triggerGetTodoIndex({wsID:ActiveWorkspaceID , categoryID:ActiveCategoryID})
-
-  }
-
-},[ActiveCategoryID])
-  
-  ;
   useEffect(() => {
     if (GetOutFromTodoPage) {
       dispatch(GetOutCompleted());
@@ -110,63 +136,6 @@ useEffect(()=>{
     }
   }, [GetOutFromTodoPage]);
 
-
-  useEffect(() => {
-    if (show[1] === "all") {
-      setTodoListCopy(todoList);
-    } else {
-      const filteredTodo = todoList.filter((todo) => todo.flag === "isDone");
-      setTodoListCopy(filteredTodo);
-    }
-  }, [show, todoList]);
-
-  useEffect(()=>{
-    if(todosRequest?.data?.todos?.length){
-      setTodoList(todosRequest?.data?.todos)
-    }
-  },[todosRequest?.data?.todos])
-
-
-  // get all todos from context
-
-  // useEffect(() => {
-  //   if (selectedWorkspace.id) {
-  //     getAllTodos();
-  //     if (selected === "other") {
-  //       setUserSelectedCategory({});
-  //     } else {
-  //       getSelectedCategoryData();
-  //     }
-  //   }
-  // }, [selected, selectedWorkspace]);
-
-  const setTodoDone = async (todo) => {
-    try {
-      const response = await Axios.put("/todos/done", { id: todo._id });
-      if (response.status === 200) {
-        // getAllTodos();
-
-        Toast(response.data.msg);
-      }
-    } catch (error) {
-      console.log(error);
-      Toast(error.response.data, false);
-    }
-  };
-
-  const deleteTodo = async (todo) => {
-    try {
-      const response = await Axios.delete(
-        `/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`
-      );
-
-      // getAllTodos();
-
-      Toast(response.data.msg);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     // for handeling dimentions of todo board
@@ -192,20 +161,14 @@ useEffect(()=>{
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box display="flex">
-          {open === "show" && <Sidebar 
-            categoryList={categoryRequest?.data?.list}
-            loading={categoryRequest?.isLoading}
-            success={categoryRequest?.isSuccess}
-            
-          />}
+          {open === "show" && <Sidebar categoryList={categoList} />}
 
           <SettingBar
-            userSelectedCategory={userSelectedCategory}
-            getSelectedCategoryData={getSelectedCategoryData}
             showCategoryModalActions={showCategoryModalActions}
             setShowCategoryModalActions={setShowCategoryModalActions}
             showAddCategoryModal={showAddCategoryModal}
             setShowAddCategoryModal={setShowAddCategoryModal}
+            UpdateOnlyCategories={UpdateOnlyCategories}
           />
         </Box>
 
@@ -227,7 +190,7 @@ useEffect(()=>{
               className="todo-list"
               style={
                 headerPosition === "top" || headerPosition === "bottom"
-                  ? { height: "83%" }
+                  ? { height: "85%" }
                   : { height: "100%" }
               }
             >
@@ -236,33 +199,42 @@ useEffect(()=>{
                   <EmptyListAnimation text="Empty List 😐" />
                 </Box>
               ) : show[0] === "table" ? (
-                <TableListTodo
-                  todos={todoListCopy}
-                  getAllTodos={getAllTodos}
-                  deleteTodo={deleteTodo}
-                  // editTodo={editTodo}
-                  setTodoDone={setTodoDone}
-                />
+                <TableListTodo todos={todoListCopy} />
               ) : (
                 <TodoList
-                  todoList={todoListCopy}
-                  getAllTodos={getAllTodos}
-                  // editTodo={editTodo}
-                  setTodoDone={setTodoDone}
+                  todoList={
+                    !ActiveCategoryID
+                      ? todoListCopy
+                      : todoListCopy.filter(
+                          (item) => item.categoId === ActiveCategoryID
+                        )
+                  }
+                  UpdateTodoAndCategories={UpdateTodoAndCategories}
                 />
               )}
             </Box>
             <TodoPageFooter
-              userSelectedCategory={userSelectedCategory}
+              // userSelectedCategory={userSelectedCategory}
               showModalAddTodo={showModalAddTodo}
               setShowModalAddTodo={setShowModalAddTodo}
             />
           </Box>
         </Box>
       </Box>
-      <TodoDrawer />
+      <TodoPageDrawer
+        UpdateTodoAndCategories={UpdateTodoAndCategories}
+        DeleteTodoOperation={DeleteTodoOperation}
+        CategoryList={categoList}
+        HandleTodoAssignToCategory={HandleTodoAssignToCategory}
+        HandleTodoChangeBody={HandleTodoChangeBody}
+        UpdateOnlyTodos={UpdateOnlyTodos}
+        UpdateOnlyCategories={UpdateOnlyCategories}
+      />
       {showModalAddTodo ? (
-        <ShowModalNewTodo setShowModalAddTodo={setShowModalAddTodo} />
+        <ShowModalNewTodo
+         setShowModalAddTodo={setShowModalAddTodo}
+         UpdateTodoAndCategories={UpdateTodoAndCategories} />
+         
       ) : null}
     </DndProvider>
   );

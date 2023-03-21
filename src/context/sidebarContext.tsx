@@ -16,8 +16,6 @@ export const SidebarProvider = ({ children }) => {
   const setToggleSidebar = () => {
     setOpen(open === "hide" ? "show" : "hide");
     localStorage.setItem("sidebarShow" , JSON.stringify(open === "hide" ? true : false))
-    
-
   };
   const setOpenSidebar = () => {
     setOpen("show");

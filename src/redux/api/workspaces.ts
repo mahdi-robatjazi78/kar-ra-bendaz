@@ -34,7 +34,6 @@ export const WorkspacesRtkService = createApi({
       transformErrorResponse:(error)=>{
         handleResponseError(error)
        }
-
     }),
     activeWs:builder.mutation({
       query: (payload) => ({
@@ -55,13 +54,8 @@ export const WorkspacesRtkService = createApi({
       transformErrorResponse:(error)=>{
         handleResponseError(error)
        }
-      
     }),
-
-
-
   }), 
-  
 });
 
 

@@ -5,14 +5,16 @@ import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import {useSelector} from "react-redux"
 
 const CategoryModalActions = (props) => {
   const {
-    userSelectedCategory,
+    // userSelectedCategory
     setShowAddCategoryModal,
     setShowCategoryModalActions,
   } = props;
   const MySwal = withReactContent(Swal);
+  const {active_category:ActiveCategory} = useSelector(state=>state.todoPageConfig)
   const {
     blurFalse,
     blurTrue,
@@ -30,7 +32,7 @@ const CategoryModalActions = (props) => {
     try {
       blurTrue();
       const result = await MySwal.fire({
-        title: userSelectedCategory.category.title,
+        title: ActiveCategory.title,
         showCloseButton: true,
         showDenyButton: true,
         showCancelButton: true,

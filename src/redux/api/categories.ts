@@ -39,7 +39,42 @@ export const TodoCategoriesRtkService = createApi({
         handleResponseError(error);
       },
     }),
+
+    renameCategory: builder.mutation({
+      query: (payload) => ({
+        url: "editname",
+        method: "PUT",
+        body: payload,
+      }),
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+
+    removeOnlyCategory:builder.mutation({
+      query:(payload)=>({
+        url: `deleteOnlyCategory?ws=${payload.ws}&id=${payload.id}`,
+        method: "DELETE",
+      }),
+      transformErrorResponse:(error)=>{
+        handleResponseError(error)
+       }
+    }),
+    removeCategoryWithAllTodos:builder.mutation({
+      query:(payload)=>({
+        url:`deleteCategoryWithTodos?ws=${payload.ws}&id=${payload.id}`,
+        method:`DELETE`,
+      })
+    })
+
+
   }),
 });
 
-export const { useLazyGetCategoryIndexQuery , useStoreNewCategoryMutation } = TodoCategoriesRtkService;
+export const { 
+  useLazyGetCategoryIndexQuery ,
+  useStoreNewCategoryMutation,
+  useRenameCategoryMutation,
+  useRemoveOnlyCategoryMutation,
+  useRemoveCategoryWithAllTodosMutation
+} = TodoCategoriesRtkService;

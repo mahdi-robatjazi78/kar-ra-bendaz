@@ -88,11 +88,7 @@ const Login = () => {
         Toast(error.response.data.msg, false);
       }
     },
-  });
-
-  useLayoutEffect(() => {
-    setCloseSidebar();
-  }, []);
+  }); 
 
   return (
     <Box
@@ -226,10 +222,10 @@ const Login = () => {
 
                 <CButton
                   type="submit"
-                  variant="contained"
+                  variant="outlined"
                   disabled={formik.errors.password || formik.errors.username}
                   >
-                  <span className="submit-button-text">Login</span>
+                  <span>Login</span>
                 </CButton>
                 
                   

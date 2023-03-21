@@ -11,11 +11,22 @@ export interface IActiveCategory {
   title: String | null;
 }
 
+export interface ITodoDrawer {
+  open: Boolean,
+  state: String,
+  anchor:String,
+  item: {
+    _id : String , body:String , flag : String , categoId : String ,owner:String , date : Date | String
+  },
+}
+
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
+  drawer:ITodoDrawer;
   get_out: Boolean;
 }
+
 
 const initialState: ITodoPage = {
   active_ws: {
@@ -25,6 +36,12 @@ const initialState: ITodoPage = {
   active_category: {
     id: null,
     title: null,
+  },
+  drawer:{
+    open: false,
+    state: "todo",
+    anchor : "right",
+    item: { _id : "" , body:"" , flag : "" , categoId : '' ,owner:""  , date:""},
   },
   get_out: false,
 };
@@ -63,6 +80,23 @@ export const todoPageConfigSlice = createSlice({
     GetOutCompleted: (state) => {
       state.get_out = false;
     },
+    DrawerOpen:(state,action)=>{
+      state.drawer = {
+      open:true,
+      state:action.payload.state,
+      anchor:"right",
+      item:action.payload.item,
+      }
+    },
+    DrawerClose:(state)=>{
+      state.drawer = {
+        open:false,
+        state:'right',
+        anchor:state.drawer.anchor,
+        item:{ _id : "" , body:"" , flag : "" , categoId : "" ,owner:'' ,date:""},
+      }
+    },
+
   },
 
   extraReducers: (builder) => {
@@ -88,7 +122,6 @@ export const fetchActiveWs = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get("/ws/get-active");
-      console.log("response >>>  ", response);
       if (response.data.activeWorkspace) {
         return response.data;
       }
@@ -105,5 +138,7 @@ export const {
   UnActiveCategory,
   NoActiveWorkspace,
   GetOutCompleted,
+  DrawerOpen,
+  DrawerClose,
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

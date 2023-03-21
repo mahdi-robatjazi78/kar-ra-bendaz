@@ -6,55 +6,43 @@ import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
 import { AppDispatch, RootState } from "@/redux/store";
-import {useDispatch} from 'react-redux'
-import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
+import { useDispatch } from "react-redux";
+import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+import {
+  useStoreNewTodoMutation,
+} from "@/redux/api/todos";
+import { useSelector } from "react-redux";
 
 const ShowModalNewTodo = (props) => {
   const MySwal = withReactContent(Swal);
-  const { setShowModalAddTodo } = props;
-  const dispatch : AppDispatch = useDispatch()
+  const { setShowModalAddTodo ,UpdateTodoAndCategories } = props;
+  const dispatch: AppDispatch = useDispatch();
   const theme = useContext(ThemeContext);
-  const { selected, getAllTodos, blurFalse, selectedWorkspace, blurTrue } =
-    useContext(AppDataContext);
+  const {
+    active_ws: { id: ActiveWorkspaceID },
+    active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
+  } = useSelector((state: RootState) => state.todoPageConfig);
+  const [storeNewTodo, respStoreNewTodo] = useStoreNewTodoMutation();
 
-  const getInformationOfCategory = async (selectedCategoryId) => {
-    try {
-      const result = await Axios.get(
-        `/category/getInfo?uuid=${selectedCategoryId}`
-      );
-      return result.data.category.title;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const Submit = async (newTask, intoCategory = false) => {
-    try {
-      const response = await Axios.post("/todos/newTodo", {
-        todo: newTask,
-        ws:selectedWorkspace.id,
-        ...(intoCategory && { categoId: selected }),
-      });
-      getAllTodos(); 
-      Toast(response.data.msg);
-    } catch (error) {
-      console.log(error);
-      if (error.response) {
-        console.log(error.response);
-        Toast(error.response.msg, false);
-      }
-    }
+  const SubmitNewTodo = (todo, intoCategory = false) => {
+    storeNewTodo({
+      todo,
+      ws: ActiveWorkspaceID,
+      ...(intoCategory && { categoId: ActiveCategoryID }),
+    })
+      .then((resp) => {
+        Toast(resp.data.msg);
+        UpdateTodoAndCategories()
+        
+      })
+      .catch(() => {});
   };
 
   const ShowAddTaskModal = async () => {
     try {
-      dispatch(setBlurPage())
-      let categoryTitle = "";
-      if (selected !== "other") {
-        categoryTitle = await getInformationOfCategory(selected);
-      }
-
-      blurTrue();
+      dispatch(setBlurPage());
+      let categoryTitle = ActiveCategoryTitle;
 
       const { value: text } = await MySwal.fire({
         customClass: {
@@ -74,40 +62,39 @@ const ShowModalNewTodo = (props) => {
         inputAttributes: {
           "aria-label": "Type your message here",
         },
-        html:
-          selected !== "other"
-            ? `<div><input type="checkbox" checked=true  id="Selected-Category-Id" /> <label>${categoryTitle}</label> </div>`
-            : null,
+        html: ActiveCategoryTitle
+          ? `<div><input type="checkbox" checked=true  id="Selected-Category-Id" /> <label>${categoryTitle}</label> </div>`
+          : null,
 
         inputValue: "",
         showCancelButton: true,
       });
 
       if (text != undefined) {
-        const selectedCategoryElement: HTMLInputElement =
-          document.querySelector("#Selected-Category-Id");
+        const selectedCategoryElement: HTMLInputElement = document.querySelector(
+          "#Selected-Category-Id"
+        );
         if (
           !selectedCategoryElement ||
           selectedCategoryElement.checked == false
         ) {
-          Submit(text, false);
+          SubmitNewTodo(text, false);
         } else if (
           selectedCategoryElement &&
           selectedCategoryElement.checked == true
         ) {
-          Submit(text, true);
+          SubmitNewTodo(text, true);
         }
 
-        
-        dispatch(deactiveBlur())
+        dispatch(deactiveBlur());
         setShowModalAddTodo(false);
       } else {
-        dispatch(deactiveBlur())
+        dispatch(deactiveBlur());
         setShowModalAddTodo(false);
       }
     } catch (error) {
       console.log(error);
-      dispatch(deactiveBlur())
+      dispatch(deactiveBlur());
       setShowModalAddTodo(false);
     }
   };

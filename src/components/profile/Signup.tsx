@@ -302,10 +302,10 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
 
                   <CButton
                     type="submit"
-                    variant="contained"
+                    variant="outlined"
                     disabled={formik.errors.password || formik.errors.username}
                   >
-                    <span className="submit-button-text">Signup</span>
+                    Signup
                   </CButton>
 
                 
