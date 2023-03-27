@@ -3,13 +3,11 @@ import ThemeContext from "../../context/themeContext";
 import { SidebarContext } from "../../context/sidebarContext";
 import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import {
-  TextField,
+import { 
   Grid,
   Box,
   Typography,
   Container,
-  Button,
   Avatar,
   InputAdornment,
   IconButton,
@@ -18,7 +16,7 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import Axios, { base_url } from "../../services/api";
 import Toast from "../../util/toast";
-import CButton from "@/styles/styled/Cbutton";
+import StyledButton from "@/styles/styled/styled_button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaRegUser } from "react-icons/fa";
@@ -27,7 +25,7 @@ import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { motion } from "framer-motion"
 import { useDispatch } from "react-redux";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
-
+import StyledTextFieldWhite from '@/styles/styled/styled_textField'
 
 const Login = () => {
   const theme = useContext(ThemeContext);
@@ -124,7 +122,7 @@ const Login = () => {
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <TextField
+                    <StyledTextFieldWhite
                       className={
                         formik.touched.password && formik.errors.username
                           ? "errorStateField"
@@ -159,7 +157,7 @@ const Login = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
+                    <StyledTextFieldWhite
                       className={
                         formik.errors.password && formik.touched.password
                           ? "errorStateField"
@@ -220,13 +218,13 @@ const Login = () => {
                 </NavLink> 
 
 
-                <CButton
+                <StyledButton
                   type="submit"
                   variant="outlined"
                   disabled={formik.errors.password || formik.errors.username}
                   >
                   <span>Login</span>
-                </CButton>
+                </StyledButton>
                 
                   
                   </Box>

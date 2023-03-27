@@ -7,7 +7,7 @@ const themes = {
     sidebar: "rgb(184 184 184)",
     secondSidebar: "rgb(40, 44, 52)",
     text1: "rgb(49, 62, 69)",
-    text2: "rgb(0, 33, 204)",
+    text2: "rgb(156, 115, 255)",
     text3: "rgb(106 56 227)",
     header: "rgb(40, 44, 52)",
     hoverSuccess: "rgb(0, 152, 0)",

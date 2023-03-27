@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 
 
-const CButton = styled(Button)`
+const StyledButton = styled(Button)`
   align-items: center;
   background-color: none; 
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
-  color: var(--text3);
+  color: var(--text3) !important;
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
@@ -20,7 +20,7 @@ const CButton = styled(Button)`
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
-  border-color:var(--text3);
+  border-color:var(--text3) !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
   text-transform:capitalize;
  
@@ -30,8 +30,8 @@ const CButton = styled(Button)`
   }
   &:hover{
     transform: translateY(-2px);
-    background-color:var(--sidebar);
-    border-color:var(--text3);
+    background-color:var(--sidebar) !important;
+    border-color:var(--borders) !important;
 
 
   }
@@ -54,4 +54,4 @@ const CButton = styled(Button)`
     }
   }
 `;
-export default CButton;
+export default StyledButton;

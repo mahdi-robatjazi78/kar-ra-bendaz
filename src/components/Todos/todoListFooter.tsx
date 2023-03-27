@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext} from "react";
 import ThemeContext from "@context/themeContext";
 import { HiPlus } from "react-icons/hi";
 import styled from "styled-components";
@@ -8,80 +8,125 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  Pagination,
-  PaginationItem,
-  Select,
+  Pagination, 
   Stack,
   Tooltip,
 } from "@mui/material";
+import { FiArrowLeft, FiArrowRight, FiSearch } from "react-icons/fi";
+import StyledSelectWhite from '@/styles/styled/styled_Selectbox'
+import StyledPaginationItem from "@/styles/styled/styled_pagination"
 
 const TodoPageFooter = (props) => {
-  const StyledPaginationItem = styled(PaginationItem)`
+  const { setShowModalAddTodo ,meta , handleChangeMeta ,ActiveCategoryID} = props;
+
+  const StyledInputLabelWhite = styled(InputLabel)`
     color: var(--text1) !important;
-    &.css-yuzg60-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
-      background-color: var(--text1) !important;
-      color: black !important;
-      border-radius: 25% !important;
-    }
+    filter: brightness(0.7);
   `;
 
-  const StyledFormControl = styled(FormControl)`
-    &.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-      border-color:var(--borders) !important; 
-    }
-  `;
-
-
-  const { setShowModalAddTodo } = props;
   const theme = useContext(ThemeContext);
-  const [perPage , setPerPage] = useState(10)
+
 
   return (
     <Box className="todo-list-footer">
-      <Box width={120} 
-        style={{ margin: ".2rem 2.2rem 0.3rem 0.5rem" }}
 
-      
-      >
-        <StyledFormControl fullWidth size="small">
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={perPage}
-            label="Age"
-            onChange={(e)=>setPerPage(Number(e.target.value))}
-          >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={25}>25</MenuItem>
-            <MenuItem value={50}>50</MenuItem>
-            <MenuItem value={75}>75</MenuItem>
-            <MenuItem value={100}>100</MenuItem>
-          </Select>
-        </StyledFormControl>
-      </Box>
 
-      <Box>
-        <Stack spacing={2}>
-          <Pagination
-            style={{ margin: ".8rem 2.2rem 0.3rem 0.5rem" }}
-            count={22}
-            renderItem={(item) => <StyledPaginationItem {...item} />}
-          />
-        </Stack>
-      </Box>
+      {
+        ActiveCategoryID ? <Box></Box>:(
+          <Box width={120} style={{ margin: ".6rem 2.2rem 0rem 2rem" }}>
+          <FormControl fullWidth size="small">
+            <StyledInputLabelWhite id="per-page-select-label">
+              Per Page
+            </StyledInputLabelWhite>
+            <StyledSelectWhite
+              labelId="per-page-select-label"
+              value={meta?.limit || 5}
+              onChange={(e) =>handleChangeMeta(1 , Number(e.target.value))}
+              label={"Per Page"}
+              MenuProps={
+                {
+                  sx:{
+                    '& .MuiMenu-paper': {
+                      background:`${theme.background}`,border:`1px solid ${theme.borders}` ,color:theme.text1 ,  borderRadius: "10px",
+                      '& .Mui-selected': {
+                        border:`1px solid ${theme.borders}`,
+                        backgroundColor: theme.header,
+                        color: theme.text1,
+                        borderRadius:"12px",
+                        margin:"3px 10px",
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: theme.header,
+    
+                          color: theme.text1,
+    
+                        },
+                    },
+                   
+                   
+                  },
+                  }
+                }
+              }
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </StyledSelectWhite>
+          </FormControl>
+        </Box>
+        )
+      }
+      {
+        ActiveCategoryID ?<Box></Box>:(
+          <Box>
+          <Stack spacing={2}>
+            <Pagination
+              style={{ margin: ".8rem 2.2rem 0.3rem 0.5rem" }}
+              count={meta.total_pages}
+              page={meta?.page || 1}
+              onChange={(e , value)=>{
+                handleChangeMeta(+value , Number(meta?.limit))}
+              }
+              renderItem={(item) => (
+                <StyledPaginationItem
+                  slots={{ previous: FiArrowLeft, next: FiArrowRight }}
+                  {...item}
+                />
+              )}
+            />
+          </Stack>
+        </Box>
+        )
+      }
 
-      <Box className="add-new-todo-icon">
-        <Tooltip arrow title="Add New Task">
-          <Box className="icon-box" onClick={() => setShowModalAddTodo(true)}>
-            <IconButton>
-              <HiPlus
-                fontSize=".8rem"
-                color={theme.isDarkMode ? "black" : "white"}
-              />
-            </IconButton>
-          </Box>
-        </Tooltip>
+    
+      <Box display="flex" mr={2}>
+        <Box className="add-new-todo-icon">
+          <Tooltip arrow title="Search">
+            <Box className="icon-box" onClick={() => {}}>
+              <IconButton>
+                <FiSearch
+                  fontSize=".8rem"
+                  color={theme.isDarkMode ? "black" : "white"}
+                />
+              </IconButton>
+            </Box>
+          </Tooltip>
+        </Box>
+        <Box className="add-new-todo-icon">
+          <Tooltip arrow title="Add New Task">
+            <Box className="icon-box" onClick={() => setShowModalAddTodo(true)}>
+              <IconButton>
+                <HiPlus
+                  fontSize=".8rem"
+                  color={theme.isDarkMode ? "black" : "white"}
+                />
+              </IconButton>
+            </Box>
+          </Tooltip>
+        </Box>
       </Box>
     </Box>
   );

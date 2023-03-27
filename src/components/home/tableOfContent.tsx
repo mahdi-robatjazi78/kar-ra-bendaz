@@ -41,6 +41,9 @@ import {
 } from "../../redux/api/workspaces";
 import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 import { useDispatch } from "react-redux";
+import {StyledTableCell,StyledTableRow}  from '@/styles/styled/styled_table'
+
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -292,27 +295,6 @@ const TableOfContent = () => {
   };
   const theme = useContext(ThemeContext);
 
-  const StyledTableCell = styled(TableCell)({
-    [`&.${tableCellClasses.head}`]: {
-      padding: ".4rem",
-      color: theme.text2,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      padding: ".4rem .4rem .4rem .7rem",
-      color: theme.text1,
-    },
-  });
-
-  const StyledTableRow = styled(TableRow)({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.isDarkMode ? `#011a69` : "rgb(215,215,215)",
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  });
 
   return (
     <Box
@@ -460,8 +442,8 @@ const TableOfContent = () => {
                   </Box>
                 ) : (
                   <TableBody>
-                    {data.workspaces.map((item) => (
-                      <StyledTableRow key={item.id}>
+                    {data.workspaces.map((item:any) => (
+                      <StyledTableRow darkMode={theme.isDarkMode} key={item.id}>
                         <StyledTableCell>{item.title}</StyledTableCell>
                         <StyledTableCell>{item.categorySum}</StyledTableCell>
                         <StyledTableCell>{item.todoSum}</StyledTableCell>

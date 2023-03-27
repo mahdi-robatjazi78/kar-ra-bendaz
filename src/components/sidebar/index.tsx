@@ -10,7 +10,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
 
 const Sidebar = (props:any) => {
-  const { categoryList } = props;
+  const { categoryList ,totalTodoItems } = props;
 
   const { active_ws: ActiveWs, active_category: ActiveCategory } = useSelector(
     (state: RootState) => state.todoPageConfig
@@ -109,6 +109,13 @@ const Sidebar = (props:any) => {
             }}
           >
             <div className="task-title-style">All</div>
+            <div
+        style={{
+        }}
+        className="task-count-style"
+      >
+        {totalTodoItems ||""}
+      </div>
           </li>
           {categoryList.map((item, index) => (
             <SidebarItem key={item.uuid} item={item} />

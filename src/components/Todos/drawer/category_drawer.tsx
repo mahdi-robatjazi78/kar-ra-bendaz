@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   IconButton,
-  InputAdornment,
-  TextField,
+  InputAdornment, 
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -22,8 +21,9 @@ import {
   UnActiveCategory,
 } from "@/redux/features/todoPageConfigSlice";
 import { deactiveBlur } from "@/redux/features/settingSlice";
-import CButton from "@/styles/styled/Cbutton";
+import StyledButton from "@/styles/styled/styled_button";
 import Toast from "@/util/toast";
+import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 
 const CategoryDrawer = (props) => {
   const { CategoryItem ,UpdateOnlyCategories,UpdateOnlyTodos } = props;
@@ -114,7 +114,7 @@ const CategoryDrawer = (props) => {
   return (
     <Box className="drawer-box">
       <Box sx={{ mt: 3 }}>
-        <TextField
+        <StyledTextFieldWhite
           fullWidth
           variant="outlined"
           label="Category title"
@@ -160,23 +160,23 @@ const CategoryDrawer = (props) => {
             </Typography>
           ) : null}
           <Box>
-          <CButton
+          <StyledButton
             onClick={RemoveCategoryOnly}
             variant="outlined"
 						size="small"
           >
             Remove category
-          </CButton>
+          </StyledButton>
 
           </Box>
           <Box sx={{mt:2}}>
-          <CButton
+          <StyledButton
             onClick={RemoveCategoryWithAllTodosInsideIt}
             variant="outlined"
 						size="small"
           >
             Remove category with all todos inside it
-          </CButton>
+          </StyledButton>
           </Box>
         </Box>
       </Box>

@@ -47,7 +47,6 @@ const SidebarItem = (props:any) => {
       {`list-category-items ${ActiveCategory.id && ActiveCategory.id === item.uuid ? "active-item" : ""}  `}
       ref={drop}
       style={{ ...subsetTabsStyle,
-        
         marginBottom:"5px",
         ...(borderColor && {
           border:`1px dashed ${borderColor}`
@@ -73,7 +72,7 @@ const SidebarItem = (props:any) => {
         }
       }}
       >
-      <div className="task-title-style">{item.title}</div>
+      <div className={`${ActiveCategory.id && ActiveCategory.id === item.uuid ? "task-title-style-active" : "task-title-style"}`}>{item.title}</div>
       <div
         style={{
           width: item.task_count.length > 1 ? "fit-content" : "1.2rem",

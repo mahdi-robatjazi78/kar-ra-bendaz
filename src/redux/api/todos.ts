@@ -23,7 +23,7 @@ export const TodoRtkService = createApi({
   tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getTodoIndex: builder.query({
-      query: (query) => `index?ws=${query.wsID}`,
+      query: (query) => `index?ws=${query.wsID}&page=${query.page}&perPage=${query.perPage}`,
       transformErrorResponse: (error) => {
         handleResponseError(error);
       },

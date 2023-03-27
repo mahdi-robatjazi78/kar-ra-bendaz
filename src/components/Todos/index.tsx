@@ -52,17 +52,19 @@ const Todos = () => {
     todoAssignResponse,
   ] = useTodoAssignToCategoryMutation();
 
-  const {
-    updateCategoryOn,
-    selected,
-    drawerState,
+  const { 
     headerPosition,
-    selectedWorkspace,
   } = useContext(AppDataContext);
-  const [todoList, setTodoList] = useState([]);
-  const [categoList, setCategoList] = useState([]);
-  const { open, setCloseSidebar } = useContext(SidebarContext);
   const [todoListCopy, setTodoListCopy] = useState([]);
+  const [meta ,setMeta] = useState({
+    page:1,
+    limit:15,
+    total_items:null,
+    total_pages:null,
+  })
+  const [categoList, setCategoList] = useState([]);
+
+  const { open, setCloseSidebar } = useContext(SidebarContext);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
@@ -82,11 +84,19 @@ const Todos = () => {
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
-  const UpdateOnlyTodos = () => {
+  const UpdateOnlyTodos = (p=null ,pp=null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
+      page: p ? p : meta?.page || 1,
+      perPage:pp ? pp : meta?.limit || 20,
     }).unwrap().then((resp)=>{
       setTodoListCopy(resp?.todos);
+      setMeta({
+        page:Number(resp?.meta?.page),
+        limit:Number(resp?.meta?.limit),
+        total_items:Number(resp?.meta?.total_items),
+        total_pages:Number(resp?.meta?.total_pages),
+      })
     });
   };
   const UpdateOnlyCategories = () => {
@@ -102,9 +112,8 @@ const Todos = () => {
 
   const DeleteTodoOperation = () => {
     todoDeleteRequest({ id: DrawerTodoId , ws: ActiveWorkspaceID })
-        UpdateTodoAndCategories();
-        dispatch(deactiveBlur());
-    
+      UpdateTodoAndCategories();
+      dispatch(deactiveBlur());
   };
 
   const HandleTodoAssignToCategory = (todoId, categoId) => {
@@ -136,6 +145,13 @@ const Todos = () => {
     }
   }, [GetOutFromTodoPage]);
 
+  const handleChangeMeta =(page , perPage)=>{
+
+    setMeta({...meta , page:page , limit:perPage})
+    UpdateOnlyTodos(page , perPage)
+
+  }
+
 
   useEffect(() => {
     // for handeling dimentions of todo board
@@ -161,7 +177,7 @@ const Todos = () => {
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box display="flex">
-          {open === "show" && <Sidebar categoryList={categoList} />}
+          {open === "show" && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
 
           <SettingBar
             showCategoryModalActions={showCategoryModalActions}
@@ -214,9 +230,10 @@ const Todos = () => {
               )}
             </Box>
             <TodoPageFooter
-              // userSelectedCategory={userSelectedCategory}
-              showModalAddTodo={showModalAddTodo}
               setShowModalAddTodo={setShowModalAddTodo}
+              meta={meta}
+              handleChangeMeta={handleChangeMeta}
+              ActiveCategoryID={ActiveCategoryID}
             />
           </Box>
         </Box>

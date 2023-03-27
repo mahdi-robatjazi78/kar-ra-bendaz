@@ -31,10 +31,7 @@ const TodoBox = (props: any) => {
   },[todos[index].categoId])
 
   const theme = useContext(ThemeContext);
-  const { show } = useContext(TodoContext);
-  const { setDrawerState, getAllTodos } = useContext(
-    AppDataContext
-  );
+  const { show } = useContext(TodoContext); 
   const dispatch : AppDispatch = useDispatch()
 
   
@@ -42,15 +39,10 @@ const TodoBox = (props: any) => {
 
 
 
-
-
-
   const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
 
-    console.log("see it 2 >> " , item , dropResult , todos);
-
     if(category === dropResult.id){
-      Toast("Please go to another category" , false)
+      Toast("Please drop todo to another category" , false)
       return 
     }
 
@@ -60,24 +52,13 @@ const TodoBox = (props: any) => {
           prevCategoId: category,
           newCategoId: "other",
         }).then(resp=>{
-
-          console.log('number 1')
-
-
           Toast(resp.data.msg);
           UpdateTodoAndCategories()
         }).catch(error=>{
 
         })
   
-      } else {
-        
-        console.log('number 2')
-        console.log("category" ,  category)
-        console.log("categoId" , categoId)
-        console.log(dropResult?.id)
-
-
+      } else { 
         assignToCategoryRequest({
           todoId: id,
           prevCategoId: category || "",
