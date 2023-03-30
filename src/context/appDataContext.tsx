@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Axios from "@services/api";
-import Toast from "@/util/toast";
 
 export const AppDataContext = React.createContext(null);
 export const AppDataContextProvider = ({ children }) => {
@@ -26,10 +25,10 @@ export const AppDataContextProvider = ({ children }) => {
   const selectedWs = JSON.parse(window.localStorage.getItem("selectedWs"))
   const [selectedWorkspace, setSelectedWorkspace] = useState<ISelectedWorkspace>({id:"",title:""});
   useEffect(()=>{
-    if(selectedWs.id && selectedWs.id !== selectedWorkspace.id){
+    if(selectedWs?.id && selectedWs?.id !== selectedWorkspace?.id){
       setSelectedWorkspace({id:selectedWs?.id , title :selectedWs.title})
     }
-  } , [selectedWs.id])
+  } , [selectedWs?.id])
   
   const [selected, setSelected] = useState("other");
   const newCategorySelected = (categoryId = "other") => {
@@ -60,25 +59,10 @@ export const AppDataContextProvider = ({ children }) => {
     }
   };
 
-  const editTodoBody = async (id, body) => {
-    try {
-      const response = await Axios.put("/todos/update-body", {
-        id: id,
-        body: body,
-      });
-      updateCategoryOn();
-      getAllTodos();
-      Toast(response.data.msg);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
   return (
     <AppDataContext.Provider
       value={{
         getAllTodos,
-        editTodoBody,
         blurPage,
         blurTrue,
         blurFalse,

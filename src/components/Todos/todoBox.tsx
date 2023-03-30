@@ -4,8 +4,12 @@ import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { TodoContext } from "@context/todoContext";
 import { AppDataContext } from "@context/appDataContext";
 import ThemeContext from "../../context/themeContext";
-import Axios from "@services/api";
 import Toast from "@utils/toast";
+import { useDragDropAssignToCategoryMutation } from "@/redux/api/todos";
+import {useDispatch , useSelector} from 'react-redux'
+import { RootState , AppDispatch } from "@/redux/store";
+import {setBlurPage} from '@/redux/features/settingSlice'
+import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
 
 export interface BoxProps {
   name: string;
@@ -17,52 +21,64 @@ interface DropResult {
 }
 
 const TodoBox = (props: any) => {
-  const { id, flag, body, index, todos } = props;
+  
+  const { id, categoId ,flag, body,todos,index,UpdateTodoAndCategories} = props;
+
+    const [category , setCategory]=useState(categoId ? categoId : "")
+
+  useEffect(()=>{
+    setCategory(categoId ? categoId : todos[index]?.categoId)
+  },[todos[index].categoId])
+
   const theme = useContext(ThemeContext);
-  const { show } = useContext(TodoContext);
-  const { blurTrue, todoList, setDrawerState, getAllTodos } = useContext(
-    AppDataContext
-  );
+  const { show } = useContext(TodoContext); 
+  const dispatch : AppDispatch = useDispatch()
 
-  const getTodoCategoryId = (todoId) => {
-    const result = todoList.filter((item) => item._id === todoId);
+  
+  const [assignToCategoryRequest , assignToCategoryResponse] = useDragDropAssignToCategoryMutation()
 
-    let todo = result[0];
-    return todo.categoId;
-  };
 
-  const addToCategoryWithDragDrop = async (item: any, dropResult: any) => {
-    try {
-      if (dropResult?.id == null || dropResult?.id === "other") {
-        const response = await Axios.put("/todos/assign-to-another-category", {
-          todoId: id,
-          prevCategoId: getTodoCategoryId(id),
-          newCategoId: "other",
-        });
 
-        Toast(response.data.msg);
-      } else {
-        const response = await Axios.put("/todos/assign-to-another-category", {
-          todoId: id,
-          prevCategoId: getTodoCategoryId(id) || "other",
-          newCategoId: dropResult?.id,
-        });
+  const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
 
-        Toast(response.data.msg);
-      }
-
-      getAllTodos();
-    } catch (error) {
-      console.log(error);
+    if(category === dropResult.id){
+      Toast("Please drop todo to another category" , false)
+      return 
     }
+
+      if (dropResult?.id == null || dropResult?.id === "other") {
+        assignToCategoryRequest({
+          todoId: id,
+          prevCategoId: category,
+          newCategoId: "other",
+        }).then(resp=>{
+          Toast(resp.data.msg);
+          UpdateTodoAndCategories()
+        }).catch(error=>{
+
+        })
+  
+      } else { 
+        assignToCategoryRequest({
+          todoId: id,
+          prevCategoId: category || "",
+          newCategoId: dropResult?.id,
+        }).then(resp=>{
+          Toast(resp.data.msg);
+          UpdateTodoAndCategories()
+        }).catch(error=>{
+
+        })
+      }
   };
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "todo-box",
-    item: { todo: todos[index] },
+    item: { todo: category },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
+        console.log("previus" , item , isDragging)
         addToCategoryWithDragDrop(item, dropResult);
       }
     },
@@ -70,7 +86,7 @@ const TodoBox = (props: any) => {
       isDragging: monitor.isDragging(),
       handlerId: monitor.getHandlerId(),
     }),
-  }));
+  })  , [category]);
   const opacity = isDragging ? 0.4 : 1;
 
   return (
@@ -106,13 +122,8 @@ const TodoBox = (props: any) => {
           border: "2px solid gray",
         }}
         onClick={() => {
-          setDrawerState({
-            state: "todo",
-            open: true,
-            item: todos[index],
-          });
-
-          blurTrue();
+         dispatch(DrawerOpen({state : "todo" ,item:todos[index]}))
+          dispatch(setBlurPage())
         }}
       >
         <CardContent

@@ -1,54 +1,57 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import {
+  useStoreNewCategoryMutation,
+} from "@/redux/api/categories";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
 
 const ShowModalNewCategory = (props) => {
   const MySwal = withReactContent(Swal);
   const {
     showAddCategoryModal,
     setShowAddCategoryModal,
-    userSelectedCategory,
-    getSelectedCategoryData    
-} = props;
+    UpdateOnlyCategories,
+  } = props;
   const theme = useContext(ThemeContext);
-  const { selected, getAllTodos, blurFalse, updateCategoryOn, blurTrue } =
-    useContext(AppDataContext);
-    const {selectedWorkspace} = useContext(AppDataContext)
+  const dispatch: AppDispatch = useDispatch();
 
-  const submitNewCategory = async (title) => {
-    try {
-      const response = await Axios.post("/category/new", { title , ws:selectedWorkspace.id });
-      Toast(response.data.msg);
-      updateCategoryOn();
-    } catch (error) {
-      console.log(error.response);
-      Toast(error.response.data.msg, false);
-    }
-  };
+  const {
+    active_ws: { id: ActiveWorkspaceID },
+  } = useSelector((state: RootState) => state.todoPageConfig);
 
-  const editCategoryName = async (title) => {
-    try {
-      console.log("userSelectedCategory , ", userSelectedCategory);
+  const [
+    storeNewCategory,
+    storeNewCategoryResponse,
+  ] = useStoreNewCategoryMutation();
+  const submitNewCategory = (title: String) => {
+      storeNewCategory({ title, ws: ActiveWorkspaceID }).unwrap().then((resp)=>{
+        Toast(resp?.msg);
+        UpdateOnlyCategories();
+        dispatch(deactiveBlur());
+        setShowAddCategoryModal({
+          show: false,
+          state: "add",
+          prevText: "",
+        });
+      }).catch(error=>{
 
-      const response = await Axios.put("/category/editname", {
-        uuid: userSelectedCategory.category.uuid,
-        newTitle: title,
       });
-      Toast(response.data.msg);
-      updateCategoryOn();
-      getSelectedCategoryData();
-    } catch (error) {
-      console.log(error.response);
-      Toast("Something went wrong", false);
-    }
   };
+
+  useEffect(() => {
+    ShowAddCategoryModal();
+  }, []);
 
   const ShowAddCategoryModal = async () => {
-    blurTrue();
+    dispatch(setBlurPage());
     try {
       const result = await MySwal.fire({
         title:
@@ -61,13 +64,13 @@ const ShowModalNewCategory = (props) => {
             ? showAddCategoryModal.prevText
             : "",
         customClass: {
-          popup: theme.isDarkMode ? "Modal_DrakMode" : "Modal_LightMode",
+          popup: theme.isDarkMode
+            ? "Modal_DrakMode CategoryCreateEditModal"
+            : "Modal_LightMode CategoryCreateEditModal",
           title: theme.isDarkMode
             ? "Modal_TitleBar_Dark"
             : "Modal_TitleBar_Light",
-          confirmButton: theme.isDarkMode
-            ? "Modal_Confirm_Button_Dark"
-            : "Modal_Confirm_Button_Light",
+          confirmButton: "Modal_Confirm_Button",
           cancelButton: "Modal_Cancel_Button",
           footer: "Modal_Footer",
           input: theme.isDarkMode ? "Modal_Input_Dark" : "Modal_Input_Light",
@@ -78,16 +81,7 @@ const ShowModalNewCategory = (props) => {
         },
 
         preConfirm(inputValue) {
-          showAddCategoryModal.state === "add"
-            ? submitNewCategory(inputValue)
-            : editCategoryName(inputValue);
-
-          blurFalse();
-          setShowAddCategoryModal({
-            show: false,
-            state: "add",
-            prevText: "",
-          });
+          submitNewCategory(inputValue);
         },
 
         showCloseButton: true,
@@ -96,7 +90,7 @@ const ShowModalNewCategory = (props) => {
 
         allowOutsideClick: () => !Swal.isLoading(),
       });
-      blurFalse();
+      dispatch(deactiveBlur());
       setShowAddCategoryModal({
         show: false,
         state: "add",
@@ -105,7 +99,8 @@ const ShowModalNewCategory = (props) => {
       // listenToInputModal();
     } catch (error) {
       console.log(error);
-      blurFalse();
+      dispatch(deactiveBlur());
+
       setShowAddCategoryModal({
         show: false,
         state: "add",
@@ -113,9 +108,6 @@ const ShowModalNewCategory = (props) => {
       });
     }
   };
-  useEffect(() => {
-    ShowAddCategoryModal();
-  }, []);
 
   return <></>;
 };
