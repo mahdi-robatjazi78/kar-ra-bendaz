@@ -13,8 +13,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import { FiArrowLeft, FiArrowRight, FiSearch } from "react-icons/fi";
-import StyledSelectWhite from '@/styles/styled/styled_Selectbox'
 import StyledPaginationItem from "@/styles/styled/styled_pagination"
+import StyledSelectWhiteComponent from "@/styles/styled/styled_Selectbox";
+
 
 const TodoPageFooter = (props) => {
   const { setShowModalAddTodo ,meta , handleChangeMeta ,ActiveCategoryID} = props;
@@ -38,49 +39,25 @@ const TodoPageFooter = (props) => {
             <StyledInputLabelWhite id="per-page-select-label">
               Per Page
             </StyledInputLabelWhite>
-            <StyledSelectWhite
+            <StyledSelectWhiteComponent
               labelId="per-page-select-label"
               value={meta?.limit || 5}
               onChange={(e) =>handleChangeMeta(1 , Number(e.target.value))}
               label={"Per Page"}
-              MenuProps={
-                {
-                  sx:{
-                    '& .MuiMenu-paper': {
-                      background:`${theme.background}`,border:`1px solid ${theme.borders}` ,color:theme.text1 ,  borderRadius: "10px",
-                      '& .Mui-selected': {
-                        border:`1px solid ${theme.borders}`,
-                        backgroundColor: theme.header,
-                        color: theme.text1,
-                        borderRadius:"12px",
-                        margin:"3px 10px",
-                        '& .MuiMenuItem-root:hover': {
-                          backgroundColor: theme.header,
-    
-                          color: theme.text1,
-    
-                        },
-                    },
-                   
-                   
-                  },
-                  }
-                }
-              }
             >
               <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={15}>15</MenuItem>
               <MenuItem value={20}>20</MenuItem>
               <MenuItem value={50}>50</MenuItem>
-            </StyledSelectWhite>
+            </StyledSelectWhiteComponent>
           </FormControl>
         </Box>
         )
       }
       {
         ActiveCategoryID ?<Box></Box>:(
-          <Box>
+          <Box sx={{marginTop:"5px"}}>
           <Stack spacing={2}>
             <Pagination
               style={{ margin: ".8rem 2.2rem 0.3rem 0.5rem" }}

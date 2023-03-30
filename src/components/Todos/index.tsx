@@ -55,7 +55,7 @@ const Todos = () => {
   const { 
     headerPosition,
   } = useContext(AppDataContext);
-  const [todoListCopy, setTodoListCopy] = useState([]);
+  const [todoList, setTodoList] = useState([]);
   const [meta ,setMeta] = useState({
     page:1,
     limit:15,
@@ -90,7 +90,7 @@ const Todos = () => {
       page: p ? p : meta?.page || 1,
       perPage:pp ? pp : meta?.limit || 20,
     }).unwrap().then((resp)=>{
-      setTodoListCopy(resp?.todos);
+      setTodoList(resp?.todos);
       setMeta({
         page:Number(resp?.meta?.page),
         limit:Number(resp?.meta?.limit),
@@ -210,18 +210,18 @@ const Todos = () => {
                   : { height: "100%" }
               }
             >
-              {!todoListCopy.length ? (
+              {!todoList.length ? (
                 <Box>
                   <EmptyListAnimation text="Empty List 😐" />
                 </Box>
               ) : show[0] === "table" ? (
-                <TableListTodo todos={todoListCopy} />
+                <TableListTodo todos={todoList} />
               ) : (
                 <TodoList
                   todoList={
                     !ActiveCategoryID
-                      ? todoListCopy
-                      : todoListCopy.filter(
+                      ? todoList
+                      : todoList.filter(
                           (item) => item.categoId === ActiveCategoryID
                         )
                   }
