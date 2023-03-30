@@ -1,20 +1,31 @@
 .swal2-container{
   z-index: 9999;
 }
+.swal2-input{
+  font-family: cursive ;
+  letter-spacing: 1px ;
+  font-size: 1.3rem !important;
+}
+
+.swal2-textarea{
+  font-family: cursive ;
+}
+
 
 .Modal_DrakMode {
 
-  // zIndex:9999;
   background-color: var(--header);
   position: relative;
   border: 2px solid var(--borders);
+  border-radius:10px;
 }
 .Modal_LightMode {
-  // zIndex:9999;
-  background-color: var(--header);
+  background-color: var(--background);
   position: relative;
   border: 2px solid var(--borders);
+  border-radius:10px;
 }
+
 .Modal_TitleBar_Light {
   font-size: 2rem;
   color: black;
@@ -24,6 +35,7 @@
   font-size: 2rem;
   color: white;
   font-family: sans-serif;
+
 }
 .Modal_Deny_Button {
   background-color:red;
@@ -32,6 +44,11 @@
   left:1rem;
   border: 1px solid white !important;
 }
+
+
+
+
+
 .Modal_Cancel_Button_Dark_Center {
   background-color: rgb(0, 48, 99) !important;
   position:absolute;
@@ -53,15 +70,40 @@
 .Half_Width {
   width:27% !important;
 }
-.Modal_Confirm_Button_Dark {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  width: fit-content;
-  background-color: rgb(0, 48, 99) !important;
+.Modal_Confirm_Button {
+
+  margin: 10px !important;
+  padding: 10px 30px !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  transition: 0.5s !important;
+  background-size: 200% auto !important;
   color: white !important;
+  border-radius: 10px !important;
+  display: block !important;
+  font-weight: 700 !important;
+  box-shadow: 0px 0px 14px -7px #f09819 !important;
+  background-image: linear-gradient(45deg, var(--borders) 0%, var(--sidebar)  51%, var(--borders)  100%) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: manipulation !important;
+  position: absolute;
+  bottom: .5rem;
+  right: 1.5rem;
   border: 1px solid white !important;
 }
+
+.Modal_Confirm_Button_Dark:hover {
+  background-position: right center !important;
+  color: #fff !important;
+  text-decoration: none ;
+}
+
+.Modal_Confirm_Button_Dark:active {
+  transform: scale(0.95);
+}
+
 
 
 .Modal_Confirm_Button_FullWidth_Dark {
@@ -74,15 +116,15 @@
   outline: none !important;
 }
 
-.Modal_Confirm_Button_Light {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  width: fit-content;
-  background-color: rgb(243, 243, 243) !important;
-  color: black !important;
-  border: 1px solid black !important;
-}
+// .Modal_Confirm_Button_Light {
+//   position: absolute;
+//   bottom: 1rem;
+//   right: 1rem;
+//   width: fit-content;
+//   background-color: rgb(243, 243, 243) !important;
+//   color: black !important;
+//   border: 1px solid black !important;
+// }
 .Modal_Confirm_Button_FullWidth_Light {
   position: absolute;
   bottom: 1rem;
@@ -95,8 +137,10 @@
 .Modal_Cancel_Button {
   position: absolute;
   bottom: 1rem;
-  left: 2rem;
+  left: 1.5rem;
   width: 6rem;
+  background-color: transparent !important;
+  user-select: none !important;
 }
 .Modal_Footer {
   display: block !important;
@@ -112,6 +156,7 @@
 .Modal_Input_Dark {
   z-index:9999;
   color: white;
+  border-radius: 10px !important;
 
 }
 .Modal_Radio_Container_Dark{
@@ -150,6 +195,7 @@
 .Modal_Input_Light {
   z-index:9999;
   color: black;
+  border-radius:10px !important;
 }
 .Modal_Input_Light >option {
     color: black;
@@ -206,4 +252,35 @@
   max-height:10rem;
   overflow-y: scroll;
 }
+
+
+.CategoryCreateEditModal{
+  height:15rem !important;
+}
  
+
+
+
+
+.waviy {
+  position: relative;
+  -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0,0,0,.2));
+  font-size: 60px;
+}
+h2.swal2-title {
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  animation: waviy 1s;
+  animation-delay: 1s;
+  user-select: none;
+  
+}
+@keyframes waviy {
+  0%,40%,100% {
+    transform: translateY(0)
+  }
+  20% {
+    transform: translateY(-10px)
+  }
+}

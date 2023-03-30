@@ -1,29 +1,38 @@
-import React , {useState ,useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import {useSelector} from "react-redux"
 
+const CategoryModalActions = (props) => {
+  const {
+    // userSelectedCategory
+    setShowAddCategoryModal,
+    setShowCategoryModalActions,
+  } = props;
+  const MySwal = withReactContent(Swal);
+  const {active_category:ActiveCategory} = useSelector(state=>state.todoPageConfig)
+  const {
+    blurFalse,
+    blurTrue,
+    getAllTodos,
+    updateCategoryOn,
+    todoList,
+    newCategorySelected,
+    selected,
+    selectedWorkspace,
+  } = useContext(AppDataContext);
 
-
-const CategoryModalActions = (props)  =>{
-
-    const {userSelectedCategory ,setShowAddCategoryModal,setShowCategoryModalActions} = props
-    const MySwal = withReactContent(Swal);
-    const { blurFalse,blurTrue, getAllTodos, updateCategoryOn, todoList,newCategorySelected, selected , selectedWorkspace } =
-      useContext(AppDataContext);
-  
-    const theme = useContext(ThemeContext);
-
-
+  const theme = useContext(ThemeContext);
 
   const ShowModal = async () => {
     try {
       blurTrue();
       const result = await MySwal.fire({
-        title: userSelectedCategory.category.title,
+        title: ActiveCategory.title,
         showCloseButton: true,
         showDenyButton: true,
         showCancelButton: true,
@@ -144,7 +153,7 @@ const CategoryModalActions = (props)  =>{
                 Axios.put("/todos/exit-from-category", {
                   todos: selectedTodosForExitOfCategory,
                   category: userSelectedCategory.category.uuid,
-                }).then((response) => { 
+                }).then((response) => {
                   getAllTodos(selected);
                   Toast(response.data.msg);
                 });
@@ -181,7 +190,7 @@ const CategoryModalActions = (props)  =>{
 
       if (result.isDenied) {
         const { value: option } = await MySwal.fire({
-          title: "Delete Category", 
+          title: "Delete Category",
           showCloseButton: true,
           showCancelButton: true,
           input: "radio",
@@ -209,7 +218,6 @@ const CategoryModalActions = (props)  =>{
         });
 
         if (option) {
-
           if (option === "onlyCategory") {
             const response = await Axios.delete(
               `/category/deleteOnlyCategory?id=${userSelectedCategory.category.uuid}&ws=${selectedWorkspace.id}`
@@ -253,11 +261,11 @@ const CategoryModalActions = (props)  =>{
         //   preConfirm(inputValue) {
         //     // editCategoryName(inputValue);
 
-            setShowAddCategoryModal({
-                show:true,
-                state:"edit",
-                prevText:userSelectedCategory.category.title   
-            })
+        setShowAddCategoryModal({
+          show: true,
+          state: "edit",
+          prevText: userSelectedCategory.category.title,
+        });
 
         //   },
         //   showCloseButton: true,
@@ -268,16 +276,17 @@ const CategoryModalActions = (props)  =>{
         // });
         // listenToInputModal();
       }
-      setShowCategoryModalActions(false)
+      setShowCategoryModalActions(false);
       blurFalse();
     } catch (error) {
-        console.log(error);
-        blurFalse();
+      console.log(error);
+      blurFalse();
     }
   };
 
-    useEffect(()=>{ShowModal()}, [])
-    return (<></>)
-
-}
-export default CategoryModalActions
+  useEffect(() => {
+    ShowModal();
+  }, []);
+  return <></>;
+};
+export default CategoryModalActions;

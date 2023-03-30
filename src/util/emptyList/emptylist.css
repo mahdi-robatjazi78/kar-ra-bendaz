@@ -64,7 +64,7 @@
   }
   0%   { 
   opacity: 0; 
-  filter: blur(10px);
+  filter: blur(6px);
   
   }
   100% { 

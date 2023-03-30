@@ -1,22 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
-import Toast from "@utils/toast";
-
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
-import Axios from "@/services/api";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; 
+import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 const ShowModalAddToCategory = (props) => {
-  const { todo, setModalOpen } = props;
-  const { blurFalse, getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
+  const { CategoryList , setModalOpen , HandleTodoAssignToCategory} = props;
+  const { getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
     useContext(AppDataContext);
-
   const theme = useContext(ThemeContext);
 
+  const dispatch :AppDispatch = useDispatch()
   const addToCategoryModal = async (id) => {
     try {
-      const resp = await Axios.get(`/category/getAll?ws=${selectedWorkspace.id}`);
-      const allCategories = resp.data.list;
+      const allCategories = CategoryList;
 
       const selectedCategoryIndex = await Swal.fire({
         title: "Select a category",
@@ -39,22 +38,15 @@ const ShowModalAddToCategory = (props) => {
         },
       });
 
-      console.log("after", allCategories, selectedCategoryIndex);
-
       if (selectedCategoryIndex.value) {
-        const response = await Axios.put("/todos/add-to-category", {
-          todoId: id,
-          categoId: allCategories[selectedCategoryIndex.value].uuid,
-        }); 
-        getAllTodos();
-        Toast(response.data.msg);
+        const categoId = allCategories[selectedCategoryIndex.value].uuid;
+        HandleTodoAssignToCategory(id , categoId)
+        dispatch(deactiveBlur())
       }
-
+      
       setModalOpen({ status: false, modal: "" });
-      blurFalse();
     } catch (error) {
       setModalOpen({ status: false, modal: "" });
-      blurFalse();
     }
   };
 

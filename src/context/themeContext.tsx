@@ -10,6 +10,7 @@ interface ITheme {
   secondSidebar: string;
   text1: string;
   text2: string;
+  header:string;
   text3: string;
   hoverSuccess: string;
   isDarkMode: boolean;
@@ -24,6 +25,7 @@ const ThemeContext = React.createContext<ITheme>({
   borders: "",
   errorBorder: "",
   sidebar: "",
+  header:"",
   secondSidebar: "",
   text1: "",
   text2: "",
@@ -43,6 +45,7 @@ export const ThemeContextProvider = ({ children }: any) => {
     borders: "",
     errorBorder: "",
     sidebar: "",
+    header:'',
     secondSidebar: "",
     text1: "",
     text2: "",

@@ -1,33 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
- 
+import { useDispatch } from "react-redux";
 import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
-import Axios from "@/services/api";
 import Swal from "sweetalert2";
+import { DrawerClose } from "@/redux/features/todoPageConfigSlice";
+
+
+
 
 const ShowModalDelete = (props) => {
-  const { todo, setModalOpen } = props;
-
-  
+  const {todo, setModalOpen , DeleteTodoOperation } = props;
   const theme = useContext(ThemeContext);
-  const { getAllTodos , setDrawerState, blurFalse ,updateCategoryOn , selectedWorkspace } = useContext(AppDataContext);
-  
-  const deleteTodo = async () => {
-    try {
-      const response = await Axios.delete(`/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`);
-      console.log(response);
-      updateCategoryOn();
-      getAllTodos();
-      Toast(response.data.msg);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch()
+
+
+
   const deleteModal = async () => {
     try {
-      
-
       const result = await Swal.fire({
         icon: "warning",
         title: "Are you Sure ?",
@@ -50,16 +40,11 @@ const ShowModalDelete = (props) => {
         },
       });
       if (result.isConfirmed) {
-        deleteTodo();
-        blurFalse()
-        setDrawerState({
-          open : false,
-          state : "" , 
-          item : {}
-      })
+        DeleteTodoOperation()
+        dispatch(DrawerClose())
       }
 
-      setModalOpen({status:false , modal:""});
+      setModalOpen({ status: false, modal: "" });
       // blurFalse()
     } catch (error) {
       console.log(error);

@@ -12,19 +12,17 @@ import { AppDataContext } from "@context/appDataContext";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
-import ShowModalNewCategory from "../TodoModals/CateogryNewEdit";
+import ShowModalNewCategory from "../TodoModals/newCategory";
 import CategoryModalActions from "../TodoModals/categoryModalActions";
 import { motion } from "framer-motion"
 
 
-const SettingBar = ({
-  // showAddCategoModalKeyboard,
-  userSelectedCategory,
-  getSelectedCategoryData,
+const SettingBar = ({ 
   showCategoryModalActions,
   setShowCategoryModalActions,
   showAddCategoryModal,
   setShowAddCategoryModal,
+  UpdateOnlyCategories
 }) => {
   const { blurTrue, blurFalse, selected, headerPosition  } = useContext(
     AppDataContext
@@ -295,14 +293,12 @@ const SettingBar = ({
         <ShowModalNewCategory
           setShowAddCategoryModal={setShowAddCategoryModal}
           showAddCategoryModal={showAddCategoryModal}
-          userSelectedCategory={userSelectedCategory}
-          getSelectedCategoryData={getSelectedCategoryData}
+          UpdateOnlyCategories={UpdateOnlyCategories}
         />
       )}
 
       {showCategoryModalActions && (
         <CategoryModalActions
-          userSelectedCategory={userSelectedCategory}
           setShowAddCategoryModal={setShowAddCategoryModal}
           setShowCategoryModalActions={setShowCategoryModalActions}
         />

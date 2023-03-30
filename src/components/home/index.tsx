@@ -7,6 +7,8 @@ const HomePage = () => {
 
   return (
     <Box id="home-page">
+
+
       <Grid container >
 
           <Grid item xs={12} md={6}>

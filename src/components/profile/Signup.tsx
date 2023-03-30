@@ -15,45 +15,22 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../../services/api";
 import { SidebarContext } from "../../context/sidebarContext";
-import CButton from "@/styles/styled/Cbutton";
+import StyledButton from "@/styles/styled/styled_button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
 import {
-  FormControlLabel,
   IconButton,
-  InputAdornment,
-  Radio,
-  RadioGroup,
+  InputAdornment, 
 } from "@mui/material";
 import { FaRegUser } from "react-icons/fa";
 import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
-// interface ISignupData {
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   password: string;
-//   gender: string;
-// }
-
-// interface IProps {
-//   userSignupData: ISignupData;
-//   setUserSignupData: React.Dispatch<React.SetStateAction<ISignupData>>;
-// }
 
 const Signup = ({ userSignupData, setUserSignupData }) => {
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const { setCloseSidebar } = useContext(SidebarContext);
-
-  // const handleChangeInput = (event) => {
-  //   setUserSignupData({
-  //     ...userSignupData,
-  //     [event.target.name]: event.target.value,
-  //   });
-  // };
-
   useLayoutEffect(() => {
     setCloseSidebar();
   }, []);
@@ -300,13 +277,13 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                   </NavLink>
 
 
-                  <CButton
+                  <StyledButton
                     type="submit"
-                    variant="contained"
+                    variant="outlined"
                     disabled={formik.errors.password || formik.errors.username}
                   >
-                    <span className="submit-button-text">Signup</span>
-                  </CButton>
+                    Signup
+                  </StyledButton>
 
                 
                 </Box>

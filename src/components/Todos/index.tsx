@@ -7,47 +7,67 @@ import SettingBar from "./settingBar";
 import Axios from "@services/api";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
-import TodoDrawer from "./TodoDrawer";
+import TodoPageDrawer from "./drawer";
 import ShowModalNewTodo from "./TodoModals/newTodo";
 import { useHotkeys } from "react-hotkeys-hook";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppDataContext } from "@context/appDataContext";
 import { TodoContext } from "@context/todoContext";
-import ThemeContext from "@context/themeContext";
 import Sidebar from "../sidebar";
 import { SidebarContext } from "@/context/sidebarContext";
 import useWindowSize from "@/hooks/useWindowSize";
-
-
-
-interface ITodoStructure {
-  title: string;
-  body: string;
-  date: string;
-  flag: string;
-  _id: string;
-}
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchActiveWs,
+  GetOutCompleted,
+  DrawerOpen,
+  DrawerClose,
+} from "@/redux/features/todoPageConfigSlice";
+import { useNavigate } from "react-router-dom";
+import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
+import {
+  useLazyGetTodoIndexQuery,
+  useTodoDeleteMutation,
+  useTodoAssignToCategoryMutation,
+  useChangeBodyMutation,
+} from "@/redux/api/todos";
+import { AppDispatch, RootState } from "@/redux/store";
+import { deactiveBlur } from "@/redux/features/settingSlice";
 
 const Todos = () => {
-  const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext);
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
   const {
-    updateCategoryOn,
-    selected,
-    getAllTodos,
-    todoList,
-    drawerState,
+    active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
+    active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
+    get_out: GetOutFromTodoPage,
+    drawer:{item : {_id : DrawerTodoId}}
+  } = useSelector((state: RootState) => state.todoPageConfig);
+
+  const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
+  const [
+    todoAssignRequest,
+    todoAssignResponse,
+  ] = useTodoAssignToCategoryMutation();
+
+  const { 
     headerPosition,
-    selectedWorkspace,
   } = useContext(AppDataContext);
-  // const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState([]);
+  const [meta ,setMeta] = useState({
+    page:1,
+    limit:15,
+    total_items:null,
+    total_pages:null,
+  })
+  const [categoList, setCategoList] = useState([]);
+
   const { open, setCloseSidebar } = useContext(SidebarContext);
-  const [todoListCopy, setTodoListCopy] = useState([]);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
-  const [userSelectedCategory, setUserSelectedCategory] = useState({});
   const [showCategoryModalActions, setShowCategoryModalActions] = useState(
     false
   );
@@ -57,61 +77,81 @@ const Todos = () => {
     prevText: "",
   });
 
-  const getSelectedCategoryData = async () => {
-    try {
-      const category = await Axios.get(`/category/getInfo?uuid=${selected}`);
-      setUserSelectedCategory(category.data);
-    } catch (error) {
-      console.log(error.response);
-    }
+  const [
+    triggerGetCategoryIndex,
+    categoryResponse,
+  ] = useLazyGetCategoryIndexQuery();
+  const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
+  const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
+
+  const UpdateOnlyTodos = (p=null ,pp=null) => {
+    triggerGetTodoIndex({
+      wsID: ActiveWorkspaceID,
+      page: p ? p : meta?.page || 1,
+      perPage:pp ? pp : meta?.limit || 20,
+    }).unwrap().then((resp)=>{
+      setTodoList(resp?.todos);
+      setMeta({
+        page:Number(resp?.meta?.page),
+        limit:Number(resp?.meta?.limit),
+        total_items:Number(resp?.meta?.total_items),
+        total_pages:Number(resp?.meta?.total_pages),
+      })
+    });
+  };
+  const UpdateOnlyCategories = () => {
+    triggerGetCategoryIndex(ActiveWorkspaceID).unwrap().then((resp)=>{
+      setCategoList(resp?.list);
+
+    });
+  };
+  const UpdateTodoAndCategories = () => {
+    UpdateOnlyTodos();
+    UpdateOnlyCategories();
+  };
+
+  const DeleteTodoOperation = () => {
+    todoDeleteRequest({ id: DrawerTodoId , ws: ActiveWorkspaceID })
+      UpdateTodoAndCategories();
+      dispatch(deactiveBlur());
+  };
+
+  const HandleTodoAssignToCategory = (todoId, categoId) => {
+    todoAssignRequest({ todoId, categoId })
+      .then((resp) => {
+        Toast(resp.data.msg);
+        UpdateTodoAndCategories();
+      })
+      .catch((error) => {});
+  };
+
+  const HandleTodoChangeBody = (todoId, todoBody) => {
+    changeBodyRequest({ todoId, todoBody })
+    UpdateOnlyTodos();
   };
 
   useEffect(() => {
-    if (show[1] === "all") {
-      setTodoListCopy(todoList);
+    if (!ActiveWorkspaceID) {
+      dispatch(fetchActiveWs());
     } else {
-      const filteredTodo = todoList.filter((todo) => todo.flag === "isDone");
-      setTodoListCopy(filteredTodo);
+      UpdateTodoAndCategories();
     }
-  }, [show, todoList]);
+  }, [ActiveWorkspaceID]);
 
   useEffect(() => {
-    if(selectedWorkspace.id){
-
-      getAllTodos();
-      if (selected === "other") {
-        setUserSelectedCategory({});
-      } else {
-        getSelectedCategoryData();
-      }
+    if (GetOutFromTodoPage) {
+      dispatch(GetOutCompleted());
+      navigate("/");
     }
-  }, [selected ,selectedWorkspace]);
+  }, [GetOutFromTodoPage]);
 
-  const setTodoDone = async (todo) => {
-    try {
-      const response = await Axios.put("/todos/done", { id: todo._id });
-      if (response.status === 200) {
-        getAllTodos();
+  const handleChangeMeta =(page , perPage)=>{
 
-        Toast(response.data.msg);
-      }
-    } catch (error) {
-      console.log(error);
-      Toast(error.response.data, false);
-    }
-  };
+    setMeta({...meta , page:page , limit:perPage})
+    UpdateOnlyTodos(page , perPage)
 
-  const deleteTodo = async (todo) => {
-    try {
-      const response = await Axios.delete(`/todos/delete/${todo._id}?ws=${selectedWorkspace.id}`);
+  }
 
-      getAllTodos();
-
-      Toast(response.data.msg);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     // for handeling dimentions of todo board
@@ -137,15 +177,14 @@ const Todos = () => {
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box display="flex">
-          {open === "show" && <Sidebar />}
+          {open === "show" && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
 
           <SettingBar
-            userSelectedCategory={userSelectedCategory}
-            getSelectedCategoryData={getSelectedCategoryData}
             showCategoryModalActions={showCategoryModalActions}
             setShowCategoryModalActions={setShowCategoryModalActions}
             showAddCategoryModal={showAddCategoryModal}
             setShowAddCategoryModal={setShowAddCategoryModal}
+            UpdateOnlyCategories={UpdateOnlyCategories}
           />
         </Box>
 
@@ -167,42 +206,52 @@ const Todos = () => {
               className="todo-list"
               style={
                 headerPosition === "top" || headerPosition === "bottom"
-                  ? { height: "83%" }
+                  ? { height: "85%" }
                   : { height: "100%" }
               }
             >
-              {!todoListCopy.length ? (
+              {!todoList.length ? (
                 <Box>
                   <EmptyListAnimation text="Empty List 😐" />
                 </Box>
               ) : show[0] === "table" ? (
-                <TableListTodo
-                  todos={todoListCopy}
-                  getAllTodos={getAllTodos}
-                  deleteTodo={deleteTodo}
-                  // editTodo={editTodo}
-                  setTodoDone={setTodoDone}
-                />
+                <TableListTodo todos={todoList} />
               ) : (
                 <TodoList
-                  todoList={todoListCopy}
-                  getAllTodos={getAllTodos}
-                  // editTodo={editTodo}
-                  setTodoDone={setTodoDone}
+                  todoList={
+                    !ActiveCategoryID
+                      ? todoList
+                      : todoList.filter(
+                          (item) => item.categoId === ActiveCategoryID
+                        )
+                  }
+                  UpdateTodoAndCategories={UpdateTodoAndCategories}
                 />
               )}
             </Box>
             <TodoPageFooter
-              userSelectedCategory={userSelectedCategory}
-              showModalAddTodo={showModalAddTodo}
               setShowModalAddTodo={setShowModalAddTodo}
+              meta={meta}
+              handleChangeMeta={handleChangeMeta}
+              ActiveCategoryID={ActiveCategoryID}
             />
           </Box>
         </Box>
       </Box>
-      <TodoDrawer />
+      <TodoPageDrawer
+        UpdateTodoAndCategories={UpdateTodoAndCategories}
+        DeleteTodoOperation={DeleteTodoOperation}
+        CategoryList={categoList}
+        HandleTodoAssignToCategory={HandleTodoAssignToCategory}
+        HandleTodoChangeBody={HandleTodoChangeBody}
+        UpdateOnlyTodos={UpdateOnlyTodos}
+        UpdateOnlyCategories={UpdateOnlyCategories}
+      />
       {showModalAddTodo ? (
-        <ShowModalNewTodo setShowModalAddTodo={setShowModalAddTodo} />
+        <ShowModalNewTodo
+         setShowModalAddTodo={setShowModalAddTodo}
+         UpdateTodoAndCategories={UpdateTodoAndCategories} />
+         
       ) : null}
     </DndProvider>
   );

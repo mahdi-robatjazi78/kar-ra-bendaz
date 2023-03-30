@@ -5,9 +5,8 @@ import { FiEdit } from "react-icons/fi";
 import { BiLogInCircle } from "react-icons/bi";
 import { RiUserAddLine, RiLogoutCircleRLine } from "react-icons/ri";
 import { SiHomeassistant } from "react-icons/si";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
-import axios from "axios";
+import axios from "../services/api";
 import { base_url } from "@services/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -18,6 +17,11 @@ import Toast from "../util/toast";
 import Burger from "../util/burger/burger";
 import { AppDataContext } from "@/context/appDataContext";
 import { motion } from "framer-motion";
+import { LogoutAction } from "@/redux/features/userSlice";
+import {useDispatch , useSelector} from 'react-redux'
+import { AppDispatch, RootState } from "@/redux/store";
+
+
 const Header = ({ ShowBurger, setShowBurger }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,22 +33,21 @@ const Header = ({ ShowBurger, setShowBurger }) => {
     setAnchorEl(null);
   };
   const [showSidebar, setShowSidebar] = React.useState<boolean>(true);
-  const user = JSON.parse(localStorage.getItem("user"));
-
+  const dispatch : AppDispatch = useDispatch()
   const { setToggleSidebar, setOpenSidebar, setCloseSidebar } = useContext(
     SidebarContext
   );
   const { headerPosition } = useContext(AppDataContext);
-
+  const auth = useSelector((state:RootState)=>state.auth)
+  const settings = useSelector((state:RootState)=>state.settings)
   const handleLogoutUser = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    
     try {
-      const response = await axios.put(`${base_url}/users/logout`, {
-        email: user.email,
-      });
-      console.log("response logout", response);
+      const response = await axios.put(`${base_url}/users/logout`);
       if (response.status === 200) {
-        localStorage.removeItem("user");
+        localStorage.removeItem("auth")
+        handleClose()
+        dispatch(LogoutAction())
         navigate("/login");
         Toast(response.data.msg);
       }
@@ -61,12 +64,14 @@ const Header = ({ ShowBurger, setShowBurger }) => {
           ? {
               width: 70,
               flexDirection: "column",
-              height:"100vh"
+              height:"100vh",
+              filter:settings.blur.head ? "blur(10px)" : "blur(0)"
             }
           : {
               height: 70,
               flexDirection: "row",
-              width:"100vw"
+              width:"100vw",
+              filter:settings.blur.head ? "blur(10px)" : "blur(0)"
             }
       }
       initial={
@@ -113,7 +118,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
           onClick={handleClick}
         />
 
-        {user && user.email ? (
+        {auth.token && auth.me.email ? (
           <Menu
             id="user-profile-icon-menu"
             anchorEl={anchorEl}

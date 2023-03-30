@@ -19,13 +19,13 @@ code {
 }
 
 
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track{
   background-color: transparent;
 }
 
 
-::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+::-webkit-scrollbar-thumb{
+  background-color:var(--hoverSuccess);
   border-radius: 20px;
   border: 8px solid transparent;
   background-clip: content-box;
