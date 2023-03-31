@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect , useMemo } from "react";
 import ThemeContext from "@context/themeContext";
 import { HiPlus } from "react-icons/hi";
 import styled from "styled-components";
@@ -25,7 +25,7 @@ import {
   ChangeSearchText,
   EmptySearchText,
 } from "@/redux/features/todoPageConfigSlice";
-import { debounce } from "@/util/funcs";
+import useDebounce from '@hooks/useDebounce';
 
 const TodoPageFooter = (props) => {
   const {
@@ -66,6 +66,21 @@ const TodoPageFooter = (props) => {
     UpdateOnlyTodos();
   };
 
+
+
+
+  // DeBounce Function
+  useDebounce(() => {
+    if(searchText){
+      UpdateOnlyTodos(null , null , searchText)
+    }
+  }, [searchText], 600
+);
+
+
+
+
+
   return (
     <Box
       className="todo-list-footer"
@@ -91,8 +106,6 @@ const TodoPageFooter = (props) => {
             let val = e.target.value;
             if (val) {
               dispatch(ChangeSearchText({ text: val }));
-
-              UpdateOnlyTodos(null, null, val);
             } else {
               dispatch(ChangeSearchText({ text: val }));
 

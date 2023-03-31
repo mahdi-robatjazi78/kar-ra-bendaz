@@ -178,7 +178,7 @@ const Todos = () => {
   useHotkeys("alt+c", () =>
     setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
   );
-  useHotkeys("ctrl+alt+f", () =>{dispatch(SearchModeActive())})
+  useHotkeys("ctrl+shift+f", () =>{dispatch(SearchModeActive())})
  
 
   return (

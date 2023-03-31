@@ -10,6 +10,7 @@ import {useDispatch , useSelector} from 'react-redux'
 import { RootState , AppDispatch } from "@/redux/store";
 import {setBlurPage} from '@/redux/features/settingSlice'
 import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
+import useDebounce from "@hooks/useDebounce";
 
 export interface BoxProps {
   name: string;
@@ -36,22 +37,38 @@ const TodoBox = (props: any) => {
   const [todoBody , setTodoBody] = useState(body)
   
   const [assignToCategoryRequest , assignToCategoryResponse] = useDragDropAssignToCategoryMutation()
-  useEffect(()=>{
-    if(searchMode && searchText){
-
-      let newSearchText = searchText;
-      let tbody = todoBody
-      console.log("here" , newSearchText ,tbody)
-      let re = new RegExp(newSearchText, "gi");
-      const result = body.replace(re ,  `<span class="highlighted-todo-text">${newSearchText}</span>`)
-      console.log("here1" , result)
+  function handleSearchModeShow (){
+    if(searchMode && searchText.length > 0){
+      let re = new RegExp(searchText, "gi");
+      
+      if(body.indexOf(searchText) === -1){
+        // case sensitive search stuff
+      let indexOf = body.toLowerCase().indexOf(searchText.toLowerCase())
+      let searchedLength = searchText.length;
+      let str = body.substring(indexOf , indexOf+searchedLength)
+      const result = body.replace( re ,`<span class="highlighted-todo-text">${str}</span>`)
       setTodoBody(result)
+      }else{
+        const result = body.replace( re ,`<span class="highlighted-todo-text">${searchText}</span>`)
+        setTodoBody(result)
+      } 
      
-    }else if(searchMode && !searchText){setTodoBody(body)}
+    }else if(searchMode && !searchText){
+      setTodoBody(body)
+    }
     else if(!searchMode){
       setTodoBody(body)
     }
-  },[searchMode , searchText])
+  }
+  
+  // DeBounce Function
+  useDebounce(() => {
+    if(searchMode){
+      handleSearchModeShow()
+    }
+  }, [searchMode , searchText], 600
+);
+
 
 
   const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
