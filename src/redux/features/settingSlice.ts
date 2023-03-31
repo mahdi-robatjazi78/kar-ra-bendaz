@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface IBlur {
   head: Boolean;
   body: Boolean;
+  sidebar:Boolean
 }
 
 interface ISettings {
@@ -13,6 +14,7 @@ const initialState: ISettings = {
   blur: {
     head: false,
     body: false,
+    sidebar:false,
   },
 };
 
@@ -24,6 +26,7 @@ export const appSettings = createSlice({
       state.blur = {
         head: true,
         body: true,
+        sidebar:true,
       };
     },
 
@@ -31,12 +34,14 @@ export const appSettings = createSlice({
       state.blur = {
         head: false,
         body: false,
+        sidebar:false,
       };
     },
     customBlur: (state, action) => {
       state.blur = {
-        head: action.payload.head,
-        body: action.payload.body,
+        head: action?.payload?.head || false,
+        body: action?.payload?.body || false,
+        sidebar: action?.payload?.sidebar || false,
       };
     },
   },

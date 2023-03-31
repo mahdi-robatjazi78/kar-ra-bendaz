@@ -58,20 +58,18 @@ const Header = ({ ShowBurger, setShowBurger }) => {
 
   return (
     <motion.header
-      className="App-header"
+      className={`App-header ${settings.blur.head ? "filterblur":"filterblurnone"}`}
       style={
         headerPosition === "left" || headerPosition === "right"
           ? {
               width: 70,
               flexDirection: "column",
               height:"100vh",
-              filter:settings.blur.head ? "blur(10px)" : "blur(0)"
             }
           : {
               height: 70,
               flexDirection: "row",
               width:"100vw",
-              filter:settings.blur.head ? "blur(10px)" : "blur(0)"
             }
       }
       initial={

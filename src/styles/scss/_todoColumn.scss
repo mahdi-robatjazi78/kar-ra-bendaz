@@ -33,7 +33,11 @@
     width: 100%;
     height: 70px;
     display: flex;
-    justify-content: space-between;
+
+    .search-in-todos-box{
+      width:50%;
+    }
+
 
     .selected-category-box {
       display: flex;

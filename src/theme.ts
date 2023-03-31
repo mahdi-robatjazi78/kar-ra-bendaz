@@ -1,6 +1,6 @@
 const themes = {
   light: {
-    foreground: "rgb(0,0,0)",
+    foreground: "rgb(255, 255, 255)",
     background: "rgb(225, 225, 225)",
     borders: "rgb(0, 0, 255)",
     errorBorder: "rgb(177, 34, 34)",
@@ -13,7 +13,7 @@ const themes = {
     hoverSuccess: "rgb(0, 152, 0)",
   },
   dark: {
-    foreground: "rgb(80, 88, 91)",
+    foreground: "rgb(0,0,0)",
     background: "rgb(1, 21, 83)",
     borders: "rgb(255, 165, 0)",
     errorBorder: "rgb(255, 95, 95)",

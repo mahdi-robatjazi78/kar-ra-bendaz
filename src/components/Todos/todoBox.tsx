@@ -21,7 +21,7 @@ interface DropResult {
 }
 
 const TodoBox = (props: any) => {
-  
+  const {searchMode,searchText} = useSelector((state: RootState) => state.todoPageConfig);
   const { id, categoId ,flag, body,todos,index,UpdateTodoAndCategories} = props;
 
     const [category , setCategory]=useState(categoId ? categoId : "")
@@ -33,10 +33,25 @@ const TodoBox = (props: any) => {
   const theme = useContext(ThemeContext);
   const { show } = useContext(TodoContext); 
   const dispatch : AppDispatch = useDispatch()
-
+  const [todoBody , setTodoBody] = useState(body)
   
   const [assignToCategoryRequest , assignToCategoryResponse] = useDragDropAssignToCategoryMutation()
+  useEffect(()=>{
+    if(searchMode && searchText){
 
+      let newSearchText = searchText;
+      let tbody = todoBody
+      console.log("here" , newSearchText ,tbody)
+      let re = new RegExp(newSearchText, "gi");
+      const result = body.replace(re ,  `<span class="highlighted-todo-text">${newSearchText}</span>`)
+      console.log("here1" , result)
+      setTodoBody(result)
+     
+    }else if(searchMode && !searchText){setTodoBody(body)}
+    else if(!searchMode){
+      setTodoBody(body)
+    }
+  },[searchMode , searchText])
 
 
   const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
@@ -132,14 +147,18 @@ const TodoBox = (props: any) => {
             wordWrap: "break-word",
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               fontSize: 14,
               color: flag === "isDone" ? "black" : theme.text1,
             }}
-          >
-            {body}
-          </Typography>
+
+            dangerouslySetInnerHTML={{
+              __html:todoBody
+            }}
+
+          > 
+          </div>
         </CardContent>
       </Card>
     </Grid>

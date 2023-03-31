@@ -4,6 +4,9 @@ import {TextField} from "@mui/material";
 const StyledTextFieldWhite = styled(TextField)`
     & input{
         -webkit-text-fill-color: var(--text1);
+        color: var(--hoverSuccess);
+        letter-spacing: 1px;
+        font-family: cursive;
     }
     & input:-webkit-autofill,
     input:-webkit-autofill:focus { 

@@ -20,9 +20,10 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchActiveWs,
-  GetOutCompleted,
-  DrawerOpen,
-  DrawerClose,
+  GetOutCompleted,  
+  SearchModeActive,
+  SearchModeDeActive,
+
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -43,19 +44,23 @@ const Todos = () => {
     active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
     active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
     get_out: GetOutFromTodoPage,
-    drawer:{item : {_id : DrawerTodoId}}
+    drawer:{item : {_id : DrawerTodoId}},
+    searchMode,
+
   } = useSelector((state: RootState) => state.todoPageConfig);
+  const {blur} = useSelector((state:RootState)=>state.settings)
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [
     todoAssignRequest,
     todoAssignResponse,
-  ] = useTodoAssignToCategoryMutation();
+  ] = useTodoAssignToCategoryMutation(); 
 
   const { 
     headerPosition,
   } = useContext(AppDataContext);
   const [todoList, setTodoList] = useState([]);
+  const emptyTodoList = ()=>{setTodoList([])}
   const [meta ,setMeta] = useState({
     page:1,
     limit:15,
@@ -64,7 +69,7 @@ const Todos = () => {
   })
   const [categoList, setCategoList] = useState([]);
 
-  const { open, setCloseSidebar } = useContext(SidebarContext);
+  const { open, setCloseSidebar , setOpenSidebar } = useContext(SidebarContext);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
@@ -84,11 +89,12 @@ const Todos = () => {
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
-  const UpdateOnlyTodos = (p=null ,pp=null) => {
+  const UpdateOnlyTodos = (p=null ,pp=null ,st=null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
       page: p ? p : meta?.page || 1,
       perPage:pp ? pp : meta?.limit || 20,
+      searchText:st ? st : ""
     }).unwrap().then((resp)=>{
       setTodoList(resp?.todos);
       setMeta({
@@ -172,11 +178,13 @@ const Todos = () => {
   useHotkeys("alt+c", () =>
     setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
   );
+  useHotkeys("ctrl+alt+f", () =>{dispatch(SearchModeActive())})
+ 
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
-        <Box display="flex">
+        <Box display="flex" className={blur.sidebar ? "filterblur" : "filterblurnone" } >
           {open === "show" && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
 
           <SettingBar
@@ -189,8 +197,7 @@ const Todos = () => {
         </Box>
 
         <Box
-          className="board"
-          // style={{width:"100%"}}
+          className="board" 
         >
           <Box
             className="todo-page-box"
@@ -210,7 +217,7 @@ const Todos = () => {
                   : { height: "100%" }
               }
             >
-              {!todoList.length ? (
+              {!todoList?.length && !searchMode ? (
                 <Box>
                   <EmptyListAnimation text="Empty List 😐" />
                 </Box>
@@ -234,6 +241,14 @@ const Todos = () => {
               meta={meta}
               handleChangeMeta={handleChangeMeta}
               ActiveCategoryID={ActiveCategoryID}
+              emptyTodoList={emptyTodoList}
+              UpdateOnlyTodos={UpdateOnlyTodos}
+              ActiveWorkspaceID={ActiveWorkspaceID}
+              searchMode={searchMode}
+              SearchModeActive={SearchModeActive}
+              SearchModeDeActive={SearchModeDeActive}
+              setCloseSidebar={setCloseSidebar}
+              setOpenSidebar={setOpenSidebar}
             />
           </Box>
         </Box>

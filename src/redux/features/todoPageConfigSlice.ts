@@ -25,6 +25,8 @@ export interface ITodoPage {
   active_category: IActiveWs;
   drawer:ITodoDrawer;
   get_out: Boolean;
+  searchMode: Boolean;
+  searchText: String;
 }
 
 
@@ -44,6 +46,8 @@ const initialState: ITodoPage = {
     item: { _id : "" , body:"" , flag : "" , categoId : '' ,owner:""  , date:""},
   },
   get_out: false,
+  searchMode:false,
+  searchText:"",
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -96,7 +100,19 @@ export const todoPageConfigSlice = createSlice({
         item:{ _id : "" , body:"" , flag : "" , categoId : "" ,owner:'' ,date:""},
       }
     },
+    SearchModeActive:(state)=>{
+      state.searchMode = true
+    },
+    SearchModeDeActive:(state)=>{
+      state.searchMode = false
+    },
+    ChangeSearchText:(state , action)=>{
+      state.searchText = action.payload.text
 
+    },
+    EmptySearchText:(state)=>{
+      state.searchText = ""
+    }
   },
 
   extraReducers: (builder) => {
@@ -140,5 +156,10 @@ export const {
   GetOutCompleted,
   DrawerOpen,
   DrawerClose,
+  SearchModeActive,
+  SearchModeDeActive,
+  ChangeSearchText,
+  EmptySearchText
+
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;
