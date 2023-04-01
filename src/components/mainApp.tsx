@@ -11,8 +11,8 @@ import { RootState } from "@/redux/store";
 
 const Main = () => { 
   const [ShowBurger, setShowBurger] = React.useState<boolean>(true);
-  const { headerPosition } = useContext(AppDataContext);
   const auth = useSelector((state : RootState)=>state.auth)
+  const {headerPosition} = useSelector((state : RootState)=>state.settings)
   const dispatch = useDispatch();
 
   

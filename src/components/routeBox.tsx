@@ -49,7 +49,8 @@ const RouteBox = ({ setShowBurger }) => {
     <Box
       style={
         {
-          filter:settings.blur.body ? "blur(6px)" : "blur(0)"
+          filter:settings.blur.body ? "blur(6px)" : "blur(0)",
+          width:"100%"
         }
       }
     

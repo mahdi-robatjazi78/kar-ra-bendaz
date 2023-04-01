@@ -48,17 +48,13 @@ const Todos = () => {
     searchMode,
 
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const {blur} = useSelector((state:RootState)=>state.settings)
+  const {blur , headerPosition} = useSelector((state:RootState)=>state.settings)
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [
     todoAssignRequest,
     todoAssignResponse,
   ] = useTodoAssignToCategoryMutation(); 
-
-  const { 
-    headerPosition,
-  } = useContext(AppDataContext);
   const [todoList, setTodoList] = useState([]);
   const emptyTodoList = ()=>{setTodoList([])}
   const [meta ,setMeta] = useState({
@@ -202,20 +198,20 @@ const Todos = () => {
           <Box
             className="todo-page-box"
             style={
-              headerPosition === "top"
-                ? { justifyContent: "start" }
-                : headerPosition === "bottom"
-                ? { justifyContent: "end" }
-                : {}
+              headerPosition === "top" || headerPosition === "bottom"
+                ? { justifyContent: "space-between" , height: window.innerHeight - 70 }
+                : headerPosition === "left" || headerPosition === "right"
+                ? { justifyContent: "space-between" , height: window.innerHeight }:{justifyContent: "space-between" , height: window.innerHeight}
+         
             }
           >
             <Box
               className="todo-list"
-              style={
-                headerPosition === "top" || headerPosition === "bottom"
-                  ? { height: "85%" }
-                  : { height: "100%" }
-              }
+              // style={
+              //   headerPosition === "top" || headerPosition === "bottom"
+              //     ? { height: "100%" }
+              //     : { height: "100%" }
+              // }
             >
               {!todoList?.length && !searchMode ? (
                 <Box>

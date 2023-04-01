@@ -68,16 +68,12 @@ const TodoBox = (props: any) => {
     }
   }, [searchMode , searchText], 600
 );
-
-
-
-  const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
-
+  
+const addToCategoryWithDragDrop = (item: any, dropResult: any ) => {
     if(category === dropResult.id){
       Toast("Please drop todo to another category" , false)
       return 
     }
-
       if (dropResult?.id == null || dropResult?.id === "other") {
         assignToCategoryRequest({
           todoId: id,
@@ -87,9 +83,8 @@ const TodoBox = (props: any) => {
           Toast(resp.data.msg);
           UpdateTodoAndCategories()
         }).catch(error=>{
-
         })
-  
+
       } else { 
         assignToCategoryRequest({
           todoId: id,
@@ -99,7 +94,6 @@ const TodoBox = (props: any) => {
           Toast(resp.data.msg);
           UpdateTodoAndCategories()
         }).catch(error=>{
-
         })
       }
   };

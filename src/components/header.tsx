@@ -15,7 +15,6 @@ import { Box } from "@mui/system";
 import { SidebarContext } from "../context/sidebarContext";
 import Toast from "../util/toast";
 import Burger from "../util/burger/burger";
-import { AppDataContext } from "@/context/appDataContext";
 import { motion } from "framer-motion";
 import { LogoutAction } from "@/redux/features/userSlice";
 import {useDispatch , useSelector} from 'react-redux'
@@ -37,9 +36,8 @@ const Header = ({ ShowBurger, setShowBurger }) => {
   const { setToggleSidebar, setOpenSidebar, setCloseSidebar } = useContext(
     SidebarContext
   );
-  const { headerPosition } = useContext(AppDataContext);
   const auth = useSelector((state:RootState)=>state.auth)
-  const settings = useSelector((state:RootState)=>state.settings)
+  const {headerPosition , blur} = useSelector((state:RootState)=>state.settings)
   const handleLogoutUser = async () => {
     
     try {
@@ -58,7 +56,7 @@ const Header = ({ ShowBurger, setShowBurger }) => {
 
   return (
     <motion.header
-      className={`App-header ${settings.blur.head ? "filterblur":"filterblurnone"}`}
+      className={`App-header ${blur.head ? "filterblur":"filterblurnone"}`}
       style={
         headerPosition === "left" || headerPosition === "right"
           ? {

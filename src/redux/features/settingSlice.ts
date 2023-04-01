@@ -8,6 +8,7 @@ interface IBlur {
 
 interface ISettings {
   blur: IBlur;
+  headerPosition:String;
 }
 
 const initialState: ISettings = {
@@ -16,6 +17,7 @@ const initialState: ISettings = {
     body: false,
     sidebar:false,
   },
+  headerPosition:"top"
 };
 
 export const appSettings = createSlice({
@@ -44,8 +46,11 @@ export const appSettings = createSlice({
         sidebar: action?.payload?.sidebar || false,
       };
     },
+    changeHeaderPosition:(state,action)=>{
+      state.headerPosition = action.payload
+    }
   },
 });
 
-export const { setBlurPage, deactiveBlur, customBlur } = appSettings.actions;
+export const { setBlurPage, deactiveBlur, customBlur ,changeHeaderPosition } = appSettings.actions;
 export default appSettings.reducer;

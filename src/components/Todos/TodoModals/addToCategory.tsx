@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import ThemeContext from "@context/themeContext";
-import { AppDataContext } from "@context/appDataContext";
 import Swal from "sweetalert2"; 
 import { deactiveBlur , setBlurPage } from "@/redux/features/settingSlice";
 import { useDispatch } from "react-redux";
@@ -8,8 +7,7 @@ import { AppDispatch } from "@/redux/store";
 
 const ShowModalAddToCategory = (props) => {
   const { CategoryList , setModalOpen , HandleTodoAssignToCategory} = props;
-  const { getAllTodos, updateCategoryOn, drawerState, setDrawerState ,selectedWorkspace} =
-    useContext(AppDataContext);
+
   const theme = useContext(ThemeContext);
 
   const dispatch :AppDispatch = useDispatch()
@@ -51,12 +49,12 @@ const ShowModalAddToCategory = (props) => {
   };
 
   useEffect(() => {
-    addToCategoryModal(drawerState?.item?._id);
-    setDrawerState({
-      open: false,
-      item: {},
-      state: "",
-    });
+    // addToCategoryModal(drawerState?.item?._id);
+    // setDrawerState({
+    //   open: false,
+    //   item: {},
+    //   state: "",
+    // });
   }, []);
 
   return <></>;

@@ -8,25 +8,24 @@ import { BsTable, BsInfoSquare } from "react-icons/bs";
 import Axios from "@services/api";
 import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
-import { AppDataContext } from "@context/appDataContext";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import Toast from "@utils/toast";
 import ShowModalNewCategory from "../TodoModals/newCategory";
-import CategoryModalActions from "../TodoModals/categoryModalActions";
 import { motion } from "framer-motion"
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 
-const SettingBar = ({ 
-  showCategoryModalActions,
-  setShowCategoryModalActions,
+const SettingBar = ({
   showAddCategoryModal,
   setShowAddCategoryModal,
   UpdateOnlyCategories
-}) => {
-  const { blurTrue, blurFalse, selected, headerPosition  } = useContext(
-    AppDataContext
-  );
+}) => { 
+
+
+  const {headerPosition}  = useSelector((state:RootState) => state.settings)
+
 
   const {
     show,
@@ -269,24 +268,6 @@ const SettingBar = ({
             <MdDoneOutline className="icon-style2" />
           </motion.div>
         </Tooltip>
-
-        {selected !== "other" || !selected ? (
-          <Box className="selected-category-info-box">
-            <Tooltip arrow placement="right" title="Category Info">
-              <motion.div
-                whileTap={{ scale: 1.2 }}
-                onClick={() => {
-                  setShowCategoryModalActions(true);
-                }}
-                className="unselected-setting"
-              >
-                <BsInfoSquare className="icon-style2" />
-              </motion.div>
-            </Tooltip>
-          </Box>
-        ) : (
-          <span></span>
-        )}
       </Box>
 
       {showAddCategoryModal.show && (
@@ -297,12 +278,7 @@ const SettingBar = ({
         />
       )}
 
-      {showCategoryModalActions && (
-        <CategoryModalActions
-          setShowAddCategoryModal={setShowAddCategoryModal}
-          setShowCategoryModalActions={setShowCategoryModalActions}
-        />
-      )}
+      
     </Box>
   );
 };

@@ -4,6 +4,9 @@ import { IoSettingsOutline } from "react-icons/io5";
 import HeaderPosition from "../mini/headerPosition";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
+
+
+
 const SettingsBox = () => {
   const [showHeaderPositions, setShowHeaderPositions] = useState(false);
 

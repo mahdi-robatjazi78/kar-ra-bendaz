@@ -77,10 +77,6 @@ const TodoPageFooter = (props) => {
   }, [searchText], 600
 );
 
-
-
-
-
   return (
     <Box
       className="todo-list-footer"

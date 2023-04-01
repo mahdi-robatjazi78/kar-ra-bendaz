@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import themeContext from "@context/themeContext";
-import Axios from "@services/api";
-import { AppDataContext } from "@context/appDataContext";
 import { useDrop } from "react-dnd";
 import SidebarItem from "./sidebarItem";
 import { Typography } from "@mui/material";
@@ -15,19 +13,12 @@ const Sidebar = (props:any) => {
   const { active_ws: ActiveWs, active_category: ActiveCategory } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
+  const { headerPosition } = useSelector(
+    (state: RootState) => state.settings
+  );
   const dispatch: AppDispatch = useDispatch();
   const theme = useContext(themeContext);
-  const {
-    newCategorySelected,
-    selected,
-    headerPosition,
-    selectedWorkspace,
-  } = useContext(AppDataContext);
-
-  type ITodoState = "all" | "done";
-
-
-
+  
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "todo-box",
     drop: (item) => ({ name: "category-box", type: "todo", id: "other" }),
@@ -112,7 +103,7 @@ const Sidebar = (props:any) => {
             <div
         style={{
         }}
-        className="task-count-style"
+        className="'task-count-style'"
       >
         {totalTodoItems ||""}
       </div>
