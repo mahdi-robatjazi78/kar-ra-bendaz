@@ -1,6 +1,5 @@
 import React, { useState, useContext, useLayoutEffect } from "react";
 import ThemeContext from "../../context/themeContext";
-import { SidebarContext } from "../../context/sidebarContext";
 import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { 
@@ -30,7 +29,6 @@ import StyledTextFieldWhite from '@/styles/styled/styled_textField'
 const Login = () => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch()
-  const { setCloseSidebar } = useContext(SidebarContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const YupObjectValidationFields = Yup.object({}).shape({

@@ -14,7 +14,6 @@ import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../../services/api";
-import { SidebarContext } from "../../context/sidebarContext";
 import StyledButton from "@/styles/styled/styled_button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -30,10 +29,7 @@ import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 const Signup = ({ userSignupData, setUserSignupData }) => {
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
-  const { setCloseSidebar } = useContext(SidebarContext);
-  useLayoutEffect(() => {
-    setCloseSidebar();
-  }, []);
+
 
   const YupObjectValidationFields = Yup.object({}).shape({
     username: Yup.string()

@@ -2,19 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
 import { useDispatch } from "react-redux";
 import ThemeContext from "@context/themeContext";
-import { AppDataContext } from "@context/appDataContext";
 import Swal from "sweetalert2";
 import { DrawerClose } from "@/redux/features/todoPageConfigSlice";
-
-
-
 
 const ShowModalDelete = (props) => {
   const {todo, setModalOpen , DeleteTodoOperation } = props;
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch()
-
-
 
   const deleteModal = async () => {
     try {

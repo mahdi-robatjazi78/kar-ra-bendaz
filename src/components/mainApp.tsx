@@ -15,9 +15,6 @@ const Main = () => {
   const {headerPosition} = useSelector((state : RootState)=>state.settings)
   const dispatch = useDispatch();
 
-  
-
-  
   const checkProfileDataEssentials = () =>{
     if(!auth.token){
       const authLocalStorage = JSON.parse(localStorage.getItem("auth"))
@@ -37,8 +34,6 @@ const Main = () => {
       
     }
   }
-
-
 
   checkProfileDataEssentials()
 

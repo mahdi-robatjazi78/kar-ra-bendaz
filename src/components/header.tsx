@@ -12,14 +12,12 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
-import { SidebarContext } from "../context/sidebarContext";
 import Toast from "../util/toast";
 import Burger from "../util/burger/burger";
 import { motion } from "framer-motion";
 import { LogoutAction } from "@/redux/features/userSlice";
 import {useDispatch , useSelector} from 'react-redux'
 import { AppDispatch, RootState } from "@/redux/store";
-
 
 const Header = ({ ShowBurger, setShowBurger }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -33,11 +31,11 @@ const Header = ({ ShowBurger, setShowBurger }) => {
   };
   const [showSidebar, setShowSidebar] = React.useState<boolean>(true);
   const dispatch : AppDispatch = useDispatch()
-  const { setToggleSidebar, setOpenSidebar, setCloseSidebar } = useContext(
-    SidebarContext
-  );
+
   const auth = useSelector((state:RootState)=>state.auth)
   const {headerPosition , blur} = useSelector((state:RootState)=>state.settings)
+  
+  
   const handleLogoutUser = async () => {
     
     try {

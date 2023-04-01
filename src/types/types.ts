@@ -1,12 +1,4 @@
-export interface ISidebar {
-  open:"show" | "hide",
 
-  setToggleSidebar?:()=>void,
-  setOpenSidebar?:()=>void,
-  setCloseSidebar?:()=>void,
-  lastSelectedCategory:"all",
-  setLastSelectedCategory?:(val:string)=>void,
-}
 
 export interface ITodosShow {
   show:["3col" | "1col" | "table" , "all" | "done" , null|2|3|4|5|6] 

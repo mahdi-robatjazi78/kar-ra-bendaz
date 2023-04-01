@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./todos.css";
 import { Grid, } from "@mui/material"; 
 import TodoBox from "./todoBox";
 

@@ -17,10 +17,8 @@ const DarkLight = () => {
           toggleDark();
         }}
         style={{
-          // border: "1px solid gray   ",
           padding: "1rem",
           display: "inline-block",
-          // borderRadius:"5rem"
         }}
       >
         {isDarkMode ? (
@@ -34,10 +32,6 @@ const DarkLight = () => {
         ) : (
           <BsFillMoonStarsFill
             fontSize={"2rem"}
-            // style={{
-            //   color: "#FFF829",
-            //   animation: "App-logo-spin infinite 20s linear",
-            // }}
           />
         )}
       </Box>

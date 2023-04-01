@@ -1,7 +1,6 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import ThemeContext, { ThemeContextProvider } from "@context/themeContext";
-import { SidebarProvider } from "@context/sidebarContext";
 import { TodoContextProvider } from "@context/todoContext";
 import Main from "@compo/mainApp";
 import CustomeRouter from "@services/customeRouter";
@@ -20,12 +19,10 @@ function App() {
     <Provider store={store}>
     <CustomeRouter history={CustomeHistory}>
       <ThemeContextProvider>
-          <SidebarProvider>
             <TodoContextProvider>
               <Toaster position="bottom-center" reverseOrder={true} />
                 <Main />
             </TodoContextProvider>
-          </SidebarProvider>
       </ThemeContextProvider>
     </CustomeRouter>
     </Provider>

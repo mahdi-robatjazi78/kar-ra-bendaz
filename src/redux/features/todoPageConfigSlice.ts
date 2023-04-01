@@ -12,23 +12,28 @@ export interface IActiveCategory {
 }
 
 export interface ITodoDrawer {
-  open: Boolean,
-  state: String,
-  anchor:String,
+  open: Boolean;
+  state: String;
+  anchor: String;
   item: {
-    _id : String , body:String , flag : String , categoId : String ,owner:String , date : Date | String
-  },
+    _id: String;
+    body: String;
+    flag: String;
+    categoId: String;
+    owner: String;
+    date: Date | String;
+  };
 }
 
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
-  drawer:ITodoDrawer;
+  drawer: ITodoDrawer;
   get_out: Boolean;
   searchMode: Boolean;
   searchText: String;
+  sidebar_open: Boolean;
 }
-
 
 const initialState: ITodoPage = {
   active_ws: {
@@ -39,15 +44,16 @@ const initialState: ITodoPage = {
     id: null,
     title: null,
   },
-  drawer:{
+  drawer: {
     open: false,
     state: "todo",
-    anchor : "right",
-    item: { _id : "" , body:"" , flag : "" , categoId : '' ,owner:""  , date:""},
+    anchor: "right",
+    item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" },
   },
   get_out: false,
-  searchMode:false,
-  searchText:"",
+  searchMode: false,
+  searchText: "",
+  sidebar_open: true,
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -84,35 +90,54 @@ export const todoPageConfigSlice = createSlice({
     GetOutCompleted: (state) => {
       state.get_out = false;
     },
-    DrawerOpen:(state,action)=>{
+    DrawerOpen: (state, action) => {
       state.drawer = {
-      open:true,
-      state:action.payload.state,
-      anchor:"right",
-      item:action.payload.item,
+        open: true,
+        state: action.payload.state,
+        anchor: "right",
+        item: action.payload.item,
+      };
+    },
+    DrawerClose: (state) => {
+      state.drawer = {
+        open: false,
+        state: "right",
+        anchor: state.drawer.anchor,
+        item: {
+          _id: "",
+          body: "",
+          flag: "",
+          categoId: "",
+          owner: "",
+          date: "",
+        },
+      };
+    },
+    SearchModeActive: (state) => {
+      state.searchMode = true;
+    },
+    SearchModeDeActive: (state) => {
+      state.searchMode = false;
+    },
+    ChangeSearchText: (state, action) => {
+      state.searchText = action.payload.text;
+    },
+    EmptySearchText: (state) => {
+      state.searchText = "";
+    },
+    OpenSidebar: (state) => {
+      state.sidebar_open = true;
+    },
+    CloseSidebar: (state) => {
+      state.sidebar_open = false;
+    },
+    ToggleSidebar: (state) => {
+      if (state.sidebar_open) {
+        state.sidebar_open = false;
+      } else {
+        state.sidebar_open = true;
       }
     },
-    DrawerClose:(state)=>{
-      state.drawer = {
-        open:false,
-        state:'right',
-        anchor:state.drawer.anchor,
-        item:{ _id : "" , body:"" , flag : "" , categoId : "" ,owner:'' ,date:""},
-      }
-    },
-    SearchModeActive:(state)=>{
-      state.searchMode = true
-    },
-    SearchModeDeActive:(state)=>{
-      state.searchMode = false
-    },
-    ChangeSearchText:(state , action)=>{
-      state.searchText = action.payload.text
-
-    },
-    EmptySearchText:(state)=>{
-      state.searchText = ""
-    }
   },
 
   extraReducers: (builder) => {
@@ -159,7 +184,9 @@ export const {
   SearchModeActive,
   SearchModeDeActive,
   ChangeSearchText,
-  EmptySearchText
-
+  EmptySearchText,
+  OpenSidebar,
+  CloseSidebar,
+  ToggleSidebar,
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

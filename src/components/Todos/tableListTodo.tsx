@@ -1,24 +1,26 @@
 import React, { useContext } from "react";
 import {
   Box,
-  Typography,
   Table,
   TableContainer,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
-  Paper,
 } from "@mui/material";
-import themes from "../../theme";
+
+
+
 import ThemeContext from "../../context/themeContext";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin3Fill } from "react-icons/ri";
 import { MdOutlineDownloadDone } from "react-icons/md";
-import { SidebarContext } from "../../context/sidebarContext";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+
 
 const TableListTodo = (props) => {
-  const { open } = useContext(SidebarContext);
+  const { sidebar_open:open } = useSelector((state : RootState)=>state.todoPageConfig);
   const {
     todos,
     getAllTodos,
@@ -36,7 +38,7 @@ const TableListTodo = (props) => {
     <Box>
       <TableContainer>
         <Table
-          sx={{ width: open === "hide" ? "90vw" : "84vw" }}
+          sx={{ width: !open  ? "90vw" : "84vw" }}
           aria-label="a dense table"
         >
           <TableHead>

@@ -12,10 +12,8 @@ import ShowModalNewTodo from "./TodoModals/newTodo";
 import { useHotkeys } from "react-hotkeys-hook";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { AppDataContext } from "@context/appDataContext";
 import { TodoContext } from "@context/todoContext";
 import Sidebar from "../sidebar";
-import { SidebarContext } from "@/context/sidebarContext";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -23,7 +21,8 @@ import {
   GetOutCompleted,  
   SearchModeActive,
   SearchModeDeActive,
-
+  CloseSidebar,
+  OpenSidebar
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -45,6 +44,7 @@ const Todos = () => {
     active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
     get_out: GetOutFromTodoPage,
     drawer:{item : {_id : DrawerTodoId}},
+    sidebar_open:open,
     searchMode,
 
   } = useSelector((state: RootState) => state.todoPageConfig);
@@ -64,14 +64,10 @@ const Todos = () => {
     total_pages:null,
   })
   const [categoList, setCategoList] = useState([]);
-
-  const { open, setCloseSidebar , setOpenSidebar } = useContext(SidebarContext);
   const dimentions = useWindowSize();
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
-  const [showCategoryModalActions, setShowCategoryModalActions] = useState(
-    false
-  );
+
   const [showAddCategoryModal, setShowAddCategoryModal] = useState({
     show: false,
     state: "add",
@@ -159,13 +155,13 @@ const Todos = () => {
     // for handeling dimentions of todo board
     let wb = dimentions[0];
     if (wb) {
-      let b = wb - (open === "show" ? 270 : 40);
+      let b = wb - (open ? 270 : 40);
       setWidthBoard(b);
     }
 
     if (wb < 550) {
-      if (open === "show") {
-        setCloseSidebar();
+      if (open) {
+        dispatch(CloseSidebar());
       }
     }
   }, [dimentions, open]);
@@ -181,11 +177,9 @@ const Todos = () => {
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box display="flex" className={blur.sidebar ? "filterblur" : "filterblurnone" } >
-          {open === "show" && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
+          {open  && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
 
           <SettingBar
-            showCategoryModalActions={showCategoryModalActions}
-            setShowCategoryModalActions={setShowCategoryModalActions}
             showAddCategoryModal={showAddCategoryModal}
             setShowAddCategoryModal={setShowAddCategoryModal}
             UpdateOnlyCategories={UpdateOnlyCategories}
@@ -207,11 +201,6 @@ const Todos = () => {
           >
             <Box
               className="todo-list"
-              // style={
-              //   headerPosition === "top" || headerPosition === "bottom"
-              //     ? { height: "100%" }
-              //     : { height: "100%" }
-              // }
             >
               {!todoList?.length && !searchMode ? (
                 <Box>
@@ -243,8 +232,8 @@ const Todos = () => {
               searchMode={searchMode}
               SearchModeActive={SearchModeActive}
               SearchModeDeActive={SearchModeDeActive}
-              setCloseSidebar={setCloseSidebar}
-              setOpenSidebar={setOpenSidebar}
+              setCloseSidebar={()=>dispatch(CloseSidebar())}
+              setOpenSidebar={()=>dispatch(OpenSidebar())}
             />
           </Box>
         </Box>

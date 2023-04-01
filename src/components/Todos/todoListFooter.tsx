@@ -66,9 +66,6 @@ const TodoPageFooter = (props) => {
     UpdateOnlyTodos();
   };
 
-
-
-
   // DeBounce Function
   useDebounce(() => {
     if(searchText){

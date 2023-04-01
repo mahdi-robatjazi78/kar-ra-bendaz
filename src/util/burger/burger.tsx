@@ -1,21 +1,29 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SidebarContext } from "../../context/sidebarContext";
-
-
+import { useSelector , useDispatch } from "react-redux";
+import { OpenSidebar , CloseSidebar } from "@/redux/features/todoPageConfigSlice";
 
 import "./burgerStyles.css";
+import { RootState } from "@/redux/store";
+
 const Burger = () => {
-  const { setOpenSidebar, setCloseSidebar ,open} = useContext(SidebarContext);
-  const [op, setOpen] = useState(open === "show" ? true : false);
+  
+  
+  const dispatch = useDispatch()
+  const {sidebar_open : open}  = useSelector((state:RootState)=>state.todoPageConfig)
+  
+  
+  
+  const [op, setOpen] = useState(open ? true : false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (op) {
-      setCloseSidebar();
+      dispatch(CloseSidebar());
     } else {
-      setOpenSidebar();
+      dispatch(OpenSidebar());
     }
   }, [op]);
 
