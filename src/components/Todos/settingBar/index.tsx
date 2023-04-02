@@ -1,31 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Box, Popover, Tooltip } from "@mui/material";
 import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
 import { FiColumns } from "react-icons/fi";
 import { FaRegSquare, FaRegPlusSquare } from "react-icons/fa";
 import { BsTable, BsInfoSquare } from "react-icons/bs";
-import Axios from "@services/api";
 import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
-import withReactContent from "sweetalert2-react-content";
-import Swal from "sweetalert2";
-import Toast from "@utils/toast";
 import ShowModalNewCategory from "../TodoModals/newCategory";
 import { motion } from "framer-motion"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-
 const SettingBar = ({
   showAddCategoryModal,
   setShowAddCategoryModal,
-  UpdateOnlyCategories
+  UpdateOnlyCategories,
 }) => { 
 
-
   const {headerPosition}  = useSelector((state:RootState) => state.settings)
-
 
   const {
     show,
@@ -269,6 +262,10 @@ const SettingBar = ({
           </motion.div>
         </Tooltip>
       </Box>
+ 
+
+
+
 
       {showAddCategoryModal.show && (
         <ShowModalNewCategory

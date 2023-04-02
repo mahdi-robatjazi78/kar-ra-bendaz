@@ -3,21 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 interface IBlur {
   head: Boolean;
   body: Boolean;
-  sidebar:Boolean
+  sidebar: Boolean;
 }
 
 interface ISettings {
   blur: IBlur;
-  headerPosition:String;
+  headerPosition: String;
+  modalOpen: Boolean;
 }
 
 const initialState: ISettings = {
   blur: {
     head: false,
     body: false,
-    sidebar:false,
+    sidebar: false,
   },
-  headerPosition:"top"
+  headerPosition: "top",
+  modalOpen: false,
 };
 
 export const appSettings = createSlice({
@@ -28,7 +30,7 @@ export const appSettings = createSlice({
       state.blur = {
         head: true,
         body: true,
-        sidebar:true,
+        sidebar: true,
       };
     },
 
@@ -36,7 +38,7 @@ export const appSettings = createSlice({
       state.blur = {
         head: false,
         body: false,
-        sidebar:false,
+        sidebar: false,
       };
     },
     customBlur: (state, action) => {
@@ -46,11 +48,24 @@ export const appSettings = createSlice({
         sidebar: action?.payload?.sidebar || false,
       };
     },
-    changeHeaderPosition:(state,action)=>{
-      state.headerPosition = action.payload
-    }
+    changeHeaderPosition: (state, action) => {
+      state.headerPosition = action.payload;
+    },
+    handleSettingModalOpen: (state) => {
+      state.modalOpen = true;
+    },
+    handleSettingModalClose: (state) => {
+      state.modalOpen = false;
+    },
   },
 });
 
-export const { setBlurPage, deactiveBlur, customBlur ,changeHeaderPosition } = appSettings.actions;
+export const {
+  setBlurPage,
+  deactiveBlur,
+  customBlur,
+  changeHeaderPosition,
+  handleSettingModalOpen,
+  handleSettingModalClose,
+} = appSettings.actions;
 export default appSettings.reducer;

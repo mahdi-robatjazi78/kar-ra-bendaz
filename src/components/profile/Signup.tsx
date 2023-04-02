@@ -1,14 +1,10 @@
 import React, { useContext, useLayoutEffect, useState } from "react";
 import ThemeContext from "../../context/themeContext";
 import Avatar from "@mui/material/Avatar";
-import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-// import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
@@ -25,6 +21,7 @@ import {
 import { FaRegUser } from "react-icons/fa";
 import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 
 const Signup = ({ userSignupData, setUserSignupData }) => {
   const navigate = useNavigate();
@@ -108,10 +105,7 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                 <Grid container>
                   <Grid item xs={12}>
                     <Box display="flex" style={{ gap: ".8rem" }}>
-                      <TextField
-                        // className={
-                        //   formik.errors.username ? "errorStateField" : ""
-                        // }
+                      <StyledTextFieldWhite
                         margin="normal"
                         autoComplete="given-name"
                         name="firstName"
@@ -122,18 +116,11 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                         style={{ borderColor: "red" }}
                         onChange={formik.handleChange}
                         value={formik.values.firstName}
-                        // error={
-                        //   formik.errors.firstName !== "" &&
-                        //   formik.touched.firstName
-                        // }
-                        // helperText={formik.errors.firstName}
+                       
                         size="small"
                       />
 
-                      <TextField
-                        // className={
-                        //   formik.errors.username ? "errorStateField" : ""
-                        // }
+                      <StyledTextFieldWhite
                         margin="normal"
                         fullWidth
                         id="lastName"
@@ -142,17 +129,12 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                         autoComplete="family-name"
                         onChange={formik.handleChange}
                         value={formik.values.lastName}
-                        // error={
-                        //   formik.errors.lastName !== "" &&
-                        //   formik.touched.lastName
-                        // }
-                        // helperText={formik.errors.lastName}
                         size="small"
                       />
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
+                    <StyledTextFieldWhite
                       className={
                         formik.touched.password && formik.errors.username
                           ? "errorStateField"
@@ -187,7 +169,7 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
+                    <StyledTextFieldWhite
                       className={
                         formik.errors.password && formik.touched.password
                           ? "errorStateField"

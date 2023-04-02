@@ -18,8 +18,10 @@ import { motion } from "framer-motion";
 import { LogoutAction } from "@/redux/features/userSlice";
 import {useDispatch , useSelector} from 'react-redux'
 import { AppDispatch, RootState } from "@/redux/store";
+import { AiFillSetting } from "react-icons/ai";
 
-const Header = ({ ShowBurger, setShowBurger }) => {
+const Header = (props) => {
+  const {handleOpenSettingModal} = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -29,7 +31,6 @@ const Header = ({ ShowBurger, setShowBurger }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [showSidebar, setShowSidebar] = React.useState<boolean>(true);
   const dispatch : AppDispatch = useDispatch()
 
   const auth = useSelector((state:RootState)=>state.auth)
@@ -94,13 +95,9 @@ const Header = ({ ShowBurger, setShowBurger }) => {
     >
       <Burger />
 
-      <DarkLight />
+      <AiFillSetting style={{cursor:"pointer" , fontSize:"2rem" , margin:"1rem"}} onClick={()=>{handleOpenSettingModal()}} />
       <NavLink className="header-link" to={"/"}>
-        <SiHomeassistant
-          onClick={() => {
-            setShowBurger(true);
-          }}
-        />
+        <SiHomeassistant />
       </NavLink>
       <Box>
         <FaUserAlt

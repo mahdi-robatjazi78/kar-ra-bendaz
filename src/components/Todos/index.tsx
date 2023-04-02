@@ -4,7 +4,6 @@ import TodoList from "./todoList";
 import { Box } from "@mui/material";
 import TableListTodo from "./tableListTodo";
 import SettingBar from "./settingBar";
-import Axios from "@services/api";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
 import TodoPageDrawer from "./drawer";

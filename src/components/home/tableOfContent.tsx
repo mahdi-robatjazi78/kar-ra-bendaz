@@ -19,9 +19,6 @@ import {
 } from "@mui/material";
 import { MdWorkspacesOutline } from "react-icons/md";
 import ThemeContext from "@context/themeContext";
-import { AppDataContext } from "@context/appDataContext";
-import Axios from "@services/api";
-import { IoIosAdd } from "react-icons/io";
 import { FiSearch, FiTrash2 } from "react-icons/fi";
 import { CgArrowsShrinkH } from "react-icons/cg";
 import { IoCloseSharp, IoReloadOutline } from "react-icons/io5";
@@ -42,6 +39,7 @@ import {
 import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 import { useDispatch } from "react-redux";
 import {StyledTableCell,StyledTableRow}  from '@/styles/styled/styled_table'
+import StyledTabs from "@/styles/styled/styled_tabs";
 
 
 
@@ -354,39 +352,16 @@ const TableOfContent = () => {
         )}
       </Box>
       <Box className="add-space-item-box">
-        <Tabs
+      <StyledTabs
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
-          sx={{
-            "& .MuiButtonBase-root": {
-              color: theme.text1,
-              fontSize: ".8rem",
-              marginTop: ".5rem",
-              marginBottom: ".5rem",
-            },
-
-            "& .MuiButtonBase-root:hover": {
-              color: theme.hoverSuccess,
-              fontSize: ".8rem",
-            },
-
-            "& .Mui-selected": {
-              color: theme.borders,
-              borderRadius: "10px",
-              border: `1px solid ${theme.borders}`,
-              fontSize: ".8rem",
-            },
-
-            "& .MuiTabs-indicator": {
-              display: "none",
-            },
-          }}
+          aria-label="note board and todo workspace tabs"
+          scrollButtons="auto"
         >
           <Tab value={0} label="Todo Workspace" />
           <Tab value={1} label="Note Boadrds" />
-        </Tabs>
+        </StyledTabs>
 
         <TabPanel value={value} index={0}>
           {isLoading ? (
