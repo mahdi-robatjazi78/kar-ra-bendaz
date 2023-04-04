@@ -9,10 +9,7 @@ import { RiDeleteBin3Fill, RiFolderAddFill } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import ShowModalDelete from "../TodoModals/delete";
 import ShowModalAddToCategory from "../TodoModals/addToCategory";
-
-
-
-
+import StyledButton from '@/styles/styled/styled_button';
 
 
 const TodoDrawer = (props) => {
@@ -73,8 +70,7 @@ const TodoDrawer = (props) => {
               
             />
             <Box id="text-area-footer">
-              <Button
-                id="button-edit-todo"
+              <StyledButton
                 disabled={todoTextEdited ? false :true}
                 onClick={()=>{ 
 
@@ -84,7 +80,7 @@ const TodoDrawer = (props) => {
                 }}
               >
                 Edit todo
-              </Button>
+              </StyledButton>
             </Box>
           </Box>
            

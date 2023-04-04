@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import { IoSettingsOutline } from "react-icons/io5";
 import HeaderPosition from "../mini/headerPosition";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { RiArrowGoBackFill } from "react-icons/ri";
 
 
 
@@ -22,7 +22,7 @@ const SettingsBox = () => {
               setShowHeaderPositions(false);
             }}
           >
-            <IoMdArrowRoundBack className="icon-styles" />
+            <RiArrowGoBackFill className="icon-styles" />
           </IconButton>
         )}
       </Box>

@@ -17,25 +17,43 @@
   background-color: var(--header);
   position: relative;
   border: 2px solid var(--borders);
-  border-radius:10px;
+  border-radius:1rem;
 }
 .Modal_LightMode {
   background-color: var(--background);
   position: relative;
   border: 2px solid var(--borders);
-  border-radius:10px;
+  border-radius:1rem;
+}
+
+.Modal_DrakModeLogout {
+
+  height:20rem;
+  background-color: var(--header);
+  position: relative;
+  border: 2px solid var(--borders);
+  border-radius:1rem;
+}
+.Modal_LightModeLogout {
+  height:20rem;
+  background-color: var(--background);
+  position: relative;
+  border: 2px solid var(--borders);
+  border-radius:1rem;
 }
 
 .Modal_TitleBar_Light {
   font-size: 2rem;
   color: black;
   font-family: sans-serif;
+display: block;
+
 }
 .Modal_TitleBar_Dark {
   font-size: 2rem;
   color: white;
   font-family: sans-serif;
-
+display: block;
 }
 .Modal_Deny_Button {
   background-color:red;

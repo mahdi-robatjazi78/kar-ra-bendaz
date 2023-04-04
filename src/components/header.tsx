@@ -19,6 +19,7 @@ import { LogoutAction } from "@/redux/features/userSlice";
 import {useDispatch , useSelector} from 'react-redux'
 import { AppDispatch, RootState } from "@/redux/store";
 import { AiFillSetting } from "react-icons/ai";
+import {Styled_Menu ,Styled_Menu_Item} from "@/styles/styled/styled_menu";
 
 const Header = (props) => {
   const {handleOpenSettingModal} = props;
@@ -110,53 +111,50 @@ const Header = (props) => {
         />
 
         {auth.token && auth.me.email ? (
-          <Menu
-            id="user-profile-icon-menu"
+          <Styled_Menu
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
           >
-            <MenuItem style={{ width: "15rem", display: "block" }}>
+            <Styled_Menu_Item>
               <NavLink
-                style={{ color: "black", textDecoration: "none" }}
+                style={{  textDecoration: "none" }}
                 to={"/profile"}
               >
-                <Box display="flex" justifyContent="space-between">
+                <Box className="d-flex-between">
                   <Box>Profile</Box>
                   <CgProfile style={{ padding: ".2rem", fontSize: "1.5rem" }} />
                 </Box>
               </NavLink>
-            </MenuItem>
+            </Styled_Menu_Item>
 
-            <MenuItem style={{ width: "15rem", display: "block" }}>
+            <Styled_Menu_Item>
               <NavLink
-                style={{ color: "black", textDecoration: "none" }}
+                style={{  textDecoration: "none" }}
                 to={"/edit-profile"}
               >
-                <Box display="flex" justifyContent="space-between">
+                <Box className="d-flex-between">
                   <Box>Edit Profile</Box>
                   <FiEdit style={{ padding: ".2rem", fontSize: "1.5rem" }} />
                 </Box>
               </NavLink>
-            </MenuItem>
+            </Styled_Menu_Item>
 
-            <MenuItem style={{ width: "15rem", display: "block" }}>
+            <Styled_Menu_Item>
               <Box
-                style={{ color: "black", textDecoration: "none" }}
+                className="logout"
+                style={{  textDecoration: "none" }}
                 onClick={() => handleLogoutUser()}
               >
-                <Box display="flex" justifyContent="space-between">
+                <Box className="d-flex-between">
                   <Box>Logout</Box>
                   <RiLogoutCircleRLine
                     style={{ padding: ".2rem", fontSize: "1.5rem" }}
                   />
                 </Box>
               </Box>
-            </MenuItem>
-          </Menu>
+            </Styled_Menu_Item>
+          </Styled_Menu>
         ) : (
           <Menu
             id="basic-menu"
@@ -172,7 +170,7 @@ const Header = (props) => {
                 style={{ color: "black", textDecoration: "none" }}
                 to={"/signup"}
               >
-                <Box display="flex" justifyContent="space-between">
+                <Box className="d-flex-between">
                   <Box>Register</Box>
                   <BiLogInCircle
                     style={{ padding: ".2rem", fontSize: "1.5rem" }}
@@ -186,7 +184,7 @@ const Header = (props) => {
                 style={{ color: "black", textDecoration: "none" }}
                 to={"/login"}
               >
-                <Box display="flex" justifyContent="space-between">
+                <Box className="d-flex-between">
                   <Box>Login</Box>{" "}
                   <RiUserAddLine
                     style={{ padding: ".2rem", fontSize: "1.5rem" }}

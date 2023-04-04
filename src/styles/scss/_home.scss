@@ -51,8 +51,8 @@
           padding:10px 10px;
           cursor:pointer;
           &:hover{
-            background-color:var(--text3);
-            color:black;
+            border:1px solid var(--borders);
+            color:var(--text1);
           }
         }
       }

@@ -4,6 +4,8 @@ import { Table, TableCell, tableCellClasses, TableRow } from "@mui/material";
 const darkmode = localStorage.getItem("darkmode")
 
 
+console.log("dark mode .>> " , typeof darkmode)
+
 export const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
       padding: ".4rem",
@@ -18,9 +20,9 @@ export const StyledTableCell = styled(TableCell)({
 
   export const StyledTableRow = styled(TableRow)({
     "&:nth-of-type(odd)": {
-
-      backgroundColor: darkmode == "true" ? `#011a69` : "rgb(215,215,215)"},
-    },
+      backgroundColor:"var(--background)",
+      filter:"brightness(90%)"
+    },}
     // hide last border
     // "&:last-child td, &:last-child th": {
     //   border: 0,

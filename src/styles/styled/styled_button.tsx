@@ -20,7 +20,7 @@ const StyledButton = styled(Button)`
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
-  border-color:var(--text3) !important;
+  border:1px solid var(--text3) !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
   text-transform:capitalize;
  

@@ -22,37 +22,11 @@
       background-color: var(--sidebar);
       border-radius: 1rem;
       font-size: 1.3rem;
+      font-family: cursive;
     }
 
     #text-area-footer {
       padding: 0.5rem 0.5rem;
-      
-      
-      
-      #button-edit-todo{
-        text-transform: capitalize;
-        letter-spacing: 1px;
-        font-weight: bold;
-        border-radius:10px;
-        border:1px solid var(--secondSidebar);
-        color:var(--text1);
-        &:hover{
-          background-color: var(--text1);
-          color:var(--secondSidebar)
-        }
-        
-        &:disabled {
-          // background-color: red;  
-          color:#4a4948;
-          border:1px solid #4a4948;
-        }
-
-        &:active{
-          border:5px solid var(--secondSidebar);
-        }
-
-
-      }
     }
   }
 

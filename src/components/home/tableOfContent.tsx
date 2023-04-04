@@ -317,11 +317,7 @@ const TableOfContent = () => {
                 <FiSearch className="add-space-icon" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Paginate">
-              <IconButton>
-                <CgArrowsShrinkH className="add-space-icon" />
-              </IconButton>
-            </Tooltip>
+       
             <Tooltip title="Reload">
               <IconButton
                 onClick={() => {
@@ -360,7 +356,7 @@ const TableOfContent = () => {
           scrollButtons="auto"
         >
           <Tab value={0} label="Todo Workspace" />
-          <Tab value={1} label="Note Boadrds" />
+          <Tab value={1} label="Note Boards" />
         </StyledTabs>
 
         <TabPanel value={value} index={0}>
@@ -383,22 +379,22 @@ const TableOfContent = () => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell
-                      style={{ color: theme.text2, fontWeight: "bold" }}
+                      style={{ color: theme.text3, fontWeight: "bold" }}
                     >
                       Title
                     </StyledTableCell>
                     <StyledTableCell
-                      style={{ color: theme.text2, fontWeight: "bold" }}
+                      style={{ color: theme.text3, fontWeight: "bold" }}
                     >
                       Categories
                     </StyledTableCell>
                     <StyledTableCell
-                      style={{ color: theme.text2, fontWeight: "bold" }}
+                      style={{ color: theme.text3, fontWeight: "bold" }}
                     >
                       Todos
                     </StyledTableCell>
                     <StyledTableCell
-                      style={{ color: theme.text2, fontWeight: "bold" }}
+                      style={{ color: theme.text3, fontWeight: "bold" }}
                     >
                       Active
                     </StyledTableCell>

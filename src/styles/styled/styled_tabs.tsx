@@ -4,7 +4,7 @@ import { Tabs } from "@mui/material";
 
 const Styled_Tabs = styled(Tabs)`
   & .MuiTab-root {
-    padding: 4px;
+    padding: 4px 10px;
     text-transform: capitalize;
     min-height: 30px;
     color: var(--text1) !important;
@@ -19,10 +19,11 @@ const Styled_Tabs = styled(Tabs)`
     border: 2px solid var(--borders);
     font-size: 0.8rem;
     border-top: none;
-    padding: 4px 10px;
+    padding: 4px 8px;
     text-transform: capitalize;
     min-height: 30px;
-		filter:brightness(1)
+		filter:brightness(1);
+    margin: 0.5rem 0.5rem;
   }
   & .MuiTabs-indicator {
     display: none !important;
