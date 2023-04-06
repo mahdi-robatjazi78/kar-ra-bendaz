@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
-import {
-  FaArrowCircleDown,
-  FaArrowCircleLeft,
-  FaArrowCircleRight,
-  FaArrowCircleUp,
-} from "react-icons/fa";
 import { Box, IconButton } from "@mui/material";
 import ThemeContext from "@context/themeContext";
 import { useDispatch } from "react-redux";
 import { changeHeaderPosition } from "@/redux/features/settingSlice";
+import {TbArrowBigDownLines , TbArrowBigLeftLines, TbArrowBigRightLines, TbArrowBigUpLines} from 'react-icons/tb'
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+
 
 const HeaderPosition = () => {
-  const { text1 } = useContext(ThemeContext);
-
+  const { borders , text3 } = useContext(ThemeContext);
+  const {headerPosition} = useSelector((state:RootState)=>state.settings)
   const dispatch = useDispatch();
+
+
 
   return (
     <Box>
@@ -24,7 +24,7 @@ const HeaderPosition = () => {
             dispatch(changeHeaderPosition("top"));
           }}
         >
-          <FaArrowCircleUp style={{ color: text1 }} />
+          <TbArrowBigUpLines style={ { color: headerPosition === "top" ? borders :  text3 }} />
         </IconButton>
       </Box>
       <Box display="flex" justifyContent="center" style={{ gap: "4rem" }}>
@@ -35,7 +35,7 @@ const HeaderPosition = () => {
               dispatch(changeHeaderPosition("left"));
             }}
           >
-            <FaArrowCircleLeft style={{ color: text1 }} />
+            <TbArrowBigLeftLines style={ { color: headerPosition === "left" ? borders :  text3 }} />
           </IconButton>
         </Box>
         <Box>
@@ -45,7 +45,7 @@ const HeaderPosition = () => {
               dispatch(changeHeaderPosition("right"));
             }}
           >
-            <FaArrowCircleRight style={{ color: text1 }} />
+            <TbArrowBigRightLines style={ { color: headerPosition === "right" ? borders :  text3 }} />
           </IconButton>
         </Box>
       </Box>
@@ -56,7 +56,7 @@ const HeaderPosition = () => {
             dispatch(changeHeaderPosition("bottom"));
           }}
         >
-          <FaArrowCircleDown style={{ color: text1 }} />
+          <TbArrowBigDownLines style={ { color: headerPosition === "bottom" ? borders :  text3 }} />
         </IconButton>
       </Box>
     </Box>

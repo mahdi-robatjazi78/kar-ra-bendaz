@@ -1,11 +1,6 @@
 import styled from "styled-components";
 import { Table, TableCell, tableCellClasses, TableRow } from "@mui/material";
 
-const darkmode = localStorage.getItem("darkmode")
-
-
-console.log("dark mode .>> " , typeof darkmode)
-
 export const StyledTableCell = styled(TableCell)({
     [`&.${tableCellClasses.head}`]: {
       padding: ".4rem",

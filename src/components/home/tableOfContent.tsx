@@ -376,7 +376,7 @@ const TableOfContent = () => {
           ) : (
             <TableContainer sx={{ maxHeight: 270, padding: 0 }}>
               <Table>
-                <TableHead>
+                <TableHead sx={{borderBottom:theme.isDarkMode ? "1px solid white" :"none"}}>
                   <TableRow>
                     <StyledTableCell
                       style={{ color: theme.text3, fontWeight: "bold" }}
