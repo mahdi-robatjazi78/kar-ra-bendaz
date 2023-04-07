@@ -1,11 +1,13 @@
 import React, { useState,useEffect , useContext } from "react";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import StyledTabs from "@/styles/styled/styled_tabs";
-import { Box, Checkbox, Tab, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, Tab, Typography } from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
 import DarkLight from "@/components/darkLight";
 import ThemeContext from "@context/themeContext";
 import Text from "@/styles/styled/styled_typography";
+
+import {GoArrowSmallDown ,  GoArrowSmallUp} from "react-icons/go"
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -55,13 +57,15 @@ const SettingModal = (props) => {
             scrollButtons="auto"
           >
             <Tab value={0} label="Overal" />
-            <Tab value={1} label="See Shortcut" />
+            <Tab value={1} label="See Shortcuts" />
             <Tab value={2} label="Todo Page" />
           </StyledTabs>
         </Box>
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
             <Box className="d-flex-around">
+          <Text variant="caption">Mute / Voice</Text>
+
               <Box
                 sx={{
                   backgroundColor: theme.isDarkMode
@@ -102,17 +106,47 @@ const SettingModal = (props) => {
               </Box>
             </Box>
           ) : settingItem === 1 ? (
-            <Box></Box>
+            <Box sx={{padding:"1rem 3rem"}}>
+
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Home Page </Text><Text><code>alt</code> <code>ctrl</code> <code>h</code></Text></Box>
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Todo Page </Text><Text><code>alt</code> <code>ctrl</code> <code>t</code></Text></Box>
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Profile Page </Text><Text><code>alt</code> <code>ctrl</code> <code>p</code></Text></Box>
+            <hr />
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Setting Modal </Text><Text><code>ctrl</code> <code>shift</code> <code>s</code></Text></Box>
+            <hr />
+
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >New Todo </Text><Text> <code>alt</code> <code>n</code></Text></Box>
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >New Category </Text><Text> <code>alt</code> <code>c</code></Text></Box>
+            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Search Mode </Text><Text><code>ctrl</code> <code>shift</code> <code>f</code></Text></Box>
+
+
+            </Box>
           ) : settingItem === 2 ? (
             <Box>
 
-
-            <Box><Text variant="caption">Show Todo Page Sidebar</Text></Box>
-            <Box><Text variant="caption">Mute / Voice</Text></Box>
-            <Box><Text variant="caption">Pagination / Perpage</Text></Box>
-
-
-
+<Accordion>
+        <AccordionSummary  sx={{background:"var(--background)"}}
+          expandIcon={<GoArrowSmallDown />}
+        >
+          <Text>Settings</Text>
+        </AccordionSummary>
+        <AccordionDetails  className="background-style">
+          <Text variant="caption">Show Todo Page Sidebar</Text>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary  sx={{background:"var(--background)"}}
+          expandIcon={<GoArrowSmallDown />}
+        >
+          <Text>Pagination</Text>
+        </AccordionSummary>
+        <AccordionDetails className="background-style">
+          <Text>
+           This is Pagination
+          </Text>
+        </AccordionDetails>
+      </Accordion>
+      
 
             </Box>
           ) : (

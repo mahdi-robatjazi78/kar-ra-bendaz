@@ -1,4 +1,4 @@
-import React, { useContext, useEffect , useMemo } from "react";
+import React, { useContext, useEffect } from "react";
 import ThemeContext from "@context/themeContext";
 import { HiPlus } from "react-icons/hi";
 import styled from "styled-components";
@@ -18,6 +18,7 @@ import StyledPaginationItem from "@/styles/styled/styled_pagination";
 import StyledSelectWhiteComponent from "@/styles/styled/styled_Selectbox";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import { VscChromeClose } from "react-icons/vsc";
+import {HiOutlineViewColumns} from "react-icons/hi2"
 import { useDispatch, useSelector } from "react-redux";
 import { customBlur, deactiveBlur } from "@/redux/features/settingSlice";
 import { RootState } from "@/redux/store";
@@ -26,6 +27,7 @@ import {
   EmptySearchText,
 } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from '@hooks/useDebounce';
+import useWindowSize from "@hooks/useWindowSize";
 
 const TodoPageFooter = (props) => {
   const {
@@ -47,6 +49,8 @@ const TodoPageFooter = (props) => {
     filter: brightness(0.7);
   `;
   const theme = useContext(ThemeContext);
+  const sizeName = useWindowSize().sizeName;
+
   const { searchText } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
@@ -73,6 +77,17 @@ const TodoPageFooter = (props) => {
     }
   }, [searchText], 600
 );
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <Box
@@ -123,7 +138,7 @@ const TodoPageFooter = (props) => {
         />
       ) : (
         <>
-          {ActiveCategoryID ? (
+          {ActiveCategoryID || sizeName === "mobile" || sizeName === "tablet" ? (
             <Box></Box>
           ) : (
             <Box width={120} style={{ margin: ".6rem 2.2rem 0rem 2rem" }}>
@@ -146,7 +161,7 @@ const TodoPageFooter = (props) => {
               </FormControl>
             </Box>
           )}
-          {ActiveCategoryID ? (
+          {ActiveCategoryID  || sizeName === "mobile" || sizeName === "tablet" ? (
             <Box></Box>
           ) : (
             <Box sx={{ marginTop: "5px" }}>
@@ -170,6 +185,28 @@ const TodoPageFooter = (props) => {
           )}
 
           <Box display="flex" mr={2}>
+            {
+               (sizeName === "mobile" || sizeName === "tablet") ?(
+            <Box className="add-new-todo-icon">
+              <Tooltip arrow title="Pagination">
+                <Box
+                  className="icon-box"
+                  onClick={() => {
+                    dispatch(SearchModeActive());
+                  }}
+                >
+                  <IconButton>
+                    <HiOutlineViewColumns
+                      fontSize=".8rem"
+                      color={theme.isDarkMode ? "black" : "white"}
+                    />
+                  </IconButton>
+                </Box>
+              </Tooltip>
+            </Box>
+               ):null
+            }
+          
             <Box className="add-new-todo-icon">
               <Tooltip arrow title="Search">
                 <Box

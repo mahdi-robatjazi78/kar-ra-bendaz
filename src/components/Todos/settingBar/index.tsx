@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Popover, Tooltip } from "@mui/material";
 import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
@@ -8,17 +8,18 @@ import { BsTable, BsInfoSquare } from "react-icons/bs";
 import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
 import ShowModalNewCategory from "../TodoModals/newCategory";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import useWindowSize from "@/hooks/useWindowSize";
 
 const SettingBar = ({
   showAddCategoryModal,
   setShowAddCategoryModal,
   UpdateOnlyCategories,
-}) => { 
-
-  const {headerPosition}  = useSelector((state:RootState) => state.settings)
+}) => {
+  const { headerPosition } = useSelector((state: RootState) => state.settings);
+  const sizeName = useWindowSize().sizeName;
 
   const {
     show,
@@ -52,12 +53,10 @@ const SettingBar = ({
       }
       case "3col": {
         todoState === "all" ? setThreeColAll(n) : setThreeColDone(n);
-
         break;
       }
       case "1col": {
         todoState === "all" ? setOneColAll() : setOneColDone();
-
         break;
       }
       case "table": {
@@ -65,7 +64,7 @@ const SettingBar = ({
         break;
       }
       default:
-        setOneColAll();
+        // setOneColAll();
         break;
     }
   };
@@ -75,7 +74,12 @@ const SettingBar = ({
   );
 
   const handleOpenTodoViewCountTooltip = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (sizeName !== "mobile") {
+      setAnchorEl(event.currentTarget);
+    } else {
+      setThreeColAll(2);
+      showTodos("3col", 2);
+    }
   };
 
   const handleCloseTodoViewCountTooltip = () => {
@@ -85,37 +89,62 @@ const SettingBar = ({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const [listTodoViewNumbers, setListTodoViewNumbers] = useState([
-    {
-      active: show[2] === 2 ?  true : false,
-      number: 2,
-      id: "2-column",
-    },
+  const [listTodoViewNumbers, setListTodoViewNumbers] = useState([]);
 
-    {
-      active: show[2] === 3 ?  true : false,
-      number: 3,
-      id: "3-column",
-    },
+  useEffect(() => {
+    if (sizeName === "mobile") {
+      handleCloseTodoViewCountTooltip();
+      if(show[2] > 2){
+        setThreeColAll(2);
+      }
+    } else {
+      let list = [];
+      let activeNumber = null
 
-    {
-      active: show[2] === 4 ?  true : false,
-      number: 4,
-      id: "4-column",
-    },
+      switch (sizeName) {
+        case "tablet":
+          if(show[2] > 3){
+            setThreeColAll(3);
+            activeNumber = 3;
+          }
+          list = [2, 3];
+          break;
+        case "laptop":
+          if(show[2] == 6){
+            setThreeColAll(5);
+            activeNumber = 5;
 
-    {
-      active: show[2] === 5 ?  true : false,
-      number: 5,
-      id: "5-column",
-    },
+          }
+          list = [2, 3, 4, 5];
+          break;
+        case "pc":
+          list = [2, 3, 4, 5, 6];
 
-    {
-      active: show[2] === 6 ?  true : false,
-      number: 6,
-      id: "6-column",
-    },
-  ]);
+          break;
+        default:
+          list = [2, 3, 4, 5, 6];
+          break;
+      }
+      
+      let result =[];
+      if (activeNumber !== null){
+        result = list.map((item) => ({
+          active:  activeNumber == item ? true : false,
+          number: item,
+          id: `${item}-column`,
+        }))
+      }
+      else{
+
+      result = list.map((item) => ({
+        active:  show[2] == item ? true : false,
+        number: item,
+        id: `${item}-column`,
+      }));
+    }
+      setListTodoViewNumbers(result);
+    }
+  }, [sizeName]);
 
   const changeAcitiveTodoViewListItem = (key: string) => {
     setListTodoViewNumbers((prevState) =>
@@ -130,18 +159,18 @@ const SettingBar = ({
   };
 
   return (
-    <Box id="setting-bar-container"
-    style={
-
-     headerPosition === "bottom" ? {
-       marginTop:"auto",
-        height : "calc(100vh - 70px)",
-      }:{
-        height:"100vh"
+    <Box
+      id="setting-bar-container"
+      style={
+        headerPosition === "bottom"
+          ? {
+              marginTop: "auto",
+              height: "calc(100vh - 70px)",
+            }
+          : {
+              height: "100vh",
+            }
       }
-      
-    }
-    
     >
       <Box className="setting-bar-section">
         <Tooltip arrow placement="right" title="New Category">
@@ -172,9 +201,9 @@ const SettingBar = ({
             <FaRegSquare className="icon-style" />
           </motion.div>
         </Tooltip>
-        <Tooltip arrow placement="right" title="3 Columns">
+        <Tooltip arrow placement="right" title="Multi Columns">
           <motion.div
-          whileTap={{ scale: 1.2 }}
+            whileTap={{ scale: 1.2 }}
             aria-describedby={id}
             onClick={(e) => {
               handleOpenTodoViewCountTooltip(e);
@@ -202,22 +231,30 @@ const SettingBar = ({
             horizontal: "center",
           }}
         >
-          <Box className="selected-list-todo-view-column-parent"
-          
-          >
+          <Box className="selected-list-todo-view-column-parent">
             {listTodoViewNumbers.map((item) => (
               <motion.div
-                initial={{ x:item.number === 2 || item.number === 4 || item.number === 6 ? -100 : 100 ,opacity: 0 }}
-                animate={{ x: 0 , opacity: 1}}
-                transition={{ ease: "easeOut", duration: .6}}
+                initial={{
+                  x:
+                    item.number === 2 || item.number === 4 || item.number === 6
+                      ? -100
+                      : 100,
+                  opacity: 0,
+                }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ ease: "easeOut", duration: 0.6 }}
                 key={item.id}
                 onClick={() => {
                   changeAcitiveTodoViewListItem(item.id);
                   showTodos("3col", item.number);
-                  setTimeout(()=>{handleCloseTodoViewCountTooltip()},500)
+                  setTimeout(() => {
+                    handleCloseTodoViewCountTooltip();
+                  }, 500);
                 }}
                 className={`todo-view-item ${
-                  item.active && show[0]==="3col" ? "todo-view-item-active" : ""
+                  item.active && show[0] === "3col"
+                    ? "todo-view-item-active d-flex-center"
+                    : ""
                 }`}
               >
                 {item.number}
@@ -252,7 +289,7 @@ const SettingBar = ({
         </Tooltip>
         <Tooltip arrow placement="right" title="Is Done">
           <motion.div
-          whileTap={{ scale: 1.2 }}
+            whileTap={{ scale: 1.2 }}
             onClick={() => showTodos("done")}
             className={
               show[1] === "done" ? "selected-setting" : "unselected-setting"
@@ -262,10 +299,6 @@ const SettingBar = ({
           </motion.div>
         </Tooltip>
       </Box>
- 
-
-
-
 
       {showAddCategoryModal.show && (
         <ShowModalNewCategory
@@ -274,8 +307,6 @@ const SettingBar = ({
           UpdateOnlyCategories={UpdateOnlyCategories}
         />
       )}
-
-      
     </Box>
   );
 };

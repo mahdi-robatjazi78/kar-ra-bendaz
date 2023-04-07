@@ -1,13 +1,7 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState } from "react";
 import { Box, Drawer } from "@mui/material";
-import { MdOutlineDownloadDone } from "react-icons/md";
-import { RiDeleteBin3Fill, RiFolderAddFill } from "react-icons/ri";
-import { FaEdit } from "react-icons/fa";
-import ShowModalDelete from "../TodoModals/delete";
-import ShowModalAddToCategory from "../TodoModals/addToCategory";
 import useWindowSize from "@hooks/useWindowSize";
-import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
-import Toast from "@/util/toast";
+import { deactiveBlur } from "@/redux/features/settingSlice";
 import { DrawerClose } from "@/redux/features/todoPageConfigSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -25,7 +19,7 @@ const TodoPageDrawer = (props) => {
   } = useSelector((state: RootState) => state.todoPageConfig);
 
   const dispatch = useDispatch();
-  const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize().size;
 
   const handleCloseDrawer = () => {
     dispatch(DrawerClose());

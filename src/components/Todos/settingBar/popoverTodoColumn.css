@@ -1,7 +1,7 @@
 .selected-list-todo-view-column > .MuiPaper-root {
   margin-left: 1.6rem;
   background-color: var(--secondSidebar);
-  border: 1px solid gray;
+  border: 1px solid var(--borders);
 }
 
 .selected-list-todo-view-column-parent {
@@ -12,7 +12,7 @@
 }
 .todo-view-item {
   padding: 0.5rem 1rem;
-  color:var(--text2);
+  color:var(--text3);
   margin:5px;
   cursor:pointer;
   user-select: none;
@@ -22,7 +22,7 @@
 .todo-view-item-active {
   background: var(--sidebar);
   border-radius: 0.4rem;
-  border: 1px solid orange;
-  color:var(--text3)
+  border: 1px solid var(--borders);
+  color:var(--hoverSuccess)
 
 }

@@ -1,7 +1,7 @@
 import React , {useState} from "react";
 import Header from "./header";
 import { useDispatch, useSelector } from "react-redux";
-
+import useWindowSize from "@hooks/useWindowSize";
 import RouteBox from "./routeBox";
 import { Box } from "@mui/material";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
@@ -17,7 +17,8 @@ const Main = () => {
   const auth = useSelector((state : RootState)=>state.auth)
   const {headerPosition} = useSelector((state : RootState)=>state.settings)
   const dispatch = useDispatch();
-
+  const windowSize = useWindowSize().size;
+  const sizeName = useWindowSize().sizeName;
   const checkProfileDataEssentials = () =>{
     if(!auth.token){
       const authLocalStorage = JSON.parse(localStorage.getItem("auth"))

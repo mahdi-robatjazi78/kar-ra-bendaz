@@ -17,11 +17,11 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchActiveWs,
-  GetOutCompleted,  
+  GetOutCompleted,
   SearchModeActive,
   SearchModeDeActive,
   CloseSidebar,
-  OpenSidebar
+  OpenSidebar,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -42,28 +42,33 @@ const Todos = () => {
     active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
     active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
     get_out: GetOutFromTodoPage,
-    drawer:{item : {_id : DrawerTodoId}},
-    sidebar_open:open,
+    drawer: {
+      item: { _id: DrawerTodoId },
+    },
+    sidebar_open: open,
     searchMode,
-
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const {blur , headerPosition} = useSelector((state:RootState)=>state.settings)
+  const { blur, headerPosition } = useSelector(
+    (state: RootState) => state.settings
+  );
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [
     todoAssignRequest,
     todoAssignResponse,
-  ] = useTodoAssignToCategoryMutation(); 
+  ] = useTodoAssignToCategoryMutation();
   const [todoList, setTodoList] = useState([]);
-  const emptyTodoList = ()=>{setTodoList([])}
-  const [meta ,setMeta] = useState({
-    page:1,
-    limit:15,
-    total_items:null,
-    total_pages:null,
-  })
+  const emptyTodoList = () => {
+    setTodoList([]);
+  };
+  const [meta, setMeta] = useState({
+    page: 1,
+    limit: 15,
+    total_items: null,
+    total_pages: null,
+  });
   const [categoList, setCategoList] = useState([]);
-  const dimentions = useWindowSize();
+  const dimentions = useWindowSize().size;
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
 
@@ -80,27 +85,30 @@ const Todos = () => {
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
-  const UpdateOnlyTodos = (p=null ,pp=null ,st=null) => {
+  const UpdateOnlyTodos = (p = null, pp = null, st = null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
       page: p ? p : meta?.page || 1,
-      perPage:pp ? pp : meta?.limit || 20,
-      searchText:st ? st : ""
-    }).unwrap().then((resp)=>{
-      setTodoList(resp?.todos);
-      setMeta({
-        page:Number(resp?.meta?.page),
-        limit:Number(resp?.meta?.limit),
-        total_items:Number(resp?.meta?.total_items),
-        total_pages:Number(resp?.meta?.total_pages),
-      })
-    });
+      perPage: pp ? pp : meta?.limit || 20,
+      searchText: st ? st : "",
+    })
+      .unwrap()
+      .then((resp) => {
+        setTodoList(resp?.todos);
+        setMeta({
+          page: Number(resp?.meta?.page),
+          limit: Number(resp?.meta?.limit),
+          total_items: Number(resp?.meta?.total_items),
+          total_pages: Number(resp?.meta?.total_pages),
+        });
+      });
   };
   const UpdateOnlyCategories = () => {
-    triggerGetCategoryIndex(ActiveWorkspaceID).unwrap().then((resp)=>{
-      setCategoList(resp?.list);
-
-    });
+    triggerGetCategoryIndex(ActiveWorkspaceID)
+      .unwrap()
+      .then((resp) => {
+        setCategoList(resp?.list);
+      });
   };
   const UpdateTodoAndCategories = () => {
     UpdateOnlyTodos();
@@ -108,9 +116,9 @@ const Todos = () => {
   };
 
   const DeleteTodoOperation = () => {
-    todoDeleteRequest({ id: DrawerTodoId , ws: ActiveWorkspaceID })
-      UpdateTodoAndCategories();
-      dispatch(deactiveBlur());
+    todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID });
+    UpdateTodoAndCategories();
+    dispatch(deactiveBlur());
   };
 
   const HandleTodoAssignToCategory = (todoId, categoId) => {
@@ -123,7 +131,7 @@ const Todos = () => {
   };
 
   const HandleTodoChangeBody = (todoId, todoBody) => {
-    changeBodyRequest({ todoId, todoBody })
+    changeBodyRequest({ todoId, todoBody });
     UpdateOnlyTodos();
   };
 
@@ -142,13 +150,10 @@ const Todos = () => {
     }
   }, [GetOutFromTodoPage]);
 
-  const handleChangeMeta =(page , perPage)=>{
-
-    setMeta({...meta , page:page , limit:perPage})
-    UpdateOnlyTodos(page , perPage)
-
-  }
-
+  const handleChangeMeta = (page, perPage) => {
+    setMeta({ ...meta, page: page, limit: perPage });
+    UpdateOnlyTodos(page, perPage);
+  };
 
   useEffect(() => {
     // for handeling dimentions of todo board
@@ -169,14 +174,23 @@ const Todos = () => {
   useHotkeys("alt+c", () =>
     setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
   );
-  useHotkeys("ctrl+shift+f", () =>{dispatch(SearchModeActive())})
- 
+  useHotkeys("ctrl+shift+f", () => {
+    dispatch(SearchModeActive());
+  });
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
-        <Box display="flex" className={blur.sidebar ? "filterblur" : "filterblurnone" } >
-          {open  && <Sidebar categoryList={categoList} totalTodoItems={meta?.total_items} />}
+        <Box
+          display="flex"
+          className={blur.sidebar ? "filterblur" : "filterblurnone"}
+        >
+          {open && (
+            <Sidebar
+              categoryList={categoList}
+              totalTodoItems={meta?.total_items}
+            />
+          )}
 
           <SettingBar
             showAddCategoryModal={showAddCategoryModal}
@@ -185,22 +199,27 @@ const Todos = () => {
           />
         </Box>
 
-        <Box
-          className="board" 
-        >
+        <Box className="board">
           <Box
             className="todo-page-box"
             style={
               headerPosition === "top" || headerPosition === "bottom"
-                ? { justifyContent: "space-between" , height: window.innerHeight - 70 }
+                ? {
+                    justifyContent: "space-between",
+                    height: window.innerHeight - 70,
+                  }
                 : headerPosition === "left" || headerPosition === "right"
-                ? { justifyContent: "space-between" , height: window.innerHeight }:{justifyContent: "space-between" , height: window.innerHeight}
-         
+                ? {
+                    justifyContent: "space-between",
+                    height: window.innerHeight,
+                  }
+                : {
+                    justifyContent: "space-between",
+                    height: window.innerHeight,
+                  }
             }
           >
-            <Box
-              className="todo-list"
-            >
+            <Box className="todo-list">
               {!todoList?.length && !searchMode ? (
                 <Box>
                   <EmptyListAnimation text="Empty List 😐" />
@@ -231,8 +250,8 @@ const Todos = () => {
               searchMode={searchMode}
               SearchModeActive={SearchModeActive}
               SearchModeDeActive={SearchModeDeActive}
-              setCloseSidebar={()=>dispatch(CloseSidebar())}
-              setOpenSidebar={()=>dispatch(OpenSidebar())}
+              setCloseSidebar={() => dispatch(CloseSidebar())}
+              setOpenSidebar={() => dispatch(OpenSidebar())}
             />
           </Box>
         </Box>
@@ -248,9 +267,9 @@ const Todos = () => {
       />
       {showModalAddTodo ? (
         <ShowModalNewTodo
-         setShowModalAddTodo={setShowModalAddTodo}
-         UpdateTodoAndCategories={UpdateTodoAndCategories} />
-         
+          setShowModalAddTodo={setShowModalAddTodo}
+          UpdateTodoAndCategories={UpdateTodoAndCategories}
+        />
       ) : null}
     </DndProvider>
   );
