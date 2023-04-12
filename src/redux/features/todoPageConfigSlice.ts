@@ -24,7 +24,12 @@ export interface ITodoDrawer {
     date: Date | String;
   };
 }
-
+export interface IMeta {
+  page: Number | null,
+  limit: Number | null,
+  total_items: Number | null,
+  total_pages: Number | null,
+}
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
@@ -33,7 +38,10 @@ export interface ITodoPage {
   searchMode: Boolean;
   searchText: String;
   sidebar_open: Boolean;
+  meta : IMeta
 }
+
+
 
 const initialState: ITodoPage = {
   active_ws: {
@@ -49,6 +57,12 @@ const initialState: ITodoPage = {
     state: "todo",
     anchor: "right",
     item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" },
+  },
+  meta:{
+    page: 1,
+    limit: 15,
+    total_items: null,
+    total_pages: null,
   },
   get_out: false,
   searchMode: false,
@@ -138,6 +152,14 @@ export const todoPageConfigSlice = createSlice({
         state.sidebar_open = true;
       }
     },
+    handleChangeMetaItem:(state , action)=>{
+      state.meta = {
+        page : action?.payload?.page || state.meta.page,
+        limit : action?.payload?.limit || state.meta.limit,
+        total_items : action?.payload?.total_items || state.meta.total_items,
+        total_pages : action?.payload?.total_pages || state.meta.total_pages,
+      }
+    },
   },
 
   extraReducers: (builder) => {
@@ -188,5 +210,6 @@ export const {
   OpenSidebar,
   CloseSidebar,
   ToggleSidebar,
+  handleChangeMetaItem
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

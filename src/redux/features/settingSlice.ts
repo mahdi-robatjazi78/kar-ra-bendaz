@@ -1,15 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { store } from "@/redux/store";
 interface IBlur {
   head: Boolean;
   body: Boolean;
   sidebar: Boolean;
 }
 
+interface ISettingModal {
+  open:Boolean;
+  config:{setting:String};
+}
+
 interface ISettings {
   blur: IBlur;
   headerPosition: String;
-  modalOpen: Boolean;
+  modal: ISettingModal;
 }
 
 const initialState: ISettings = {
@@ -19,7 +24,7 @@ const initialState: ISettings = {
     sidebar: false,
   },
   headerPosition: "top",
-  modalOpen: false,
+  modal: {open:false,config:{setting:""}},
 };
 
 export const appSettings = createSlice({
@@ -51,11 +56,14 @@ export const appSettings = createSlice({
     changeHeaderPosition: (state, action) => {
       state.headerPosition = action.payload;
     },
-    handleSettingModalOpen: (state) => {
-      state.modalOpen = true;
+    handleSettingModalOpen: (state , payload) => {
+      state.modal.open = true;
+      state.modal.config.setting = payload?.setting || "" ;
     },
     handleSettingModalClose: (state) => {
-      state.modalOpen = false;
+      // store.dispatch(deactiveBlur())
+      state.modal.open = false;
+      state.modal.config.setting = "";
     },
   },
 });

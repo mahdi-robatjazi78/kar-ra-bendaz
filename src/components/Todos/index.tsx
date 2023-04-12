@@ -22,6 +22,7 @@ import {
   SearchModeDeActive,
   CloseSidebar,
   OpenSidebar,
+  handleChangeMetaItem,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -47,6 +48,7 @@ const Todos = () => {
     },
     sidebar_open: open,
     searchMode,
+    meta
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
@@ -61,12 +63,6 @@ const Todos = () => {
   const emptyTodoList = () => {
     setTodoList([]);
   };
-  const [meta, setMeta] = useState({
-    page: 1,
-    limit: 15,
-    total_items: null,
-    total_pages: null,
-  });
   const [categoList, setCategoList] = useState([]);
   const dimentions = useWindowSize().size;
   const [widthBoard, setWidthBoard] = useState(0);
@@ -85,22 +81,22 @@ const Todos = () => {
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
-  const UpdateOnlyTodos = (p = null, pp = null, st = null) => {
+  const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
       page: p ? p : meta?.page || 1,
-      perPage: pp ? pp : meta?.limit || 20,
+      perPage: lmt ? lmt : meta?.limit || 20,
       searchText: st ? st : "",
     })
       .unwrap()
       .then((resp) => {
         setTodoList(resp?.todos);
-        setMeta({
-          page: Number(resp?.meta?.page),
-          limit: Number(resp?.meta?.limit),
-          total_items: Number(resp?.meta?.total_items),
-          total_pages: Number(resp?.meta?.total_pages),
-        });
+        dispatch(handleChangeMetaItem({
+          page: + resp?.meta?.page,
+          limit: + resp?.meta?.limit,
+          total_items: + resp?.meta?.total_items,
+          total_pages: + resp?.meta?.total_pages,
+        }))
       });
   };
   const UpdateOnlyCategories = () => {
@@ -114,6 +110,13 @@ const Todos = () => {
     UpdateOnlyTodos();
     UpdateOnlyCategories();
   };
+
+  useEffect(()=>{
+
+    
+    UpdateOnlyTodos(meta?.page,meta?.limit)
+
+  },[meta.page , meta.limit])
 
   const DeleteTodoOperation = () => {
     todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID });
@@ -151,8 +154,7 @@ const Todos = () => {
   }, [GetOutFromTodoPage]);
 
   const handleChangeMeta = (page, perPage) => {
-    setMeta({ ...meta, page: page, limit: perPage });
-    UpdateOnlyTodos(page, perPage);
+    dispatch(handleChangeMetaItem({ page: page, limit: perPage }))
   };
 
   useEffect(() => {

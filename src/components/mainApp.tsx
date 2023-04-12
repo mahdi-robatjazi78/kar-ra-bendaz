@@ -1,24 +1,19 @@
 import React , {useState} from "react";
 import Header from "./header";
 import { useDispatch, useSelector } from "react-redux";
-import useWindowSize from "@hooks/useWindowSize";
 import RouteBox from "./routeBox";
 import { Box } from "@mui/material";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 import { RootState } from "@/redux/store";
 import SettingModal from "./modal/settingModal";
-import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+import { handleSettingModalOpen , handleSettingModalClose, setBlurPage, deactiveBlur } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
 
-
-
 const Main = () => { 
-  const [ShowBurger, setShowBurger] = React.useState<boolean>(true);
+  const [ setShowBurger] = React.useState<boolean>(true);
   const auth = useSelector((state : RootState)=>state.auth)
-  const {headerPosition} = useSelector((state : RootState)=>state.settings)
+  const {headerPosition , modal} = useSelector((state : RootState)=>state.settings)
   const dispatch = useDispatch();
-  const windowSize = useWindowSize().size;
-  const sizeName = useWindowSize().sizeName;
   const checkProfileDataEssentials = () =>{
     if(!auth.token){
       const authLocalStorage = JSON.parse(localStorage.getItem("auth"))
@@ -40,20 +35,17 @@ const Main = () => {
   }
 
   checkProfileDataEssentials()
-
-
-
-  const [settingModalOpen , setOpenSettingModal]  = useState(false)
+ 
   const handleCloseSettingModal = ()=>{
-    
-      dispatch(deactiveBlur())
-    setOpenSettingModal(false)}
+    dispatch(deactiveBlur())
+    dispatch(handleSettingModalClose())
+  }
   const handleOpenSettingModal = ()=>{
     dispatch(setBlurPage())
-    setOpenSettingModal(true)
+    dispatch(handleSettingModalOpen({}))
   }
-  useHotkeys("ctrl+shift+s", () =>{handleOpenSettingModal()})
 
+  useHotkeys("ctrl+shift+s", () =>{handleOpenSettingModal()})
 
   return (
 
@@ -75,20 +67,11 @@ const Main = () => {
         <Header handleOpenSettingModal={handleOpenSettingModal}  />
         <RouteBox setShowBurger={setShowBurger} />
 
-
-
-
-
         <SettingModal
-        settingModalOpen={settingModalOpen}
-        handleClose={handleCloseSettingModal}
+          settingModalOpen={modal.open}
+          handleClose={handleCloseSettingModal}
         
         />
-
-
-
-
-
 
       </Box>
     </main>

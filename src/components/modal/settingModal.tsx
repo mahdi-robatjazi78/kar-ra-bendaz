@@ -1,13 +1,24 @@
-import React, { useState,useEffect , useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import StyledTabs from "@/styles/styled/styled_tabs";
-import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, Tab, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Checkbox,
+  Tab,
+  Typography,
+} from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
 import DarkLight from "@/components/darkLight";
 import ThemeContext from "@context/themeContext";
 import Text from "@/styles/styled/styled_typography";
-
-import {GoArrowSmallDown ,  GoArrowSmallUp} from "react-icons/go"
+import { useDispatch, useSelector } from "react-redux";
+import { GoArrowSmallDown, GoArrowSmallUp } from "react-icons/go";
+import { RootState } from "@/redux/store";
+import { PaginationComponent, PerPageComponent } from "../Todos/paginate";
+import { handleChangeMetaItem } from "@/redux/features/todoPageConfigSlice";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -16,28 +27,49 @@ const SettingModal = (props) => {
   };
 
   const theme = useContext(ThemeContext);
-  
+  const dispatch = useDispatch();
+  const { meta } = useSelector((state: RootState) => state.todoPageConfig);
+  const { modal } = useSelector((state: RootState) => state.settings);
+  const setting = modal.config?.setting;
+
+  console.log('setting2 >   ' , setting)
+
+  useEffect(()=>{
+  // {if(setting === "todo-pagination"){
+    // setSettingItem(2)
+  // }
+
+console.log('setting >   ' , setting)
+
+
+} ,[setting])
+
 
   const [listenFromOs, setListenFromOs] = useState(false);
-  const [osTheme , setOsTheme] = useState(false)
+  const [osTheme, setOsTheme] = useState(false);
+  const handleSeeOsDarkMode = () => {
+    const isDarkMode =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme:dark)").matches;
+    setOsTheme(isDarkMode);
+  };
 
-
-  const handleSeeOsDarkMode = ()=>{
-    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
-    setOsTheme(isDarkMode)
-
-  }
-  
-  useEffect(()=>{
-    handleSeeOsDarkMode()
-
-  } , [])
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change' , ()=>{handleSeeOsDarkMode()});
-
+  useEffect(() => {
+    handleSeeOsDarkMode();
+  }, []);
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      handleSeeOsDarkMode();
+    });
 
   const handleChangeListenFromOs = (e) => {
     const listen = e.target.checked;
     setListenFromOs(listen);
+  };
+
+  const handleChangeMeta = (page, perPage) => {
+    dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
   };
 
   return (
@@ -64,7 +96,7 @@ const SettingModal = (props) => {
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
             <Box className="d-flex-around">
-          <Text variant="caption">Mute / Voice</Text>
+              <Text variant="caption">Mute / Voice</Text>
 
               <Box
                 sx={{
@@ -85,7 +117,10 @@ const SettingModal = (props) => {
                       checked={listenFromOs}
                       onChange={handleChangeListenFromOs}
                     />{" "}
-                    <Text variant="caption" selectable={false}> Listen to os </Text>
+                    <Text variant="caption" selectable={false}>
+                      {" "}
+                      Listen to os{" "}
+                    </Text>
                   </Box>
                 </Box>
               </Box>
@@ -106,48 +141,91 @@ const SettingModal = (props) => {
               </Box>
             </Box>
           ) : settingItem === 1 ? (
-            <Box sx={{padding:"1rem 3rem"}}>
+            <Box sx={{ padding: "1rem 3rem" }}>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>Home Page </Text>
+                <Text>
+                  <code>alt</code> <code>ctrl</code> <code>h</code>
+                </Text>
+              </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>Todo Page </Text>
+                <Text>
+                  <code>alt</code> <code>ctrl</code> <code>t</code>
+                </Text>
+              </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>Profile Page </Text>
+                <Text>
+                  <code>alt</code> <code>ctrl</code> <code>p</code>
+                </Text>
+              </Box>
+              <hr />
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>Setting Modal </Text>
+                <Text>
+                  <code>ctrl</code> <code>shift</code> <code>s</code>
+                </Text>
+              </Box>
+              <hr />
 
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Home Page </Text><Text><code>alt</code> <code>ctrl</code> <code>h</code></Text></Box>
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Todo Page </Text><Text><code>alt</code> <code>ctrl</code> <code>t</code></Text></Box>
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Profile Page </Text><Text><code>alt</code> <code>ctrl</code> <code>p</code></Text></Box>
-            <hr />
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Setting Modal </Text><Text><code>ctrl</code> <code>shift</code> <code>s</code></Text></Box>
-            <hr />
-
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >New Todo </Text><Text> <code>alt</code> <code>n</code></Text></Box>
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >New Category </Text><Text> <code>alt</code> <code>c</code></Text></Box>
-            <Box className="d-flex-between" sx={{m:2 , flexWrap:"nowrap"}}><Text >Search Mode </Text><Text><code>ctrl</code> <code>shift</code> <code>f</code></Text></Box>
-
-
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>New Todo </Text>
+                <Text>
+                  {" "}
+                  <code>alt</code> <code>n</code>
+                </Text>
+              </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>New Category </Text>
+                <Text>
+                  {" "}
+                  <code>alt</code> <code>c</code>
+                </Text>
+              </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text>Search Mode </Text>
+                <Text>
+                  <code>ctrl</code> <code>shift</code> <code>f</code>
+                </Text>
+              </Box>
             </Box>
           ) : settingItem === 2 ? (
             <Box>
-
-<Accordion>
-        <AccordionSummary  sx={{background:"var(--background)"}}
-          expandIcon={<GoArrowSmallDown />}
-        >
-          <Text>Settings</Text>
-        </AccordionSummary>
-        <AccordionDetails  className="background-style">
-          <Text variant="caption">Show Todo Page Sidebar</Text>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary  sx={{background:"var(--background)"}}
-          expandIcon={<GoArrowSmallDown />}
-        >
-          <Text>Pagination</Text>
-        </AccordionSummary>
-        <AccordionDetails className="background-style">
-          <Text>
-           This is Pagination
-          </Text>
-        </AccordionDetails>
-      </Accordion>
-      
-
+              <Accordion>
+                <AccordionSummary
+                  sx={{ background: "var(--background)" }}
+                  expandIcon={<GoArrowSmallDown />}
+                >
+                  <Text>Settings</Text>
+                </AccordionSummary>
+                <AccordionDetails className="background-style">
+                  <Text variant="caption">Show Todo Page Sidebar</Text>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion>
+                <AccordionSummary
+                  sx={{ background: "var(--background)" }}
+                  expandIcon={<GoArrowSmallDown />}
+                >
+                  <Text>Pagination</Text>
+                </AccordionSummary>
+                <AccordionDetails className="background-style">
+                  <Box className="d-flex-between-wrap">
+                    <PerPageComponent
+                      meta={meta}
+                      handleChangeMeta={handleChangeMeta}
+                      fullWidth={true}
+                    />
+                    <Box style={{margin:"auto"}}>
+                    <PaginationComponent
+                      meta={meta}
+                      handleChangeMeta={handleChangeMeta}
+                    />
+                    </Box>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
             </Box>
           ) : (
             <></>

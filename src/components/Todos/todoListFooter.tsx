@@ -9,7 +9,7 @@ import {
   InputAdornment,
   InputLabel,
   MenuItem,
-  Pagination,
+  // Pagination,
   Stack,
   Tooltip,
 } from "@mui/material";
@@ -20,7 +20,7 @@ import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import { VscChromeClose } from "react-icons/vsc";
 import {HiOutlineViewColumns} from "react-icons/hi2"
 import { useDispatch, useSelector } from "react-redux";
-import { customBlur, deactiveBlur } from "@/redux/features/settingSlice";
+import { customBlur, deactiveBlur, handleSettingModalOpen, setBlurPage } from "@/redux/features/settingSlice";
 import { RootState } from "@/redux/store";
 import {
   ChangeSearchText,
@@ -28,6 +28,7 @@ import {
 } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from '@hooks/useDebounce';
 import useWindowSize from "@hooks/useWindowSize";
+import {PaginationComponent, PerPageComponent} from './paginate'
 
 const TodoPageFooter = (props) => {
   const {
@@ -44,10 +45,7 @@ const TodoPageFooter = (props) => {
     SearchModeDeActive,
   } = props;
   const dispatch = useDispatch();
-  const StyledInputLabelWhite = styled(InputLabel)`
-    color: var(--text1) !important;
-    filter: brightness(0.7);
-  `;
+
   const theme = useContext(ThemeContext);
   const sizeName = useWindowSize().sizeName;
 
@@ -141,47 +139,12 @@ const TodoPageFooter = (props) => {
           {ActiveCategoryID || sizeName === "mobile" || sizeName === "tablet" ? (
             <Box></Box>
           ) : (
-            <Box width={120} style={{ margin: ".6rem 2.2rem 0rem 2rem" }}>
-              <FormControl fullWidth size="small">
-                <StyledInputLabelWhite id="per-page-select-label">
-                  Per Page
-                </StyledInputLabelWhite>
-                <StyledSelectWhiteComponent
-                  labelId="per-page-select-label"
-                  value={meta?.limit || 5}
-                  onChange={(e) => handleChangeMeta(1, Number(e.target.value))}
-                  label={"Per Page"}
-                >
-                  <MenuItem value={5}>5</MenuItem>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={15}>15</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
-                </StyledSelectWhiteComponent>
-              </FormControl>
-            </Box>
+            <PerPageComponent meta={meta} handleChangeMeta={handleChangeMeta} />
           )}
           {ActiveCategoryID  || sizeName === "mobile" || sizeName === "tablet" ? (
             <Box></Box>
           ) : (
-            <Box sx={{ marginTop: "5px" }}>
-              <Stack spacing={2}>
-                <Pagination
-                  style={{ margin: ".8rem 2.2rem 0.3rem 0.5rem" }}
-                  count={meta.total_pages}
-                  page={meta?.page || 1}
-                  onChange={(e, value) => {
-                    handleChangeMeta(+value, Number(meta?.limit));
-                  }}
-                  renderItem={(item) => (
-                    <StyledPaginationItem
-                      slots={{ previous: FiArrowLeft, next: FiArrowRight }}
-                      {...item}
-                    />
-                  )}
-                />
-              </Stack>
-            </Box>
+            <PaginationComponent meta={meta} handleChangeMeta={handleChangeMeta} />
           )}
 
           <Box display="flex" mr={2}>
@@ -192,7 +155,8 @@ const TodoPageFooter = (props) => {
                 <Box
                   className="icon-box"
                   onClick={() => {
-                    dispatch(SearchModeActive());
+                    dispatch(setBlurPage())
+                    dispatch(handleSettingModalOpen({setting:"todo-pagination"}))
                   }}
                 >
                   <IconButton>
