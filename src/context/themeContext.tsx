@@ -10,7 +10,7 @@ interface ITheme {
   secondSidebar: string;
   text1: string;
   text2: string;
-  header:string;
+  header: string;
   text3: string;
   hoverSuccess: string;
   isDarkMode: boolean;
@@ -25,7 +25,7 @@ const ThemeContext = React.createContext<ITheme>({
   borders: "",
   errorBorder: "",
   sidebar: "",
-  header:"",
+  header: "",
   secondSidebar: "",
   text1: "",
   text2: "",
@@ -45,7 +45,7 @@ export const ThemeContextProvider = ({ children }: any) => {
     borders: "",
     errorBorder: "",
     sidebar: "",
-    header:'',
+    header: "",
     secondSidebar: "",
     text1: "",
     text2: "",
@@ -140,16 +140,23 @@ export const ThemeContextProvider = ({ children }: any) => {
   }, [isDarkMode]);
 
   const toggleDark = () => {
-    localStorage.setItem("darkmode", JSON.stringify(!isDarkMode));
-    setIsDarkMode(!isDarkMode);
+    console.log("here . toggle , " ,isDarkMode)
+    const localDarkModeRead = JSON.parse(localStorage.getItem("darkmode"));
+    if (localDarkModeRead) {
+      setLight();
+    } else {
+      setDark();
+    }
   };
 
   const setDark = () => {
+    console.log("here . go to dark , " ,isDarkMode)
     localStorage.setItem("darkmode", JSON.stringify(true));
     setIsDarkMode(true);
   };
 
   const setLight = () => {
+    console.log("here . go to light , " ,isDarkMode)
     localStorage.setItem("darkmode", JSON.stringify(false));
     setIsDarkMode(false);
   };

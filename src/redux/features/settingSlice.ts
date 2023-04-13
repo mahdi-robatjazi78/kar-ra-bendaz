@@ -56,9 +56,9 @@ export const appSettings = createSlice({
     changeHeaderPosition: (state, action) => {
       state.headerPosition = action.payload;
     },
-    handleSettingModalOpen: (state , payload) => {
+    handleSettingModalOpen: (state , action) => {
       state.modal.open = true;
-      state.modal.config.setting = payload?.setting || "" ;
+      state.modal.config.setting = action?.payload?.setting || "" ;
     },
     handleSettingModalClose: (state) => {
       // store.dispatch(deactiveBlur())

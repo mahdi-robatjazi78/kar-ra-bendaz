@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import TodoPageFooter from "./todoListFooter";
 import TodoList from "./todoList";
 import { Box } from "@mui/material";
@@ -53,7 +53,6 @@ const Todos = () => {
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
   );
-
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [
     todoAssignRequest,
@@ -112,10 +111,7 @@ const Todos = () => {
   };
 
   useEffect(()=>{
-
-    
     UpdateOnlyTodos(meta?.page,meta?.limit)
-
   },[meta.page , meta.limit])
 
   const DeleteTodoOperation = () => {

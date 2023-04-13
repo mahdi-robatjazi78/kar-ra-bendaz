@@ -10,7 +10,6 @@ const DarkLight = (props) => {
   );
   const handleChangeTheme = () => {
     if (!listenFromOs) {
-      localStorage.setItem("darkmode", JSON.stringify(!isDarkMode));
       toggleDark();
     }
   };

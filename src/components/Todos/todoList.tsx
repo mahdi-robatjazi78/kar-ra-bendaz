@@ -24,11 +24,9 @@ const TodoList = (props: any) => {
     }else{
       setTodoItems(todoList); 
     }
-  },[filter , todoList.length])
+  },[filter , todoList ,todoList.length])
 
 
-
-  
 
   return (
     <Grid container spacing={2} id="todo-grid-list">

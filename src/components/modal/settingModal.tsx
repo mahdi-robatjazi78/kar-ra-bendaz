@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import StyledTabs from "@/styles/styled/styled_tabs";
 import {
@@ -31,18 +31,18 @@ const SettingModal = (props) => {
   const { meta } = useSelector((state: RootState) => state.todoPageConfig);
   const { modal } = useSelector((state: RootState) => state.settings);
   const setting = modal.config?.setting;
+  const [accordionExpanded,setAccordionExpanded] = useState <string | false> (false)
 
-  console.log('setting2 >   ' , setting)
-
-  useEffect(()=>{
-  // {if(setting === "todo-pagination"){
-    // setSettingItem(2)
-  // }
-
-console.log('setting >   ' , setting)
-
-
-} ,[setting])
+  useLayoutEffect(()=>{
+    if(setting === "todo-pagination"){
+      setTimeout(()=>{
+        setSettingItem(2)
+      },400)
+      setTimeout(()=>{ 
+        setAccordionExpanded("pagination")
+      },800)
+    }
+  } ,[setting])
 
 
   const [listenFromOs, setListenFromOs] = useState(false);
@@ -56,6 +56,11 @@ console.log('setting >   ' , setting)
 
   useEffect(() => {
     handleSeeOsDarkMode();
+
+    return()=>{
+      setSettingItem(0)
+      setAccordionExpanded(false)
+    }
   }, []);
   window
     .matchMedia("(prefers-color-scheme: dark)")
@@ -167,6 +172,19 @@ console.log('setting >   ' , setting)
                   <code>ctrl</code> <code>shift</code> <code>s</code>
                 </Text>
               </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text> Header Position </Text>
+                <Text>
+                  <code>ctrl</code> <code>shift</code> <code>arrow key</code>
+                </Text>
+              </Box>
+              <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
+                <Text> 
+                  Change Theme </Text>
+                <Text>
+                  <code>alt</code> <code>t</code>
+                </Text>
+              </Box>
               <hr />
 
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
@@ -192,7 +210,13 @@ console.log('setting >   ' , setting)
             </Box>
           ) : settingItem === 2 ? (
             <Box>
-              <Accordion>
+              <Accordion expanded = {accordionExpanded === "settings"} onChange={(e,val)=>{
+                if(val){
+                  setAccordionExpanded("settings")
+                }else{
+                  setAccordionExpanded(false)
+                }
+              }}>
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
                   expandIcon={<GoArrowSmallDown />}
@@ -201,12 +225,20 @@ console.log('setting >   ' , setting)
                 </AccordionSummary>
                 <AccordionDetails className="background-style">
                   <Text variant="caption">Show Todo Page Sidebar</Text>
+                  <Text variant="caption">Change Todo Page Layout</Text>
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              <Accordion expanded={accordionExpanded === "pagination"}  onChange={(e,val)=>{
+                if(val){
+                  setAccordionExpanded("pagination")
+                }else{
+                  setAccordionExpanded(false)
+                }
+              }}>
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
                   expandIcon={<GoArrowSmallDown />}
+                  
                 >
                   <Text>Pagination</Text>
                 </AccordionSummary>

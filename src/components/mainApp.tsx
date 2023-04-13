@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useState , useContext} from "react";
 import Header from "./header";
 import { useDispatch, useSelector } from "react-redux";
 import RouteBox from "./routeBox";
@@ -6,11 +6,11 @@ import { Box } from "@mui/material";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 import { RootState } from "@/redux/store";
 import SettingModal from "./modal/settingModal";
-import { handleSettingModalOpen , handleSettingModalClose, setBlurPage, deactiveBlur } from "@/redux/features/settingSlice";
+import { handleSettingModalOpen , handleSettingModalClose, setBlurPage, deactiveBlur, changeHeaderPosition } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
-
+import ThemeContext from "@/context/themeContext";
 const Main = () => { 
-  const [ setShowBurger] = React.useState<boolean>(true);
+  const [ showBurger ,  setShowBurger] = useState<boolean>(true);
   const auth = useSelector((state : RootState)=>state.auth)
   const {headerPosition , modal} = useSelector((state : RootState)=>state.settings)
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const Main = () => {
       
     }
   }
-
+  const {toggleDark , setLight , isDarkMode}  = useContext(ThemeContext)
   checkProfileDataEssentials()
  
   const handleCloseSettingModal = ()=>{
@@ -46,6 +46,31 @@ const Main = () => {
   }
 
   useHotkeys("ctrl+shift+s", () =>{handleOpenSettingModal()})
+  useHotkeys("alt+t", () => {
+
+    toggleDark()
+  
+  
+  });
+  useHotkeys("ctrl+shift+keydown", () => {
+    dispatch(changeHeaderPosition("bottom"));
+
+  });
+  useHotkeys("ctrl+shift+keyup", () => {
+    dispatch(changeHeaderPosition("top"));
+
+  });
+
+  useHotkeys("ctrl+shift+keyleft", () => {
+    dispatch(changeHeaderPosition("left"));
+  });
+  useHotkeys("ctrl+shift+keyright", () => {
+    dispatch(changeHeaderPosition("right"));
+
+  });
+
+
+
 
   return (
 
@@ -67,12 +92,17 @@ const Main = () => {
         <Header handleOpenSettingModal={handleOpenSettingModal}  />
         <RouteBox setShowBurger={setShowBurger} />
 
-        <SettingModal
-          settingModalOpen={modal.open}
-          handleClose={handleCloseSettingModal}
-        
-        />
+        {modal.open ?(
 
+          <SettingModal
+            settingModalOpen={modal.open}
+            handleClose={handleCloseSettingModal}
+            
+          />
+          
+          )
+        :null
+        }
       </Box>
     </main>
   );
