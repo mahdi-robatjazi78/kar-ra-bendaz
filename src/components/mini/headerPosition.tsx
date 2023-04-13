@@ -42,7 +42,7 @@ const HeaderPosition = () => {
 
 
   (sizeName !== "mobile") ? (
-<Box display="flex" justifyContent="center" style={{ gap: "4rem" }}>
+      <Box display="flex" justifyContent="center" style={{ gap: "4rem" }}>
         <Box>
           {" "}
           <IconButton

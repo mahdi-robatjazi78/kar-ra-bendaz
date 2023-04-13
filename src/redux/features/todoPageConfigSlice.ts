@@ -30,6 +30,10 @@ export interface IMeta {
   total_items: Number | null,
   total_pages: Number | null,
 }
+
+
+
+
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
@@ -38,7 +42,8 @@ export interface ITodoPage {
   searchMode: Boolean;
   searchText: String;
   sidebar_open: Boolean;
-  meta : IMeta
+  meta : IMeta,
+  layout_nav_show:Boolean,
 }
 
 
@@ -68,6 +73,7 @@ const initialState: ITodoPage = {
   searchMode: false,
   searchText: "",
   sidebar_open: true,
+  layout_nav_show:true,
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -160,6 +166,12 @@ export const todoPageConfigSlice = createSlice({
         total_pages : action?.payload?.total_pages || state.meta.total_pages,
       }
     },
+    showLayoutNav:(state)=>{
+      state.layout_nav_show = true;
+    },
+    hideLayoutNav:(state)=>{
+      state.layout_nav_show = false;
+    }
   },
 
   extraReducers: (builder) => {
@@ -210,6 +222,8 @@ export const {
   OpenSidebar,
   CloseSidebar,
   ToggleSidebar,
-  handleChangeMetaItem
+  handleChangeMetaItem,
+  showLayoutNav,
+  hideLayoutNav
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

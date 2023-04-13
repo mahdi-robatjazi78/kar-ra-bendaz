@@ -3,9 +3,6 @@ import { Grid, } from "@mui/material";
 import TodoBox from "./todoBox";
 import { TodoContext } from "@context/todoContext";
 
-
-
-
 const TodoList = (props: any) => {
   const { todoList ,UpdateTodoAndCategories } = props;
   const[todoItems , setTodoItems]  = useState([]) 
@@ -24,7 +21,7 @@ const TodoList = (props: any) => {
     }else{
       setTodoItems(todoList); 
     }
-  },[filter , todoList ,todoList.length])
+  },[filter , todoList ])
 
 
 

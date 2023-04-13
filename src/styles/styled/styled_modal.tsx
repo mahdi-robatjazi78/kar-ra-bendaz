@@ -15,7 +15,6 @@ const CustomeStyledModalBox = styled(Box)`
   border-radius: 8px;
   height: min(400px);
   outline: none !important;
-	overflow:auto;
 `;
 
 const Styled_Modal = (props) => {

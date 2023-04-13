@@ -48,7 +48,8 @@ const Todos = () => {
     },
     sidebar_open: open,
     searchMode,
-    meta
+    meta,
+    layout_nav_show
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
@@ -190,11 +191,19 @@ const Todos = () => {
             />
           )}
 
-          <SettingBar
-            showAddCategoryModal={showAddCategoryModal}
-            setShowAddCategoryModal={setShowAddCategoryModal}
-            UpdateOnlyCategories={UpdateOnlyCategories}
-          />
+
+            {
+              layout_nav_show ? (
+
+              <SettingBar
+                showAddCategoryModal={showAddCategoryModal}
+                setShowAddCategoryModal={setShowAddCategoryModal}
+                UpdateOnlyCategories={UpdateOnlyCategories}
+              />
+              ):null
+            }
+
+
         </Box>
 
         <Box className="board">

@@ -1,32 +1,26 @@
 #setting-modal-main-parent {
+  margin: 1rem 0;
 
-	margin:1rem;
+  .setting-modal-board {
+    height: 330px;
+    overflow-y: auto;
 
+    .box {
+      width: 15rem;
+      height: 270px;
+      margin: 1rem;
+      border-radius: 1rem;
+      position: relative;
 
-
-	.setting-modal-board{
-		height:300px;
-		
-		.box{
-    width: 15rem;
-    height: 270px;
-    margin: 1rem;
-    border-radius: 1rem;
-    position: relative;
-
-
-
-		.head{
-			padding:1rem;
-			font-size: 1.1rem;
-			color:var(--text3);
-			text-align: center;
-		}
-		.body{
-			height: 10rem;
-		}
-
-		}
-		
-	}
+      .head {
+        padding: 1rem;
+        font-size: 1.1rem;
+        color: var(--text3);
+        text-align: center;
+      }
+      .body {
+        height: 10rem;
+      }
+    }
+  }
 }

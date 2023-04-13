@@ -7,7 +7,9 @@ import {
   AccordionSummary,
   Box,
   Checkbox,
+  IconButton,
   Tab,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
@@ -18,8 +20,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { GoArrowSmallDown, GoArrowSmallUp } from "react-icons/go";
 import { RootState } from "@/redux/store";
 import { PaginationComponent, PerPageComponent } from "../Todos/paginate";
-import { handleChangeMetaItem } from "@/redux/features/todoPageConfigSlice";
-
+import {
+  handleChangeMetaItem,
+  showLayoutNav,
+  hideLayoutNav,
+} from "@/redux/features/todoPageConfigSlice";
+import { GiSoundOn, GiSoundOff } from "react-icons/gi";
+import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
   const handleChange = (e, newValue) => {
@@ -28,22 +35,33 @@ const SettingModal = (props) => {
 
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
-  const { meta } = useSelector((state: RootState) => state.todoPageConfig);
+  const { meta, layout_nav_show } = useSelector(
+    (state: RootState) => state.todoPageConfig
+  );
   const { modal } = useSelector((state: RootState) => state.settings);
   const setting = modal.config?.setting;
-  const [accordionExpanded,setAccordionExpanded] = useState <string | false> (false)
+  const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
+    false
+  );
 
-  useLayoutEffect(()=>{
-    if(setting === "todo-pagination"){
-      setTimeout(()=>{
-        setSettingItem(2)
-      },400)
-      setTimeout(()=>{ 
-        setAccordionExpanded("pagination")
-      },800)
+  useLayoutEffect(() => {
+    if (setting === "todo-pagination") {
+      setTimeout(() => {
+        setSettingItem(2);
+      }, 400);
+      setTimeout(() => {
+        setAccordionExpanded("pagination");
+      }, 800);
     }
-  } ,[setting])
-
+    if (setting === "todo-layout") {
+      setTimeout(() => {
+        setSettingItem(2);
+      }, 400);
+      setTimeout(() => {
+        setAccordionExpanded("layout");
+      }, 800);
+    }
+  }, [setting]);
 
   const [listenFromOs, setListenFromOs] = useState(false);
   const [osTheme, setOsTheme] = useState(false);
@@ -57,10 +75,10 @@ const SettingModal = (props) => {
   useEffect(() => {
     handleSeeOsDarkMode();
 
-    return()=>{
-      setSettingItem(0)
-      setAccordionExpanded(false)
-    }
+    return () => {
+      setSettingItem(0);
+      setAccordionExpanded(false);
+    };
   }, []);
   window
     .matchMedia("(prefers-color-scheme: dark)")
@@ -101,7 +119,33 @@ const SettingModal = (props) => {
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
             <Box className="d-flex-around">
-              <Text variant="caption">Mute / Voice</Text>
+              <Box
+                sx={{
+                  backgroundColor: theme.isDarkMode
+                    ? theme.header
+                    : theme.sidebar,
+                }}
+                className="box"
+              >
+                {" "}
+                <Box className="head">Sound</Box>
+                <Box className="body">
+                  <Box className="flex-central">
+                    <GiSoundOn
+                      fontSize={"2rem"}
+                      style={{
+                        color: "var(--text3)",
+                      }}
+                    />
+                    <GiSoundOff
+                      fontSize={"2rem"}
+                      style={{
+                        color: "var(--text3)",
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Box>
 
               <Box
                 sx={{
@@ -179,8 +223,7 @@ const SettingModal = (props) => {
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text> 
-                  Change Theme </Text>
+                <Text>Change Theme </Text>
                 <Text>
                   <code>alt</code> <code>t</code>
                 </Text>
@@ -210,13 +253,16 @@ const SettingModal = (props) => {
             </Box>
           ) : settingItem === 2 ? (
             <Box>
-              <Accordion expanded = {accordionExpanded === "settings"} onChange={(e,val)=>{
-                if(val){
-                  setAccordionExpanded("settings")
-                }else{
-                  setAccordionExpanded(false)
-                }
-              }}>
+              <Accordion
+                expanded={accordionExpanded === "settings"}
+                onChange={(e, val) => {
+                  if (val) {
+                    setAccordionExpanded("settings");
+                  } else {
+                    setAccordionExpanded(false);
+                  }
+                }}
+              >
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
                   expandIcon={<GoArrowSmallDown />}
@@ -224,21 +270,73 @@ const SettingModal = (props) => {
                   <Text>Settings</Text>
                 </AccordionSummary>
                 <AccordionDetails className="background-style">
+                  <Box className="t-align-center">
+                    {layout_nav_show ? (
+                      <Tooltip title="Hide Layout Nav">
+                        <IconButton
+                          onClick={() => {
+                            dispatch(hideLayoutNav());
+                          }}
+                        >
+                          <HiOutlineEyeOff
+                            style={{ color: "var(--text3)" }}
+                            fontSize={"1.5rem"}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="See Layout Nav">
+                        <IconButton
+                          onClick={() => {
+                            dispatch(showLayoutNav());
+                          }}
+                        >
+                          <HiOutlineEye
+                            style={{ color: "var(--text3)" }}
+                            fontSize={"1.5rem"}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion
+                expanded={accordionExpanded === "layout"}
+                onChange={(e, val) => {
+                  if (val) {
+                    setAccordionExpanded("layout");
+                  } else {
+                    setAccordionExpanded(false);
+                  }
+                }}
+              >
+                <AccordionSummary
+                  sx={{ background: "var(--background)" }}
+                  expandIcon={<GoArrowSmallDown />}
+                >
+                  <Text>Layout</Text>
+                </AccordionSummary>
+                <AccordionDetails className="background-style">
                   <Text variant="caption">Show Todo Page Sidebar</Text>
                   <Text variant="caption">Change Todo Page Layout</Text>
                 </AccordionDetails>
               </Accordion>
-              <Accordion expanded={accordionExpanded === "pagination"}  onChange={(e,val)=>{
-                if(val){
-                  setAccordionExpanded("pagination")
-                }else{
-                  setAccordionExpanded(false)
-                }
-              }}>
+
+              <Accordion
+                expanded={accordionExpanded === "pagination"}
+                onChange={(e, val) => {
+                  if (val) {
+                    setAccordionExpanded("pagination");
+                  } else {
+                    setAccordionExpanded(false);
+                  }
+                }}
+              >
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
                   expandIcon={<GoArrowSmallDown />}
-                  
                 >
                   <Text>Pagination</Text>
                 </AccordionSummary>
@@ -249,11 +347,11 @@ const SettingModal = (props) => {
                       handleChangeMeta={handleChangeMeta}
                       fullWidth={true}
                     />
-                    <Box style={{margin:"auto"}}>
-                    <PaginationComponent
-                      meta={meta}
-                      handleChangeMeta={handleChangeMeta}
-                    />
+                    <Box style={{ margin: "auto" }}>
+                      <PaginationComponent
+                        meta={meta}
+                        handleChangeMeta={handleChangeMeta}
+                      />
                     </Box>
                   </Box>
                 </AccordionDetails>
