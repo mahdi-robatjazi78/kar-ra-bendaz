@@ -22,5 +22,10 @@
         height: 10rem;
       }
     }
+    .selected-setting-layout {
+      @extend %selected-setting;
+    }
+
+
   }
 }

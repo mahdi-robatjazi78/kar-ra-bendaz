@@ -9,8 +9,6 @@ import {
   Checkbox,
   IconButton,
   Tab,
-  Tooltip,
-  Typography,
 } from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
 import DarkLight from "@/components/darkLight";
@@ -27,6 +25,23 @@ import {
 } from "@/redux/features/todoPageConfigSlice";
 import { GiSoundOn, GiSoundOff } from "react-icons/gi";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+import { FaRegSquare } from "react-icons/fa";
+import { FiColumns } from "react-icons/fi";
+import { BsTable } from "react-icons/bs";
+import { TodoContext } from "@/context/todoContext";
+import { CgList } from "react-icons/cg";
+import { MdDoneOutline } from "react-icons/md";
+import useWindowSize from "@/hooks/useWindowSize";
+import SelectMultiColumn from "../mini/selectMultiColumn";
+
+
+
+
+
+
+
+
+
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
   const handleChange = (e, newValue) => {
@@ -34,6 +49,11 @@ const SettingModal = (props) => {
   };
 
   const theme = useContext(ThemeContext);
+  const {
+    show,
+    handlePresentAndFilterTodoLayout,
+    setThreeColAll
+  } = useContext(TodoContext);
   const dispatch = useDispatch();
   const { meta, layout_nav_show } = useSelector(
     (state: RootState) => state.todoPageConfig
@@ -94,6 +114,33 @@ const SettingModal = (props) => {
   const handleChangeMeta = (page, perPage) => {
     dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
   };
+
+
+
+  const sizeName = useWindowSize().sizeName;
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  const handleCloseTodoViewCountTooltip = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenTodoViewCountTooltip = (event) => {
+    if (sizeName !== "mobile") {
+      setAnchorEl(event.currentTarget);
+    } else {
+      setThreeColAll(2);
+      handlePresentAndFilterTodoLayout("3col", 2);
+    }
+  };
+
+
+
+
 
   return (
     <Styled_Modal
@@ -270,35 +317,40 @@ const SettingModal = (props) => {
                   <Text>Settings</Text>
                 </AccordionSummary>
                 <AccordionDetails className="background-style">
-                  <Box className="t-align-center">
+
+                    <Box className="mini-card d-flex" 
+                      onClick={()=>{
+                        if(layout_nav_show){
+
+                          dispatch(hideLayoutNav());
+                        }else{
+                          dispatch(showLayoutNav());
+
+                        }
+                      }}
+                    >
+
                     {layout_nav_show ? (
-                      <Tooltip title="Hide Layout Nav">
                         <IconButton
-                          onClick={() => {
-                            dispatch(hideLayoutNav());
-                          }}
                         >
                           <HiOutlineEyeOff
-                            style={{ color: "var(--text3)" }}
+                            style={{ color:"var(--text3)"}}
                             fontSize={"1.5rem"}
                           />
                         </IconButton>
-                      </Tooltip>
                     ) : (
-                      <Tooltip title="See Layout Nav">
                         <IconButton
-                          onClick={() => {
-                            dispatch(showLayoutNav());
-                          }}
                         >
                           <HiOutlineEye
-                            style={{ color: "var(--text3)" }}
+                            style={{ color:"var(--text3)"}}
                             fontSize={"1.5rem"}
                           />
+
                         </IconButton>
-                      </Tooltip>
                     )}
-                  </Box>
+
+                    <Text>{layout_nav_show ? "Hide Layout Nav" : "Show Layout Nav"}</Text>
+                    </Box>
                 </AccordionDetails>
               </Accordion>
 
@@ -318,11 +370,100 @@ const SettingModal = (props) => {
                 >
                   <Text>Layout</Text>
                 </AccordionSummary>
-                <AccordionDetails className="background-style">
-                  <Text variant="caption">Show Todo Page Sidebar</Text>
-                  <Text variant="caption">Change Todo Page Layout</Text>
+                <AccordionDetails className="background-style2">
+                
+                
+              <Box className="d-flex-around" style={{gap:"1rem"}}>
+                <Box className={`mini-card d-flex ${show[0]==="1col" && "selected-setting-layout"}`} 
+                      onClick={()=>{handlePresentAndFilterTodoLayout("1col")}}
+                  >
+                    <IconButton><FaRegSquare className={`${show[0]==="1col" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
+                    <Text>Single Column</Text>
+                </Box>
+
+                <Box className={`mini-card d-flex ${show[0]==="3col" && "selected-setting-layout"}`} 
+                        onClick={(e) => {
+                          handleOpenTodoViewCountTooltip(e);
+                        }}
+                  >
+                    <IconButton><FiColumns className={`${show[0]==="3col" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
+                    <Text>Multi Column</Text>
+                </Box>
+
+                <Box className={`mini-card d-flex ${show[0]==="table" && "selected-setting-layout"}`} 
+                      onClick={()=>{handlePresentAndFilterTodoLayout("table")}}
+                  >
+                    <IconButton><BsTable className={`${show[0]==="table" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
+                    <Text>Table Mode</Text>
+                </Box>
+              </Box>
+
+
+
+
+              
+              <SelectMultiColumn
+                handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
+                open={open}
+                id={id}
+                anchorEl={anchorEl}
+              />
+
+
+
                 </AccordionDetails>
               </Accordion>
+
+
+
+
+              <Accordion
+                expanded={accordionExpanded === "filter"}
+                onChange={(e, val) => {
+                  if (val) {
+                    setAccordionExpanded("filter");
+                  } else {
+                    setAccordionExpanded(false);
+                  }
+                }}
+              >
+                <AccordionSummary
+                  sx={{ background: "var(--background)" }}
+                  expandIcon={<GoArrowSmallDown />}
+                >
+                  <Text>Filter</Text>
+                </AccordionSummary>
+                <AccordionDetails className="background-style2">
+
+                <Box className="d-flex-around" style={{gap:"1rem"}}>
+                <Box className={`mini-card d-flex ${show[1]==="all" && "selected-setting-layout"}`} 
+                      onClick={()=>{handlePresentAndFilterTodoLayout("all")}}
+                  >
+                    <IconButton><CgList className={`${  show[1] === "all"  ? "icon-styles" : "icon-styles2"}`} /></IconButton>
+                    <Text>All Todos</Text>
+                </Box>
+
+                <Box className={`mini-card d-flex ${ show[1] === "done"  && "selected-setting-layout"}`} 
+                      onClick={()=>{ handlePresentAndFilterTodoLayout("done")}}
+                  >
+                    <IconButton><MdDoneOutline className={`${ show[1] === "done" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
+                    <Text>Done Todos</Text>
+                </Box>
+                </Box>
+
+
+
+                </AccordionDetails>
+                </Accordion>
+
+
+
+
+
+
+
+
+
 
               <Accordion
                 expanded={accordionExpanded === "pagination"}

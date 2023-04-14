@@ -9,18 +9,10 @@
     margin: 3rem 0;
     width:37px;
     .selected-setting {
-      background: var(--sidebar);
-      border-radius: 0.4rem;
-      border: 1px solid orange;
-      cursor: pointer;
+      @extend %selected-setting;
+
       width: 35px;
       height: 35px;
-      margin: 0.6rem auto;
-
-
-     
-
-
       .icon-style {
         margin-top: 7px;
         font-size: 1.2rem;

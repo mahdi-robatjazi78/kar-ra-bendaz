@@ -179,7 +179,7 @@ const TodoPageFooter = (props) => {
 
             {!layout_nav_show ? (
               <Box className="add-new-todo-icon">
-                <Tooltip arrow title="Search">
+                <Tooltip arrow title="Config Layout">
                   <Box
                     className="icon-box"
                     onClick={() => {
@@ -192,7 +192,7 @@ const TodoPageFooter = (props) => {
                     <IconButton>
                       <GrConfigure
                         fontSize=".8rem"
-                        color={theme.isDarkMode ? "black" : "white"}
+                        style={{color:theme.isDarkMode ? "white" : "black"}}
                       />
                     </IconButton>
                   </Box>

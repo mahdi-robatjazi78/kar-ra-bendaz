@@ -13,6 +13,13 @@
   cursor: pointer;
 }
 
+%selected-setting {
+  background: var(--sidebar);
+  border-radius: 0.4rem;
+  border: 1px solid orange;
+  cursor: pointer;
+}
+
 #home-page {
   @extend %font-styles;
   height:100%;
