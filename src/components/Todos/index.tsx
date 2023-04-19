@@ -34,9 +34,10 @@ import {
 } from "@/redux/api/todos";
 import { AppDispatch, RootState } from "@/redux/store";
 import { deactiveBlur } from "@/redux/features/settingSlice";
+import ShowModalNewCategory from "./TodoModals/newCategory";
 
 const Todos = () => {
-  const { show } = useContext(TodoContext);
+  const { show , setThreeColAll } = useContext(TodoContext);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {
@@ -54,6 +55,7 @@ const Todos = () => {
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
   );
+  
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [
     todoAssignRequest,
@@ -65,6 +67,7 @@ const Todos = () => {
   };
   const [categoList, setCategoList] = useState([]);
   const dimentions = useWindowSize().size;
+  const sizeName = useWindowSize().sizeName;
   const [widthBoard, setWidthBoard] = useState(0);
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
 
@@ -177,12 +180,47 @@ const Todos = () => {
     dispatch(SearchModeActive());
   });
 
+
+
+
+
+  useEffect(()=>{
+    if (sizeName === "mobile") {
+      
+      if (show[2] > 2) {
+        setThreeColAll(2);
+      }
+    } else {
+
+      switch (sizeName) {
+        case "tablet":
+          if (show[2] > 3) {
+            setThreeColAll(3);
+          }
+          break;
+        case "laptop":
+          if (show[2] == 6) {
+            setThreeColAll(5);
+          }
+          break;
+        case "pc":
+
+          break;
+        default:
+          break;
+      }
+    }
+  },[sizeName])
+
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box
           display="flex"
-          className={blur.sidebar ? "filterblur" : "filterblurnone"}
+          style={
+          {...(blur.sidebar && {filter:`blur(${blur.size}px)`})}
+          }
         >
           {open && (
             <Sidebar
@@ -196,9 +234,7 @@ const Todos = () => {
               layout_nav_show ? (
 
               <SettingBar
-                showAddCategoryModal={showAddCategoryModal}
                 setShowAddCategoryModal={setShowAddCategoryModal}
-                UpdateOnlyCategories={UpdateOnlyCategories}
               />
               ):null
             }
@@ -206,7 +242,9 @@ const Todos = () => {
 
         </Box>
 
-        <Box className="board">
+        <Box className="board" 
+          
+          >
           <Box
             className="todo-page-box"
             style={
@@ -259,6 +297,7 @@ const Todos = () => {
               SearchModeDeActive={SearchModeDeActive}
               setCloseSidebar={() => dispatch(CloseSidebar())}
               setOpenSidebar={() => dispatch(OpenSidebar())}
+              setShowAddCategoryModal={()=>{setShowAddCategoryModal({ show: true, state: "add", prevText: "" })}} 
             />
           </Box>
         </Box>
@@ -278,6 +317,14 @@ const Todos = () => {
           UpdateTodoAndCategories={UpdateTodoAndCategories}
         />
       ) : null}
+      
+      {showAddCategoryModal.show && (
+        <ShowModalNewCategory
+          setShowAddCategoryModal={setShowAddCategoryModal}
+          showAddCategoryModal={showAddCategoryModal}
+          UpdateOnlyCategories={UpdateOnlyCategories}
+        />
+      )}
     </DndProvider>
   );
 };

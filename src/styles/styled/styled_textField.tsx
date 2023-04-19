@@ -20,10 +20,10 @@ const StyledTextFieldWhite = styled(TextField)`
         border-color: var(--text1) !important;
     } 
     & .Mui-disabled {
-        color: var(--foreground) !important
+        color: var(--disabled) !important
     }
     & .Mui-disabled .MuiOutlinedInput-input {
-        -webkit-text-fill-color: var(--foreground) !important;
+        -webkit-text-fill-color: var(--disabled) !important;
 
     }
 

@@ -1,21 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import ThemeContext from "@context/themeContext";
 import { HiPlus } from "react-icons/hi";
-import styled from "styled-components";
 import {
   Box,
-  FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  // Pagination,
-  Stack,
   Tooltip,
 } from "@mui/material";
-import { FiArrowLeft, FiArrowRight, FiSearch } from "react-icons/fi";
-import StyledPaginationItem from "@/styles/styled/styled_pagination";
-import StyledSelectWhiteComponent from "@/styles/styled/styled_Selectbox";
+import { FiSearch } from "react-icons/fi";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import { VscChromeClose } from "react-icons/vsc";
 import { HiOutlineViewColumns } from "react-icons/hi2";
@@ -34,8 +26,11 @@ import {
 import useDebounce from "@hooks/useDebounce";
 import useWindowSize from "@hooks/useWindowSize";
 import { PaginationComponent, PerPageComponent } from "./paginate";
-import { TfiLayoutSidebar2 } from "react-icons/tfi";
 import { GrConfigure } from "react-icons/gr";
+import FooterButton from "../mini/footerButton";
+import BoxIconsPopop from "../mini/boxIconsPopop";
+import { RiTodoLine } from "react-icons/ri";
+import { MdOutlineCategory } from "react-icons/md";
 
 const TodoPageFooter = (props) => {
   const {
@@ -50,6 +45,7 @@ const TodoPageFooter = (props) => {
     searchMode,
     SearchModeActive,
     SearchModeDeActive,
+    setShowAddCategoryModal
   } = props;
   const dispatch = useDispatch();
 
@@ -85,6 +81,44 @@ const TodoPageFooter = (props) => {
     [searchText],
     600
   );
+
+
+
+
+
+
+
+  const [anchorElBoxIconsPopop, setAnchorElBoxIconsPopop] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const open = Boolean(anchorElBoxIconsPopop);
+  const id = open ? "Box-Icons-Popop" : undefined;
+
+  const handleCloseTodoViewCountTooltip = () => {
+    dispatch(deactiveBlur())
+    setAnchorElBoxIconsPopop(null);
+  };
+
+
+  const handleOpenTodoViewCountTooltip = (event:any) => {
+    setAnchorElBoxIconsPopop(event.currentTarget);
+  };
+
+
+  const AddNewTodoFunction = ()=>{
+    handleCloseTodoViewCountTooltip()
+    setShowModalAddTodo(true)
+
+
+  }
+const AddNewCategoryFunction = ()=>{
+  handleCloseTodoViewCountTooltip()
+  setShowAddCategoryModal()
+
+
+}
+
+
 
   return (
     <Box
@@ -155,83 +189,74 @@ const TodoPageFooter = (props) => {
 
           <Box display="flex" mr={2}>
             {sizeName === "mobile" || sizeName === "tablet" ? (
-              <Box className="add-new-todo-icon">
-                <Tooltip arrow title="Pagination">
-                  <Box
-                    className="icon-box"
-                    onClick={() => {
-                      dispatch(setBlurPage());
-                      dispatch(
-                        handleSettingModalOpen({ setting: "todo-pagination" })
-                      );
-                    }}
-                  >
-                    <IconButton>
-                      <HiOutlineViewColumns
-                        fontSize=".8rem"
-                        color={theme.isDarkMode ? "black" : "white"}
-                      />
-                    </IconButton>
-                  </Box>
-                </Tooltip>
-              </Box>
+              <FooterButton
+                title="Pagination"
+                icon={
+                  <HiOutlineViewColumns
+                    
+                  />
+                }
+                onClick={() => {
+                  dispatch(setBlurPage());
+                  dispatch(
+                    handleSettingModalOpen({ setting: "todo-pagination" })
+                  );
+                }}
+              />
             ) : null}
 
             {!layout_nav_show ? (
-              <Box className="add-new-todo-icon">
-                <Tooltip arrow title="Config Layout">
-                  <Box
-                    className="icon-box"
-                    onClick={() => {
-                      dispatch(setBlurPage());
-                      dispatch(
-                        handleSettingModalOpen({ setting: "todo-layout" })
-                      );
-                    }}
-                  >
-                    <IconButton>
-                      <GrConfigure
-                        fontSize=".8rem"
-                        style={{color:theme.isDarkMode ? "white" : "black"}}
-                      />
-                    </IconButton>
-                  </Box>
-                </Tooltip>
-              </Box>
+              <FooterButton
+                title="Config Layout"
+                icon={
+                  <GrConfigure />
+                }
+                onClick={() => {
+                  dispatch(setBlurPage());
+                  dispatch(handleSettingModalOpen({ setting: "todo-layout" }));
+                }}
+              />
             ) : null}
 
-            <Box className="add-new-todo-icon">
-              <Tooltip arrow title="Search">
-                <Box
-                  className="icon-box"
-                  onClick={() => {
-                    dispatch(SearchModeActive());
-                  }}
-                >
-                  <IconButton>
-                    <FiSearch
-                      fontSize=".8rem"
-                      color={theme.isDarkMode ? "black" : "white"}
-                    />
-                  </IconButton>
-                </Box>
-              </Tooltip>
-            </Box>
-            <Box className="add-new-todo-icon">
-              <Tooltip arrow title="Add New Task">
-                <Box
-                  className="icon-box"
-                  onClick={() => setShowModalAddTodo(true)}
-                >
-                  <IconButton>
-                    <HiPlus
-                      fontSize=".8rem"
-                      color={theme.isDarkMode ? "black" : "white"}
-                    />
-                  </IconButton>
-                </Box>
-              </Tooltip>
-            </Box>
+            <FooterButton
+              title="Search"
+              icon={<FiSearch  />}
+              onClick={() => {
+                dispatch(SearchModeActive());
+              }}
+            />
+
+            <FooterButton
+              title="Add New Todo"
+              icon={<HiPlus />}
+              onClick={(e) => {
+                
+                if(layout_nav_show){
+                  setShowModalAddTodo(true)
+
+                }else{
+                  dispatch(setBlurPage())
+                  handleOpenTodoViewCountTooltip(e) 
+                }
+                
+              
+              }}
+            />
+            <BoxIconsPopop
+             anchorEl={anchorElBoxIconsPopop}
+             
+             open={open}
+            id={id} 
+            handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip} 
+              iconList={[<MdOutlineCategory /> , <RiTodoLine />]}
+              titleList={["Add New Category" , "Add New Todo"]}
+              onClickList={
+              [
+                AddNewCategoryFunction,
+                AddNewTodoFunction
+              ]
+              }
+            />
           </Box>
         </>
       )}

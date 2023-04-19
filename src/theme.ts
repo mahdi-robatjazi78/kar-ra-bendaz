@@ -11,6 +11,7 @@ const themes = {
     text3: "rgb(106 56 227)",
     header: "rgb(40, 44, 52)",
     hoverSuccess: "rgb(0, 152, 0)",
+    disabled:"rgb(165, 165, 165)"
   },
   dark: {
     foreground: "rgb(0,0,0)",
@@ -24,6 +25,8 @@ const themes = {
     text3: "rgb(165, 168, 228)",
     header: "rgb(0, 18, 59)",
     hoverSuccess: "rgb(51, 255, 51)",
+    disabled:"rgb(30, 45, 117)"
+
   },
 };
 

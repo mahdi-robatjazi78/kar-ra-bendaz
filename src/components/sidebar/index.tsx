@@ -1,24 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import themeContext from "@context/themeContext";
 import { useDrop } from "react-dnd";
 import SidebarItem from "./sidebarItem";
-import { Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
+import StyledBadge from "@/styles/styled/styled_badge";
+import Text  from "@/styles/styled/styled_typography";
 
-const Sidebar = (props:any) => {
-  const { categoryList ,totalTodoItems } = props;
+const Sidebar = (props: any) => {
+  const { categoryList, totalTodoItems } = props;
 
   const { active_ws: ActiveWs, active_category: ActiveCategory } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
-  const { headerPosition } = useSelector(
-    (state: RootState) => state.settings
-  );
+  const { headerPosition } = useSelector((state: RootState) => state.settings);
   const dispatch: AppDispatch = useDispatch();
   const theme = useContext(themeContext);
-  
+
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "todo-box",
     drop: (item) => ({ name: "category-box", type: "todo", id: "other" }),
@@ -27,25 +26,6 @@ const Sidebar = (props:any) => {
       canDrop: monitor.canDrop(),
     }),
   }));
-
-  // const showSubset = async () => {
-  //   try {
-  //     const response = await Axios.get(`/category/index?ws=${ActiveWs.id}`);
-  //     setCategoryList(response.data.list);
-  //     updateCategoryOff();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if(ActiveWs?.id){
-  //     showSubset();
-  //   }
-  // }, [ActiveWs.id]);
-
-  // useEffect(() => {
-  //   }
 
   const isActive = canDrop && isOver;
   let borderColor = "";
@@ -67,16 +47,18 @@ const Sidebar = (props:any) => {
           ? {
               height: "calc(100vh - 70px)",
               marginTop: "auto",
+              boxShadow: "1px 3px 4px 3px var(--header)",
             }
           : {
               height: "100vh",
+              boxShadow: "1px 3px 4px 3px var(--header)",
             }
       }
     >
       {ActiveWs?.title && (
-        <Typography className="ws-title" component={"h4"}>
+        <Text className="ws-title" component={"h4"}>
           {ActiveWs?.title}
-        </Typography>
+        </Text>
       )}
 
       {categoryList?.length ? (
@@ -100,13 +82,12 @@ const Sidebar = (props:any) => {
             }}
           >
             <div className="task-title-style">All</div>
-            <div
-        style={{
-        }}
-        className="'task-count-style'"
-      >
-        {totalTodoItems ||""}
-      </div>
+            <div>
+              <StyledBadge
+                style={{ margin: "1.2rem" }}
+                badgeContent={totalTodoItems || "0"}
+              ></StyledBadge>
+            </div>
           </li>
           {categoryList.map((item, index) => (
             <SidebarItem key={item.uuid} item={item} />

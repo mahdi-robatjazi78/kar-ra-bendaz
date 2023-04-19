@@ -51,6 +51,7 @@ export const ThemeContextProvider = ({ children }: any) => {
     text2: "",
     text3: "",
     hoverSuccess: "",
+    disabled:"",
   });
 
   // const darkModeTheme = createTheme(getDesignTokens("dark"));
@@ -97,6 +98,10 @@ export const ThemeContextProvider = ({ children }: any) => {
         "--hoverSuccess",
         themes.dark.hoverSuccess
       );
+      document.documentElement.style.setProperty(
+        "--disabled",
+        themes.dark.disabled
+      );
     }
     if (!isDarkMode) {
       document.documentElement.style.setProperty(
@@ -134,13 +139,16 @@ export const ThemeContextProvider = ({ children }: any) => {
         "--hoverSuccess",
         themes.light.hoverSuccess
       );
+      document.documentElement.style.setProperty(
+        "--disabled",
+        themes.light.disabled
+      );
 
       setSelectedTheme(themes.light);
     }
   }, [isDarkMode]);
 
   const toggleDark = () => {
-    console.log("here . toggle , " ,isDarkMode)
     const localDarkModeRead = JSON.parse(localStorage.getItem("darkmode"));
     if (localDarkModeRead) {
       setLight();
@@ -150,16 +158,17 @@ export const ThemeContextProvider = ({ children }: any) => {
   };
 
   const setDark = () => {
-    console.log("here . go to dark , " ,isDarkMode)
     localStorage.setItem("darkmode", JSON.stringify(true));
     setIsDarkMode(true);
   };
 
   const setLight = () => {
-    console.log("here . go to light , " ,isDarkMode)
     localStorage.setItem("darkmode", JSON.stringify(false));
     setIsDarkMode(false);
   };
+
+
+
 
   return (
     <ThemeContext.Provider

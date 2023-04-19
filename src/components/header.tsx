@@ -56,18 +56,22 @@ const Header = (props) => {
 
   return (
     <motion.header
-      className={`App-header ${blur.head ? "filterblur":"filterblurnone"}`}
+      className={`App-header`}
       style={
         headerPosition === "left" || headerPosition === "right"
           ? {
               width: 70,
               flexDirection: "column",
               height:"100vh",
+              ...(blur.head && {filter:`blur(${blur.size}px)`})
+
             }
           : {
               height: 70,
               flexDirection: "row",
               width:"100vw",
+              ...(blur.head && {filter:`blur(${blur.size}px)`})
+
             }
       }
       initial={

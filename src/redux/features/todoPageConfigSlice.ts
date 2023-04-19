@@ -30,10 +30,6 @@ export interface IMeta {
   total_items: Number | null,
   total_pages: Number | null,
 }
-
-
-
-
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
@@ -45,8 +41,6 @@ export interface ITodoPage {
   meta : IMeta,
   layout_nav_show:Boolean,
 }
-
-
 
 const initialState: ITodoPage = {
   active_ws: {
@@ -73,7 +67,7 @@ const initialState: ITodoPage = {
   searchMode: false,
   searchText: "",
   sidebar_open: true,
-  layout_nav_show:true,
+  layout_nav_show:false,
 };
 
 export const todoPageConfigSlice = createSlice({

@@ -1,3 +1,45 @@
+%footer-icon-box {
+  width: 38px;
+  margin: .8rem .5rem 0.3rem 0.5rem;
+
+  .icon-box {
+    border-radius: 25%;
+    background-color: var(--text1) !important;
+
+    svg {
+      font-size: 1.3rem;
+      color:var(--background);
+
+      path{
+        stroke-width:1;
+        stroke:var(--background);
+        fill:var(--text1);
+      }
+      circle{
+        stroke-width:1;
+        stroke:var(--background);
+        fill:var(--text1);
+      }
+
+      line{
+        stroke-width:1;
+        stroke:var(--background);
+        fill:var(--text1);
+      }
+    }
+  }
+  .icon-box2 {
+    border-radius: 25%;
+    background-color: var(--text1) !important;
+
+    svg {
+      font-size: 1.3rem;
+      color:var(--background);
+    }
+  }
+}
+
+
 #todo-page-container {
   display: flex;
   // width: 100vw;
@@ -37,8 +79,6 @@
     .search-in-todos-box{
       width:50%;
     }
-
-
     .selected-category-box {
       display: flex;
       height: 30px;
@@ -52,18 +92,10 @@
       .close-category {
       }
     }
-    .add-new-todo-icon {
-      width: 38px;
-      margin: .8rem .5rem 0.3rem 0.5rem;
-
-      .icon-box {
-        border-radius: 25%;
-        background-color: var(--text1);
-
-        svg {
-          font-size: 1.3rem;
-        }
-      }
+    .footer-icon-box {
+      @extend %footer-icon-box;
     }
+    
   }
+  
 }

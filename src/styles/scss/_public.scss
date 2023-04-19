@@ -37,6 +37,12 @@
     justify-content: space-around;
     align-items: center;
 }
+.d-flex-around-wrap{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
 .d-flex-center{
     display: flex;
     justify-content: space-center;
@@ -55,10 +61,10 @@
     color:var(--text1);
 }
 .filterblur {
-    filter:blur(5px)
+    filter:blur(var(--app-blur-filter));
 }
 .filterblurnone{
-    filter:blur(0px)
+    filter:blur(0px);
 }
 .highlighted-todo-text{
     background-color:var(--text3);
@@ -96,27 +102,21 @@ code {
     padding: 0 10px;
     border:1px solid var(--text3);
     cursor: pointer;
+    button svg{
+        font-size:1.5rem;
+        color:var(--text3);
+    }
     p{
         font-size:.8rem;
         user-select: none;
-        font-weight: bold;
+        font-weight: 100;
         text-align: center;
+        line-height:2rem;
     }
 }
-.mini-card-active{
-    background-color: var(--sidebar);
-    min-width:120px;
-    max-width:175px;
-    border-radius: 10px;
-    padding: 0 10px;
-    border:1px solid var(--borders);
-    cursor: pointer;
-    p{
-        font-size:.8rem;
-        user-select: none;
-        font-weight: bold;
-        text-align: center;
-    }
+.active-button{
+    background-color: var(--sidebar) !important;
+    border:1px solid var(--borders) !important;
 }
 
 .mini-card:hover{
@@ -124,4 +124,7 @@ code {
 }
 .mini-card.mini-card-active{
     background-color: var(--background);
+}
+.box-icon-popover{
+    @extend %footer-icon-box;
 }

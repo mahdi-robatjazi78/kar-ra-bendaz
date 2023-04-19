@@ -22,17 +22,17 @@ export const TodoContextProvider = ({ children }) => {
   const changeTodoFilterLayout =(f)=>{setTodoFilterLayout((prevConfig)=>({...prevConfig,filter:f }))}
 
   const setThreeColAll = (number: any) => {
-    setTodoListShowStatus(["3col", "all", number]);
+    setTodoListShowStatus(["3col", "all", number ? number :  todoListShowStatus[2]]);
     localStorage.setItem(
       "todoListShowStatusLocal",
-      JSON.stringify(["3col", "all", number])
+      JSON.stringify(["3col", "all", number ? number :  todoListShowStatus[2]])
     );
   };
-  const setThreeColDone = (number: any) => {
-    setTodoListShowStatus(["3col", "done", number]);
+  const setThreeColDone = (number:any) => {
+    setTodoListShowStatus(["3col", "done",  number ? number : todoListShowStatus[2] ]);
     localStorage.setItem(
       "todoListShowStatusLocal",
-      JSON.stringify(["3col", "done", number])
+      JSON.stringify(["3col", "done", number ? number :  todoListShowStatus[2] ])
     );
   };
   const setOneColAll = () => {

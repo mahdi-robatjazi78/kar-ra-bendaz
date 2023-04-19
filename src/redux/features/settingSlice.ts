@@ -4,6 +4,7 @@ interface IBlur {
   head: Boolean;
   body: Boolean;
   sidebar: Boolean;
+  size:Number;
 }
 
 interface ISettingModal {
@@ -22,10 +23,13 @@ const initialState: ISettings = {
     head: false,
     body: false,
     sidebar: false,
+    size:5,
   },
   headerPosition: "top",
   modal: {open:false,config:{setting:""}},
 };
+
+
 
 export const appSettings = createSlice({
   name: "settings",
@@ -36,6 +40,7 @@ export const appSettings = createSlice({
         head: true,
         body: true,
         sidebar: true,
+        size:state.blur.size,
       };
     },
 
@@ -44,6 +49,8 @@ export const appSettings = createSlice({
         head: false,
         body: false,
         sidebar: false,
+        size:state.blur.size,
+
       };
     },
     customBlur: (state, action) => {
@@ -51,6 +58,7 @@ export const appSettings = createSlice({
         head: action?.payload?.head || false,
         body: action?.payload?.body || false,
         sidebar: action?.payload?.sidebar || false,
+        size:action?.payload?.size || 5,
       };
     },
     changeHeaderPosition: (state, action) => {

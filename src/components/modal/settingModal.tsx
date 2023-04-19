@@ -6,6 +6,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
+  ButtonGroup,
   Checkbox,
   IconButton,
   Tab,
@@ -15,7 +17,7 @@ import DarkLight from "@/components/darkLight";
 import ThemeContext from "@context/themeContext";
 import Text from "@/styles/styled/styled_typography";
 import { useDispatch, useSelector } from "react-redux";
-import { GoArrowSmallDown, GoArrowSmallUp } from "react-icons/go";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { RootState } from "@/redux/store";
 import { PaginationComponent, PerPageComponent } from "../Todos/paginate";
 import {
@@ -33,14 +35,12 @@ import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
 import useWindowSize from "@/hooks/useWindowSize";
 import SelectMultiColumn from "../mini/selectMultiColumn";
-
-
-
-
-
-
-
-
+import SettingButton from "../mini/settingButton";
+import StyledButton from "@/styles/styled/styled_button";
+import ButtonGroupSetting from "../mini/buttonGroupSetting";
+import StyledSliderComponent from "@/styles/styled/styled_Slider";
+import { customBlur } from "@/redux/features/settingSlice";
+import useDebounce from "@/hooks/useDebounce";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -49,16 +49,16 @@ const SettingModal = (props) => {
   };
 
   const theme = useContext(ThemeContext);
-  const {
-    show,
-    handlePresentAndFilterTodoLayout,
-    setThreeColAll
-  } = useContext(TodoContext);
-  const dispatch = useDispatch();
-  const { meta, layout_nav_show } = useSelector(
-    (state: RootState) => state.todoPageConfig
+  const { show, handlePresentAndFilterTodoLayout, setThreeColAll } = useContext(
+    TodoContext
   );
-  const { modal } = useSelector((state: RootState) => state.settings);
+  const dispatch = useDispatch();
+  const {
+    meta,
+    layout_nav_show,
+    active_category: ActiveCategory,
+  } = useSelector((state: RootState) => state.todoPageConfig);
+  const { modal , blur } = useSelector((state: RootState) => state.settings);
   const setting = modal.config?.setting;
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
@@ -115,8 +115,6 @@ const SettingModal = (props) => {
     dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
   };
 
-
-
   const sizeName = useWindowSize().sizeName;
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -138,9 +136,37 @@ const SettingModal = (props) => {
     }
   };
 
+  const handleChangeBlurSlider = (
+    newValue: number
+  ) => {
+    if (typeof newValue === "number") {
+      dispatch(
+        customBlur({
+          head: true,
+          body: true,
+          sidebar: true,
+          size: String(newValue / 10),
+        })
+      );
+    }
+  };
 
 
+   const [ blurSliderNewValue ,setBlurSliderNewValue ] = useState(blur?.size)
+ 
 
+      useDebounce(
+        () => {
+         
+          handleChangeBlurSlider(+blurSliderNewValue)
+          
+        },
+        [blurSliderNewValue],
+        600
+      );
+
+ 
+  
 
   return (
     <Styled_Modal
@@ -158,13 +184,14 @@ const SettingModal = (props) => {
             aria-label="setting tabs"
             scrollButtons="auto"
           >
-            <Tab value={0} label="Overal" />
-            <Tab value={1} label="See Shortcuts" />
-            <Tab value={2} label="Todo Page" />
+            <Tab tabIndex={1} value={0} label="Overal" />
+            <Tab tabIndex={2} value={1} label="See Shortcuts" />
+            <Tab tabIndex={3} value={2} label="Todo Page" />
           </StyledTabs>
         </Box>
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
+            <Box>
             <Box className="d-flex-around">
               <Box
                 sx={{
@@ -236,6 +263,30 @@ const SettingModal = (props) => {
                 </Box>
               </Box>
             </Box>
+              
+            <StyledSliderComponent
+                    valueLabelDisplay="auto"
+                    aria-label="pretto slider"
+                    defaultValue={blurSliderNewValue || blur?.size || 50}
+                    onChange={
+                      
+                      (  event: Event,
+                        newValue: number | number[])=>{  
+                          setBlurSliderNewValue(newValue)
+                        }  
+                        
+                    
+                    
+                    }
+
+
+
+                  />
+                  </Box>
+       
+              
+
+          
           ) : settingItem === 1 ? (
             <Box sx={{ padding: "1rem 3rem" }}>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
@@ -301,6 +352,7 @@ const SettingModal = (props) => {
           ) : settingItem === 2 ? (
             <Box>
               <Accordion
+                tabIndex={4}
                 expanded={accordionExpanded === "settings"}
                 onChange={(e, val) => {
                   if (val) {
@@ -312,49 +364,36 @@ const SettingModal = (props) => {
               >
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
-                  expandIcon={<GoArrowSmallDown />}
+                  expandIcon={
+                    <MdOutlineKeyboardArrowDown color="var(--borders)" />
+                  }
                 >
                   <Text>Settings</Text>
                 </AccordionSummary>
-                <AccordionDetails className="background-style">
+                <AccordionDetails className="background-style2">
+                  <SettingButton
+                    icon={
+                      layout_nav_show ? <HiOutlineEyeOff /> : <HiOutlineEye />
+                    }
+                    text={
+                      layout_nav_show ? "Hide Layout Nav" : "Show Layout Nav"
+                    }
+                    active={false}
+                    onClick={() => {
+                      if (layout_nav_show) {
+                        dispatch(hideLayoutNav());
+                      } else {
+                        dispatch(showLayoutNav());
+                      }
+                    }}
+                  />
 
-                    <Box className="mini-card d-flex" 
-                      onClick={()=>{
-                        if(layout_nav_show){
-
-                          dispatch(hideLayoutNav());
-                        }else{
-                          dispatch(showLayoutNav());
-
-                        }
-                      }}
-                    >
-
-                    {layout_nav_show ? (
-                        <IconButton
-                        >
-                          <HiOutlineEyeOff
-                            style={{ color:"var(--text3)"}}
-                            fontSize={"1.5rem"}
-                          />
-                        </IconButton>
-                    ) : (
-                        <IconButton
-                        >
-                          <HiOutlineEye
-                            style={{ color:"var(--text3)"}}
-                            fontSize={"1.5rem"}
-                          />
-
-                        </IconButton>
-                    )}
-
-                    <Text>{layout_nav_show ? "Hide Layout Nav" : "Show Layout Nav"}</Text>
-                    </Box>
+                  
                 </AccordionDetails>
               </Accordion>
 
               <Accordion
+                tabIndex={5}
                 expanded={accordionExpanded === "layout"}
                 onChange={(e, val) => {
                   if (val) {
@@ -366,58 +405,53 @@ const SettingModal = (props) => {
               >
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
-                  expandIcon={<GoArrowSmallDown />}
+                  expandIcon={
+                    <MdOutlineKeyboardArrowDown color="var(--borders)" />
+                  }
                 >
                   <Text>Layout</Text>
                 </AccordionSummary>
-                <AccordionDetails className="background-style2">
-                
-                
-              <Box className="d-flex-around" style={{gap:"1rem"}}>
-                <Box className={`mini-card d-flex ${show[0]==="1col" && "selected-setting-layout"}`} 
-                      onClick={()=>{handlePresentAndFilterTodoLayout("1col")}}
-                  >
-                    <IconButton><FaRegSquare className={`${show[0]==="1col" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
-                    <Text>Single Column</Text>
-                </Box>
+                <AccordionDetails
+                  className="background-style2"
+                  style={{ textAlign: "center" }}
+                >
+                  <ButtonGroupSetting
+                    onClickList={[
+                      () => {
+                        handlePresentAndFilterTodoLayout("1col", null);
+                      },
 
-                <Box className={`mini-card d-flex ${show[0]==="3col" && "selected-setting-layout"}`} 
-                        onClick={(e) => {
-                          handleOpenTodoViewCountTooltip(e);
-                        }}
-                  >
-                    <IconButton><FiColumns className={`${show[0]==="3col" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
-                    <Text>Multi Column</Text>
-                </Box>
+                      (e) => {
+                        handleOpenTodoViewCountTooltip(e);
+                      },
+                      () => {
+                        handlePresentAndFilterTodoLayout("table", null);
+                      },
+                    ]}
+                    textList={["Single Column", "Multi Column", "Table View"]}
+                    iconList={[
+                      <FaRegSquare style={{ marginRight: "10px" }} />,
+                      <FiColumns style={{ marginRight: "10px" }} />,
+                      <BsTable style={{ marginRight: "10px" }} />,
+                    ]}
+                    activeItem={
+                      show[0] === "1col" ? 0 : show[0] === "3col" ? 1 : 2
+                    }
+                  />
 
-                <Box className={`mini-card d-flex ${show[0]==="table" && "selected-setting-layout"}`} 
-                      onClick={()=>{handlePresentAndFilterTodoLayout("table")}}
-                  >
-                    <IconButton><BsTable className={`${show[0]==="table" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
-                    <Text>Table Mode</Text>
-                </Box>
-              </Box>
-
-
-
-
-              
-              <SelectMultiColumn
-                handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
-                open={open}
-                id={id}
-                anchorEl={anchorEl}
-              />
-
-
-
+                  <SelectMultiColumn
+                    handleCloseTodoViewCountTooltip={
+                      handleCloseTodoViewCountTooltip
+                    }
+                    open={open}
+                    id={id}
+                    anchorEl={anchorEl}
+                  />
                 </AccordionDetails>
               </Accordion>
 
-
-
-
               <Accordion
+                tabIndex={6}
                 expanded={accordionExpanded === "filter"}
                 onChange={(e, val) => {
                   if (val) {
@@ -429,74 +463,73 @@ const SettingModal = (props) => {
               >
                 <AccordionSummary
                   sx={{ background: "var(--background)" }}
-                  expandIcon={<GoArrowSmallDown />}
+                  expandIcon={
+                    <MdOutlineKeyboardArrowDown color="var(--borders)" />
+                  }
                 >
                   <Text>Filter</Text>
                 </AccordionSummary>
-                <AccordionDetails className="background-style2">
-
-                <Box className="d-flex-around" style={{gap:"1rem"}}>
-                <Box className={`mini-card d-flex ${show[1]==="all" && "selected-setting-layout"}`} 
-                      onClick={()=>{handlePresentAndFilterTodoLayout("all")}}
-                  >
-                    <IconButton><CgList className={`${  show[1] === "all"  ? "icon-styles" : "icon-styles2"}`} /></IconButton>
-                    <Text>All Todos</Text>
-                </Box>
-
-                <Box className={`mini-card d-flex ${ show[1] === "done"  && "selected-setting-layout"}`} 
-                      onClick={()=>{ handlePresentAndFilterTodoLayout("done")}}
-                  >
-                    <IconButton><MdDoneOutline className={`${ show[1] === "done" ? "icon-styles" : "icon-styles2"}`} /></IconButton>
-                    <Text>Done Todos</Text>
-                </Box>
-                </Box>
-
-
-
-                </AccordionDetails>
-                </Accordion>
-
-
-
-
-
-
-
-
-
-
-              <Accordion
-                expanded={accordionExpanded === "pagination"}
-                onChange={(e, val) => {
-                  if (val) {
-                    setAccordionExpanded("pagination");
-                  } else {
-                    setAccordionExpanded(false);
-                  }
-                }}
-              >
-                <AccordionSummary
-                  sx={{ background: "var(--background)" }}
-                  expandIcon={<GoArrowSmallDown />}
+                <AccordionDetails
+                  className="background-style2"
+                  style={{ textAlign: "center" }}
                 >
-                  <Text>Pagination</Text>
-                </AccordionSummary>
-                <AccordionDetails className="background-style">
-                  <Box className="d-flex-between-wrap">
-                    <PerPageComponent
-                      meta={meta}
-                      handleChangeMeta={handleChangeMeta}
-                      fullWidth={true}
-                    />
-                    <Box style={{ margin: "auto" }}>
-                      <PaginationComponent
-                        meta={meta}
-                        handleChangeMeta={handleChangeMeta}
-                      />
-                    </Box>
-                  </Box>
+                  <ButtonGroupSetting
+                    onClickList={[
+                      () => {
+                        handlePresentAndFilterTodoLayout("all", null);
+                      },
+
+                      () => {
+                        handlePresentAndFilterTodoLayout("done", null);
+                      },
+                    ]}
+                    textList={["All Todos", "Done Todos"]}
+                    iconList={[
+                      <CgList style={{ marginRight: "10px" }} />,
+                      <MdDoneOutline style={{ marginRight: "10px" }} />,
+                    ]}
+                    activeItem={show[1] === "all" ? 0 : 1}
+                  />
                 </AccordionDetails>
               </Accordion>
+
+              {!ActiveCategory.id && (
+                <Accordion
+                  tabIndex={7}
+                  expanded={accordionExpanded === "pagination"}
+                  onChange={(e, val) => {
+                    if (val) {
+                      setAccordionExpanded("pagination");
+                    } else {
+                      setAccordionExpanded(false);
+                    }
+                  }}
+                >
+                  <AccordionSummary
+                    sx={{ background: "var(--background)" }}
+                    expandIcon={
+                      <MdOutlineKeyboardArrowDown color="var(--borders)" />
+                    }
+                  >
+                    <Text>Pagination</Text>
+                  </AccordionSummary>
+                  <AccordionDetails className="background-style2">
+                    <Box className="d-flex-between-wrap">
+                      <PerPageComponent
+                        meta={meta}
+                        handleChangeMeta={handleChangeMeta}
+                        fullWidth={true}
+                      />
+                      <Box style={{ margin: "auto" }}>
+                        <PaginationComponent
+                          meta={meta}
+                          handleChangeMeta={handleChangeMeta}
+                        />
+                      </Box>
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              )}
             </Box>
           ) : (
             <></>

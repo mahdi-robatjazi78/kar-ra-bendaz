@@ -82,6 +82,8 @@ const TodoBox = (props: any) => {
     () => {
       if (searchMode) {
         handleSearchModeShow();
+      }else{
+        setTodoBody(`<span>${body}</span>`);
       }
     },
     [searchMode, searchText],

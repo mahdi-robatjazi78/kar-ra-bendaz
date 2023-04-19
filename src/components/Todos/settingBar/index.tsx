@@ -15,14 +15,10 @@ import useWindowSize from "@/hooks/useWindowSize";
 
 import SelectMultiColumn from '../../mini/selectMultiColumn'
 
-const SettingBar = ({
-  showAddCategoryModal,
-  setShowAddCategoryModal,
-  UpdateOnlyCategories,
-}) => {
+const SettingBar = (props) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const sizeName = useWindowSize().sizeName;
-
+  const {setShowAddCategoryModal} = props
   const {
     show,
     setThreeColAll,
@@ -50,8 +46,9 @@ const SettingBar = ({
     }
   };
 
-  
 
+
+  
   return (
     <Box
       id="setting-bar-container"
@@ -154,13 +151,7 @@ const SettingBar = ({
         </Tooltip>
       </Box>
 
-      {showAddCategoryModal.show && (
-        <ShowModalNewCategory
-          setShowAddCategoryModal={setShowAddCategoryModal}
-          showAddCategoryModal={showAddCategoryModal}
-          UpdateOnlyCategories={UpdateOnlyCategories}
-        />
-      )}
+    
     </Box>
   );
 };
