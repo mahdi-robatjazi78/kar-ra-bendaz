@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledSlider = styled(Slider)({
-  color: "#52af77",
+  color:"var(--sidebar) !important",
   height: 8,
   "& .MuiSlider-track": {
     border: "none",
@@ -11,8 +11,9 @@ const StyledSlider = styled(Slider)({
   "& .MuiSlider-thumb": {
     height: 24,
     width: 24,
-    backgroundColor: "#fff",
-    border: "2px solid currentColor",
+    borderRadius: "10px",
+    backgroundColor: "var(--text3)",
+    border: "1px solid var(--borders)",
     "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
       boxShadow: "inherit",
     },

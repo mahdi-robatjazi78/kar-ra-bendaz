@@ -1,31 +1,48 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import ThemeContext from "../context/themeContext";
 import { Box } from "@mui/material";
-import { BsFillSunFill, BsFillMoonStarsFill } from "react-icons/bs";
+import { BsFillMoonStarsFill } from "react-icons/bs";
+import { getLocalStorageValue } from "@/util/funcs";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
-const DarkLight = (props) => {
-  const { listenFromOs, osTheme } = props;
+
+const DarkLight = () => {
+  const {theme:OsTheme} = useSelector((state:RootState)=>state.settings) 
   const { isDarkMode, toggleDark, setDark, setLight } = useContext(
     ThemeContext
   );
   const handleChangeTheme = () => {
-    if (!listenFromOs) {
+    if (!OsTheme.listen) {
       toggleDark();
     }
   };
   useEffect(() => {
-    if (listenFromOs) {
-      if (osTheme) {
-        setDark();
-      } else {
-        setLight();
+
+    const handleReadListenFromOsTheme =()=>{
+      if (OsTheme.listen) {
+        if (OsTheme.osTheme === "dark") {
+          setDark();
+        } else {
+          setLight();
+        }
       }
     }
-  }, [listenFromOs, osTheme]);
+    
+      window.addEventListener("storage", () => {
+        // When storage changes refetch
+        handleReadListenFromOsTheme();
+      });
+
+  
+  }, [OsTheme]);
+
+
+  
 
 
   return (
-    <Box style={{ cursor: !listenFromOs ? "pointer" : "no-drop" }}>
+    <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop" }}>
       <Box
         onClick={handleChangeTheme}
         style={{

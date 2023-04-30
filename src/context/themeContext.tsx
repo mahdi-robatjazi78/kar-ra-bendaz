@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import themes from "../theme";
+import { getLocalStorageValue, setCommonLocalSettings } from "@/util/funcs";
 
 interface ITheme {
   foreground: string;
@@ -54,10 +55,9 @@ export const ThemeContextProvider = ({ children }: any) => {
     disabled:"",
   });
 
-  // const darkModeTheme = createTheme(getDesignTokens("dark"));
-
   useEffect(() => {
-    setIsDarkMode(JSON.parse(localStorage.getItem("darkmode")!));
+    const localDarkModeRead = getLocalStorageValue("darkmode")
+    setIsDarkMode(localDarkModeRead);
   }, []);
 
   useEffect(() => {
@@ -149,7 +149,8 @@ export const ThemeContextProvider = ({ children }: any) => {
   }, [isDarkMode]);
 
   const toggleDark = () => {
-    const localDarkModeRead = JSON.parse(localStorage.getItem("darkmode"));
+    const localDarkModeRead = getLocalStorageValue('darkmode')
+
     if (localDarkModeRead) {
       setLight();
     } else {
@@ -158,17 +159,14 @@ export const ThemeContextProvider = ({ children }: any) => {
   };
 
   const setDark = () => {
-    localStorage.setItem("darkmode", JSON.stringify(true));
+    setCommonLocalSettings("darkmode",true);
     setIsDarkMode(true);
   };
 
   const setLight = () => {
-    localStorage.setItem("darkmode", JSON.stringify(false));
+    setCommonLocalSettings("darkmode",false);
     setIsDarkMode(false);
   };
-
-
-
 
   return (
     <ThemeContext.Provider

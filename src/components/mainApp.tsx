@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Header from "./header";
 import { useDispatch, useSelector } from "react-redux";
 import RouteBox from "./routeBox";
@@ -12,19 +12,26 @@ import {
   setBlurPage,
   deactiveBlur,
   changeHeaderPosition,
+  handleOsTheme,
 } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
+import {
+  getLocalStorageValue,
+  localStorageSetFirstEssentials,
+  setCommonLocalSettings,
+} from "@/util/funcs";
+import { TodoContext } from "@/context/todoContext";
+
 const Main = () => {
-  const [showBurger, setShowBurger] = useState<boolean>(true);
   const auth = useSelector((state: RootState) => state.auth);
-  const { headerPosition, modal } = useSelector(
+  const { headerPosition, modal, theme: {listen:ListenOsTheme} } = useSelector(
     (state: RootState) => state.settings
   );
   const dispatch = useDispatch();
   const checkProfileDataEssentials = () => {
     if (!auth.token) {
-      const authLocalStorage = JSON.parse(localStorage.getItem("auth"));
+      const authLocalStorage = getLocalStorageValue("auth");
 
       const token = authLocalStorage?.token;
       if (token) {
@@ -46,7 +53,13 @@ const Main = () => {
       }
     }
   };
-  const { toggleDark, setLight, isDarkMode } = useContext(ThemeContext);
+  const {
+    toggleDark,
+    setDark,
+    setLight,
+    isDarkMode: DarkModeContext,
+  } = useContext(ThemeContext);
+  const { setThreeColAll } = useContext(TodoContext);
   checkProfileDataEssentials();
 
   const handleCloseSettingModal = () => {
@@ -77,6 +90,43 @@ const Main = () => {
   useHotkeys("ctrl+shift+keyright", () => {
     dispatch(changeHeaderPosition("right"));
   });
+
+  useEffect(() => {
+    // check and set localstorage default essentials
+    localStorageSetFirstEssentials(dispatch, setThreeColAll);
+  }, [])
+  useEffect(()=>{
+    handleSeeOsDarkMode();
+  },[ListenOsTheme])
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+        handleSeeOsDarkMode();
+    });
+
+  const handleSeeOsDarkMode = () => {
+    const isDarkMode =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme:dark)").matches;
+
+
+
+    if(getLocalStorageValue("theme-read-from-os")){
+
+      if (isDarkMode) {
+        dispatch(handleOsTheme("dark"));
+        if (DarkModeContext !== isDarkMode) {
+          setDark();
+        }
+      } else {
+        dispatch(handleOsTheme("light"));
+        if (DarkModeContext !== isDarkMode) {
+          setLight();
+        }
+      }
+    }
+  };
 
   return (
     <main id="main">

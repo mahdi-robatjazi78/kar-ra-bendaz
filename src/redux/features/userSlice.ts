@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from '../../services/api'
+import { removeLocalSettings } from '@/util/funcs'
 export interface IUserData {
     email:String,
     fname:String,
@@ -37,6 +38,7 @@ export const userSlice = createSlice({
       state.me = action.payload
     },
     LogoutAction :(state , action)=>{
+      removeLocalSettings("auth")
       state.token = null
       state.me = {
         email:null,
@@ -45,6 +47,7 @@ export const userSlice = createSlice({
         lname:null,
         userName:null,
       }
+
     }
     
   },

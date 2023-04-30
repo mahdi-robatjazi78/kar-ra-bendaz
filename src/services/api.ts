@@ -1,3 +1,4 @@
+import { AppDispatch } from './../redux/store';
 import axios from "axios";
 import CustomeHistory from "./customeHistory";
 import withReactContent from "sweetalert2-react-content";
@@ -7,6 +8,7 @@ import UnAuthenticatedModal from "@/components/modal/unAuthenticated";
 import { store } from "@/redux/store";
 import { setBlurPage } from "@/redux/features/settingSlice";
 import { LogoutAction } from "@/redux/features/userSlice";
+import { getLocalStorageValue, removeLocalSettings } from '@/util/funcs';
 
 let base_url :string = `http://localhost:8888` ;
 
@@ -16,10 +18,8 @@ export const handleLogoutUser = async () => {
   try {
     const response = await axios.put(`${base_url}/users/logout`);
     if (response.status === 200) {
-      localStorage.removeItem("auth")
+      removeLocalSettings("auth")
       store.dispatch(LogoutAction())
-    
-    
     }
   } catch (error) {
     console.log(error.response);
@@ -46,7 +46,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function(request) {
-    const auth = JSON.parse(localStorage.getItem("auth"))
+    const auth = getLocalStorageValue("auth")
     request.headers.common["x-auth-token"] = auth.token;
     request.headers.common["Content-Type"] = "application/json";
     if(!auth?.token){

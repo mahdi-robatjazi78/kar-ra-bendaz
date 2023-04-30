@@ -64,6 +64,29 @@
               @extend %box-styles;
               min-height: 6rem;
               max-height: 6rem;
+              border: 2px solid gray;
+              .todoBox{
+                font-size: 1rem;
+                line-height:1rem;
+                color: var(--text1)
+              }
+              
+              .todoBoxDone{
+                font-size: 1rem;
+                line-height:1rem;
+                color:black;
+              }
+
+              .highlighted-todo-text{
+                background-color:var(--text3);
+                color:var(--foreground);
+                letter-spacing: 1px;
+                padding:0 4px;
+                border-radius: 4px;
+                line-height: 1rem;
+              }
+              
+
             }
           }
         }

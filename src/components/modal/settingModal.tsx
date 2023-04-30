@@ -6,10 +6,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
-  ButtonGroup,
   Checkbox,
-  IconButton,
   Tab,
 } from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
@@ -36,11 +33,15 @@ import { MdDoneOutline } from "react-icons/md";
 import useWindowSize from "@/hooks/useWindowSize";
 import SelectMultiColumn from "../mini/selectMultiColumn";
 import SettingButton from "../mini/settingButton";
-import StyledButton from "@/styles/styled/styled_button";
 import ButtonGroupSetting from "../mini/buttonGroupSetting";
 import StyledSliderComponent from "@/styles/styled/styled_Slider";
-import { customBlur } from "@/redux/features/settingSlice";
+import { customBlur, handleListenFromOs } from "@/redux/features/settingSlice";
 import useDebounce from "@/hooks/useDebounce";
+import {
+  getLocalStorageValue,
+  setCommonLocalSettings,
+  setTodoPageLocalSettings,
+} from "@/util/funcs";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -58,7 +59,9 @@ const SettingModal = (props) => {
     layout_nav_show,
     active_category: ActiveCategory,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const { modal , blur } = useSelector((state: RootState) => state.settings);
+  const { modal, blur, theme: OsTheme } = useSelector(
+    (state: RootState) => state.settings
+  );
   const setting = modal.config?.setting;
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
@@ -83,32 +86,17 @@ const SettingModal = (props) => {
     }
   }, [setting]);
 
-  const [listenFromOs, setListenFromOs] = useState(false);
-  const [osTheme, setOsTheme] = useState(false);
-  const handleSeeOsDarkMode = () => {
-    const isDarkMode =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme:dark)").matches;
-    setOsTheme(isDarkMode);
-  };
-
   useEffect(() => {
-    handleSeeOsDarkMode();
-
     return () => {
       setSettingItem(0);
       setAccordionExpanded(false);
     };
   }, []);
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => {
-      handleSeeOsDarkMode();
-    });
 
   const handleChangeListenFromOs = (e) => {
     const listen = e.target.checked;
-    setListenFromOs(listen);
+    setCommonLocalSettings('theme-read-from-os' , listen)
+    dispatch(handleListenFromOs(listen));
   };
 
   const handleChangeMeta = (page, perPage) => {
@@ -136,9 +124,7 @@ const SettingModal = (props) => {
     }
   };
 
-  const handleChangeBlurSlider = (
-    newValue: number
-  ) => {
+  const handleChangeBlurSlider = (newValue: number) => {
     if (typeof newValue === "number") {
       dispatch(
         customBlur({
@@ -151,22 +137,18 @@ const SettingModal = (props) => {
     }
   };
 
+  const [blurSliderNewValue, setBlurSliderNewValue] = useState(
+    getLocalStorageValue("blur-size") || +blur?.size * 10 || 50
+  );
 
-   const [ blurSliderNewValue ,setBlurSliderNewValue ] = useState(blur?.size)
- 
-
-      useDebounce(
-        () => {
-         
-          handleChangeBlurSlider(+blurSliderNewValue)
-          
-        },
-        [blurSliderNewValue],
-        600
-      );
-
- 
-  
+  useDebounce(
+    () => {
+      handleChangeBlurSlider(+blurSliderNewValue);
+      setCommonLocalSettings("blur-size", +blurSliderNewValue);
+    },
+    [blurSliderNewValue],
+    600
+  );
 
   return (
     <Styled_Modal
@@ -186,37 +168,84 @@ const SettingModal = (props) => {
           >
             <Tab tabIndex={1} value={0} label="Overal" />
             <Tab tabIndex={2} value={1} label="See Shortcuts" />
-            <Tab tabIndex={3} value={2} label="Todo Page" />
+            {
+              window.location.pathname === "/todos" && ( 
+                <Tab tabIndex={3} value={2} label="Todo Page" />
+              )
+            }
           </StyledTabs>
         </Box>
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
             <Box>
-            <Box className="d-flex-around">
-              <Box
-                sx={{
-                  backgroundColor: theme.isDarkMode
-                    ? theme.header
-                    : theme.sidebar,
-                }}
-                className="box"
-              >
-                {" "}
-                <Box className="head">Sound</Box>
-                <Box className="body">
-                  <Box className="flex-central">
-                    <GiSoundOn
-                      fontSize={"2rem"}
-                      style={{
-                        color: "var(--text3)",
-                      }}
-                    />
-                    <GiSoundOff
-                      fontSize={"2rem"}
-                      style={{
-                        color: "var(--text3)",
-                      }}
-                    />
+              <Box className="d-flex-around">
+                <Box
+                  sx={{
+                    backgroundColor: theme.isDarkMode
+                      ? theme.header
+                      : theme.sidebar,
+                  }}
+                  className="box"
+                >
+                  {" "}
+                  <Box className="head">Sound</Box>
+                  <Box className="body">
+                    <Box className="flex-central">
+                      <GiSoundOn
+                        fontSize={"2rem"}
+                        style={{
+                          color: "var(--text3)",
+                        }}
+                      />
+                      <GiSoundOff
+                        fontSize={"2rem"}
+                        style={{
+                          color: "var(--text3)",
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box
+                  sx={{
+                    backgroundColor: theme.isDarkMode
+                      ? theme.header
+                      : theme.sidebar,
+                  }}
+                  className="box"
+                >
+                  {" "}
+                  <Box className="head">Theme</Box>
+                  <Box className="body">
+                    <Box className="flex-central">
+                      <DarkLight />
+                    </Box>
+                    <Box>
+                      <Checkbox
+                        checked={OsTheme.listen}
+                        onChange={handleChangeListenFromOs}
+                      />{" "}
+                      <Text variant="caption" selectable={false}>
+                        {" "}
+                        Listen to os{" "}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    backgroundColor: theme.isDarkMode
+                      ? theme.header
+                      : theme.sidebar,
+                  }}
+                  className="box"
+                >
+                  <Box className="head">Header</Box>
+                  <Box className="body">
+                    <Box className="flex-central">
+                      <HeaderPosition />
+                    </Box>
                   </Box>
                 </Box>
               </Box>
@@ -227,66 +256,21 @@ const SettingModal = (props) => {
                     ? theme.header
                     : theme.sidebar,
                 }}
-                className="box"
+                className="blurBox"
               >
-                {" "}
-                <Box className="head">Theme</Box>
+                <Box className="head">Blur</Box>
                 <Box className="body">
-                  <Box className="flex-central">
-                    <DarkLight listenFromOs={listenFromOs} osTheme={osTheme} />
-                  </Box>
-                  <Box>
-                    <Checkbox
-                      checked={listenFromOs}
-                      onChange={handleChangeListenFromOs}
-                    />{" "}
-                    <Text variant="caption" selectable={false}>
-                      {" "}
-                      Listen to os{" "}
-                    </Text>
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  backgroundColor: theme.isDarkMode
-                    ? theme.header
-                    : theme.sidebar,
-                }}
-                className="box"
-              >
-                <Box className="head">Header Position</Box>
-                <Box className="body">
-                  <Box className="flex-central">
-                    <HeaderPosition />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-              
-            <StyledSliderComponent
+                  <StyledSliderComponent
                     valueLabelDisplay="auto"
                     aria-label="pretto slider"
                     defaultValue={blurSliderNewValue || blur?.size || 50}
-                    onChange={
-                      
-                      (  event: Event,
-                        newValue: number | number[])=>{  
-                          setBlurSliderNewValue(newValue)
-                        }  
-                        
-                    
-                    
-                    }
-
-
-
+                    onChange={(event: Event, newValue: number) => {
+                      setBlurSliderNewValue(newValue);
+                    }}
                   />
-                  </Box>
-       
-              
-
-          
+                </Box>
+              </Box>
+            </Box>
           ) : settingItem === 1 ? (
             <Box sx={{ padding: "1rem 3rem" }}>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
@@ -387,8 +371,6 @@ const SettingModal = (props) => {
                       }
                     }}
                   />
-
-                  
                 </AccordionDetails>
               </Accordion>
 

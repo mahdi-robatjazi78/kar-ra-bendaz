@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../services/api";
+// import { getLocalStorageValue, setTodoPageLocalSettings } from "@/util/funcs";
 
 export interface IActiveWs {
   id: String | null;
@@ -164,6 +165,7 @@ export const todoPageConfigSlice = createSlice({
       state.layout_nav_show = true;
     },
     hideLayoutNav:(state)=>{
+      
       state.layout_nav_show = false;
     }
   },

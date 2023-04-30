@@ -44,15 +44,15 @@ const RouteBox = () => {
 
   return (
     <Box
-      style={
-        { 
+      style=
+      {
+        {
           ...(blur.body && {filter:`blur(${blur.size}px)`}),
           width:"100%"
         }
       }
-    
-    >
-    <Routes>
+      >
+      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route
         path="signup"
@@ -65,7 +65,6 @@ const RouteBox = () => {
       />
       <Route path="login" element={<Login />} />
       <Route path="profile" element={<Profile />} />
-
       <Route path="todos" element={<Todos />} />
       <Route path="notes" element={<NoteBoard />} />
     </Routes>

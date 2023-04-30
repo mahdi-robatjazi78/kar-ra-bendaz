@@ -1,12 +1,13 @@
 import React, { useState, createContext } from "react";
 import { ITodoLayoutConfig } from "../types/types";
+import { getLocalStorageValue, setTodoPageLocalSettings } from "@/util/funcs";
 
 export const TodoContext = createContext<ITodoLayoutConfig | null>(null);
 
 export const TodoContextProvider = ({ children }) => {
-  const savedTodoPageState = JSON.parse(
-    localStorage.getItem("todoListShowStatusLocal")
-  );
+  const savedTodoPageState = getLocalStorageValue("todoPage.layout");
+
+
 
   const [todoListShowStatus, setTodoListShowStatus] = useState<
     ITodoLayoutConfig["show"]
@@ -23,44 +24,44 @@ export const TodoContextProvider = ({ children }) => {
 
   const setThreeColAll = (number: any) => {
     setTodoListShowStatus(["3col", "all", number ? number :  todoListShowStatus[2]]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["3col", "all", number ? number :  todoListShowStatus[2]])
+    setTodoPageLocalSettings(
+      "layout",
+      ["3col", "all", number ? number :  todoListShowStatus[2]]
     );
   };
   const setThreeColDone = (number:any) => {
     setTodoListShowStatus(["3col", "done",  number ? number : todoListShowStatus[2] ]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["3col", "done", number ? number :  todoListShowStatus[2] ])
+    setTodoPageLocalSettings(
+      "layout",
+      ["3col", "done", number ? number :  todoListShowStatus[2] ]
     );
   };
   const setOneColAll = () => {
     setTodoListShowStatus(["1col", "all", null]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["1col", "all", null])
+    setTodoPageLocalSettings(
+      "layout",
+      ["1col", "all", null]
     );
   };
   const setOneColDone = () => {
     setTodoListShowStatus(["1col", "done", null]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["1col", "done", null])
+    setTodoPageLocalSettings(
+      "layout",
+      ["1col", "done", null]
     );
   };
   const setTableAll = () => {
     setTodoListShowStatus(["table", "all", null]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["table", "all", null])
+    setTodoPageLocalSettings(
+      "layout",
+      ["table", "all", null]
     );
   };
   const setTableDone = () => {
     setTodoListShowStatus(["table", "done", null]);
-    localStorage.setItem(
-      "todoListShowStatusLocal",
-      JSON.stringify(["table", "done", null])
+    setTodoPageLocalSettings(
+      "layout",
+      ["table", "done", null]
     );
   };
   const handlePresentAndFilterTodoLayout = (id: string, n = null) => {

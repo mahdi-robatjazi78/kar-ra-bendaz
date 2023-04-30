@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import ThemeContext, { ThemeContextProvider } from "@context/themeContext";
@@ -29,4 +30,4 @@ function App() {
   );
 }
 
-export default App;
+export default hot(App);

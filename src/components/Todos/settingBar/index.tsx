@@ -15,7 +15,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 
 import SelectMultiColumn from '../../mini/selectMultiColumn'
 
-const SettingBar = (props) => {
+const SettingBar = (props:any) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const sizeName = useWindowSize().sizeName;
   const {setShowAddCategoryModal} = props
@@ -24,7 +24,6 @@ const SettingBar = (props) => {
     setThreeColAll,
     handlePresentAndFilterTodoLayout,
   } = useContext(TodoContext);
-
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -36,7 +35,6 @@ const SettingBar = (props) => {
     setAnchorEl(null);
   };
 
-
   const handleOpenTodoViewCountTooltip = (event) => {
     if (sizeName !== "mobile") {
       setAnchorEl(event.currentTarget);
@@ -46,9 +44,6 @@ const SettingBar = (props) => {
     }
   };
 
-
-
-  
   return (
     <Box
       id="setting-bar-container"

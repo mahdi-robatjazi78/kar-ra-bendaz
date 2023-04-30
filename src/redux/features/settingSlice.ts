@@ -1,5 +1,8 @@
+import { getLocalStorageValue } from "@/util/funcs";
 import { createSlice } from "@reduxjs/toolkit";
-import { store } from "@/redux/store";
+
+// const hPos = getLocalStorageValue("header-pos")
+
 interface IBlur {
   head: Boolean;
   body: Boolean;
@@ -12,10 +15,16 @@ interface ISettingModal {
   config:{setting:String};
 }
 
+interface ITheme {
+  osTheme : String,  // dark | light | "",
+  listen: boolean,
+}
+
 interface ISettings {
   blur: IBlur;
   headerPosition: String;
   modal: ISettingModal;
+  theme:ITheme,
 }
 
 const initialState: ISettings = {
@@ -26,7 +35,9 @@ const initialState: ISettings = {
     size:5,
   },
   headerPosition: "top",
+  // headerPosition: hPos ? hPos : "top",
   modal: {open:false,config:{setting:""}},
+  theme:{osTheme : "" ,listen:false }
 };
 
 
@@ -69,10 +80,17 @@ export const appSettings = createSlice({
       state.modal.config.setting = action?.payload?.setting || "" ;
     },
     handleSettingModalClose: (state) => {
-      // store.dispatch(deactiveBlur())
       state.modal.open = false;
       state.modal.config.setting = "";
     },
+
+    handleOsTheme:(state,action)=>{
+      state.theme.osTheme = action.payload  ;
+    },
+    handleListenFromOs :(state,action)=>{
+      state.theme.listen = action.payload;
+    }
+
   },
 });
 
@@ -83,6 +101,8 @@ export const {
   changeHeaderPosition,
   handleSettingModalOpen,
   handleSettingModalClose,
+  handleOsTheme,
+  handleListenFromOs
 } = appSettings.actions;
 
 

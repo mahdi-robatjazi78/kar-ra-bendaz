@@ -25,12 +25,16 @@ import { motion } from "framer-motion"
 import { useDispatch } from "react-redux";
 import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 import StyledTextFieldWhite from '@/styles/styled/styled_textField'
+import { setCommonLocalSettings } from "@/util/funcs";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const Login = () => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const {headerPosition} = useSelector((state:RootState)=>state.settings)
   const YupObjectValidationFields = Yup.object({}).shape({
     username: Yup.string()
       .min(3, "Must Greater than 3 charachters")
@@ -70,12 +74,12 @@ const Login = () => {
           email ,fname,lname ,gender , userName,
         }))
         
-        localStorage.setItem("auth" , JSON.stringify({
+        setCommonLocalSettings("auth" , {
           token : token,
           me:{
             email ,fname,lname ,gender , userName,
           }
-        }))
+        })
 
         navigate("/");
         Toast(response.data.msg);
@@ -102,15 +106,11 @@ const Login = () => {
             transition={{ ease: "easeOut", duration: .3}}
 
             className="container">
-              <Avatar sx={{ mt: "3em", bgcolor: theme.borders }}>
-                {/* <LockOutlinedIcon /> */}
+              <Avatar>
               </Avatar>
               <Typography
                 component="h1"
                 variant="h5"
-                style={{ color: theme.text1,
-                  userSelect:"none"
-                }}
               >
                 Login
               </Typography>
@@ -121,6 +121,7 @@ const Login = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <StyledTextFieldWhite
+                      tabIndex={1}
                       className={
                         formik.touched.password && formik.errors.username
                           ? "errorStateField"
@@ -156,6 +157,7 @@ const Login = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <StyledTextFieldWhite
+                      tabIndex={2}
                       className={
                         formik.errors.password && formik.touched.password
                           ? "errorStateField"
@@ -217,6 +219,7 @@ const Login = () => {
 
 
                 <StyledButton
+                  tabIndex={3}
                   type="submit"
                   variant="outlined"
                   disabled={formik.errors.password || formik.errors.username}

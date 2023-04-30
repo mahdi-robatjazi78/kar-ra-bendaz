@@ -168,7 +168,6 @@ const TodoBox = (props: any) => {
             flag === "isDone"
               ? "rgb(163, 206, 168)"
               : "rgba( 255, 255, 255, 0.25 )",
-          border: "2px solid gray",
         }}
         onClick={() => {
           dispatch(DrawerOpen({ state: "todo", item: todos[index] }));
@@ -182,10 +181,7 @@ const TodoBox = (props: any) => {
           }}
         >
           <div
-            style={{
-              fontSize: 14,
-              color: flag === "isDone" ? "black" : theme.text1,
-            }}
+            className={ flag === "isDone"  ?`todoBoxDone f-f-r-dongle` :"todoBox f-f-r-dongle"}
             dangerouslySetInnerHTML={{
               __html: todoBody,
             }}

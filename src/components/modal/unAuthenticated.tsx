@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react'
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { handleLogoutUser } from '@/services/api';
 import CustomeHistory from '@/services/customeHistory';
 import { store } from '@/redux/store';
 import { deactiveBlur, setBlurPage } from '@/redux/features/settingSlice';
+import { getLocalStorageValue } from '@/util/funcs';
 
 
 const UnAuthenticatedModal = () => {
   const MySwal = withReactContent(Swal);
   
   const showAlertExpirationAccout = () => {
-    const darkMode = JSON.parse(localStorage.getItem("darkmode"));
+    const darkMode = getLocalStorageValue("auth")
 
     MySwal.fire({
       title: "Expiration Token",

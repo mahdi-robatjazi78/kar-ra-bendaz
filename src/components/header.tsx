@@ -20,6 +20,7 @@ import {useDispatch , useSelector} from 'react-redux'
 import { AppDispatch, RootState } from "@/redux/store";
 import { AiFillSetting } from "react-icons/ai";
 import {Styled_Menu ,Styled_Menu_Item} from "@/styles/styled/styled_menu";
+import { removeLocalSettings } from "@/util/funcs";
 
 const Header = (props) => {
   const {handleOpenSettingModal} = props;
@@ -43,7 +44,7 @@ const Header = (props) => {
     try {
       const response = await axios.put(`${base_url}/users/logout`);
       if (response.status === 200) {
-        localStorage.removeItem("auth")
+        removeLocalSettings("auth")
         handleClose()
         dispatch(LogoutAction())
         navigate("/login");

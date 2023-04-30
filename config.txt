@@ -1,0 +1,19 @@
+checkAndSetConfigEssentials()
+
+"local storage config"
+
+config : {
+    auth : JSON,
+    darkmode : Boolean,
+    use-sound : Boolean,
+    header-pos : String,
+    blur-size: String,
+    theme-read-from-os:Boolean,
+
+    todoPage:{
+        layout : Array,
+        show-layout-nav : Boolean,
+        show-sidebar : Boolean,
+        filter : String,
+    }
+}
