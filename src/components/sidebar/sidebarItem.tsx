@@ -81,14 +81,14 @@ const SidebarItem = (props: any) => {
             : "task-title-style"
         }`}
       >
-        {truncateText(item.title , 17)}
+        {truncateText(item.title, 17)}
       </div>
-      <div
-        style={{
-          width: item.task_count.length > 1 ? "fit-content" : "1.2rem",
-        }}
-      >
-        <StyledBadge badgeContent={item.task_count || "0"}></StyledBadge>
+      <div>
+        <StyledBadge
+          bordered={ActiveCategory.id && ActiveCategory.id === item.uuid}
+          style={{ margin: "1.2rem" }}
+          badgeContent={item.task_count || "0"}
+        ></StyledBadge>
       </div>
     </li>
   );

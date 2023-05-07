@@ -37,7 +37,7 @@ import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 
 const Todos = () => {
-  const { show , setThreeColAll } = useContext(TodoContext);
+  const { show, setThreeColAll } = useContext(TodoContext);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {
@@ -50,17 +50,15 @@ const Todos = () => {
     sidebar_open: open,
     searchMode,
     meta,
-    layout_nav_show
+    layout_nav_show,
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
   );
-  
+
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
-  const [
-    todoAssignRequest,
-    todoAssignResponse,
-  ] = useTodoAssignToCategoryMutation();
+  const [todoAssignRequest, todoAssignResponse] =
+    useTodoAssignToCategoryMutation();
   const [todoList, setTodoList] = useState([]);
   const emptyTodoList = () => {
     setTodoList([]);
@@ -77,10 +75,8 @@ const Todos = () => {
     prevText: "",
   });
 
-  const [
-    triggerGetCategoryIndex,
-    categoryResponse,
-  ] = useLazyGetCategoryIndexQuery();
+  const [triggerGetCategoryIndex, categoryResponse] =
+    useLazyGetCategoryIndexQuery();
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
 
@@ -94,12 +90,14 @@ const Todos = () => {
       .unwrap()
       .then((resp) => {
         setTodoList(resp?.todos);
-        dispatch(handleChangeMetaItem({
-          page: + resp?.meta?.page,
-          limit: + resp?.meta?.limit,
-          total_items: + resp?.meta?.total_items,
-          total_pages: + resp?.meta?.total_pages,
-        }))
+        dispatch(
+          handleChangeMetaItem({
+            page: +resp?.meta?.page,
+            limit: +resp?.meta?.limit,
+            total_items: +resp?.meta?.total_items,
+            total_pages: +resp?.meta?.total_pages,
+          })
+        );
       });
   };
   const UpdateOnlyCategories = () => {
@@ -114,9 +112,9 @@ const Todos = () => {
     UpdateOnlyCategories();
   };
 
-  useEffect(()=>{
-    UpdateOnlyTodos(meta?.page,meta?.limit)
-  },[meta.page , meta.limit])
+  useEffect(() => {
+    UpdateOnlyTodos(meta?.page, meta?.limit);
+  }, [meta.page, meta.limit]);
 
   const DeleteTodoOperation = () => {
     todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID });
@@ -154,23 +152,8 @@ const Todos = () => {
   }, [GetOutFromTodoPage]);
 
   const handleChangeMeta = (page, perPage) => {
-    dispatch(handleChangeMetaItem({ page: page, limit: perPage }))
+    dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
   };
-
-  useEffect(() => {
-    // for handeling dimentions of todo board
-    let wb = dimentions[0];
-    if (wb) {
-      let b = wb - (open ? 270 : 40);
-      setWidthBoard(b);
-    }
-
-    if (wb < 550) {
-      if (open) {
-        dispatch(CloseSidebar());
-      }
-    }
-  }, [dimentions, open]);
 
   useHotkeys("alt+n", () => setShowModalAddTodo(true));
   useHotkeys("alt+c", () =>
@@ -180,18 +163,12 @@ const Todos = () => {
     dispatch(SearchModeActive());
   });
 
-
-
-
-
-  useEffect(()=>{
+  useEffect(() => {
     if (sizeName === "mobile") {
-      
       if (show[2] > 2) {
         setThreeColAll(2);
       }
     } else {
-
       switch (sizeName) {
         case "tablet":
           if (show[2] > 3) {
@@ -204,23 +181,23 @@ const Todos = () => {
           }
           break;
         case "pc":
-
           break;
         default:
           break;
       }
     }
-  },[sizeName])
-
+  }, [sizeName]);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
         <Box
-          display="flex"
-          style={
-          {...(blur.sidebar && {filter:`blur(${blur.size}px)`})}
-          }
+          className={`${
+            sizeName === "mobile" || sizeName === "tablet"
+              ? "parent-ghost-sidebar"
+              : "parent-normal-sidebar"
+          }`}
+          style={{ ...(blur.sidebar && { filter: `blur(${blur.size}px)` }) }}
         >
           {open && (
             <Sidebar
@@ -229,22 +206,18 @@ const Todos = () => {
             />
           )}
 
-
-            {
-              layout_nav_show ? (
-
-              <SettingBar
-                setShowAddCategoryModal={setShowAddCategoryModal}
-              />
-              ):null
-            }
-
-
+          {layout_nav_show ? (
+            <SettingBar setShowAddCategoryModal={setShowAddCategoryModal} />
+          ) : null}
         </Box>
+        {(sizeName === "mobile" || sizeName === "tablet") &&
+          layout_nav_show && (
+            <Box className="empty-space">
+              {/* empty space for fix layout */}
+            </Box>
+          )}
 
-        <Box className="board" 
-          
-          >
+        <Box className="board">
           <Box
             className="todo-page-box"
             style={
@@ -297,7 +270,13 @@ const Todos = () => {
               SearchModeDeActive={SearchModeDeActive}
               setCloseSidebar={() => dispatch(CloseSidebar())}
               setOpenSidebar={() => dispatch(OpenSidebar())}
-              setShowAddCategoryModal={()=>{setShowAddCategoryModal({ show: true, state: "add", prevText: "" })}} 
+              setShowAddCategoryModal={() => {
+                setShowAddCategoryModal({
+                  show: true,
+                  state: "add",
+                  prevText: "",
+                });
+              }}
             />
           </Box>
         </Box>
@@ -317,7 +296,7 @@ const Todos = () => {
           UpdateTodoAndCategories={UpdateTodoAndCategories}
         />
       ) : null}
-      
+
       {showAddCategoryModal.show && (
         <ShowModalNewCategory
           setShowAddCategoryModal={setShowAddCategoryModal}

@@ -40,6 +40,7 @@ import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 import { useDispatch } from "react-redux";
 import {StyledTableCell,StyledTableRow}  from '@/styles/styled/styled_table'
 import StyledTabs from "@/styles/styled/styled_tabs";
+import Styled_Standard_Textfield from "@/styles/styled/styled_standard_textfield";
 
 
 
@@ -124,8 +125,8 @@ const AddOrSearchUi = (props) => {
   };
 
   return (
-    <Box>
-      <TextField
+    <Box> 
+      <Styled_Standard_Textfield
         autoFocus
         InputLabelProps={{ shrink: true }}
         type="text"

@@ -1,6 +1,6 @@
 %footer-icon-box {
   width: 38px;
-  margin: .8rem .5rem 0.3rem 0.5rem;
+  margin: 0.8rem 0.5rem 0.3rem 0.5rem;
 
   .icon-box {
     border-radius: 25%;
@@ -8,23 +8,23 @@
 
     svg {
       font-size: 1.3rem;
-      color:var(--background);
+      color: var(--background);
 
-      path{
-        stroke-width:1;
-        stroke:var(--background);
-        fill:var(--text1);
+      path {
+        stroke-width: 1;
+        stroke: var(--background);
+        fill: var(--text1);
       }
-      circle{
-        stroke-width:1;
-        stroke:var(--background);
-        fill:var(--text1);
+      circle {
+        stroke-width: 1;
+        stroke: var(--background);
+        fill: var(--text1);
       }
 
-      line{
-        stroke-width:1;
-        stroke:var(--background);
-        fill:var(--text1);
+      line {
+        stroke-width: 1;
+        stroke: var(--background);
+        fill: var(--text1);
       }
     }
   }
@@ -34,16 +34,28 @@
 
     svg {
       font-size: 1.3rem;
-      color:var(--background);
+      color: var(--background);
     }
   }
 }
 
-
 #todo-page-container {
   display: flex;
-  // width: 100vw;
-  position:relative;  
+  position: relative;
+
+  .parent-ghost-sidebar {
+    display: flex;
+    position: absolute;
+    z-index: 2;
+  }
+  .parent-normal-sidebar {
+    display: flex;
+  }
+  .empty-space {
+    height: 100%;
+    min-width: 2.5rem;
+  }
+
   .board {
     color: var(--text1);
     display: flex;
@@ -56,7 +68,7 @@
       .todo-list {
         overflow-y: auto;
         width: 100%;
-        
+
         #todo-grid-list {
           padding: 1rem;
           .todo-box-grid {
@@ -65,28 +77,26 @@
               min-height: 6rem;
               max-height: 6rem;
               border: 2px solid gray;
-              .todoBox{
+              .todoBox {
                 font-size: 1rem;
-                line-height:1rem;
-                color: var(--text1)
-              }
-              
-              .todoBoxDone{
-                font-size: 1rem;
-                line-height:1rem;
-                color:black;
+                line-height: 1rem;
+                color: var(--text1);
               }
 
-              .highlighted-todo-text{
-                background-color:var(--text3);
-                color:var(--foreground);
+              .todoBoxDone {
+                font-size: 1rem;
+                line-height: 1rem;
+                color: black;
+              }
+
+              .highlighted-todo-text {
+                background-color: var(--text3);
+                color: var(--foreground);
                 letter-spacing: 1px;
-                padding:0 4px;
+                padding: 0 4px;
                 border-radius: 4px;
                 line-height: 1rem;
               }
-              
-
             }
           }
         }
@@ -99,8 +109,8 @@
     height: 60px;
     display: flex;
 
-    .search-in-todos-box{
-      width:50%;
+    .search-in-todos-box {
+      width: 50%;
     }
     .selected-category-box {
       display: flex;
@@ -118,7 +128,5 @@
     .footer-icon-box {
       @extend %footer-icon-box;
     }
-    
   }
-  
 }

@@ -68,7 +68,7 @@ const initialState: ITodoPage = {
   searchMode: false,
   searchText: "",
   sidebar_open: true,
-  layout_nav_show:false,
+  layout_nav_show:true,
 };
 
 export const todoPageConfigSlice = createSlice({
