@@ -22,6 +22,7 @@ const Burger = () => {
 
   const handleClickBurger = () => {
     if (location.pathname !== "/todos") {
+      dispatch(OpenSidebar());
       navigate("/todos");
     }
 

@@ -1,12 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import ThemeContext from "@context/themeContext";
 import { HiPlus } from "react-icons/hi";
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  Tooltip,
-} from "@mui/material";
+import { Box, IconButton, InputAdornment, Tooltip } from "@mui/material";
 import { FiSearch } from "react-icons/fi";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import { VscChromeClose } from "react-icons/vsc";
@@ -31,6 +25,7 @@ import FooterButton from "../mini/footerButton";
 import BoxIconsPopop from "../mini/boxIconsPopop";
 import { RiTodoLine } from "react-icons/ri";
 import { MdOutlineCategory } from "react-icons/md";
+import PlusIcon from "@/styles/styled/plusIcon";
 
 const TodoPageFooter = (props) => {
   const {
@@ -45,11 +40,10 @@ const TodoPageFooter = (props) => {
     searchMode,
     SearchModeActive,
     SearchModeDeActive,
-    setShowAddCategoryModal
+    setShowAddCategoryModal,
   } = props;
   const dispatch = useDispatch();
 
-  const theme = useContext(ThemeContext);
   const sizeName = useWindowSize().sizeName;
 
   const { searchText, layout_nav_show } = useSelector(
@@ -82,43 +76,30 @@ const TodoPageFooter = (props) => {
     600
   );
 
-
-
-
-
-
-
-  const [anchorElBoxIconsPopop, setAnchorElBoxIconsPopop] = React.useState<HTMLButtonElement | null>(
-    null
-  );
+  const [
+    anchorElBoxIconsPopop,
+    setAnchorElBoxIconsPopop,
+  ] = React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorElBoxIconsPopop);
   const id = open ? "Box-Icons-Popop" : undefined;
 
   const handleCloseTodoViewCountTooltip = () => {
-    dispatch(deactiveBlur())
+    dispatch(deactiveBlur());
     setAnchorElBoxIconsPopop(null);
   };
 
-
-  const handleOpenTodoViewCountTooltip = (event:any) => {
+  const handleOpenTodoViewCountTooltip = (event: any) => {
     setAnchorElBoxIconsPopop(event.currentTarget);
   };
 
-
-  const AddNewTodoFunction = ()=>{
-    handleCloseTodoViewCountTooltip()
-    setShowModalAddTodo(true)
-
-
-  }
-const AddNewCategoryFunction = ()=>{
-  handleCloseTodoViewCountTooltip()
-  setShowAddCategoryModal()
-
-
-}
-
-
+  const AddNewTodoFunction = () => {
+    handleCloseTodoViewCountTooltip();
+    setShowModalAddTodo(true);
+  };
+  const AddNewCategoryFunction = () => {
+    handleCloseTodoViewCountTooltip();
+    setShowAddCategoryModal();
+  };
 
   return (
     <Box
@@ -187,15 +168,11 @@ const AddNewCategoryFunction = ()=>{
             />
           )}
 
-          <Box display="flex" mr={2}>
+          <Box display="flex" alignItems="center" mr={2}>
             {sizeName === "mobile" || sizeName === "tablet" ? (
               <FooterButton
                 title="Pagination"
-                icon={
-                  <HiOutlineViewColumns
-                    
-                  />
-                }
+                icon={<HiOutlineViewColumns />}
                 onClick={() => {
                   dispatch(setBlurPage());
                   dispatch(
@@ -204,58 +181,43 @@ const AddNewCategoryFunction = ()=>{
                 }}
               />
             ) : null}
-
             {!layout_nav_show ? (
               <FooterButton
                 title="Config Layout"
-                icon={
-                  <GrConfigure />
-                }
+                icon={<GrConfigure />}
                 onClick={() => {
                   dispatch(setBlurPage());
                   dispatch(handleSettingModalOpen({ setting: "todo-layout" }));
                 }}
               />
             ) : null}
-
             <FooterButton
               title="Search"
-              icon={<FiSearch  />}
+              icon={<FiSearch />}
               onClick={() => {
                 dispatch(SearchModeActive());
               }}
             />
-
             <FooterButton
               title="Add New Todo"
               icon={<HiPlus />}
               onClick={(e) => {
-                
-                if(layout_nav_show){
-                  setShowModalAddTodo(true)
-
-                }else{
-                  dispatch(setBlurPage())
-                  handleOpenTodoViewCountTooltip(e) 
+                if (layout_nav_show) {
+                  setShowModalAddTodo(true);
+                } else {
+                  dispatch(setBlurPage());
+                  handleOpenTodoViewCountTooltip(e);
                 }
-                
-              
               }}
             />
             <BoxIconsPopop
-             anchorEl={anchorElBoxIconsPopop}
-             
-             open={open}
-            id={id} 
-            handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip} 
-              iconList={[<MdOutlineCategory /> , <RiTodoLine />]}
-              titleList={["Add New Category" , "Add New Todo"]}
-              onClickList={
-              [
-                AddNewCategoryFunction,
-                AddNewTodoFunction
-              ]
-              }
+              anchorEl={anchorElBoxIconsPopop}
+              open={open}
+              id={id}
+              handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
+              iconList={[<MdOutlineCategory />, <RiTodoLine />]}
+              titleList={["Add New Category", "Add New Todo"]}
+              onClickList={[AddNewCategoryFunction, AddNewTodoFunction]}
             />
           </Box>
         </>

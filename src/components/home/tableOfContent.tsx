@@ -27,7 +27,7 @@ import { CiEdit, CiTrash } from "react-icons/ci";
 import Toast from "@/util/toast";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
-import StyledSwitchComponent from "../../styles/styled/CustomeSwitch";
+import SwitchCustomized from "../../styles/styled/CustomeSwitch";
 import EmptyListAnimation from "@/util/emptyList/emptyListAnimation";
 
 import {
@@ -38,11 +38,9 @@ import {
 } from "../../redux/api/workspaces";
 import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 import { useDispatch } from "react-redux";
-import {StyledTableCell,StyledTableRow}  from '@/styles/styled/styled_table'
+import { StyledTableCell, StyledTableRow } from "@/styles/styled/styled_table";
 import StyledTabs from "@/styles/styled/styled_tabs";
 import Styled_Standard_Textfield from "@/styles/styled/styled_standard_textfield";
-
-
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -82,7 +80,7 @@ const AddOrSearchUi = (props) => {
   const handlekeydown = (e) => {
     if (e.keyCode == 13) {
       // enter key
-      console.log("enter")
+      console.log("enter");
       switch (state) {
         case "add":
           AddWorkspace();
@@ -125,7 +123,7 @@ const AddOrSearchUi = (props) => {
   };
 
   return (
-    <Box> 
+    <Box>
       <Styled_Standard_Textfield
         autoFocus
         InputLabelProps={{ shrink: true }}
@@ -146,7 +144,7 @@ const AddOrSearchUi = (props) => {
                       ? "Add"
                       : state === "search"
                       ? "Search"
-                      : "Rename" 
+                      : "Rename"
                   }
                 >
                   {state === "add" ? (
@@ -213,13 +211,16 @@ const TableOfContent = () => {
     setWsSelectedId("");
     setState("icons");
   };
-  const { data = [], isLoading, isSuccess, refetch } = useWsListQuery(
-    resultText
-  );
+  const {
+    data = [],
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useWsListQuery(resultText);
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const AddWorkspace = () => {
     if (inputText) {
       storeNewWs({ title: inputText })
@@ -243,11 +244,12 @@ const TableOfContent = () => {
   };
 
   const handleActiveWorkspace = (checked, id) => {
-    activeWs({ id, active: checked }).unwrap()
-    .then((res) => {})
-    .catch((err) => {
-      console.log(err);
-    });
+    activeWs({ id, active: checked })
+      .unwrap()
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -264,14 +266,15 @@ const TableOfContent = () => {
     // AFTER ACTIVE OR DIACTIVE REQUEST
     if (respActiveWs.isSuccess) {
       Toast(respActiveWs?.data?.msg);
-      if(respActiveWs?.data?.activeWorkspace?.id){
-        dispatch(SetActiveWs({
-          id:respActiveWs?.data?.activeWorkspace?.id,
-          title:respActiveWs?.data?.activeWorkspace?.title
-        }))
-        
-      }else{
-        dispatch(UnActiveWs())
+      if (respActiveWs?.data?.activeWorkspace?.id) {
+        dispatch(
+          SetActiveWs({
+            id: respActiveWs?.data?.activeWorkspace?.id,
+            title: respActiveWs?.data?.activeWorkspace?.title,
+          })
+        );
+      } else {
+        dispatch(UnActiveWs());
       }
       backToIcons();
       setInputText("");
@@ -293,7 +296,6 @@ const TableOfContent = () => {
     setValue(newValue);
   };
   const theme = useContext(ThemeContext);
-
 
   return (
     <Box
@@ -318,7 +320,7 @@ const TableOfContent = () => {
                 <FiSearch className="add-space-icon" />
               </IconButton>
             </Tooltip>
-       
+
             <Tooltip title="Reload">
               <IconButton
                 onClick={() => {
@@ -349,7 +351,7 @@ const TableOfContent = () => {
         )}
       </Box>
       <Box className="add-space-item-box">
-      <StyledTabs
+        <StyledTabs
           variant="scrollable"
           value={value}
           onChange={handleChange}
@@ -377,7 +379,11 @@ const TableOfContent = () => {
           ) : (
             <TableContainer sx={{ maxHeight: 270, padding: 0 }}>
               <Table>
-                <TableHead sx={{borderBottom:theme.isDarkMode ? "1px solid white" :"none"}}>
+                <TableHead
+                  sx={{
+                    borderBottom: theme.isDarkMode ? "1px solid white" : "none",
+                  }}
+                >
                   <TableRow>
                     <StyledTableCell
                       style={{ color: theme.text3, fontWeight: "bold" }}
@@ -414,18 +420,19 @@ const TableOfContent = () => {
                   </Box>
                 ) : (
                   <TableBody>
-                    {data.workspaces.map((item:any) => (
+                    {data.workspaces.map((item: any) => (
                       <StyledTableRow darkMode={theme.isDarkMode} key={item.id}>
                         <StyledTableCell>{item.title}</StyledTableCell>
                         <StyledTableCell>{item.categorySum}</StyledTableCell>
                         <StyledTableCell>{item.todoSum}</StyledTableCell>
                         <StyledTableCell>
-                          <StyledSwitchComponent
-                            checked={item.active}
+                          <SwitchCustomized
+                            isOn={item.active}
                             name="active-sys-log"
-                            color="primary"
-                            onChange={(e) => {
-                              handleActiveWorkspace(e.target.checked, item.id);
+                            id={item.id}
+                            toggleSwitch={(checked, id) => {
+                              console.log("....", checked, id);
+                              handleActiveWorkspace(checked, id);
                             }}
                           />
                         </StyledTableCell>
