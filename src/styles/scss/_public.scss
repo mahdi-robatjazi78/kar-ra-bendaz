@@ -32,6 +32,19 @@
   align-items: center;
   flex-wrap: wrap;
 }
+.d-flex-between-nowrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.d-flex-around-column {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
 .d-flex-around {
   display: flex;
   justify-content: space-around;

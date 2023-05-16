@@ -82,7 +82,7 @@ const TodoBox = (props: any) => {
     () => {
       if (searchMode) {
         handleSearchModeShow();
-      }else{
+      } else {
         setTodoBody(`<span>${body}</span>`);
       }
     },
@@ -159,6 +159,7 @@ const TodoBox = (props: any) => {
       className="todo-box-grid"
     >
       <Card
+        box-todo-id={id}
         className="todo-box"
         data-testid="box"
         ref={drag}
@@ -181,7 +182,11 @@ const TodoBox = (props: any) => {
           }}
         >
           <div
-            className={ flag === "isDone"  ?`todoBoxDone f-f-r-dongle` :"todoBox f-f-r-dongle"}
+            className={
+              flag === "isDone"
+                ? `todoBoxDone f-f-r-dongle`
+                : "todoBox f-f-r-dongle"
+            }
             dangerouslySetInnerHTML={{
               __html: todoBody,
             }}

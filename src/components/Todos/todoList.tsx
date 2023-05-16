@@ -3,13 +3,20 @@ import { Grid } from "@mui/material";
 import TodoBox from "./todoBox";
 import { TodoContext } from "@context/todoContext";
 import Selecto from "react-selecto";
+import useDebounce from "@hooks/useDebounce";
+import { useDispatch } from "react-redux";
+import {
+  AddMouseSelectedItems,
+  clearMouseSelectedItems,
+} from "@/redux/features/todoPageConfigSlice";
 
 const TodoList = (props: any) => {
   const { todoList, UpdateTodoAndCategories } = props;
   const [todoItems, setTodoItems] = useState([]);
   const { show } = useContext(TodoContext);
-
+  const dispatch = useDispatch();
   const filter = show[1];
+  const [listState, setListState] = useState([]);
 
   useEffect(() => {
     if (filter === "done") {
@@ -23,6 +30,31 @@ const TodoList = (props: any) => {
       setTodoItems(todoList);
     }
   }, [filter, todoList]);
+
+  useDebounce(
+    () => {
+      if (listState.length) {
+        let data = {
+          count: listState.length,
+          entity: "todo",
+          items: listState,
+        };
+        AddTodosToReduxStore(data);
+      }
+    },
+    [listState.length],
+    600
+  );
+
+  const AddTodosToReduxStore = (data) => {
+    // add mouse selected todos to redux store
+    dispatch(AddMouseSelectedItems(data));
+  };
+
+  const clearSelectedTodosList = () => {
+    // remove all mouse selected todos from redux store
+    dispatch(clearMouseSelectedItems());
+  };
 
   return (
     <Grid container spacing={2} id="todo-grid-list">
@@ -64,9 +96,23 @@ const TodoList = (props: any) => {
           e.added.forEach((el) => {
             el.classList.add("mouse-drag-selected");
           });
-          e.removed.forEach((el) => {
-            el.classList.remove("mouse-drag-selected");
-          });
+
+          if (e.selected.length) {
+            const list = e.selected.map((el) => {
+              const boxTodoId = el.getAttribute("box-todo-id");
+              const spanElement = el.querySelector("span");
+              const innerTodoText =
+                spanElement?.textContent || spanElement?.innerText || "y";
+              return { boxTodoId, innerTodoText };
+            });
+            setListState(list);
+          } else {
+            // clearSelectedTodosList();
+          }
+
+          // e.removed.forEach((el) => {
+          //   el.classList.remove("mouse-drag-selected");
+          // });
         }}
       />
     </Grid>

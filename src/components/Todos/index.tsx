@@ -23,6 +23,7 @@ import {
   CloseSidebar,
   OpenSidebar,
   handleChangeMetaItem,
+  clearMouseSelectedItems,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -35,6 +36,7 @@ import {
 import { AppDispatch, RootState } from "@/redux/store";
 import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
+import BulkFunction from "./TodoModals/bulkFunction";
 
 const Todos = () => {
   const { show, setThreeColAll } = useContext(TodoContext);
@@ -51,14 +53,17 @@ const Todos = () => {
     searchMode,
     meta,
     layout_nav_show,
+    mouse_selected_items,
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition } = useSelector(
     (state: RootState) => state.settings
   );
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
-  const [todoAssignRequest, todoAssignResponse] =
-    useTodoAssignToCategoryMutation();
+  const [
+    todoAssignRequest,
+    todoAssignResponse,
+  ] = useTodoAssignToCategoryMutation();
   const [todoList, setTodoList] = useState([]);
   const emptyTodoList = () => {
     setTodoList([]);
@@ -75,11 +80,15 @@ const Todos = () => {
     prevText: "",
   });
 
-  const [triggerGetCategoryIndex, categoryResponse] =
-    useLazyGetCategoryIndexQuery();
+  const [
+    triggerGetCategoryIndex,
+    categoryResponse,
+  ] = useLazyGetCategoryIndexQuery();
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
-
+  const [openBulkFunctionModal, setOpenBulkFunctionModal] = React.useState(
+    false
+  );
   const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
@@ -188,6 +197,17 @@ const Todos = () => {
     }
   }, [sizeName]);
 
+  const handleCloseBulkFunctionModal = () => {
+    setOpenBulkFunctionModal(false);
+    dispatch(clearMouseSelectedItems());
+    const elements = document.querySelectorAll(".mouse-drag-selected");
+    if (elements.length) {
+      elements.forEach(function(element) {
+        element.classList.remove("mouse-drag-selected");
+      });
+    }
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Box id="todo-page-container">
@@ -277,6 +297,7 @@ const Todos = () => {
                   prevText: "",
                 });
               }}
+              setOpenBulkFunctionModal={setOpenBulkFunctionModal}
             />
           </Box>
         </Box>
@@ -302,6 +323,17 @@ const Todos = () => {
           setShowAddCategoryModal={setShowAddCategoryModal}
           showAddCategoryModal={showAddCategoryModal}
           UpdateOnlyCategories={UpdateOnlyCategories}
+        />
+      )}
+
+      {openBulkFunctionModal && (
+        <BulkFunction
+          open={openBulkFunctionModal}
+          onClose={handleCloseBulkFunctionModal}
+          data={mouse_selected_items}
+          UpdateOnlyTodos={UpdateOnlyTodos}
+          UpdateTodoAndCategories={UpdateTodoAndCategories}
+          categoList={categoList}
         />
       )}
     </DndProvider>

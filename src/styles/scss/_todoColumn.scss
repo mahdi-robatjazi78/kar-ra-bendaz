@@ -1,3 +1,48 @@
+%drawer-icon-box {
+  .drawer-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: clamp(4.2rem, 7vw, 7vw);
+    height: clamp(4.2rem, 7vw, 7vw);
+
+    background-color: var(--sidebar);
+    border-radius: 1rem;
+
+    .drawer-footer-icon {
+      font-size: clamp(2rem, 4vw, 4vw);
+      color: var(--text1);
+      margin: 1.2rem;
+      // display: none;
+    }
+  }
+}
+%drawer-icon-box2 {
+  .drawer-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: clamp(3.2rem, 3.6vw, 3.6vw);
+    height: clamp(3.2rem, 3.6vw, 3.6vw);
+
+    background-color: var(--sidebar);
+    border-radius: 1rem;
+
+    .drawer-footer-icon {
+      font-size: clamp(2rem, 2.5vw, 2.5vw);
+      color: var(--text1);
+      margin: 1.2rem;
+      // display: none;
+    }
+  }
+}
+
+.bulk-function-parent-modal {
+  @extend %drawer-icon-box2;
+}
+
 %footer-icon-box {
   width: 38px;
   margin: 0.8rem 0.5rem 0.3rem 0.5rem;

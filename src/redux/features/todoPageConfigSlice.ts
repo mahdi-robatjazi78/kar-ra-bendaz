@@ -31,6 +31,13 @@ export interface IMeta {
   total_items: Number | null,
   total_pages: Number | null,
 }
+export interface IMouseSelected {
+  
+  count: Number ,
+  entity:String, // todo , category
+  items: {boxTodoId:String , innerTodoText:String}[]
+}
+
 export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
@@ -40,7 +47,8 @@ export interface ITodoPage {
   searchText: String;
   sidebar_open: Boolean;
   meta : IMeta,
-  layout_nav_show:Boolean,
+  layout_nav_show: Boolean,
+  mouse_selected_items:IMouseSelected
 }
 
 const initialState: ITodoPage = {
@@ -68,7 +76,12 @@ const initialState: ITodoPage = {
   searchMode: false,
   searchText: "",
   sidebar_open: true,
-  layout_nav_show:true,
+  layout_nav_show: true,
+  mouse_selected_items: {
+    count: 0,
+    entity:"" , // todo , category
+    items:[]
+  }
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -165,9 +178,40 @@ export const todoPageConfigSlice = createSlice({
       state.layout_nav_show = true;
     },
     hideLayoutNav:(state)=>{
-      
       state.layout_nav_show = false;
+    }, 
+
+    AddMouseSelectedItems: (state,action) => { 
+      state.mouse_selected_items = {
+        count:action.payload.count,
+        entity: action.payload.entity,
+        items:action.payload.items,
+      }
+    },
+    clearMouseSelectedItems: (state) => { state.mouse_selected_items = { count: 0, entity: '', items: [] } },
+    removeMouseSelectedItemWithId: (state, action) => {
+      
+ const elements = document.querySelectorAll(".mouse-drag-selected");
+
+      elements.forEach(function (element) {
+        const boxTodoId = element.getAttribute("box-todo-id")
+
+        if (boxTodoId === action.payload.id) {
+            element.classList.remove("mouse-drag-selected");
+        }
+    });
+      
+      
+      
+      
+      state.mouse_selected_items = {
+        count: +state.mouse_selected_items.count -1,
+        entity: state.mouse_selected_items.entity,
+        items:state.mouse_selected_items.items.filter(item=>item?.boxTodoId !== action.payload.id),
+      }
+
     }
+    
   },
 
   extraReducers: (builder) => {
@@ -220,6 +264,9 @@ export const {
   ToggleSidebar,
   handleChangeMetaItem,
   showLayoutNav,
-  hideLayoutNav
+  hideLayoutNav,
+  AddMouseSelectedItems,
+  clearMouseSelectedItems,
+ removeMouseSelectedItemWithId 
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

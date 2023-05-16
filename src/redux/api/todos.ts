@@ -1,4 +1,3 @@
-import { ITodoStructure } from "./../../types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { handleResponseError } from "@services/api";
 const base_url = `http://localhost:8888`;
@@ -51,6 +50,19 @@ export const TodoRtkService = createApi({
         handleResponseError(error);
       },
     }),
+    todoSetDoneBulk: builder.mutation({
+      query: ({ ids , ws }) => ({
+        url: `done-many?ws=${ws}`,
+        method: "PUT",
+        body: {
+          todoListIds:ids
+        },
+      }),
+
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
 
     todoDelete: builder.mutation({
       query: ({ id, ws }) => ({
@@ -62,7 +74,36 @@ export const TodoRtkService = createApi({
         handleResponseError(error);
       },
     }),
+    todoDeleteBulk: builder.mutation({
+      query: ({ ws ,  list }) => ({
+        url: `delete-many?ws=${ws}`,
+        method: "DELETE",
+        body: {
+          todoListIds:list
+        }
+      }),
 
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+
+   changeBody: builder.mutation({
+      query: ({ todoId, todoBody }) => ({
+        url: `update-body`,
+        method: "PUT",
+        body: {
+          id: todoId,
+          body: todoBody,
+        },
+      }),
+
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+  
+  
     todoAssignToCategory: builder.mutation({
       query: ({ todoId, categoId }) => ({
         url: `add-to-category`,
@@ -77,20 +118,7 @@ export const TodoRtkService = createApi({
         handleResponseError(error);
       },
     }),
-    changeBody: builder.mutation({
-      query: ({ todoId, todoBody }) => ({
-        url: `update-body`,
-        method: "PUT",
-        body: {
-          id: todoId,
-          body: todoBody,
-        },
-      }),
-
-      transformErrorResponse: (error) => {
-        handleResponseError(error);
-      },
-    }),
+   
     dragDropAssignToCategory: builder.mutation({
       query: ({ todoId, prevCategoId, newCategoId }) => ({
         url: `assign-to-another-category`,
@@ -106,6 +134,25 @@ export const TodoRtkService = createApi({
         handleResponseError(error);
       },
     }),
+
+
+
+    todosAssignBulk: builder.mutation({
+      query: ({ todoIdList, categoId }) => ({
+        url: `assign-many`,
+        method: "PUT",
+        body: {
+          todoList:todoIdList,
+          categoId,
+        },
+      }),
+
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+
+
   }),
 });
 
@@ -113,8 +160,11 @@ export const {
   useLazyGetTodoIndexQuery,
   useStoreNewTodoMutation,
   useTodoSetDoneMutation,
-  useTodoDeleteMutation,
   useTodoAssignToCategoryMutation,
   useChangeBodyMutation,
   useDragDropAssignToCategoryMutation,
+  useTodoDeleteMutation,
+  useTodoDeleteBulkMutation,
+  useTodoSetDoneBulkMutation,
+  useTodosAssignBulkMutation
 } = TodoRtkService;

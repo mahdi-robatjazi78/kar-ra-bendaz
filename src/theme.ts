@@ -5,11 +5,11 @@ const themes = {
     borders: "rgb(0, 0, 255)",
     errorBorder: "rgb(177, 34, 34)",
     sidebar: "rgb(184 184 184)",
-    secondSidebar: "rgb(40, 44, 52)",
+    secondSidebar: "rgb(38, 18, 49)",
     text1: "rgb(49, 62, 69)",
-    text2: "rgb(156, 115, 255)",
+    text2: "rgb(199,182,249)",
     text3: "rgb(106 56 227)",
-    header: "rgb(40, 44, 52)",
+    header: "rgb(38, 18, 49)",
     hoverSuccess: "rgb(0, 152, 0)",
     disabled:"rgb(165, 165, 165)"
   },
@@ -25,7 +25,7 @@ const themes = {
     text3: "rgb(165, 168, 228)",
     header: "rgb(0, 18, 59)",
     hoverSuccess: "rgb(51, 255, 51)",
-    disabled:"rgb(30, 45, 117)"
+    disabled:"rgb(116,125,169)"
 
   },
 };

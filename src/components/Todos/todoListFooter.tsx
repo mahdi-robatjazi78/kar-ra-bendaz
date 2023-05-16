@@ -20,12 +20,11 @@ import {
 import useDebounce from "@hooks/useDebounce";
 import useWindowSize from "@hooks/useWindowSize";
 import { PaginationComponent, PerPageComponent } from "./paginate";
-import { GrConfigure } from "react-icons/gr";
+import { GrConfigure, GrMultiple } from "react-icons/gr";
 import FooterButton from "../mini/footerButton";
 import BoxIconsPopop from "../mini/boxIconsPopop";
 import { RiTodoLine } from "react-icons/ri";
 import { MdOutlineCategory } from "react-icons/md";
-import PlusIcon from "@/styles/styled/plusIcon";
 
 const TodoPageFooter = (props) => {
   const {
@@ -41,12 +40,13 @@ const TodoPageFooter = (props) => {
     SearchModeActive,
     SearchModeDeActive,
     setShowAddCategoryModal,
+    setOpenBulkFunctionModal,
   } = props;
   const dispatch = useDispatch();
 
   const sizeName = useWindowSize().sizeName;
 
-  const { searchText, layout_nav_show } = useSelector(
+  const { searchText, layout_nav_show, mouse_selected_items } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
   useEffect(() => {
@@ -169,6 +169,16 @@ const TodoPageFooter = (props) => {
           )}
 
           <Box display="flex" alignItems="center" mr={2}>
+            {+mouse_selected_items.count > 0 && (
+              <FooterButton
+                title={`You have selected ${mouse_selected_items?.count} ${mouse_selected_items?.entity} items`}
+                icon={<GrMultiple />}
+                onClick={(e) => {
+                  setOpenBulkFunctionModal(true);
+                }}
+              />
+            )}
+
             {sizeName === "mobile" || sizeName === "tablet" ? (
               <FooterButton
                 title="Pagination"
