@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { AiFillSetting } from "react-icons/ai";
 import { Styled_Menu, Styled_Menu_Item } from "@/styles/styled/styled_menu";
-import { removeLocalSettings } from "@/util/funcs";
+import { removeLocalSettings, soundPlay } from "@/util/funcs";
 
 const Header = (props) => {
   const { handleOpenSettingModal } = props;
@@ -36,7 +36,7 @@ const Header = (props) => {
   const dispatch: AppDispatch = useDispatch();
 
   const auth = useSelector((state: RootState) => state.auth);
-  const { headerPosition, blur } = useSelector(
+  const { headerPosition, blur, playSound } = useSelector(
     (state: RootState) => state.settings
   );
 
@@ -47,6 +47,9 @@ const Header = (props) => {
         removeLocalSettings("auth");
         handleClose();
         dispatch(LogoutAction({}));
+        if (playSound) {
+          soundPlay("sound7.wav");
+        }
         navigate("/login");
         Toast(response.data.msg, false, true);
       }

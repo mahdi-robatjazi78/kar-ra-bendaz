@@ -4,12 +4,10 @@ import { useDispatch } from "react-redux";
 import ThemeContext from "@context/themeContext";
 import Swal from "sweetalert2";
 import { DrawerClose } from "@/redux/features/todoPageConfigSlice";
-
 const ShowModalDelete = (props) => {
-  const {todo, setModalOpen , DeleteTodoOperation } = props;
+  const { todo, setModalOpen, DeleteTodoOperation } = props;
   const theme = useContext(ThemeContext);
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
   const deleteModal = async () => {
     try {
       const result = await Swal.fire({
@@ -34,8 +32,8 @@ const ShowModalDelete = (props) => {
         },
       });
       if (result.isConfirmed) {
-        DeleteTodoOperation()
-        dispatch(DrawerClose())
+        DeleteTodoOperation();
+        dispatch(DrawerClose());
       }
 
       setModalOpen({ status: false, modal: "" });

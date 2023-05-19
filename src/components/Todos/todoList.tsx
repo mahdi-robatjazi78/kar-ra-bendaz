@@ -77,7 +77,7 @@ const TodoList = (props: any) => {
         // The container to add a selection element
         container={document.body}
         // The area to drag selection element (default: container)
-        dragContainer={window}
+        dragContainer={document.getElementsByClassName("todo-list")[0]}
         // Targets to select. You can register a queryselector or an Element.
         selectableTargets={[".todo-box"]}
         // Whether to select by click (default: true)

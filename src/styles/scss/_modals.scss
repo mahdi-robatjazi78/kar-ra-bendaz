@@ -122,8 +122,8 @@
   position: absolute;
   bottom: 1rem;
   width: 90%;
-  background: transparent;
-  color: white !important;
+  background-color: var(--background) !important;
+  color: var(--text1) !important;
   border: 1px solid var(--borders) !important;
   outline: none !important;
 }
@@ -142,7 +142,7 @@
   bottom: 1rem;
   width: 90%;
   background-color: var(--background) !important;
-  color: black !important;
+  color: var(--text1) !important;
   border: 1px solid var(--borders) !important;
   outline: none !important;
 }

@@ -2,14 +2,13 @@ import React, { useEffect, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
-import { AppDataContext } from "@context/appDataContext";
-import Axios from "@/services/api";
 import Swal from "sweetalert2";
 import { useStoreNewCategoryMutation } from "@/redux/api/categories";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+import { soundPlay } from "@/util/funcs";
 
 const ShowModalNewCategory = (props) => {
   const MySwal = withReactContent(Swal);
@@ -20,7 +19,7 @@ const ShowModalNewCategory = (props) => {
   } = props;
   const theme = useContext(ThemeContext);
   const dispatch: AppDispatch = useDispatch();
-
+  const { playSound } = useSelector((state: RootState) => state.settings);
   const {
     active_ws: { id: ActiveWorkspaceID },
   } = useSelector((state: RootState) => state.todoPageConfig);
@@ -34,6 +33,10 @@ const ShowModalNewCategory = (props) => {
       .unwrap()
       .then((resp) => {
         Toast(resp?.msg, true, true, "📂");
+
+        if (playSound) {
+          soundPlay("sound3.m4a");
+        }
         UpdateOnlyCategories();
         dispatch(deactiveBlur());
         setShowAddCategoryModal({

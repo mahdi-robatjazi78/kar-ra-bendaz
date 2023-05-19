@@ -17,3 +17,16 @@ config : {
         filter : String,
     }
 }
+
+
+
+sounds : 
+
+sound1.wav  (delete todo , delete category)	
+sound2.mp3  (new todo)
+sound3.m4a  (new category)
+sound4.wav  (edit todo)
+sound5.wav  (todo done)
+sound6.wav  (todo assign)
+sound7.wav ( logout )
+sound8.wav  (go to home page)

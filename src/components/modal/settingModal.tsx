@@ -35,13 +35,14 @@ import SelectMultiColumn from "../mini/selectMultiColumn";
 import SettingButton from "../mini/settingButton";
 import ButtonGroupSetting from "../mini/buttonGroupSetting";
 import StyledSliderComponent from "@/styles/styled/styled_Slider";
-import { customBlur, handleListenFromOs } from "@/redux/features/settingSlice";
-import useDebounce from "@/hooks/useDebounce";
 import {
-  getLocalStorageValue,
-  setCommonLocalSettings,
-  setTodoPageLocalSettings,
-} from "@/util/funcs";
+  customBlur,
+  handleListenFromOs,
+  handlePauseSound,
+  handlePlaySound,
+} from "@/redux/features/settingSlice";
+import useDebounce from "@/hooks/useDebounce";
+import { getLocalStorageValue, setCommonLocalSettings } from "@/util/funcs";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -59,7 +60,7 @@ const SettingModal = (props) => {
     layout_nav_show,
     active_category: ActiveCategory,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const { modal, blur, theme: OsTheme } = useSelector(
+  const { modal, blur, theme: OsTheme, playSound } = useSelector(
     (state: RootState) => state.settings
   );
   const setting = modal.config?.setting;
@@ -167,7 +168,7 @@ const SettingModal = (props) => {
             scrollButtons="auto"
           >
             <Tab tabIndex={1} value={0} label="Overal" />
-            <Tab tabIndex={2} value={1} label="See Shortcuts" />
+            <Tab tabIndex={2} value={1} label="Shortcuts" />
             {window.location.pathname === "/todos" && (
               <Tab tabIndex={3} value={2} label="Todo Page" />
             )}
@@ -182,8 +183,23 @@ const SettingModal = (props) => {
                   <Box className="head">Sound</Box>
                   <Box className="body">
                     <Box className="flex-central">
-                      <GiSoundOn fontSize={"2rem"} color="var(--text2)" />
-                      <GiSoundOff fontSize={"2rem"} color="var(--text2)" />
+                      {playSound ? (
+                        <GiSoundOff
+                          onClick={() => {
+                            dispatch(handlePauseSound());
+                          }}
+                          fontSize={"4rem"}
+                          color="var(--text2)"
+                        />
+                      ) : (
+                        <GiSoundOn
+                          onClick={() => {
+                            dispatch(handlePlaySound());
+                          }}
+                          fontSize={"4rem"}
+                          color="var(--text2)"
+                        />
+                      )}
                     </Box>
                   </Box>
                 </Box>

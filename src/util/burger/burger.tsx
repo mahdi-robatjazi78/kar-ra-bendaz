@@ -5,15 +5,17 @@ import {
   OpenSidebar,
   CloseSidebar,
 } from "@/redux/features/todoPageConfigSlice";
-
 import "./burgerStyles.css";
 import { RootState } from "@/redux/store";
+import { soundPlay } from "../funcs";
+import Toast from "../toast";
 
 const Burger = () => {
   const dispatch = useDispatch();
-  const { sidebar_open: open } = useSelector(
+  const { sidebar_open: open, active_ws: activeWs } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
+  const { playSound } = useSelector((state: RootState) => state.settings);
 
   const [op, setOpen] = useState(open);
 
@@ -22,8 +24,23 @@ const Burger = () => {
 
   const handleClickBurger = () => {
     if (location.pathname !== "/todos") {
-      dispatch(OpenSidebar());
-      navigate("/todos");
+      if (activeWs?.id) {
+        dispatch(OpenSidebar());
+
+        if (playSound) {
+          soundPlay("sound8.wav");
+        }
+
+        navigate("/todos");
+      } else {
+        Toast(
+          "Please first select a workspace then go to todo page",
+          true,
+          true,
+          "⚠"
+        );
+        return;
+      }
     } else {
       dispatch(CloseSidebar());
     }

@@ -10,6 +10,7 @@ import { FaEdit } from "react-icons/fa";
 import ShowModalDelete from "../TodoModals/delete";
 import ShowModalAddToCategory from "../TodoModals/addToCategory";
 import StyledButton from "@/styles/styled/styled_button";
+import { soundPlay } from "@/util/funcs";
 
 const TodoDrawer = (props) => {
   const [todoBody, setTodoBody] = useState("");
@@ -32,6 +33,7 @@ const TodoDrawer = (props) => {
     // active_category : {id :ActiveCategoryID ,title : ActiveCategoryTitle},
     drawer: { open: Open, state: State, item: Item, anchor: Anchor },
   } = useSelector((state: RootState) => state.todoPageConfig);
+  const { playSound } = useSelector((state: RootState) => state.settings);
 
   useEffect(() => {
     if (!Open) {
@@ -43,6 +45,9 @@ const TodoDrawer = (props) => {
 
   const setDoneThisTodo = () => {
     todoSetDoneRequest({ id: Item?._id });
+    if (playSound) {
+      soundPlay("sound5.wav");
+    }
     UpdateOnlyTodos();
   };
 

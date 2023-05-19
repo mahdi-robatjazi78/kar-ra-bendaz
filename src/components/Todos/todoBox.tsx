@@ -10,6 +10,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { setBlurPage } from "@/redux/features/settingSlice";
 import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from "@hooks/useDebounce";
+import { soundPlay } from "@/util/funcs";
 
 export interface BoxProps {
   name: string;
@@ -24,6 +25,8 @@ const TodoBox = (props: any) => {
   const { searchMode, searchText } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
+  const { playSound } = useSelector((state: RootState) => state.settings);
+
   const {
     id,
     categoId,
@@ -102,6 +105,9 @@ const TodoBox = (props: any) => {
         newCategoId: "other",
       })
         .then((resp) => {
+          if (playSound) {
+            soundPlay("sound6.wav");
+          }
           Toast(resp.data.msg, true, true);
           UpdateTodoAndCategories();
         })

@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Autocomplete,
-  Box,
-  Grid,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Autocomplete, Box, IconButton, Tooltip } from "@mui/material";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import Text from "@/styles/styled/styled_typography";
-import { RiDeleteBin3Fill, RiFolderAddFill } from "react-icons/ri";
 import { MdOutlineClose, MdDone } from "react-icons/md";
 import {
   useTodoSetDoneBulkMutation,
@@ -25,6 +17,7 @@ import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import StyledBadge from "@/styles/styled/styled_badge";
 import { BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
+import { soundPlay } from "@/util/funcs";
 
 const BulkFunction = (props) => {
   const {
@@ -39,6 +32,7 @@ const BulkFunction = (props) => {
     title: string;
     uuid: string;
   }>({ title: "", uuid: "" });
+  const { playSound } = useSelector((state: RootState) => state.settings);
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
   const [
@@ -60,6 +54,9 @@ const BulkFunction = (props) => {
       list: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
     }).then((resp) => {
+      if (playSound) {
+        soundPlay("sound1.wav");
+      }
       Toast(resp.data.msg, true, true);
     });
     UpdateTodoAndCategories();
@@ -71,6 +68,9 @@ const BulkFunction = (props) => {
       ids: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
     }).then((resp) => {
+      if (playSound) {
+        soundPlay("sound5.wav");
+      }
       Toast(resp.data.msg, true, true);
     });
     UpdateOnlyTodos();

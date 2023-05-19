@@ -24,6 +24,7 @@ import { deactiveBlur } from "@/redux/features/settingSlice";
 import StyledButton from "@/styles/styled/styled_button";
 import Toast from "@/util/toast";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
+import { soundPlay } from "@/util/funcs";
 
 const CategoryDrawer = (props) => {
   const { CategoryItem, UpdateOnlyCategories, UpdateOnlyTodos } = props;
@@ -31,6 +32,8 @@ const CategoryDrawer = (props) => {
     active_category: { id: ActiveCategoryId, title: ActiveCategoryTitle },
     active_ws: { id: ActiveWsId },
   } = useSelector((state: RootState) => state.todoPageConfig);
+  const { playSound } = useSelector((state: RootState) => state.settings);
+
   const dispatch = useDispatch();
   const [
     renameCategoryRequest,
@@ -79,6 +82,9 @@ const CategoryDrawer = (props) => {
       id: ActiveCategoryId,
       ws: ActiveWsId,
     });
+    if (playSound) {
+      soundPlay("sound1.wav");
+    }
   };
 
   const RemoveCategoryWithAllTodosInsideIt = () => {
@@ -86,6 +92,10 @@ const CategoryDrawer = (props) => {
       id: ActiveCategoryId,
       ws: ActiveWsId,
     });
+
+    if (playSound) {
+      soundPlay("sound1.wav");
+    }
   };
 
   useEffect(() => {
@@ -162,7 +172,7 @@ const CategoryDrawer = (props) => {
             <StyledButton
               onClick={RemoveCategoryOnly}
               variant="outlined"
-              size="small"
+              size="medium"
             >
               Remove category
             </StyledButton>
@@ -171,7 +181,7 @@ const CategoryDrawer = (props) => {
             <StyledButton
               onClick={RemoveCategoryWithAllTodosInsideIt}
               variant="outlined"
-              size="small"
+              size="medium"
             >
               Remove category with all todos inside it
             </StyledButton>

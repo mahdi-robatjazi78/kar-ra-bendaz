@@ -2,14 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
-import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
 import { useStoreNewTodoMutation } from "@/redux/api/todos";
-import { useSelector } from "react-redux";
+import { soundPlay } from "@/util/funcs";
 
 const ShowModalNewTodo = (props) => {
   const MySwal = withReactContent(Swal);
@@ -20,6 +19,8 @@ const ShowModalNewTodo = (props) => {
     active_ws: { id: ActiveWorkspaceID },
     active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
   } = useSelector((state: RootState) => state.todoPageConfig);
+  const { playSound } = useSelector((state: RootState) => state.settings);
+
   const [storeNewTodo, respStoreNewTodo] = useStoreNewTodoMutation();
 
   const SubmitNewTodo = (todo, intoCategory = false) => {
@@ -29,6 +30,9 @@ const ShowModalNewTodo = (props) => {
       ...(intoCategory && { categoId: ActiveCategoryID }),
     })
       .then((resp) => {
+        if (playSound) {
+          soundPlay("sound2.mp3");
+        }
         Toast(resp.data.msg, true, true, "📝");
         UpdateTodoAndCategories();
       })

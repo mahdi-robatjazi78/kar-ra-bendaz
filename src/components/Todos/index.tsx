@@ -37,6 +37,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
+import { soundPlay } from "@/util/funcs";
 
 const Todos = () => {
   const { show, setThreeColAll } = useContext(TodoContext);
@@ -55,7 +56,7 @@ const Todos = () => {
     layout_nav_show,
     mouse_selected_items,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const { blur, headerPosition } = useSelector(
+  const { blur, headerPosition, playSound } = useSelector(
     (state: RootState) => state.settings
   );
 
@@ -128,12 +129,18 @@ const Todos = () => {
   const DeleteTodoOperation = () => {
     todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID });
     UpdateTodoAndCategories();
+    if (playSound) {
+      soundPlay("sound1.wav");
+    }
     dispatch(deactiveBlur());
   };
 
   const HandleTodoAssignToCategory = (todoId, categoId) => {
     todoAssignRequest({ todoId, categoId })
       .then((resp) => {
+        if (playSound) {
+          soundPlay("sound6.wav");
+        }
         Toast(resp.data.msg);
         UpdateTodoAndCategories();
       })
@@ -142,6 +149,9 @@ const Todos = () => {
 
   const HandleTodoChangeBody = (todoId, todoBody) => {
     changeBodyRequest({ todoId, todoBody });
+    if (playSound) {
+      soundPlay("sound4.wav");
+    }
     UpdateOnlyTodos();
   };
 
