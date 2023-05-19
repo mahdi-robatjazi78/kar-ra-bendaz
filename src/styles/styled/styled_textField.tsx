@@ -3,21 +3,35 @@ import { TextField } from "@mui/material";
 
 const StyledTextFieldWhite = styled(TextField)`
   & input {
-    -webkit-text-fill-color: var(--text1);
-    color: var(--hoverSuccess);
-    letter-spacing: 1px;
-    font-family: cursive;
+    -webkit-text-fill-color: ${(props: any) =>
+      props.lighter ? "white" : "var(--text1)"};
+    caret-color:var(--text2);  
+    letter-spacing: 2px;
+    font-family: system-ui monospace cursive;
   }
+
+  
+  
+  
   & input:-webkit-autofill,
   input:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--text1);
+    -webkit-text-fill-color: ${(props: any) =>
+      props.lighter ? "var(--text2)" : "white"}
+    background:none !important;
+    font-size:1.2rem;
     transition: background-color 600000s 0s, green 600000s 0s;
   }
   & label {
-    color: var(--text2) !important;
+    color:${(props: any) =>
+      props.lighter ? "var(--text2) !important" : "#868686 !important"};
+    letter-spacing:1px; 
+    background: var(--background);
+    padding-right: 6px; 
+  }
   }
   fieldset {
-    border-color: var(--borders);
+    border-color: ${(props: any) =>
+      props.lighter ? "var(--text2) !important" : "var(--text1) !important"};
   }
   & .Mui-disabled {
     color: var(--disabled) !important;
@@ -34,7 +48,8 @@ const StyledTextFieldWhite = styled(TextField)`
   }
 
   & svg {
-    color: var(--text2);
+    color: ${(props: any) => (props.lighter ? "var(--text2)" : "var(--text2)")};
+  };
   }
 `;
 

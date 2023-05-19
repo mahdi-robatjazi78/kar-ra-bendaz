@@ -6,9 +6,8 @@ import { getLocalStorageValue } from "@/util/funcs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-
 const DarkLight = () => {
-  const {theme:OsTheme} = useSelector((state:RootState)=>state.settings) 
+  const { theme: OsTheme } = useSelector((state: RootState) => state.settings);
   const { isDarkMode, toggleDark, setDark, setLight } = useContext(
     ThemeContext
   );
@@ -18,8 +17,7 @@ const DarkLight = () => {
     }
   };
   useEffect(() => {
-
-    const handleReadListenFromOsTheme =()=>{
+    const handleReadListenFromOsTheme = () => {
       if (OsTheme.listen) {
         if (OsTheme.osTheme === "dark") {
           setDark();
@@ -27,19 +25,13 @@ const DarkLight = () => {
           setLight();
         }
       }
-    }
-    
-      window.addEventListener("storage", () => {
-        // When storage changes refetch
-        handleReadListenFromOsTheme();
-      });
+    };
 
-  
+    window.addEventListener("storage", () => {
+      // When storage changes refetch
+      handleReadListenFromOsTheme();
+    });
   }, [OsTheme]);
-
-
-  
-
 
   return (
     <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop" }}>
@@ -55,17 +47,26 @@ const DarkLight = () => {
             width="44"
             height="55"
             viewBox="0 0 18 18"
-            style={{animation: "App-logo-spin infinite 20s linear" , zIndex:9999 }}
+            style={{
+              animation: "App-logo-spin infinite 20s linear",
+              zIndex: 9999,
+            }}
             className="sc-a794b73f-1 cfurEx"
           >
             <mask id="moon-mask-sound-demo">
-              <rect x="0" y="0" width="18" height="18" fill="#FFF"></rect>
-              <circle cx="25" cy="0" r="12" fill="var(--borders)"></circle>
+              <rect
+                x="0"
+                y="0"
+                width="18"
+                height="18"
+                fill="var(--text2)"
+              ></rect>
+              <circle cx="25" cy="0" r="12" fill="var(--text2)"></circle>
             </mask>
             <circle
               cx="9"
               cy="9"
-              fill="var(--borders)"
+              fill="var(--text2)"
               mask="url(#moon-mask-sound-demo)"
               r="5"
             ></circle>
@@ -74,48 +75,60 @@ const DarkLight = () => {
                 cx="17"
                 cy="9"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
               <circle
                 cx="13"
                 cy="15.928203"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
               <circle
                 cx="5"
                 cy="15.928203"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
               <circle
                 cx="1"
                 cy="9"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
               <circle
                 cx="5"
                 cy="2.071797"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
               <circle
                 cx="13"
                 cy="2.071797"
                 r="1.5"
-                fill="var(--borders)"
-                style={{transformOrigin: "center center", transform: "scale(1)"
+                fill="var(--text2)"
+                style={{
+                  transformOrigin: "center center",
+                  transform: "scale(1)",
                 }}
               ></circle>
             </g>
@@ -125,12 +138,12 @@ const DarkLight = () => {
           //   fontSize={"2rem"}
           //   style={{
           //     animation: "App-logo-spin infinite 20s linear",
-          //     color: "var(--borders)",
+          //     color: "var(--text2)",
           //   }}
           // />
           <BsFillMoonStarsFill
             fontSize={"2rem"}
-            style={{ color: "var(--text3)" }}
+            style={{ color: "var(--text2)" }}
           />
         )}
       </Box>

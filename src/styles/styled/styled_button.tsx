@@ -1,56 +1,69 @@
 import styled from "styled-components";
 import { Button } from "@mui/material";
 
-
 const StyledButton = styled(Button)`
   align-items: center;
-  background-color: none; 
-  border-radius: .25rem;
+  background ${(props: any) =>
+    props.transparent ? "transparent !important" : ""};
+  border-radius: 0.25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
-  color: var(--text3) !important;
+  color: ${(props: any) =>
+    props.transparent ? "var(--text2) !important" : "var(--text3) !important"};
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
   margin: 0;
   position: relative;
-  text-decoration: none;
   transition: all 250ms;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
-  border:1px solid var(--text3) !important;
+  border:  ${(props: any) =>
+    props.transparent
+      ? "1px solid var(--text2) !important"
+      : "1px solid var(--text3) !important"};
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-  text-transform:capitalize;
- 
-
-  &:hover
-  &:focus{
+  & span {
+    text-transform:capitalize;
+    text-decoration: none;
+    font-weight:bold;
+    font-family:system-ui monospace cursive;
   }
-  &:hover{
+  &:hover &:focus {
+
+    color:${(props: any) =>
+      props.transparent ? "black" : "var(--text3) !important"};
+  }
+  &:hover {
     transform: translateY(-2px);
-    background-color:var(--sidebar) !important;
-    border-color:var(--borders) !important;
+    background-color: var(--sidebar) !important;
+    border-color: var(--borders) !important;
+
+    color:${(props: any) =>
+      props.transparent ? "black" : "var(--text3) !important"};
 
 
+
+    
   }
-  &:active{
-    background-color:var(--header);
-    color:white ;
-    border-color:var(--borders);
+  &:active {
+    background-color: var(--header);
+    color: white;
+    border-color: var(--borders);
 
     box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
     transform: translateY(0);
   }
 
-  &:disabled{
-    filter:brightness(.4);
-    color:var(--borders);
-    border:1px solid var(--borders);
+  &:disabled {
+    filter: brightness(0.4);
+    color: var(--borders);
+    border: 1px solid var(--borders);
 
-    & .submit-button-text{
-      color:var(--text1);
+    & .submit-button-text {
+      color: var(--text1);
     }
   }
 `;

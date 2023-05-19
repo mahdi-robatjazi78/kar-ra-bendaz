@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   IconButton,
-  InputAdornment, 
+  InputAdornment,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -13,7 +13,7 @@ import ThemeContext from "@context/themeContext";
 import {
   useRenameCategoryMutation,
   useRemoveOnlyCategoryMutation,
-  useRemoveCategoryWithAllTodosMutation
+  useRemoveCategoryWithAllTodosMutation,
 } from "@/redux/api/categories";
 import {
   DrawerClose,
@@ -26,7 +26,7 @@ import Toast from "@/util/toast";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 
 const CategoryDrawer = (props) => {
-  const { CategoryItem ,UpdateOnlyCategories,UpdateOnlyTodos } = props;
+  const { CategoryItem, UpdateOnlyCategories, UpdateOnlyTodos } = props;
   const {
     active_category: { id: ActiveCategoryId, title: ActiveCategoryTitle },
     active_ws: { id: ActiveWsId },
@@ -43,7 +43,10 @@ const CategoryDrawer = (props) => {
     removeOnlyCategoryRequest,
     removeOnlyCategoryResponse,
   ] = useRemoveOnlyCategoryMutation();
-  const [removeCategoryWithTodosRequest,removeCategoryWithTodosResponse ] = useRemoveCategoryWithAllTodosMutation()
+  const [
+    removeCategoryWithTodosRequest,
+    removeCategoryWithTodosResponse,
+  ] = useRemoveCategoryWithAllTodosMutation();
 
   useEffect(() => {
     if (ActiveCategoryId) {
@@ -71,7 +74,6 @@ const CategoryDrawer = (props) => {
     }
   };
 
-  
   const RemoveCategoryOnly = () => {
     removeOnlyCategoryRequest({
       id: ActiveCategoryId,
@@ -85,31 +87,28 @@ const CategoryDrawer = (props) => {
       ws: ActiveWsId,
     });
   };
- 
-  useEffect(() => { 
+
+  useEffect(() => {
     if (removeOnlyCategoryResponse.isSuccess) {
-			// Remove only category
-		 Toast(removeOnlyCategoryResponse?.data?.msg , true)
-		 UpdateOnlyCategories();
-		 dispatch(UnActiveCategory());
-		 dispatch(DrawerClose())
-		 dispatch(deactiveBlur())
+      // Remove only category
+      Toast(removeOnlyCategoryResponse?.data?.msg, true, true);
+      UpdateOnlyCategories();
+      dispatch(UnActiveCategory());
+      dispatch(DrawerClose());
+      dispatch(deactiveBlur());
     }
-
   }, [removeCategoryWithTodosResponse.isSuccess]);
-  useEffect(() => { 
+  useEffect(() => {
     if (removeCategoryWithTodosResponse.isSuccess) {
-			// Remove only category
-		 Toast(removeCategoryWithTodosResponse?.data?.msg , true)
-		 UpdateOnlyCategories();
-     UpdateOnlyTodos();
-		 dispatch(UnActiveCategory());
-		 dispatch(DrawerClose())
-		 dispatch(deactiveBlur())
+      // Remove only category
+      Toast(removeCategoryWithTodosResponse?.data?.msg, true);
+      UpdateOnlyCategories();
+      UpdateOnlyTodos();
+      dispatch(UnActiveCategory());
+      dispatch(DrawerClose());
+      dispatch(deactiveBlur());
     }
-
   }, [removeCategoryWithTodosResponse.isSuccess]);
-
 
   return (
     <Box className="drawer-box">
@@ -160,23 +159,22 @@ const CategoryDrawer = (props) => {
             </Typography>
           ) : null}
           <Box>
-          <StyledButton
-            onClick={RemoveCategoryOnly}
-            variant="outlined"
-						size="small"
-          >
-            Remove category
-          </StyledButton>
-
+            <StyledButton
+              onClick={RemoveCategoryOnly}
+              variant="outlined"
+              size="small"
+            >
+              Remove category
+            </StyledButton>
           </Box>
-          <Box sx={{mt:2}}>
-          <StyledButton
-            onClick={RemoveCategoryWithAllTodosInsideIt}
-            variant="outlined"
-						size="small"
-          >
-            Remove category with all todos inside it
-          </StyledButton>
+          <Box sx={{ mt: 2 }}>
+            <StyledButton
+              onClick={RemoveCategoryWithAllTodosInsideIt}
+              variant="outlined"
+              size="small"
+            >
+              Remove category with all todos inside it
+            </StyledButton>
           </Box>
         </Box>
       </Box>

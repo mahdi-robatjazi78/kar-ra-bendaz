@@ -19,20 +19,19 @@
   }
 }
 %drawer-icon-box2 {
+  .bordered {
+    border: 1px solid var(--text2);
+    border-radius: 0.4rem;
+  }
   .drawer-icon-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    @extend .flex-central;
     width: clamp(3.2rem, 3.6vw, 3.6vw);
     height: clamp(3.2rem, 3.6vw, 3.6vw);
-
-    background-color: var(--sidebar);
-    border-radius: 1rem;
+    background: transparent;
 
     .drawer-footer-icon {
-      font-size: clamp(2rem, 2.5vw, 2.5vw);
-      color: var(--text1);
+      font-size: clamp(2rem, 2.2vw, 2.2vw);
+      color: var(--text2);
       margin: 1.2rem;
       // display: none;
     }
@@ -128,7 +127,7 @@
               .todoBox {
                 font-size: 1rem;
                 line-height: 1rem;
-                color: var(--text1);
+                color: black;
               }
 
               .todoBoxDone {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Autocomplete,
   Box,
@@ -11,7 +10,7 @@ import {
 import Styled_Modal from "@/styles/styled/styled_modal";
 import Text from "@/styles/styled/styled_typography";
 import { RiDeleteBin3Fill, RiFolderAddFill } from "react-icons/ri";
-import { MdOutlineClose, MdOutlineDownloadDone } from "react-icons/md";
+import { MdOutlineClose, MdDone } from "react-icons/md";
 import {
   useTodoSetDoneBulkMutation,
   useTodoDeleteBulkMutation,
@@ -24,6 +23,8 @@ import StyledButton from "@/styles/styled/styled_button";
 import { removeMouseSelectedItemWithId } from "@/redux/features/todoPageConfigSlice";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import StyledBadge from "@/styles/styled/styled_badge";
+import { BsFolderSymlink } from "react-icons/bs";
+import { SlTrash } from "react-icons/sl";
 
 const BulkFunction = (props) => {
   const {
@@ -59,7 +60,7 @@ const BulkFunction = (props) => {
       list: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
     }).then((resp) => {
-      Toast(resp.data.msg);
+      Toast(resp.data.msg, true, true);
     });
     UpdateTodoAndCategories();
     onClose();
@@ -70,7 +71,7 @@ const BulkFunction = (props) => {
       ids: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
     }).then((resp) => {
-      Toast(resp.data.msg);
+      Toast(resp.data.msg, true, true);
     });
     UpdateOnlyTodos();
     onClose();
@@ -82,12 +83,12 @@ const BulkFunction = (props) => {
         todoIdList: data.items.map((item) => item.boxTodoId),
         categoId: selectedCategoryForAssign?.uuid,
       }).then((resp) => {
-        Toast(resp.data.msg);
+        Toast(resp.data.msg, true, true);
       });
       UpdateTodoAndCategories();
       onClose();
     } else {
-      Toast("Something went wrong please try again");
+      Toast("Something went wrong please try again", false, true);
       onClose();
     }
   };
@@ -97,6 +98,19 @@ const BulkFunction = (props) => {
       onClose();
     }
   }, [data?.count]);
+
+  useEffect(() => {
+    function checkSelectedItems() {
+      const elements = document.querySelectorAll(".mouse-drag-selected");
+
+      if (elements?.length !== data?.count) {
+        Toast("Please select again", false, true, "⚠️");
+        onClose();
+      }
+    }
+
+    checkSelectedItems();
+  }, []);
 
   return (
     <Styled_Modal
@@ -144,15 +158,10 @@ const BulkFunction = (props) => {
             padding: "1rem",
           }}
         >
-          <Box
-            className="drawer-icon-box"
-            style={
-              stateFunction === "multy-done"
-                ? {
-                    border: "1px solid var(--borders)",
-                  }
-                : {}
-            }
+          <div
+            className={`drawer-icon-box ${
+              stateFunction === "multy-done" ? "bordered" : ""
+            }`}
           >
             <Tooltip arrow title="Done All">
               <IconButton
@@ -160,20 +169,15 @@ const BulkFunction = (props) => {
                   setStateFunction("multy-done");
                 }}
               >
-                <MdOutlineDownloadDone className="drawer-footer-icon" />
+                <MdDone className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
-          </Box>
+          </div>
 
           <Box
-            className="drawer-icon-box"
-            style={
-              stateFunction === "multy-assign"
-                ? {
-                    border: "1px solid var(--borders)",
-                  }
-                : {}
-            }
+            className={`drawer-icon-box  ${
+              stateFunction === "multy-assign" ? "bordered" : ""
+            }`}
           >
             <Tooltip arrow title="Todos Add To Category">
               <IconButton
@@ -181,24 +185,19 @@ const BulkFunction = (props) => {
                   setStateFunction("multy-assign");
                 }}
               >
-                <RiFolderAddFill className="drawer-footer-icon" />
+                <BsFolderSymlink className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
           </Box>
 
           <Box
-            className="drawer-icon-box"
-            style={
-              stateFunction === "multy-delete"
-                ? {
-                    border: "1px solid var(--borders)",
-                  }
-                : {}
-            }
+            className={`drawer-icon-box  ${
+              stateFunction === "multy-delete" ? "bordered" : ""
+            }`}
           >
             <Tooltip arrow title="Delete All">
               <IconButton onClick={() => setStateFunction("multy-delete")}>
-                <RiDeleteBin3Fill className="drawer-footer-icon" />
+                <SlTrash className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
           </Box>
@@ -217,6 +216,8 @@ const BulkFunction = (props) => {
             <Text variant="h6" onlyWhite={true}>
               You have selected{" "}
               <StyledBadge
+                fontSize={"1.4rem"}
+                padding={"1rem .5rem"}
                 bordered={true}
                 style={{ margin: "1.2rem" }}
                 badgeContent={data?.count || "0"}
@@ -230,6 +231,7 @@ const BulkFunction = (props) => {
               </Text>
 
               <StyledButton
+                transparent={true}
                 onClick={() => setStateFunction(null)}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}
@@ -238,6 +240,7 @@ const BulkFunction = (props) => {
               </StyledButton>
 
               <StyledButton
+                transparent={true}
                 onClick={handleDeleteAllSelectedTodoItems}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}
@@ -252,6 +255,7 @@ const BulkFunction = (props) => {
               </Text>
 
               <StyledButton
+                transparent={true}
                 onClick={() => setStateFunction(null)}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}
@@ -260,6 +264,7 @@ const BulkFunction = (props) => {
               </StyledButton>
 
               <StyledButton
+                transparent={true}
                 onClick={handleSetDoneAllSelectedTodoItems}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}
@@ -283,10 +288,15 @@ const BulkFunction = (props) => {
                 getOptionLabel={(option) => option.title}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
-                  <StyledTextFieldWhite {...params} label="Select Category" />
+                  <StyledTextFieldWhite
+                    {...params}
+                    lighter={true}
+                    label="Select Category"
+                  />
                 )}
               />
               <StyledButton
+                transparent={true}
                 onClick={() => setStateFunction(null)}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}
@@ -295,6 +305,7 @@ const BulkFunction = (props) => {
               </StyledButton>
 
               <StyledButton
+                transparent={true}
                 onClick={handleAssignAllSelectedTodoItems}
                 className={"active-button"}
                 style={{ textTransform: "capitalize" }}

@@ -4,7 +4,7 @@ import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
 import { FiColumns } from "react-icons/fi";
 import { FaRegSquare, FaRegPlusSquare } from "react-icons/fa";
-import { BsTable, BsInfoSquare } from "react-icons/bs";
+import { BsTable, BsInfoSquare, BsFolderPlus } from "react-icons/bs";
 import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
 import ShowModalNewCategory from "../TodoModals/newCategory";
@@ -13,17 +13,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
 
-import SelectMultiColumn from '../../mini/selectMultiColumn'
+import SelectMultiColumn from "../../mini/selectMultiColumn";
 
-const SettingBar = (props:any) => {
+const SettingBar = (props: any) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const sizeName = useWindowSize().sizeName;
-  const {setShowAddCategoryModal} = props
-  const {
-    show,
-    setThreeColAll,
-    handlePresentAndFilterTodoLayout,
-  } = useContext(TodoContext);
+  const { setShowAddCategoryModal } = props;
+  const { show, setThreeColAll, handlePresentAndFilterTodoLayout } = useContext(
+    TodoContext
+  );
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -70,7 +68,7 @@ const SettingBar = (props:any) => {
               });
             }}
           >
-            <FaRegPlusSquare className="icon-style" />
+            <BsFolderPlus className="icon-style" />
           </Box>
         </Tooltip>
       </Box>
@@ -79,7 +77,7 @@ const SettingBar = (props:any) => {
         <Tooltip arrow placement="right" title="Single Column">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("1col" , null)}
+            onClick={() => handlePresentAndFilterTodoLayout("1col", null)}
             className={
               show[0] === "1col" ? "selected-setting" : "unselected-setting"
             }
@@ -111,7 +109,7 @@ const SettingBar = (props:any) => {
         <Tooltip arrow placement="right" title="Table">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("table" , null)}
+            onClick={() => handlePresentAndFilterTodoLayout("table", null)}
             className={
               show[0] === "table" ? "selected-setting" : "unselected-setting"
             }
@@ -125,7 +123,7 @@ const SettingBar = (props:any) => {
         <Tooltip arrow placement="right" title="All">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("all" , null)}
+            onClick={() => handlePresentAndFilterTodoLayout("all", null)}
             className={
               show[1] === "all" ? "selected-setting" : "unselected-setting"
             }
@@ -136,7 +134,7 @@ const SettingBar = (props:any) => {
         <Tooltip arrow placement="right" title="Is Done">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("done" ,null)}
+            onClick={() => handlePresentAndFilterTodoLayout("done", null)}
             className={
               show[1] === "done" ? "selected-setting" : "unselected-setting"
             }
@@ -145,8 +143,6 @@ const SettingBar = (props:any) => {
           </motion.div>
         </Tooltip>
       </Box>
-
-    
     </Box>
   );
 };

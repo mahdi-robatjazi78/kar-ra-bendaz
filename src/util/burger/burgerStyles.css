@@ -1,16 +1,12 @@
   #container-burger{
-
     width:35px;
     height:35px;
     cursor: pointer;
   }
   #nav-icon3{
     width: 26px;
-    /* height: 15px; */
     position: relative;
     top:8px;
-
-    /* margin: 50px auto; */
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
     -o-transform: rotate(0deg);
@@ -21,8 +17,6 @@
     transition: .5s ease-in-out;
     cursor: pointer;
   }
-  
-  
   
   #nav-icon3 span{
     display: block;
@@ -42,7 +36,6 @@
     -o-transition: .25s ease-in-out;
     transition: .25s ease-in-out;
   }
-  
   
   #nav-icon3 span:nth-child(1) {
     top: 0px;

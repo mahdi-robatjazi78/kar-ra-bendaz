@@ -5,11 +5,12 @@
     margin: 1rem;
     border-radius: 1rem;
     position: relative;
+    background-color: var(--header);
 
     .head {
       padding: 1rem;
       font-size: 1.1rem;
-      color: var(--text3);
+      color: white;
       text-align: center;
     }
     .body {
@@ -22,15 +23,15 @@
     margin: auto;
     padding: 0.2rem 1rem;
     height: 5.5rem;
+    background-color: var(--header);
     .head {
       padding: 0.4rem 1rem;
       font-size: 1.1rem;
-      color: var(--text3);
+      color: white;
       text-align: center;
     }
   }
 }
-
 
 #setting-modal-main-parent {
   margin: 1rem 0;

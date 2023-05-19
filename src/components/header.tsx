@@ -16,14 +16,14 @@ import Toast from "../util/toast";
 import Burger from "../util/burger/burger";
 import { motion } from "framer-motion";
 import { LogoutAction } from "@/redux/features/userSlice";
-import {useDispatch , useSelector} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { AiFillSetting } from "react-icons/ai";
-import {Styled_Menu ,Styled_Menu_Item} from "@/styles/styled/styled_menu";
+import { Styled_Menu, Styled_Menu_Item } from "@/styles/styled/styled_menu";
 import { removeLocalSettings } from "@/util/funcs";
 
 const Header = (props) => {
-  const {handleOpenSettingModal} = props;
+  const { handleOpenSettingModal } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -33,22 +33,22 @@ const Header = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const dispatch : AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
-  const auth = useSelector((state:RootState)=>state.auth)
-  const {headerPosition , blur} = useSelector((state:RootState)=>state.settings)
-  
-  
+  const auth = useSelector((state: RootState) => state.auth);
+  const { headerPosition, blur } = useSelector(
+    (state: RootState) => state.settings
+  );
+
   const handleLogoutUser = async () => {
-    
     try {
       const response = await axios.put(`${base_url}/users/logout`);
       if (response.status === 200) {
-        removeLocalSettings("auth")
-        handleClose()
-        dispatch(LogoutAction())
+        removeLocalSettings("auth");
+        handleClose();
+        dispatch(LogoutAction({}));
         navigate("/login");
-        Toast(response.data.msg);
+        Toast(response.data.msg, false, true);
       }
     } catch (error) {
       console.log(error.response);
@@ -63,16 +63,14 @@ const Header = (props) => {
           ? {
               width: 70,
               flexDirection: "column",
-              height:"100vh",
-              ...(blur.head && {filter:`blur(${blur.size}px)`})
-
+              height: "100vh",
+              ...(blur.head && { filter: `blur(${blur.size}px)` }),
             }
           : {
               height: 70,
               flexDirection: "row",
-              width:"100vw",
-              ...(blur.head && {filter:`blur(${blur.size}px)`})
-
+              width: "100vw",
+              ...(blur.head && { filter: `blur(${blur.size}px)` }),
             }
       }
       initial={
@@ -101,7 +99,12 @@ const Header = (props) => {
     >
       <Burger />
 
-      <AiFillSetting style={{cursor:"pointer" , fontSize:"2rem" , margin:"1rem"}} onClick={()=>{handleOpenSettingModal()}} />
+      <AiFillSetting
+        style={{ cursor: "pointer", fontSize: "2rem", margin: "1rem" }}
+        onClick={() => {
+          handleOpenSettingModal();
+        }}
+      />
       <NavLink className="header-link" to={"/"}>
         <SiHomeassistant />
       </NavLink>
@@ -116,16 +119,9 @@ const Header = (props) => {
         />
 
         {auth.token && auth.me.email ? (
-          <Styled_Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-          >
+          <Styled_Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
             <Styled_Menu_Item>
-              <NavLink
-                style={{  textDecoration: "none" }}
-                to={"/profile"}
-              >
+              <NavLink style={{ textDecoration: "none" }} to={"/profile"}>
                 <Box className="d-flex-between">
                   <Box>Profile</Box>
                   <CgProfile style={{ padding: ".2rem", fontSize: "1.5rem" }} />
@@ -134,10 +130,7 @@ const Header = (props) => {
             </Styled_Menu_Item>
 
             <Styled_Menu_Item>
-              <NavLink
-                style={{  textDecoration: "none" }}
-                to={"/edit-profile"}
-              >
+              <NavLink style={{ textDecoration: "none" }} to={"/edit-profile"}>
                 <Box className="d-flex-between">
                   <Box>Edit Profile</Box>
                   <FiEdit style={{ padding: ".2rem", fontSize: "1.5rem" }} />
@@ -148,7 +141,7 @@ const Header = (props) => {
             <Styled_Menu_Item>
               <Box
                 className="logout"
-                style={{  textDecoration: "none" }}
+                style={{ textDecoration: "none" }}
                 onClick={() => handleLogoutUser()}
               >
                 <Box className="d-flex-between">

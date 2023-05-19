@@ -95,7 +95,7 @@ const SettingModal = (props) => {
 
   const handleChangeListenFromOs = (e) => {
     const listen = e.target.checked;
-    setCommonLocalSettings('theme-read-from-os' , listen)
+    setCommonLocalSettings("theme-read-from-os", listen);
     dispatch(handleListenFromOs(listen));
   };
 
@@ -163,58 +163,32 @@ const SettingModal = (props) => {
             variant="scrollable"
             value={settingItem}
             onChange={handleChange}
-            aria-label="setting tabs"
+            aria-label="setting-tabs"
             scrollButtons="auto"
           >
             <Tab tabIndex={1} value={0} label="Overal" />
             <Tab tabIndex={2} value={1} label="See Shortcuts" />
-            {
-              window.location.pathname === "/todos" && ( 
-                <Tab tabIndex={3} value={2} label="Todo Page" />
-              )
-            }
+            {window.location.pathname === "/todos" && (
+              <Tab tabIndex={3} value={2} label="Todo Page" />
+            )}
           </StyledTabs>
         </Box>
         <Box className="setting-modal-board">
           {settingItem === 0 ? (
             <Box>
               <Box className="d-flex-around">
-                <Box
-                  sx={{
-                    backgroundColor: theme.isDarkMode
-                      ? theme.header
-                      : theme.sidebar,
-                  }}
-                  className="box"
-                >
+                <Box className="box">
                   {" "}
                   <Box className="head">Sound</Box>
                   <Box className="body">
                     <Box className="flex-central">
-                      <GiSoundOn
-                        fontSize={"2rem"}
-                        style={{
-                          color: "var(--text3)",
-                        }}
-                      />
-                      <GiSoundOff
-                        fontSize={"2rem"}
-                        style={{
-                          color: "var(--text3)",
-                        }}
-                      />
+                      <GiSoundOn fontSize={"2rem"} color="var(--text2)" />
+                      <GiSoundOff fontSize={"2rem"} color="var(--text2)" />
                     </Box>
                   </Box>
                 </Box>
 
-                <Box
-                  sx={{
-                    backgroundColor: theme.isDarkMode
-                      ? theme.header
-                      : theme.sidebar,
-                  }}
-                  className="box"
-                >
+                <Box className="box">
                   {" "}
                   <Box className="head">Theme</Box>
                   <Box className="body">
@@ -226,7 +200,11 @@ const SettingModal = (props) => {
                         checked={OsTheme.listen}
                         onChange={handleChangeListenFromOs}
                       />{" "}
-                      <Text variant="caption" selectable={false}>
+                      <Text
+                        variant="caption"
+                        selectable={false}
+                        style={{ color: "white" }}
+                      >
                         {" "}
                         Listen to os{" "}
                       </Text>
@@ -250,14 +228,7 @@ const SettingModal = (props) => {
                 </Box>
               </Box>
 
-              <Box
-                sx={{
-                  backgroundColor: theme.isDarkMode
-                    ? theme.header
-                    : theme.sidebar,
-                }}
-                className="blurBox"
-              >
+              <Box className="blurBox">
                 <Box className="head">Blur</Box>
                 <Box className="body">
                   <StyledSliderComponent

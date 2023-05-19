@@ -61,7 +61,7 @@ instance.interceptors.response.use(
     return response;
   },
   function(error) {
-    Toast(error.response.data.msg || error.response.data.error, false);
+    Toast(error.response.data.msg || error.response.data.error, false , true);
 
     if (error.response.status === 401 || error.response.status === 403) {
       store.dispatch(setBlurPage())

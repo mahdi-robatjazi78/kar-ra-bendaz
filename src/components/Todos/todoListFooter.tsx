@@ -113,6 +113,7 @@ const TodoPageFooter = (props) => {
           label="Search in todos"
           margin="normal"
           size="small"
+          lighter={false}
           className="search-in-todos-box"
           autoFocus
           value={searchText}
@@ -141,7 +142,7 @@ const TodoPageFooter = (props) => {
                       handleBackFromSearchState();
                     }}
                   >
-                    <VscChromeClose />
+                    <VscChromeClose color="var(--borders)" />
                   </IconButton>
                 </Tooltip>
               </InputAdornment>

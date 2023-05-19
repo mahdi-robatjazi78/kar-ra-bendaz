@@ -30,9 +30,9 @@ const SidebarItem = (props: any) => {
   const isActive = canDrop && isOver;
   let borderColor = "";
   if (isActive) {
-    borderColor = "green";
+    borderColor = "var(--hoverSuccess)";
   } else if (canDrop) {
-    borderColor = "darkkhaki";
+    borderColor = "var(--borders)";
   }
 
   const subsetTabsStyle = {

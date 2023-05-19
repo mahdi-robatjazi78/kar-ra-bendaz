@@ -15,7 +15,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { setCommonLocalSettings } from "@/util/funcs";
 
 const HeaderPosition = () => {
-  const { borders, text3 } = useContext(ThemeContext);
+  const { borders, text2 } = useContext(ThemeContext);
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
   const sizeName = useWindowSize().sizeName;
@@ -40,7 +40,7 @@ const HeaderPosition = () => {
           }}
         >
           <TbArrowBigUpLines
-            style={{ color: headerPosition === "top" ? borders : text3 }}
+            style={{ color: headerPosition === "top" ? borders : text2 }}
           />
         </IconButton>
       </Box>
@@ -55,7 +55,7 @@ const HeaderPosition = () => {
               }}
             >
               <TbArrowBigLeftLines
-                style={{ color: headerPosition === "left" ? borders : text3 }}
+                style={{ color: headerPosition === "left" ? borders : text2 }}
               />
             </IconButton>
           </Box>
@@ -68,7 +68,7 @@ const HeaderPosition = () => {
               }}
             >
               <TbArrowBigRightLines
-                style={{ color: headerPosition === "right" ? borders : text3 }}
+                style={{ color: headerPosition === "right" ? borders : text2 }}
               />
             </IconButton>
           </Box>
@@ -83,7 +83,7 @@ const HeaderPosition = () => {
           }}
         >
           <TbArrowBigDownLines
-            style={{ color: headerPosition === "bottom" ? borders : text3 }}
+            style={{ color: headerPosition === "bottom" ? borders : text2 }}
           />
         </IconButton>
       </Box>

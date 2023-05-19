@@ -5,9 +5,7 @@ import ThemeContext from "@context/themeContext";
 import { AppDataContext } from "@context/appDataContext";
 import Axios from "@/services/api";
 import Swal from "sweetalert2";
-import {
-  useStoreNewCategoryMutation,
-} from "@/redux/api/categories";
+import { useStoreNewCategoryMutation } from "@/redux/api/categories";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch } from "react-redux";
@@ -32,8 +30,10 @@ const ShowModalNewCategory = (props) => {
     storeNewCategoryResponse,
   ] = useStoreNewCategoryMutation();
   const submitNewCategory = (title: String) => {
-      storeNewCategory({ title, ws: ActiveWorkspaceID }).unwrap().then((resp)=>{
-        Toast(resp?.msg);
+    storeNewCategory({ title, ws: ActiveWorkspaceID })
+      .unwrap()
+      .then((resp) => {
+        Toast(resp?.msg, true, true, "📂");
         UpdateOnlyCategories();
         dispatch(deactiveBlur());
         setShowAddCategoryModal({
@@ -41,9 +41,8 @@ const ShowModalNewCategory = (props) => {
           state: "add",
           prevText: "",
         });
-      }).catch(error=>{
-
-      });
+      })
+      .catch((error) => {});
   };
 
   useEffect(() => {

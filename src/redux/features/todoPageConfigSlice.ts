@@ -3,26 +3,26 @@ import axios from "../../services/api";
 // import { getLocalStorageValue, setTodoPageLocalSettings } from "@/util/funcs";
 
 export interface IActiveWs {
-  id: String | null;
-  title: String | null;
+  id: string | null;
+  title: string | null;
 }
 
 export interface IActiveCategory {
-  id: String | null;
-  title: String | null;
+  id: string | null;
+  title: string | null;
 }
 
 export interface ITodoDrawer {
   open: Boolean;
-  state: String;
-  anchor: String;
+  state: string;
+  anchor: string;
   item: {
-    _id: String;
-    body: String;
-    flag: String;
-    categoId: String;
-    owner: String;
-    date: Date | String;
+    _id: string;
+    body: string;
+    flag: string;
+    categoId: string;
+    owner: string;
+    date: Date | string;
   };
 }
 export interface IMeta {

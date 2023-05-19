@@ -10,6 +10,7 @@ export default function Text(props: any) {
       sx={{
         color: `${onlyWhite ? "white" : "var(--text1)"}`,
         userSelect: props?.selectable ? "text" : "none",
+        fontFamily: "system-ui monospace cursive",
       }}
     >
       {props.children}

@@ -8,14 +8,12 @@ import Swal from "sweetalert2";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
-import {
-  useStoreNewTodoMutation,
-} from "@/redux/api/todos";
+import { useStoreNewTodoMutation } from "@/redux/api/todos";
 import { useSelector } from "react-redux";
 
 const ShowModalNewTodo = (props) => {
   const MySwal = withReactContent(Swal);
-  const { setShowModalAddTodo ,UpdateTodoAndCategories } = props;
+  const { setShowModalAddTodo, UpdateTodoAndCategories } = props;
   const dispatch: AppDispatch = useDispatch();
   const theme = useContext(ThemeContext);
   const {
@@ -24,7 +22,6 @@ const ShowModalNewTodo = (props) => {
   } = useSelector((state: RootState) => state.todoPageConfig);
   const [storeNewTodo, respStoreNewTodo] = useStoreNewTodoMutation();
 
-
   const SubmitNewTodo = (todo, intoCategory = false) => {
     storeNewTodo({
       todo,
@@ -32,9 +29,8 @@ const ShowModalNewTodo = (props) => {
       ...(intoCategory && { categoId: ActiveCategoryID }),
     })
       .then((resp) => {
-        Toast(resp.data.msg);
-        UpdateTodoAndCategories()
-        
+        Toast(resp.data.msg, true, true, "📝");
+        UpdateTodoAndCategories();
       })
       .catch(() => {});
   };

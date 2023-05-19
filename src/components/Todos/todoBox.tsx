@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, CSSProperties } from "react";
 import { useDrag } from "react-dnd";
 import { Card, CardContent, Grid } from "@mui/material";
 import { TodoContext } from "@context/todoContext";
@@ -92,7 +92,7 @@ const TodoBox = (props: any) => {
 
   const addToCategoryWithDragDrop = (item: any, dropResult: any) => {
     if (category === dropResult.id) {
-      Toast("Please drop todo to another category", false);
+      Toast("Please drop todo to another category", false, true);
       return;
     }
     if (dropResult?.id == null || dropResult?.id === "other") {
@@ -102,7 +102,7 @@ const TodoBox = (props: any) => {
         newCategoId: "other",
       })
         .then((resp) => {
-          Toast(resp.data.msg);
+          Toast(resp.data.msg, true, true);
           UpdateTodoAndCategories();
         })
         .catch((error) => {});
@@ -113,7 +113,7 @@ const TodoBox = (props: any) => {
         newCategoId: dropResult?.id,
       })
         .then((resp) => {
-          Toast(resp.data.msg);
+          Toast(resp.data.msg, true, true);
           UpdateTodoAndCategories();
         })
         .catch((error) => {});
@@ -139,6 +139,22 @@ const TodoBox = (props: any) => {
   );
   const opacity = isDragging ? 0.4 : 1;
 
+  const getStyle = (isDragging: boolean): CSSProperties => {
+    return {
+      border: isDragging ? "2px dashed var(--borders)" : "unset",
+
+      opacity,
+      background:
+        flag === "isDone"
+          ? "rgb(163, 206, 168)"
+          : isDragging
+          ? "gray"
+          : theme.isDarkMode
+          ? "rgb(107, 125, 179)"
+          : "white",
+    };
+  };
+
   return (
     <Grid
       key={index}
@@ -162,14 +178,8 @@ const TodoBox = (props: any) => {
         box-todo-id={id}
         className="todo-box"
         data-testid="box"
+        style={getStyle(isDragging)}
         ref={drag}
-        sx={{
-          opacity,
-          background:
-            flag === "isDone"
-              ? "rgb(163, 206, 168)"
-              : "rgba( 255, 255, 255, 0.25 )",
-        }}
         onClick={() => {
           dispatch(DrawerOpen({ state: "todo", item: todos[index] }));
           dispatch(setBlurPage());

@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
 import StyledBadge from "@/styles/styled/styled_badge";
 import Text from "@/styles/styled/styled_typography";
+import { truncateText } from "@/util/funcs";
 
 const Sidebar = (props: any) => {
   const { categoryList, totalTodoItems } = props;
@@ -30,9 +31,9 @@ const Sidebar = (props: any) => {
   const isActive = canDrop && isOver;
   let borderColor = "";
   if (isActive) {
-    borderColor = "green";
+    borderColor = "var(--hoverSuccess)";
   } else if (canDrop) {
-    borderColor = "darkkhaki";
+    borderColor = "var(--borders)";
   }
 
   const subsetTabsStyle = {
@@ -57,7 +58,7 @@ const Sidebar = (props: any) => {
     >
       {ActiveWs?.title && (
         <Text className="ws-title" component={"h4"}>
-          {ActiveWs?.title}
+          {truncateText(ActiveWs?.title, 19)}
         </Text>
       )}
 

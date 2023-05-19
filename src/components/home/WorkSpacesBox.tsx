@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   Tab,
-  Tabs,
   Box,
-  Typography,
   IconButton,
   Table,
   TableHead,
   TableRow,
-  TableCell,
   TableBody,
-  Switch,
-  TextField,
   InputAdornment,
   Tooltip,
   TableContainer,
@@ -19,17 +14,13 @@ import {
 } from "@mui/material";
 import { MdWorkspacesOutline } from "react-icons/md";
 import ThemeContext from "@context/themeContext";
-import { FiSearch, FiTrash2 } from "react-icons/fi";
-import { CgArrowsShrinkH } from "react-icons/cg";
+import { FiSearch } from "react-icons/fi";
 import { IoCloseSharp, IoReloadOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import Toast from "@/util/toast";
-import { styled } from "@mui/material/styles";
-import { tableCellClasses } from "@mui/material/TableCell";
 import SwitchCustomized from "../../styles/styled/CustomeSwitch";
 import EmptyListAnimation from "@/util/emptyList/emptyListAnimation";
-
 import {
   useWsListQuery,
   useStoreNewWsMutation,
@@ -41,11 +32,13 @@ import { useDispatch } from "react-redux";
 import { StyledTableCell, StyledTableRow } from "@/styles/styled/styled_table";
 import StyledTabs from "@/styles/styled/styled_tabs";
 import Styled_Standard_Textfield from "@/styles/styled/styled_standard_textfield";
+import Text from "@/styles/styled/styled_typography";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  sx?: object;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -58,8 +51,9 @@ function TabPanel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
+      style={{ height: "80%" }}
     >
-      {value === index && <Box>{children}</Box>}
+      {value === index && <Box style={{ height: "80%" }}>{children}</Box>}
     </div>
   );
 }
@@ -201,7 +195,7 @@ const AddOrSearchUi = (props) => {
   );
 };
 
-const TableOfContent = () => {
+const WorkspacesTable = () => {
   const [value, setValue] = useState(0);
   const [state, setState] = useState("icons");
   const [wsSelectedId, setWsSelectedId] = useState("");
@@ -211,12 +205,9 @@ const TableOfContent = () => {
     setWsSelectedId("");
     setState("icons");
   };
-  const {
-    data = [],
-    isLoading,
-    isSuccess,
-    refetch,
-  } = useWsListQuery(resultText);
+  const { data = [], isLoading, isSuccess, refetch } = useWsListQuery(
+    resultText
+  );
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
@@ -255,7 +246,7 @@ const TableOfContent = () => {
   useEffect(() => {
     // AFTER STORE REQUEST
     if (respStoreNewWs.isSuccess) {
-      Toast(respStoreNewWs?.data?.msg);
+      Toast(respStoreNewWs?.data?.msg, true, true);
       backToIcons();
       setInputText("");
       refetch();
@@ -265,7 +256,7 @@ const TableOfContent = () => {
   useEffect(() => {
     // AFTER ACTIVE OR DIACTIVE REQUEST
     if (respActiveWs.isSuccess) {
-      Toast(respActiveWs?.data?.msg);
+      Toast(respActiveWs?.data?.msg, true, true);
       if (respActiveWs?.data?.activeWorkspace?.id) {
         dispatch(
           SetActiveWs({
@@ -287,7 +278,7 @@ const TableOfContent = () => {
     if (respRenameWs.isSuccess) {
       backToIcons();
       setInputText("");
-      Toast(respRenameWs?.data?.msg);
+      Toast(respRenameWs?.data?.msg, true, true);
       refetch();
     }
   }, [respRenameWs.isSuccess]);
@@ -360,6 +351,7 @@ const TableOfContent = () => {
         >
           <Tab value={0} label="Todo Workspace" />
           <Tab value={1} label="Note Boards" />
+          <Tab value={2} label="Widget Dashboards" />
         </StyledTabs>
 
         <TabPanel value={value} index={0}>
@@ -385,26 +377,10 @@ const TableOfContent = () => {
                   }}
                 >
                   <TableRow>
-                    <StyledTableCell
-                      style={{ color: theme.text3, fontWeight: "bold" }}
-                    >
-                      Title
-                    </StyledTableCell>
-                    <StyledTableCell
-                      style={{ color: theme.text3, fontWeight: "bold" }}
-                    >
-                      Categories
-                    </StyledTableCell>
-                    <StyledTableCell
-                      style={{ color: theme.text3, fontWeight: "bold" }}
-                    >
-                      Todos
-                    </StyledTableCell>
-                    <StyledTableCell
-                      style={{ color: theme.text3, fontWeight: "bold" }}
-                    >
-                      Active
-                    </StyledTableCell>
+                    <StyledTableCell>Title</StyledTableCell>
+                    <StyledTableCell>Categories</StyledTableCell>
+                    <StyledTableCell>Todos</StyledTableCell>
+                    <StyledTableCell>Active</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 {!isSuccess || !data?.workspaces?.length ? (
@@ -477,11 +453,18 @@ const TableOfContent = () => {
           )}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <Text style={{ fontSize: "1.5em" }} className="flex-central">
+            Note Boards Coming Soon Available 👻👻👻
+          </Text>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <Text style={{ fontSize: "1.5em" }} className="flex-central">
+            Widget Dashboards Coming Soon Available 👻👻👻
+          </Text>
         </TabPanel>
       </Box>
     </Box>
   );
 };
 
-export default TableOfContent;
+export default WorkspacesTable;

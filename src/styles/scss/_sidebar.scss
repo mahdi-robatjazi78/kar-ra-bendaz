@@ -9,12 +9,11 @@
   min-width: 230px;
   max-width: 230px;
 
-
-  .ws-title{
-    margin:0 1rem ;
-    color:var(--text2)
+  .ws-title {
+    margin: 0 1rem;
+    color: var(--hoverSuccess);
+    font-size: 1.2rem;
   }
-
 
   #listCategories {
     list-style: none;
@@ -25,7 +24,7 @@
       background-color: var(--secondSidebar);
     }
     .hover-todo-mode {
-      border: 2px dashed orange;
+      border: 2px dashed var(--borders);
     }
 
     .list-category-items {
@@ -35,7 +34,6 @@
       display: flex;
       justify-content: space-between;
 
-       
       // border-bottom:1px solid var(--header);
 
       .task-title-style {
@@ -46,14 +44,14 @@
         user-select: none;
         line-height: 2rem;
       }
-      .task-title-style-active{
+      .task-title-style-active {
         font-weight: 500;
         font-size: 1.1rem;
         font-family: sans-serif;
         letter-spacing: 1px;
         user-select: none;
         line-height: 2rem;
-        color:var(--text2);
+        color: var(--text2);
       }
 
       .task-count-style {
@@ -62,8 +60,8 @@
         margin-right: 0.5rem;
         text-align: center;
         user-select: none;
-        font-size:.6rem;
-        height:25px;
+        font-size: 0.6rem;
+        height: 25px;
         border: 1px solid var(--header);
       }
     }

@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap");
 
-%font-styles{
-  color:var(--text1);
-  font-family: 'Noto Sans', sans-serif;
-  font-size:.8rem;
+%font-styles {
+  color: var(--text1);
+  font-family: "Noto Sans", sans-serif;
+  font-size: 0.8rem;
 }
-%box-styles{
+%box-styles {
   user-select: none;
-  border: .7px solid gray;
+  border: 0.7px solid gray;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   cursor: pointer;
@@ -22,50 +22,46 @@
 
 #home-page {
   @extend %font-styles;
-  height:100%;
-  width:100%;
-  padding:2rem;
-  margin:auto;
-  overflow-y:auto;
-  
-  .MuiGrid-root{
-      grid-gap:1rem;
-    .add-space-box{
-      padding:1rem .2rem 1rem 1rem !important;
-      border:1.5px solid var(--borders);
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
+  margin: auto;
+  overflow-y: auto;
+
+  .MuiGrid-root {
+    grid-gap: 1rem;
+    .add-space-box {
+      padding: 1rem 0.2rem 1rem 1rem !important;
+      border: 1.5px solid var(--borders);
       border-radius: 12px 12px 12px 0;
-      width:100%;
-      height:200px;
+      width: 100%;
+      height: 200px;
 
       @extend %box-styles;
-      .add-space-icon-box{
-        padding-bottom:5px;
-        border-bottom:1px solid var(--borders);
+      .add-space-icon-box {
+        padding-bottom: 5px;
+        border-bottom: 1px solid var(--borders);
 
-        .add-space-icon{
+        .add-space-icon {
           font-size: 1.2rem;
-          color:var(--borders);
-          
+          color: var(--borders);
         }
       }
 
-      .add-space-item-box{
-        padding:10px 0;
-        height:100%;
-        .add-space-item{
+      .add-space-item-box {
+        padding: 10px 0;
+        height: 100%;
+        .add-space-item {
           @extend %font-styles;
           user-select: none;
-          padding:10px 10px;
-          cursor:pointer;
-          &:hover{
-            border:1px solid var(--borders);
-            color:var(--text1);
+          padding: 10px 10px;
+          cursor: pointer;
+          &:hover {
+            border: 1px solid var(--borders);
+            color: var(--text1);
           }
         }
       }
     }
-
   }
-
-
 }

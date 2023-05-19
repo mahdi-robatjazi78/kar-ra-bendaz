@@ -25,9 +25,11 @@ import { TodoContext } from "@/context/todoContext";
 
 const Main = () => {
   const auth = useSelector((state: RootState) => state.auth);
-  const { headerPosition, modal, theme: {listen:ListenOsTheme} } = useSelector(
-    (state: RootState) => state.settings
-  );
+  const {
+    headerPosition,
+    modal,
+    theme: { listen: ListenOsTheme },
+  } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
   const checkProfileDataEssentials = () => {
     if (!auth.token) {
@@ -94,26 +96,38 @@ const Main = () => {
   useEffect(() => {
     // check and set localstorage default essentials
     localStorageSetFirstEssentials(dispatch, setThreeColAll);
-  }, [])
-  useEffect(()=>{
+  }, []);
+  useEffect(() => {
     handleSeeOsDarkMode();
-  },[ListenOsTheme])
+  }, [ListenOsTheme]);
 
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", () => {
-        handleSeeOsDarkMode();
+      handleSeeOsDarkMode();
     });
+
+  // .matchMedia("(prefers-color-scheme: dark)")
+  // .addEventListener("change", (event) => {
+  //   const newColorScheme = event.matches ? "dark" : "light";
+
+  //   console.log(" newColorScheme  ???", newColorScheme);
+
+  let mm = window.matchMedia("(prefers-color-scheme: light)");
+  mm.addEventListener("change", (scheme) => {
+    if (scheme.matches) {
+      console.log("We have browser/system light scheme 1", scheme.matches);
+    } else {
+      console.log("We have browser/system light scheme 2", scheme.matches);
+    }
+  });
 
   const handleSeeOsDarkMode = () => {
     const isDarkMode =
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme:dark)").matches;
 
-
-
-    if(getLocalStorageValue("theme-read-from-os")){
-
+    if (getLocalStorageValue("theme-read-from-os")) {
       if (isDarkMode) {
         dispatch(handleOsTheme("dark"));
         if (DarkModeContext !== isDarkMode) {
