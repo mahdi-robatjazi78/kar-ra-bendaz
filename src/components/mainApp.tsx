@@ -16,11 +16,7 @@ import {
 } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
-import {
-  getLocalStorageValue,
-  localStorageSetFirstEssentials,
-  setCommonLocalSettings,
-} from "@/util/funcs";
+import { getLocalStorageValue } from "@/util/funcs";
 import { TodoContext } from "@/context/todoContext";
 
 const Main = () => {
@@ -93,10 +89,10 @@ const Main = () => {
     dispatch(changeHeaderPosition("right"));
   });
 
-  useEffect(() => {
-    // check and set localstorage default essentials
-    localStorageSetFirstEssentials(dispatch, setThreeColAll);
-  }, []);
+  // useEffect(() => {
+  // check and set localstorage default essentials
+  // localStorageSetFirstEssentials(dispatch, setThreeColAll);
+  // }, []);
   useEffect(() => {
     handleSeeOsDarkMode();
   }, [ListenOsTheme]);

@@ -42,7 +42,6 @@ import {
   handlePlaySound,
 } from "@/redux/features/settingSlice";
 import useDebounce from "@/hooks/useDebounce";
-import { getLocalStorageValue, setCommonLocalSettings } from "@/util/funcs";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -51,18 +50,20 @@ const SettingModal = (props) => {
   };
 
   const theme = useContext(ThemeContext);
-  const { show, handlePresentAndFilterTodoLayout, setThreeColAll } = useContext(
-    TodoContext
-  );
+  const { show, handlePresentAndFilterTodoLayout, setThreeColAll } =
+    useContext(TodoContext);
   const dispatch = useDispatch();
   const {
     meta,
     layout_nav_show,
     active_category: ActiveCategory,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const { modal, blur, theme: OsTheme, playSound } = useSelector(
-    (state: RootState) => state.settings
-  );
+  const {
+    modal,
+    blur,
+    theme: OsTheme,
+    playSound,
+  } = useSelector((state: RootState) => state.settings);
   const setting = modal.config?.setting;
   const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
     false
@@ -96,7 +97,6 @@ const SettingModal = (props) => {
 
   const handleChangeListenFromOs = (e) => {
     const listen = e.target.checked;
-    setCommonLocalSettings("theme-read-from-os", listen);
     dispatch(handleListenFromOs(listen));
   };
 
@@ -139,13 +139,12 @@ const SettingModal = (props) => {
   };
 
   const [blurSliderNewValue, setBlurSliderNewValue] = useState(
-    getLocalStorageValue("blur-size") || +blur?.size * 10 || 50
+    +blur?.size * 10 || 50
   );
 
   useDebounce(
     () => {
       handleChangeBlurSlider(+blurSliderNewValue);
-      setCommonLocalSettings("blur-size", +blurSliderNewValue);
     },
     [blurSliderNewValue],
     600

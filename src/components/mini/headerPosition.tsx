@@ -12,7 +12,6 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
-import { setCommonLocalSettings } from "@/util/funcs";
 
 const HeaderPosition = () => {
   const { borders, text2 } = useContext(ThemeContext);
@@ -36,7 +35,6 @@ const HeaderPosition = () => {
         <IconButton
           onClick={() => {
             dispatch(changeHeaderPosition("top"));
-            setCommonLocalSettings("header-pos", "top");
           }}
         >
           <TbArrowBigUpLines
@@ -51,7 +49,6 @@ const HeaderPosition = () => {
             <IconButton
               onClick={() => {
                 dispatch(changeHeaderPosition("left"));
-                setCommonLocalSettings("header-pos", "left");
               }}
             >
               <TbArrowBigLeftLines
@@ -64,7 +61,6 @@ const HeaderPosition = () => {
             <IconButton
               onClick={() => {
                 dispatch(changeHeaderPosition("right"));
-                setCommonLocalSettings("header-pos", "right");
               }}
             >
               <TbArrowBigRightLines
@@ -79,7 +75,6 @@ const HeaderPosition = () => {
         <IconButton
           onClick={() => {
             dispatch(changeHeaderPosition("bottom"));
-            setCommonLocalSettings("header-pos", "bottom");
           }}
         >
           <TbArrowBigDownLines

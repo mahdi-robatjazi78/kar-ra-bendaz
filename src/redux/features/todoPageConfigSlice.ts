@@ -26,16 +26,15 @@ export interface ITodoDrawer {
   };
 }
 export interface IMeta {
-  page: Number | null,
-  limit: Number | null,
-  total_items: Number | null,
-  total_pages: Number | null,
+  page: Number | null;
+  limit: Number | null;
+  total_items: Number | null;
+  total_pages: Number | null;
 }
 export interface IMouseSelected {
-  
-  count: Number ,
-  entity:String, // todo , category
-  items: {boxTodoId:String , innerTodoText:String}[]
+  count: Number;
+  entity: String; // todo , category
+  items: { boxTodoId: String; innerTodoText: String }[];
 }
 
 export interface ITodoPage {
@@ -46,9 +45,9 @@ export interface ITodoPage {
   searchMode: Boolean;
   searchText: String;
   sidebar_open: Boolean;
-  meta : IMeta,
-  layout_nav_show: Boolean,
-  mouse_selected_items:IMouseSelected
+  meta: IMeta;
+  layout_nav_show: Boolean;
+  mouse_selected_items: IMouseSelected;
 }
 
 const initialState: ITodoPage = {
@@ -66,7 +65,7 @@ const initialState: ITodoPage = {
     anchor: "right",
     item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" },
   },
-  meta:{
+  meta: {
     page: 1,
     limit: 15,
     total_items: null,
@@ -79,9 +78,9 @@ const initialState: ITodoPage = {
   layout_nav_show: true,
   mouse_selected_items: {
     count: 0,
-    entity:"" , // todo , category
-    items:[]
-  }
+    entity: "", // todo , category
+    items: [],
+  },
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -166,52 +165,50 @@ export const todoPageConfigSlice = createSlice({
         state.sidebar_open = true;
       }
     },
-    handleChangeMetaItem:(state , action)=>{
+    handleChangeMetaItem: (state, action) => {
       state.meta = {
-        page : action?.payload?.page || state.meta.page,
-        limit : action?.payload?.limit || state.meta.limit,
-        total_items : action?.payload?.total_items || state.meta.total_items,
-        total_pages : action?.payload?.total_pages || state.meta.total_pages,
-      }
+        page: action?.payload?.page || state.meta.page,
+        limit: action?.payload?.limit || state.meta.limit,
+        total_items: action?.payload?.total_items || state.meta.total_items,
+        total_pages: action?.payload?.total_pages || state.meta.total_pages,
+      };
     },
-    showLayoutNav:(state)=>{
+    showLayoutNav: (state) => {
       state.layout_nav_show = true;
     },
-    hideLayoutNav:(state)=>{
+    hideLayoutNav: (state) => {
       state.layout_nav_show = false;
-    }, 
-
-    AddMouseSelectedItems: (state,action) => { 
-      state.mouse_selected_items = {
-        count:action.payload.count,
-        entity: action.payload.entity,
-        items:action.payload.items,
-      }
     },
-    clearMouseSelectedItems: (state) => { state.mouse_selected_items = { count: 0, entity: '', items: [] } },
+
+    AddMouseSelectedItems: (state, action) => {
+      state.mouse_selected_items = {
+        count: action.payload.count,
+        entity: action.payload.entity,
+        items: action.payload.items,
+      };
+    },
+    clearMouseSelectedItems: (state) => {
+      state.mouse_selected_items = { count: 0, entity: "", items: [] };
+    },
     removeMouseSelectedItemWithId: (state, action) => {
-      
- const elements = document.querySelectorAll(".mouse-drag-selected");
+      const elements = document.querySelectorAll(".mouse-drag-selected");
 
       elements.forEach(function (element) {
-        const boxTodoId = element.getAttribute("box-todo-id")
+        const boxTodoId = element.getAttribute("box-todo-id");
 
         if (boxTodoId === action.payload.id) {
-            element.classList.remove("mouse-drag-selected");
+          element.classList.remove("mouse-drag-selected");
         }
-    });
-      
-      
-      
-      
-      state.mouse_selected_items = {
-        count: +state.mouse_selected_items.count -1,
-        entity: state.mouse_selected_items.entity,
-        items:state.mouse_selected_items.items.filter(item=>item?.boxTodoId !== action.payload.id),
-      }
+      });
 
-    }
-    
+      state.mouse_selected_items = {
+        count: +state.mouse_selected_items.count - 1,
+        entity: state.mouse_selected_items.entity,
+        items: state.mouse_selected_items.items.filter(
+          (item) => item?.boxTodoId !== action.payload.id
+        ),
+      };
+    },
   },
 
   extraReducers: (builder) => {
@@ -267,6 +264,6 @@ export const {
   hideLayoutNav,
   AddMouseSelectedItems,
   clearMouseSelectedItems,
- removeMouseSelectedItemWithId 
+  removeMouseSelectedItemWithId,
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

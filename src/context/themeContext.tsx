@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import themes from "../theme";
 import { getLocalStorageValue, setCommonLocalSettings } from "@/util/funcs";
+import { handleAppThemeChange } from "@/redux/features/settingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface ITheme {
   foreground: string;
@@ -38,8 +41,9 @@ const ThemeContext = React.createContext<ITheme>({
   setLight: Function,
 });
 export const ThemeContextProvider = ({ children }: any) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-
+  const mode = useSelector((state: RootState) => state.settings.theme.mode);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(mode === "dark");
+  const dispatch = useDispatch();
   const [selectedTheme, setSelectedTheme] = useState({
     foreground: "",
     background: "",
@@ -52,12 +56,11 @@ export const ThemeContextProvider = ({ children }: any) => {
     text2: "",
     text3: "",
     hoverSuccess: "",
-    disabled:"",
+    disabled: "",
   });
 
   useEffect(() => {
-    const localDarkModeRead = getLocalStorageValue("darkmode")
-    setIsDarkMode(localDarkModeRead);
+    setIsDarkMode(mode === "dark");
   }, []);
 
   useEffect(() => {
@@ -149,9 +152,7 @@ export const ThemeContextProvider = ({ children }: any) => {
   }, [isDarkMode]);
 
   const toggleDark = () => {
-    const localDarkModeRead = getLocalStorageValue('darkmode')
-
-    if (localDarkModeRead) {
+    if (mode === "dark") {
       setLight();
     } else {
       setDark();
@@ -159,12 +160,12 @@ export const ThemeContextProvider = ({ children }: any) => {
   };
 
   const setDark = () => {
-    setCommonLocalSettings("darkmode",true);
+    dispatch(handleAppThemeChange("dark"));
     setIsDarkMode(true);
   };
 
   const setLight = () => {
-    setCommonLocalSettings("darkmode",false);
+    dispatch(handleAppThemeChange("light"));
     setIsDarkMode(false);
   };
 

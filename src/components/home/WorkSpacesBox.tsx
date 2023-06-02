@@ -205,9 +205,12 @@ const WorkspacesTable = () => {
     setWsSelectedId("");
     setState("icons");
   };
-  const { data = [], isLoading, isSuccess, refetch } = useWsListQuery(
-    resultText
-  );
+  const {
+    data = [],
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useWsListQuery(resultText);
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
