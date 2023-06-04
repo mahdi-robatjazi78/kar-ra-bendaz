@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../services/api";
-// import { getLocalStorageValue, setTodoPageLocalSettings } from "@/util/funcs";
 
 export interface IActiveWs {
   id: string | null;
@@ -48,6 +47,7 @@ export interface ITodoPage {
   meta: IMeta;
   layout_nav_show: Boolean;
   mouse_selected_items: IMouseSelected;
+  layout: Array<String | Number | null>;
 }
 
 const initialState: ITodoPage = {
@@ -81,6 +81,7 @@ const initialState: ITodoPage = {
     entity: "", // todo , category
     items: [],
   },
+  layout: ["3col", "all", 3],
 };
 
 export const todoPageConfigSlice = createSlice({
@@ -209,6 +210,10 @@ export const todoPageConfigSlice = createSlice({
         ),
       };
     },
+
+    todosLayoutChange: (state, action) => {
+      state.layout = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -265,5 +270,6 @@ export const {
   AddMouseSelectedItems,
   clearMouseSelectedItems,
   removeMouseSelectedItemWithId,
+  todosLayoutChange,
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;

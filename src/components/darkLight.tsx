@@ -8,9 +8,8 @@ import { RootState } from "@/redux/store";
 
 const DarkLight = () => {
   const { theme: OsTheme } = useSelector((state: RootState) => state.settings);
-  const { isDarkMode, toggleDark, setDark, setLight } = useContext(
-    ThemeContext
-  );
+  const { isDarkMode, toggleDark, setDark, setLight } =
+    useContext(ThemeContext);
   const handleChangeTheme = () => {
     if (!OsTheme.listen) {
       toggleDark();
@@ -68,7 +67,7 @@ const DarkLight = () => {
               cy="9"
               fill="var(--text2)"
               mask="url(#moon-mask-sound-demo)"
-              r="5"
+              r="8"
             ></circle>
             <g>
               <circle
@@ -142,7 +141,7 @@ const DarkLight = () => {
           //   }}
           // />
           <BsFillMoonStarsFill
-            fontSize={"2rem"}
+            fontSize={"3.6rem"}
             style={{ color: "var(--text2)" }}
           />
         )}

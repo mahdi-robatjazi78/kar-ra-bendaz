@@ -27,7 +27,6 @@ import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { FaRegSquare } from "react-icons/fa";
 import { FiColumns } from "react-icons/fi";
 import { BsTable } from "react-icons/bs";
-import { TodoContext } from "@/context/todoContext";
 import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
 import useWindowSize from "@/hooks/useWindowSize";
@@ -42,6 +41,9 @@ import {
   handlePlaySound,
 } from "@/redux/features/settingSlice";
 import useDebounce from "@/hooks/useDebounce";
+import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
+
+import { handlePresentAndFilterTodoLayout } from "@utils/funcs";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -50,8 +52,10 @@ const SettingModal = (props) => {
   };
 
   const theme = useContext(ThemeContext);
-  const { show, handlePresentAndFilterTodoLayout, setThreeColAll } =
-    useContext(TodoContext);
+
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
+  );
   const dispatch = useDispatch();
   const {
     meta,
@@ -120,7 +124,7 @@ const SettingModal = (props) => {
     if (sizeName !== "mobile") {
       setAnchorEl(event.currentTarget);
     } else {
-      setThreeColAll(2);
+      dispatch(setThreeColAll(2));
       handlePresentAndFilterTodoLayout("3col", 2);
     }
   };
@@ -187,7 +191,7 @@ const SettingModal = (props) => {
                           onClick={() => {
                             dispatch(handlePauseSound());
                           }}
-                          fontSize={"4rem"}
+                          fontSize={"6rem"}
                           color="var(--text2)"
                         />
                       ) : (
@@ -195,7 +199,7 @@ const SettingModal = (props) => {
                           onClick={() => {
                             dispatch(handlePlaySound());
                           }}
-                          fontSize={"4rem"}
+                          fontSize={"6rem"}
                           color="var(--text2)"
                         />
                       )}

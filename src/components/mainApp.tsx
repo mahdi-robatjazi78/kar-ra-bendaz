@@ -17,7 +17,6 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
 import { getLocalStorageValue } from "@/util/funcs";
-import { TodoContext } from "@/context/todoContext";
 
 const Main = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -57,7 +56,6 @@ const Main = () => {
     setLight,
     isDarkMode: DarkModeContext,
   } = useContext(ThemeContext);
-  const { setThreeColAll } = useContext(TodoContext);
   checkProfileDataEssentials();
 
   const handleCloseSettingModal = () => {

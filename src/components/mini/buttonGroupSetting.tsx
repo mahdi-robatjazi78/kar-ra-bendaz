@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import StyledButton from "@/styles/styled/styled_button";
 import { ButtonGroup } from "@mui/material";
-import { TodoContext } from "@/context/todoContext";
 
 const ButtonGroupSetting = (props) => {
-  const { onClickList, textList, iconList , activeItem } = props;
-  const { show } = useContext(TodoContext);
+  const { onClickList, textList, iconList, activeItem } = props;
 
   return (
     <ButtonGroup

@@ -4,11 +4,11 @@ import { handleLogoutUser } from "@/services/api";
 import CustomeHistory from "@/services/customeHistory";
 import { RootState, store } from "@/redux/store";
 import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
-import { useSelector } from "react-redux";
 
 const UnAuthenticatedModal = () => {
   const MySwal = withReactContent(Swal);
-  const mode = useSelector((state: RootState) => state.settings.theme.mode);
+  const mode = store.getState().settings.theme.mode;
+
   const showAlertExpirationAccout = () => {
     MySwal.fire({
       title: "Expiration Token",

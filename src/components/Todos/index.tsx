@@ -11,7 +11,6 @@ import ShowModalNewTodo from "./TodoModals/newTodo";
 import { useHotkeys } from "react-hotkeys-hook";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { TodoContext } from "@context/todoContext";
 import Sidebar from "../sidebar";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,9 +37,12 @@ import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
 import { soundPlay } from "@/util/funcs";
-
+import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
 const Todos = () => {
-  const { show, setThreeColAll } = useContext(TodoContext);
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
+  );
+
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {
@@ -61,10 +63,8 @@ const Todos = () => {
   );
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
-  const [
-    todoAssignRequest,
-    todoAssignResponse,
-  ] = useTodoAssignToCategoryMutation();
+  const [todoAssignRequest, todoAssignResponse] =
+    useTodoAssignToCategoryMutation();
   const [todoList, setTodoList] = useState([]);
   const emptyTodoList = () => {
     setTodoList([]);
@@ -81,15 +81,12 @@ const Todos = () => {
     prevText: "",
   });
 
-  const [
-    triggerGetCategoryIndex,
-    categoryResponse,
-  ] = useLazyGetCategoryIndexQuery();
+  const [triggerGetCategoryIndex, categoryResponse] =
+    useLazyGetCategoryIndexQuery();
   const [triggerGetTodoIndex, todosResponse] = useLazyGetTodoIndexQuery();
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
-  const [openBulkFunctionModal, setOpenBulkFunctionModal] = React.useState(
-    false
-  );
+  const [openBulkFunctionModal, setOpenBulkFunctionModal] =
+    React.useState(false);
   const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
@@ -184,19 +181,19 @@ const Todos = () => {
 
   useEffect(() => {
     if (sizeName === "mobile") {
-      if (show[2] > 2) {
-        setThreeColAll(2);
+      if (+show[2] > 2) {
+        dispatch(setThreeColAll(2));
       }
     } else {
       switch (sizeName) {
         case "tablet":
-          if (show[2] > 3) {
-            setThreeColAll(3);
+          if (+show[2] > 3) {
+            dispatch(setThreeColAll(3));
           }
           break;
         case "laptop":
-          if (show[2] == 6) {
-            setThreeColAll(5);
+          if (+show[2] == 6) {
+            dispatch(setThreeColAll(5));
           }
           break;
         case "pc":
@@ -212,7 +209,7 @@ const Todos = () => {
     dispatch(clearMouseSelectedItems());
     const elements = document.querySelectorAll(".mouse-drag-selected");
     if (elements.length) {
-      elements.forEach(function(element) {
+      elements.forEach(function (element) {
         element.classList.remove("mouse-drag-selected");
       });
     }

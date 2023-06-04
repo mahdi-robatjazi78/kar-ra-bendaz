@@ -3,6 +3,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { userSlice } from "./features/userSlice";
 import { todoPageConfigSlice } from "./features/todoPageConfigSlice";
+import { todoLayoutSlice } from "./features/todoLayoutSlice";
 import { WorkspacesRtkService } from "./api/workspaces";
 import { TodoCategoriesRtkService } from "./api/categories";
 import { TodoRtkService } from "./api/todos";
@@ -30,6 +31,7 @@ export const rootReducers = combineReducers({
   [TodoRtkService.reducerPath]: TodoRtkService.reducer,
   auth: userSlice.reducer,
   todoPageConfig: todoPageConfigSlice.reducer,
+  todoLayout: todoLayoutSlice.reducer,
   settings: appSettings.reducer,
 });
 
@@ -66,6 +68,7 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 setupListeners(store.dispatch);
+
 export default () => {
   let persistor = persistStore(store);
   return { persistor };

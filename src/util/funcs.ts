@@ -5,6 +5,17 @@
 // } from "@/redux/features/settingSlice";
 // import { showLayoutNav } from "@/redux/features/todoPageConfigSlice";
 
+import {
+  changeTodoFilterLayout,
+  setOneColAll,
+  setOneColDone,
+  setTableAll,
+  setTableDone,
+  setThreeColAll,
+  setThreeColDone,
+} from "@/redux/features/todoLayoutSlice";
+import { store } from "@/redux/store";
+
 export const truncateText = (text: string, size: number) => {
   return text.length > size ? text.slice(0, size - 1) + "…" : text;
 };
@@ -86,4 +97,47 @@ export const soundPlay = (soundName) => {
     true
   );
   audio.src = tinung;
+};
+
+export const handlePresentAndFilterTodoLayout = (id: string, n = null) => {
+  const dispatch = store.dispatch;
+  const todoPageLayout = store.getState().todoLayout.todoPageLayout;
+
+  switch (id) {
+    case "all": {
+      dispatch(changeTodoFilterLayout("all"));
+      if (todoPageLayout[0] === "3col") dispatch(setThreeColAll(n));
+      if (todoPageLayout[0] === "1col") dispatch(setOneColAll());
+      if (todoPageLayout[0] === "table") dispatch(setTableAll());
+      break;
+    }
+    case "done": {
+      dispatch(changeTodoFilterLayout("done"));
+
+      if (todoPageLayout[0] === "3col") dispatch(setThreeColDone(n));
+      if (todoPageLayout[0] === "1col") dispatch(setOneColDone());
+      if (todoPageLayout[0] === "table") dispatch(setTableDone());
+      break;
+    }
+    case "3col": {
+      todoPageLayout[1] === "all"
+        ? dispatch(setThreeColAll(n))
+        : dispatch(setThreeColDone(n));
+      break;
+    }
+    case "1col": {
+      todoPageLayout[1] === "all"
+        ? dispatch(setOneColAll())
+        : dispatch(setOneColDone());
+      break;
+    }
+    case "table": {
+      todoPageLayout[1] === "all"
+        ? dispatch(setTableAll())
+        : dispatch(setTableDone());
+      break;
+    }
+    default:
+      break;
+  }
 };

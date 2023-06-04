@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, CSSProperties } from "react";
 import { useDrag } from "react-dnd";
 import { Card, CardContent, Grid } from "@mui/material";
-import { TodoContext } from "@context/todoContext";
+
 import ThemeContext from "../../context/themeContext";
 import Toast from "@utils/toast";
 import { useDragDropAssignToCategoryMutation } from "@/redux/api/todos";
@@ -27,15 +27,8 @@ const TodoBox = (props: any) => {
   );
   const { playSound } = useSelector((state: RootState) => state.settings);
 
-  const {
-    id,
-    categoId,
-    flag,
-    body,
-    todos,
-    index,
-    UpdateTodoAndCategories,
-  } = props;
+  const { id, categoId, flag, body, todos, index, UpdateTodoAndCategories } =
+    props;
 
   const [category, setCategory] = useState(categoId ? categoId : "");
 
@@ -44,14 +37,15 @@ const TodoBox = (props: any) => {
   }, [todos[index].categoId]);
 
   const theme = useContext(ThemeContext);
-  const { show } = useContext(TodoContext);
+
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
+  );
   const dispatch: AppDispatch = useDispatch();
   const [todoBody, setTodoBody] = useState(body);
 
-  const [
-    assignToCategoryRequest,
-    assignToCategoryResponse,
-  ] = useDragDropAssignToCategoryMutation();
+  const [assignToCategoryRequest, assignToCategoryResponse] =
+    useDragDropAssignToCategoryMutation();
   function handleSearchModeShow() {
     if (searchMode && searchText.length > 0) {
       let re = new RegExp(searchText, "gi");

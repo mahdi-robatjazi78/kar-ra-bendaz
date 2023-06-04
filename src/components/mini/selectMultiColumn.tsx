@@ -1,17 +1,19 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Box, Popover } from "@mui/material";
 import { motion } from "framer-motion";
-import { TodoContext } from "@/context/todoContext";
 import useWindowSize from "@/hooks/useWindowSize";
+import { RootState } from "@/redux/store";
+import { handlePresentAndFilterTodoLayout } from "@utils/funcs";
+import { useSelector, useDispatch } from "react-redux";
 
 const SelectMultiColumn = (props) => {
+  const dispatch = useDispatch();
   const { anchorEl, open, id, handleCloseTodoViewCountTooltip } = props;
-  const sizeName = useWindowSize().sizeName;  
-  const { show, setThreeColAll, handlePresentAndFilterTodoLayout } = useContext(
-    TodoContext
+  const sizeName = useWindowSize().sizeName;
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
   );
   const [listTodoViewNumbers, setListTodoViewNumbers] = useState([]);
-
   const changeAcitiveTodoViewListItem = (key: string) => {
     setListTodoViewNumbers((prevState) =>
       prevState.map((item) => {
@@ -33,13 +35,13 @@ const SelectMultiColumn = (props) => {
 
       switch (sizeName) {
         case "tablet":
-          if (show[2] > 3) {
+          if (+show[2] > 3) {
             activeNumber = 3;
           }
           list = [2, 3];
           break;
         case "laptop":
-          if (show[2] == 6) {
+          if (+show[2] == 6) {
             activeNumber = 5;
           }
           list = [2, 3, 4, 5];
@@ -102,7 +104,9 @@ const SelectMultiColumn = (props) => {
             key={item.id}
             onClick={() => {
               changeAcitiveTodoViewListItem(item.id);
-              handlePresentAndFilterTodoLayout("3col", item.number);
+
+              handlePresentAndFilterTodoLayout("3col", +item.number);
+
               setTimeout(() => {
                 handleCloseTodoViewCountTooltip();
               }, 500);

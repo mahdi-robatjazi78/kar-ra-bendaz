@@ -10,18 +10,17 @@ const CustomeStyledModalBox = styled(Box)`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--background);
-  width: min(35rem, 92%);
   border: 2px solid var(--borders);
   border-radius: 8px;
-  height: min(400px);
   outline: none !important;
+  height: min(550px);
+  width: min(60rem, 92%);
 `;
 
 const Styled_Modal = (props) => {
   return (
     <CustomeStyledModal
       {...props}
-      closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
         backdrop: {

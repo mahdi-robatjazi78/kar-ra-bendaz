@@ -1,14 +1,14 @@
 %setting-box-styles {
   .box {
     width: 15rem;
-    height: 12rem;
+    height: 20rem;
     margin: 1rem;
     border-radius: 1rem;
     position: relative;
     background-color: var(--header);
 
     .head {
-      padding: 1rem;
+      padding: 3rem 1rem;
       font-size: 1.1rem;
       color: white;
       text-align: center;
@@ -37,7 +37,7 @@
   margin: 1rem 0;
 
   .setting-modal-board {
-    height: 330px;
+    height: 30rem;
     overflow-y: auto;
 
     @extend %setting-box-styles;

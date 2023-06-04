@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import TodoBox from "./todoBox";
-import { TodoContext } from "@context/todoContext";
 import Selecto from "react-selecto";
 import useDebounce from "@hooks/useDebounce";
 import { useDispatch } from "react-redux";
@@ -9,11 +8,15 @@ import {
   AddMouseSelectedItems,
   clearMouseSelectedItems,
 } from "@/redux/features/todoPageConfigSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const TodoList = (props: any) => {
   const { todoList, UpdateTodoAndCategories } = props;
   const [todoItems, setTodoItems] = useState([]);
-  const { show } = useContext(TodoContext);
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
+  );
   const dispatch = useDispatch();
   const filter = show[1];
   const [listState, setListState] = useState([]);

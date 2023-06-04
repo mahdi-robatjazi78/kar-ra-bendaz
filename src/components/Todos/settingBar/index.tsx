@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import { Box, Popover, Tooltip } from "@mui/material";
 import { CgList } from "react-icons/cg";
 import { MdDoneOutline } from "react-icons/md";
 import { FiColumns } from "react-icons/fi";
 import { FaRegSquare, FaRegPlusSquare } from "react-icons/fa";
 import { BsTable, BsInfoSquare, BsFolderPlus } from "react-icons/bs";
-import { TodoContext } from "@context/todoContext";
 import "./popoverTodoColumn.css";
-import ShowModalNewCategory from "../TodoModals/newCategory";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
-
+import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
 import SelectMultiColumn from "../../mini/selectMultiColumn";
-
+import { handlePresentAndFilterTodoLayout } from "@utils/funcs";
 const SettingBar = (props: any) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const sizeName = useWindowSize().sizeName;
   const { setShowAddCategoryModal } = props;
-  const { show, setThreeColAll, handlePresentAndFilterTodoLayout } = useContext(
-    TodoContext
+  const dispatch = useDispatch();
+  const { todoPageLayout: show } = useSelector(
+    (state: RootState) => state.todoLayout
   );
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -37,7 +36,7 @@ const SettingBar = (props: any) => {
     if (sizeName !== "mobile") {
       setAnchorEl(event.currentTarget);
     } else {
-      setThreeColAll(2);
+      dispatch(setThreeColAll(2));
       handlePresentAndFilterTodoLayout("3col", 2);
     }
   };
