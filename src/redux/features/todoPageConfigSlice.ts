@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "../../services/api";
 
 export interface IActiveWs {
   id: string | null;
@@ -215,38 +214,7 @@ export const todoPageConfigSlice = createSlice({
       state.layout = action.payload;
     },
   },
-
-  extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(fetchActiveWs.fulfilled, (state, action) => {
-      state.active_ws = {
-        id: action.payload.activeWorkspace.id,
-        title: action.payload.activeWorkspace.title,
-      };
-    });
-    builder.addCase(fetchActiveWs.rejected, (state, action) => {
-      state.active_ws = {
-        id: null,
-        title: null,
-      };
-      state.get_out = true;
-    });
-  },
 });
-
-export const fetchActiveWs = createAsyncThunk(
-  "todoPageConfig/ActiveWs",
-  async () => {
-    try {
-      const response = await axios.get("/ws/get-active");
-      if (response.data.activeWorkspace) {
-        return response.data;
-      }
-    } catch (error) {
-      return Promise.reject(error.reponse.data.msg);
-    }
-  }
-);
 
 export const {
   SetActiveWs,

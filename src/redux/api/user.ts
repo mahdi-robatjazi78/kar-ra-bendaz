@@ -5,14 +5,13 @@ const base_url = `http://localhost:8888`;
 
 // Define a service using a base URL and expected endpoints
 
-export const TodoCategoriesRtkService = createApi({
-  reducerPath: "categories",
+export const UserRtkService = createApi({
+  reducerPath: "users",
   baseQuery: fetchBaseQuery({
-    baseUrl: base_url + "/category/",
+    baseUrl: base_url + "/users",
     prepareHeaders(headers, { getState }) {
       const { auth } = getState() as { auth: IUser };
-
-      if (!headers.has("x-auth-token")) {
+      if (!headers.has("x-auth-token") && auth?.token) {
         headers.set("x-auth-token", auth?.token);
       }
       if (!headers.has("Content-Type")) {
@@ -21,17 +20,11 @@ export const TodoCategoriesRtkService = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Categories"],
+  tagTypes: ["Users"],
   endpoints: (builder) => ({
-    getCategoryIndex: builder.query({
-      query: (wsID) => `index?ws=${wsID}`,
-      transformErrorResponse: (error) => {
-        handleResponseError(error);
-      },
-    }),
-    storeNewCategory: builder.mutation({
+    userSignin: builder.mutation({
       query: (payload) => ({
-        url: "store",
+        url: "/login",
         method: "POST",
         body: payload,
       }),
@@ -39,40 +32,32 @@ export const TodoCategoriesRtkService = createApi({
         handleResponseError(error);
       },
     }),
-
-    renameCategory: builder.mutation({
-      query: (payload) => ({
-        url: "editname",
+    userSignout: builder.mutation({
+      query: () => ({
+        url: "/logout",
         method: "PUT",
+        body: {},
+      }),
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+
+    userSignup: builder.mutation({
+      query: (payload) => ({
+        url: "/new",
+        method: "POST",
         body: payload,
       }),
       transformErrorResponse: (error) => {
         handleResponseError(error);
       },
     }),
-
-    removeOnlyCategory: builder.mutation({
-      query: (payload) => ({
-        url: `deleteOnlyCategory?ws=${payload.ws}&id=${payload.id}`,
-        method: "DELETE",
-      }),
-      transformErrorResponse: (error) => {
-        handleResponseError(error);
-      },
-    }),
-    removeCategoryWithAllTodos: builder.mutation({
-      query: (payload) => ({
-        url: `deleteCategoryWithTodos?ws=${payload.ws}&id=${payload.id}`,
-        method: `DELETE`,
-      }),
-    }),
   }),
 });
 
 export const {
-  useLazyGetCategoryIndexQuery,
-  useStoreNewCategoryMutation,
-  useRenameCategoryMutation,
-  useRemoveOnlyCategoryMutation,
-  useRemoveCategoryWithAllTodosMutation,
-} = TodoCategoriesRtkService;
+  useUserSigninMutation,
+  useUserSignoutMutation,
+  useUserSignupMutation,
+} = UserRtkService;

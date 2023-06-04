@@ -15,7 +15,6 @@ import Sidebar from "../sidebar";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchActiveWs,
   GetOutCompleted,
   SearchModeActive,
   SearchModeDeActive,
@@ -23,6 +22,7 @@ import {
   OpenSidebar,
   handleChangeMetaItem,
   clearMouseSelectedItems,
+  SetActiveWs,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -38,6 +38,8 @@ import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
 import { soundPlay } from "@/util/funcs";
 import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
+import { useGetActiveWsQuery } from "@/redux/api/workspaces";
+
 const Todos = () => {
   const { todoPageLayout: show } = useSelector(
     (state: RootState) => state.todoLayout
@@ -61,6 +63,12 @@ const Todos = () => {
   const { blur, headerPosition, playSound } = useSelector(
     (state: RootState) => state.settings
   );
+  const {
+    data: DataGetActiveWsQuery = [],
+    isSuccess: iSuccessGetActiveWsQuery,
+    isError: isErrorGetActiveWsQuery,
+    refetch: RefetchGetActiveWsQuery,
+  } = useGetActiveWsQuery({});
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteMutation();
   const [todoAssignRequest, todoAssignResponse] =
@@ -151,14 +159,15 @@ const Todos = () => {
     }
     UpdateOnlyTodos();
   };
-
   useEffect(() => {
-    if (!ActiveWorkspaceID) {
-      dispatch(fetchActiveWs());
-    } else {
+    if (iSuccessGetActiveWsQuery) {
+      const { id, title } = DataGetActiveWsQuery.activeWorkspace;
+      dispatch(SetActiveWs({ id, title }));
+    }
+    if (ActiveWorkspaceID) {
       UpdateTodoAndCategories();
     }
-  }, [ActiveWorkspaceID]);
+  }, [ActiveWorkspaceID, iSuccessGetActiveWsQuery]);
 
   useEffect(() => {
     if (GetOutFromTodoPage) {

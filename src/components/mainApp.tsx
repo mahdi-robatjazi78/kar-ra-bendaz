@@ -3,7 +3,6 @@ import Header from "./header";
 import { useDispatch, useSelector } from "react-redux";
 import RouteBox from "./routeBox";
 import { Box } from "@mui/material";
-import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
 import { RootState } from "@/redux/store";
 import SettingModal from "./modal/settingModal";
 import {
@@ -16,47 +15,23 @@ import {
 } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
-import { getLocalStorageValue } from "@/util/funcs";
 
 const Main = () => {
   const auth = useSelector((state: RootState) => state.auth);
+  const theme = useSelector((state: RootState) => state.settings.theme);
   const {
     headerPosition,
     modal,
     theme: { listen: ListenOsTheme },
   } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
-  const checkProfileDataEssentials = () => {
-    if (!auth.token) {
-      const authLocalStorage = getLocalStorageValue("auth");
 
-      const token = authLocalStorage?.token;
-      if (token) {
-        const { email, fname, lname, gender, userName } = authLocalStorage.me;
-        dispatch(
-          SetUserToken({
-            token,
-          })
-        );
-        dispatch(
-          SetMeData({
-            email,
-            fname,
-            lname,
-            gender,
-            userName,
-          })
-        );
-      }
-    }
-  };
   const {
     toggleDark,
     setDark,
     setLight,
     isDarkMode: DarkModeContext,
   } = useContext(ThemeContext);
-  checkProfileDataEssentials();
 
   const handleCloseSettingModal = () => {
     dispatch(deactiveBlur());
@@ -121,7 +96,7 @@ const Main = () => {
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme:dark)").matches;
 
-    if (getLocalStorageValue("theme-read-from-os")) {
+    if (theme.osTheme) {
       if (isDarkMode) {
         dispatch(handleOsTheme("dark"));
         if (DarkModeContext !== isDarkMode) {

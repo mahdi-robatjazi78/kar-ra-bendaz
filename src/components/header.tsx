@@ -6,8 +6,6 @@ import { BiLogInCircle } from "react-icons/bi";
 import { RiUserAddLine, RiLogoutCircleRLine } from "react-icons/ri";
 import { SiHomeassistant } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
-import axios from "../services/api";
-import { base_url } from "@services/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
@@ -20,8 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { AiFillSetting } from "react-icons/ai";
 import { Styled_Menu, Styled_Menu_Item } from "@/styles/styled/styled_menu";
-import { removeLocalSettings, soundPlay } from "@/util/funcs";
-
+import { soundPlay } from "@/util/funcs";
+import { useUserSignoutMutation } from "@/redux/api/user";
 const Header = (props) => {
   const { handleOpenSettingModal } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -34,17 +32,16 @@ const Header = (props) => {
     setAnchorEl(null);
   };
   const dispatch: AppDispatch = useDispatch();
-
+  const [userSignoutRequest, userSignoutResponse] = useUserSignoutMutation();
   const auth = useSelector((state: RootState) => state.auth);
   const { headerPosition, blur, playSound } = useSelector(
     (state: RootState) => state.settings
   );
 
-  const handleLogoutUser = async () => {
-    try {
-      const response = await axios.put(`${base_url}/users/logout`);
-      if (response.status === 200) {
-        removeLocalSettings("auth");
+  const handleLogoutUser = () => {
+    userSignoutRequest({})
+      .unwrap()
+      .then((response) => {
         handleClose();
         dispatch(LogoutAction({}));
         if (playSound) {
@@ -52,10 +49,10 @@ const Header = (props) => {
         }
         navigate("/login");
         Toast(response.data.msg, false, true);
-      }
-    } catch (error) {
-      console.log(error.response);
-    }
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   };
 
   return (

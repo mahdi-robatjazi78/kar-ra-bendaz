@@ -12,8 +12,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
-import Axios, { base_url } from "../../services/api";
 import Toast from "../../util/toast";
 import StyledButton from "@/styles/styled/styled_button";
 import { useFormik } from "formik";
@@ -23,11 +21,11 @@ import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { SetMeData, SetUserToken } from "@/redux/features/userSlice";
+import { SetUserData, SetUserToken } from "@/redux/features/userSlice";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
-import { setCommonLocalSettings } from "@/util/funcs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useUserSigninMutation } from "@/redux/api/user";
 
 const Login = () => {
   const theme = useContext(ThemeContext);
@@ -35,6 +33,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { headerPosition } = useSelector((state: RootState) => state.settings);
+  const [loginUserRequest, loginUserResponse] = useUserSigninMutation();
+
   const YupObjectValidationFields = Yup.object({}).shape({
     username: Yup.string()
       .min(3, "Must Greater than 3 charachters")
@@ -59,45 +59,35 @@ const Login = () => {
 
     validationSchema: YupObjectValidationFields,
 
-    onSubmit: async (values) => {
-      try {
-        const response = await axios.post(`${base_url}/users/login`, {
-          email: values.username,
-          password: values.password,
+    onSubmit: (values) => {
+      loginUserRequest({ email: values.username, password: values.password })
+        .unwrap()
+        .then((response) => {
+          console.log(response);
+          const { email, fname, lname, gender, token, userName } = response;
+
+          dispatch(
+            SetUserToken({
+              token,
+            })
+          );
+          dispatch(
+            SetUserData({
+              email,
+              fname,
+              lname,
+              gender,
+              userName,
+            })
+          );
+
+          navigate("/");
+          Toast(response.msg, true, true);
+        })
+        .catch((error) => {
+          console.log(error);
+          Toast(error.response.msg, false, true);
         });
-        const { email, fname, lname, gender, token, userName } = response.data;
-
-        dispatch(
-          SetUserToken({
-            token,
-          })
-        );
-        dispatch(
-          SetMeData({
-            email,
-            fname,
-            lname,
-            gender,
-            userName,
-          })
-        );
-
-        setCommonLocalSettings("auth", {
-          token: token,
-          me: {
-            email,
-            fname,
-            lname,
-            gender,
-            userName,
-          },
-        });
-
-        navigate("/");
-        Toast(response.data.msg, true, true);
-      } catch (error) {
-        Toast(error.response.data.msg, false, true);
-      }
     },
   });
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import Toast from "@utils/toast";
 import withReactContent from "sweetalert2-react-content";
 import ThemeContext from "@context/themeContext";
-import Axios from "@/services/api";
 import Swal from "sweetalert2";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -71,9 +70,8 @@ const ShowModalNewTodo = (props) => {
       });
 
       if (text != undefined) {
-        const selectedCategoryElement: HTMLInputElement = document.querySelector(
-          "#Selected-Category-Id"
-        );
+        const selectedCategoryElement: HTMLInputElement =
+          document.querySelector("#Selected-Category-Id");
         if (
           !selectedCategoryElement ||
           selectedCategoryElement.checked == false

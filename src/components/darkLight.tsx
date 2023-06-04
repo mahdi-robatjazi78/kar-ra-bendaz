@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from "react";
 import ThemeContext from "../context/themeContext";
 import { Box } from "@mui/material";
 import { BsFillMoonStarsFill } from "react-icons/bs";
-import { getLocalStorageValue } from "@/util/funcs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 

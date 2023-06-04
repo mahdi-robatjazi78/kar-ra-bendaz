@@ -43,7 +43,6 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-redux": "^7.1.25",
     "@types/tailwindcss": "^3.0.11",
-    "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "formik": "^2.2.9",
     "framer-motion": "^8.4.2",

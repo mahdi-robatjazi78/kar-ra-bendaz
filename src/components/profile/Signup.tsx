@@ -1,33 +1,28 @@
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import ThemeContext from "../../context/themeContext";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
-import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { base_url } from "../../services/api";
 import StyledButton from "@/styles/styled/styled_button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-import {
-  IconButton,
-  InputAdornment, 
-} from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
 import { FaRegUser } from "react-icons/fa";
 import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
+import { useUserSignupMutation } from "@/redux/api/user";
 
-const Signup = ({ userSignupData, setUserSignupData }) => {
+const Signup = () => {
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
-
-
+  const [userSignupRequest, userSignupResponse] = useUserSignupMutation();
   const YupObjectValidationFields = Yup.object({}).shape({
     username: Yup.string()
       .min(3, "Must Greater than 3 charachters")
@@ -47,26 +42,23 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
       username: "",
       password: "",
     },
-
     validateOnMount: false,
     validateOnChange: true,
     validateOnBlur: true,
     validationSchema: YupObjectValidationFields,
 
-    onSubmit: async (values) => {
-      try {
-        await axios.post(`${base_url}/users/new`, {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          gender: "female",
-          email: values.username,
-          password: values.password,
+    onSubmit: (values) => {
+      userSignupRequest({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        gender: "male",
+        email: values.username,
+        password: values.password,
+      })
+        .unwrap()
+        .then((response) => {
+          navigate("/login");
         });
-
-        navigate("/login");
-      } catch (error) {
-        console.error(error.response);
-      }
     },
   });
 
@@ -116,7 +108,6 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                         style={{ borderColor: "red" }}
                         onChange={formik.handleChange}
                         value={formik.values.firstName}
-                       
                         size="small"
                       />
 
@@ -174,7 +165,7 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                         formik.errors.password && formik.touched.password
                           ? "errorStateField"
                           : ""
-                      } 
+                      }
                       key="password"
                       margin="normal"
                       required
@@ -223,37 +214,16 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                     />
                   </Grid>
                 </Grid>
-                {/*<Box>
-              <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="male"
-                  name="gender"
-                  row
-                  style={{color:theme.text3 , paddingLeft:"1.5rem"}}
-                  onChange={(event)=>{
-                    setUserSignupData({...userSignupData , gender:event.target.checked})
-                  }}
-                >
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-              </RadioGroup>
-            </Box> */}
 
                 <Box
                   display="flex"
                   justifyContent="space-between"
                   alignItems="center"
-                  style={{marginTop:"1.5rem"}}
+                  style={{ marginTop: "1.5rem" }}
                 >
-
-
-                <NavLink
-                    to="/login"
-                    className="linkStyles"
-                  >
+                  <NavLink to="/login" className="linkStyles">
                     Already have an account? go to Login
                   </NavLink>
-
 
                   <StyledButton
                     type="submit"
@@ -262,8 +232,6 @@ const Signup = ({ userSignupData, setUserSignupData }) => {
                   >
                     Signup
                   </StyledButton>
-
-                
                 </Box>
               </form>
             </motion.div>

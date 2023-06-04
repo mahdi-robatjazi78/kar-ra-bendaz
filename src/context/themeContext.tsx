@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import themes from "../theme";
-import { getLocalStorageValue, setCommonLocalSettings } from "@/util/funcs";
 import { handleAppThemeChange } from "@/redux/features/settingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";

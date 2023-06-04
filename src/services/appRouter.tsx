@@ -1,7 +1,7 @@
 import React from "react";
 import { Router } from "react-router-dom";
 
-const CustomeRouter = ({ history, ...props }) => {
+const AppRouter = ({ history, ...props }) => {
   const [state, setState] = React.useState({
     action: history.action,
     location: history.location,
@@ -21,4 +21,4 @@ const CustomeRouter = ({ history, ...props }) => {
   );
 };
 
-export default CustomeRouter;
+export default AppRouter;

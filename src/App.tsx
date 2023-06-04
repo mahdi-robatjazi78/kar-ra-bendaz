@@ -2,8 +2,8 @@ import React from "react";
 import { Toaster } from "react-hot-toast";
 import ThemeContext, { ThemeContextProvider } from "@context/themeContext";
 import Main from "@compo/mainApp";
-import CustomeRouter from "@services/customeRouter";
-import CustomeHistory from "@services/customeHistory";
+import AppRouter from "@services/appRouter";
+import history from "@services/appHistory";
 import persistorInitial, { store, AppDispatch, RootState } from "./redux/store";
 import {
   TypedUseSelectorHook,
@@ -21,12 +21,12 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <CustomeRouter history={CustomeHistory}>
+        <AppRouter history={history}>
           <ThemeContextProvider>
             <Toaster position="bottom-center" reverseOrder={true} />
             <Main />
           </ThemeContextProvider>
-        </CustomeRouter>
+        </AppRouter>
       </PersistGate>
     </Provider>
   );

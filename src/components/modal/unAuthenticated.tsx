@@ -1,9 +1,9 @@
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { handleLogoutUser } from "@/services/api";
-import CustomeHistory from "@/services/customeHistory";
-import { RootState, store } from "@/redux/store";
+import history from "@/services/appHistory";
+import { store } from "@/redux/store";
 import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+import { LogoutAction } from "@/redux/features/userSlice";
 
 const UnAuthenticatedModal = () => {
   const MySwal = withReactContent(Swal);
@@ -26,8 +26,8 @@ const UnAuthenticatedModal = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         store.dispatch(deactiveBlur());
-        handleLogoutUser();
-        CustomeHistory.replace("/login");
+        store.dispatch(LogoutAction());
+        history.replace("/login");
       }
       if (result.isDismissed) {
         store.dispatch(deactiveBlur());

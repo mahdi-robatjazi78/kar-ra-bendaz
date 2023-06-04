@@ -7,6 +7,7 @@ import { todoLayoutSlice } from "./features/todoLayoutSlice";
 import { WorkspacesRtkService } from "./api/workspaces";
 import { TodoCategoriesRtkService } from "./api/categories";
 import { TodoRtkService } from "./api/todos";
+import { UserRtkService } from "./api/user";
 import storage from "redux-persist/lib/storage";
 import {
   persistReducer,
@@ -29,25 +30,12 @@ export const rootReducers = combineReducers({
   [WorkspacesRtkService.reducerPath]: WorkspacesRtkService.reducer,
   [TodoCategoriesRtkService.reducerPath]: TodoCategoriesRtkService.reducer,
   [TodoRtkService.reducerPath]: TodoRtkService.reducer,
+  [UserRtkService.reducerPath]: UserRtkService.reducer,
   auth: userSlice.reducer,
   todoPageConfig: todoPageConfigSlice.reducer,
   todoLayout: todoLayoutSlice.reducer,
   settings: appSettings.reducer,
 });
-
-// export const store = configureStore({
-//   reducer: {
-//     [WorkspacesRtkService.reducerPath]: WorkspacesRtkService.reducer,
-//     [TodoCategoriesRtkService.reducerPath]: TodoCategoriesRtkService.reducer,
-//     [TodoRtkService.reducerPath]: TodoRtkService.reducer,
-//     auth: userSlice.reducer,
-//     todoPageConfig:todoPageConfigSlice.reducer,
-//     settings:appSettings.reducer,
-//   },
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware()
-//     .concat(WorkspacesRtkService.middleware ,TodoCategoriesRtkService.middleware , TodoRtkService.middleware )
-// });
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
 
@@ -61,7 +49,8 @@ export const store = configureStore({
     }).concat(
       TodoRtkService.middleware,
       WorkspacesRtkService.middleware,
-      TodoCategoriesRtkService.middleware
+      TodoCategoriesRtkService.middleware,
+      UserRtkService.middleware
     ),
 });
 export type RootState = ReturnType<typeof store.getState>;
