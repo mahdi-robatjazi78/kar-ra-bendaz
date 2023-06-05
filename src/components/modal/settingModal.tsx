@@ -189,7 +189,7 @@ const SettingModal = (props) => {
                       {playSound ? (
                         <GiSoundOn
                           onClick={() => {
-                            dispatch(handlePlaySound());
+                            dispatch(handlePauseSound());
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"
@@ -197,7 +197,7 @@ const SettingModal = (props) => {
                       ) : (
                         <GiSoundOff
                           onClick={() => {
-                            dispatch(handlePauseSound());
+                            dispatch(handlePlaySound());
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"
