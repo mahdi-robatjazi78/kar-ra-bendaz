@@ -160,12 +160,14 @@ const Todos = () => {
     UpdateOnlyTodos();
   };
   useEffect(() => {
-    if (iSuccessGetActiveWsQuery) {
-      const { id, title } = DataGetActiveWsQuery.activeWorkspace;
-      dispatch(SetActiveWs({ id, title }));
-    }
     if (ActiveWorkspaceID) {
       UpdateTodoAndCategories();
+    } else {
+      if (iSuccessGetActiveWsQuery) {
+        const { id, title } = DataGetActiveWsQuery.activeWorkspace;
+
+        dispatch(SetActiveWs({ id, title }));
+      }
     }
   }, [ActiveWorkspaceID, iSuccessGetActiveWsQuery]);
 

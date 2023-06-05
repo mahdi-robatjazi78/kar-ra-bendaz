@@ -187,17 +187,17 @@ const SettingModal = (props) => {
                   <Box className="body">
                     <Box className="flex-central">
                       {playSound ? (
-                        <GiSoundOff
+                        <GiSoundOn
                           onClick={() => {
-                            dispatch(handlePauseSound());
+                            dispatch(handlePlaySound());
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"
                         />
                       ) : (
-                        <GiSoundOn
+                        <GiSoundOff
                           onClick={() => {
-                            dispatch(handlePlaySound());
+                            dispatch(handlePauseSound());
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"

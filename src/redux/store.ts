@@ -5,7 +5,7 @@ import { userSlice } from "./features/userSlice";
 import { todoPageConfigSlice } from "./features/todoPageConfigSlice";
 import { todoLayoutSlice } from "./features/todoLayoutSlice";
 import { WorkspacesRtkService } from "./api/workspaces";
-import { TodoCategoriesRtkService } from "./api/categories";
+import { CategoryRtkService } from "./api/categories";
 import { TodoRtkService } from "./api/todos";
 import { UserRtkService } from "./api/user";
 import storage from "redux-persist/lib/storage";
@@ -29,7 +29,7 @@ const persistConfig = {
 
 export const rootReducers = combineReducers({
   [WorkspacesRtkService.reducerPath]: WorkspacesRtkService.reducer,
-  [TodoCategoriesRtkService.reducerPath]: TodoCategoriesRtkService.reducer,
+  [CategoryRtkService.reducerPath]: CategoryRtkService.reducer,
   [TodoRtkService.reducerPath]: TodoRtkService.reducer,
   [UserRtkService.reducerPath]: UserRtkService.reducer,
   auth: userSlice.reducer,
@@ -50,7 +50,7 @@ export const store = configureStore({
     }).concat(
       TodoRtkService.middleware,
       WorkspacesRtkService.middleware,
-      TodoCategoriesRtkService.middleware,
+      CategoryRtkService.middleware,
       UserRtkService.middleware
     ),
 });

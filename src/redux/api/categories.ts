@@ -5,7 +5,7 @@ const base_url = `http://localhost:8888`;
 
 // Define a service using a base URL and expected endpoints
 
-export const TodoCategoriesRtkService = createApi({
+export const CategoryRtkService = createApi({
   reducerPath: "categories",
   baseQuery: fetchBaseQuery({
     baseUrl: base_url + "/category/",
@@ -75,4 +75,4 @@ export const {
   useRenameCategoryMutation,
   useRemoveOnlyCategoryMutation,
   useRemoveCategoryWithAllTodosMutation,
-} = TodoCategoriesRtkService;
+} = CategoryRtkService;

@@ -20,6 +20,7 @@ import { AiFillSetting } from "react-icons/ai";
 import { Styled_Menu, Styled_Menu_Item } from "@/styles/styled/styled_menu";
 import { soundPlay } from "@/util/funcs";
 import { useUserSignoutMutation } from "@/redux/api/user";
+
 const Header = (props) => {
   const { handleOpenSettingModal } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -44,6 +45,7 @@ const Header = (props) => {
       .then((response) => {
         handleClose();
         dispatch(LogoutAction({}));
+
         if (playSound) {
           soundPlay("sound7.wav");
         }

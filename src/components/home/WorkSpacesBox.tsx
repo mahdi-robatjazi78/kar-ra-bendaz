@@ -26,13 +26,21 @@ import {
   useStoreNewWsMutation,
   useActiveWsMutation,
   useRenameWsMutation,
+  useDeleteWsMutation,
 } from "../../redux/api/workspaces";
-import { SetActiveWs, UnActiveWs } from "@/redux/features/todoPageConfigSlice";
-import { useDispatch } from "react-redux";
+import todoPageConfigSlice, {
+  SetActiveWs,
+  UnActiveWs,
+} from "@/redux/features/todoPageConfigSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { StyledTableCell, StyledTableRow } from "@/styles/styled/styled_table";
 import StyledTabs from "@/styles/styled/styled_tabs";
 import Styled_Standard_Textfield from "@/styles/styled/styled_standard_textfield";
 import Text from "@/styles/styled/styled_typography";
+import { TodoRtkService } from "@/redux/api/todos";
+import { CategoryRtkService } from "@/redux/api/categories";
+import StyledButton from "@/styles/styled/styled_button";
+import { RootState } from "@/redux/store";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -51,9 +59,11 @@ function TabPanel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      style={{ height: "80%" }}
+      style={{ height: "87%", overflowY: "auto" }}
     >
-      {value === index && <Box style={{ height: "80%" }}>{children}</Box>}
+      {value === index && (
+        <Box style={{ height: "100%", overflowY: "auto" }}>{children}</Box>
+      )}
     </div>
   );
 }
@@ -199,6 +209,7 @@ const WorkspacesTable = () => {
   const [value, setValue] = useState(0);
   const [state, setState] = useState("icons");
   const [wsSelectedId, setWsSelectedId] = useState("");
+  const [wsSelectedTitle, setWsSelectedTitle] = useState("");
   const [inputText, setInputText] = useState("");
   const [resultText, setResultText] = useState("");
   const backToIcons = () => {
@@ -214,6 +225,11 @@ const WorkspacesTable = () => {
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
+  const [deleteWsRequest, deleteWorkspaceResponse] = useDeleteWsMutation();
+  const {
+    active_ws: { id: ActiveWorkspaceId },
+  } = useSelector((state: RootState) => state.todoPageConfig);
+
   const dispatch = useDispatch();
   const AddWorkspace = () => {
     if (inputText) {
@@ -260,6 +276,9 @@ const WorkspacesTable = () => {
     // AFTER ACTIVE OR DIACTIVE REQUEST
     if (respActiveWs.isSuccess) {
       Toast(respActiveWs?.data?.msg, true, true);
+      dispatch(TodoRtkService.util.resetApiState());
+      dispatch(CategoryRtkService.util.resetApiState());
+
       if (respActiveWs?.data?.activeWorkspace?.id) {
         dispatch(
           SetActiveWs({
@@ -281,8 +300,16 @@ const WorkspacesTable = () => {
     if (respRenameWs.isSuccess) {
       backToIcons();
       setInputText("");
-      Toast(respRenameWs?.data?.msg, true, true);
       refetch();
+      if (respRenameWs?.data?.data?.id) {
+        dispatch(
+          SetActiveWs({
+            id: respRenameWs?.data?.data?.id,
+            title: respRenameWs?.data?.data?.title,
+          })
+        );
+      }
+      Toast(respRenameWs?.data?.msg, true, true);
     }
   }, [respRenameWs.isSuccess]);
 
@@ -291,10 +318,33 @@ const WorkspacesTable = () => {
   };
   const theme = useContext(ThemeContext);
 
+  const handleDeleteWorkspace = () => {
+    deleteWsRequest({ id: wsSelectedId })
+      .unwrap()
+      .then((response) => {
+        if (
+          wsSelectedId &&
+          ActiveWorkspaceId &&
+          ActiveWorkspaceId === wsSelectedId
+        ) {
+          dispatch(UnActiveWs());
+        }
+
+        setWsSelectedId("");
+        setWsSelectedTitle("");
+        refetch();
+        setState("icons");
+        Toast(response?.msg, true, true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Box
       className="add-space-box"
-      style={{ height: "26rem", position: "relative" }}
+      style={{ height: "90vh", position: "relative" }}
     >
       <Box className="add-space-icon-box d-flex-between">
         <IconButton>
@@ -338,6 +388,25 @@ const WorkspacesTable = () => {
             AddWorkspace={AddWorkspace}
             editWorkspaceTitle={editWorkspaceTitle}
           />
+        ) : state === "remove" ? (
+          <>
+            <Box className="d-flex-between" style={{ gap: "1rem" }}>
+              <Text>
+                Do you want Delete{" "}
+                {wsSelectedTitle ? (
+                  <code> {`${wsSelectedTitle} ?`}</code>
+                ) : (
+                  "it ? "
+                )}
+              </Text>
+              <StyledButton size="medium" onClick={() => setState("icons")}>
+                Cancel
+              </StyledButton>
+              <StyledButton size="medium" onClick={handleDeleteWorkspace}>
+                Delete It
+              </StyledButton>
+            </Box>
+          </>
         ) : state === "pagination" ? (
           <></>
         ) : (
@@ -372,7 +441,7 @@ const WorkspacesTable = () => {
                 ))}
             </Box>
           ) : (
-            <TableContainer sx={{ maxHeight: 270, padding: 0 }}>
+            <TableContainer sx={{ p: 0 }}>
               <Table>
                 <TableHead
                   sx={{
@@ -435,7 +504,9 @@ const WorkspacesTable = () => {
                           <Tooltip title="Remove Workspace">
                             <IconButton
                               onClick={() => {
+                                setState("remove");
                                 setWsSelectedId(item.id);
+                                setWsSelectedTitle(item.title);
                               }}
                             >
                               <CiTrash

@@ -10,6 +10,7 @@ import {
   setThreeColDone,
 } from "@/redux/features/todoLayoutSlice";
 import { store } from "@/redux/store";
+import Toast from "./toast";
 
 export const truncateText = (text: string, size: number) => {
   return text.length > size ? text.slice(0, size - 1) + "…" : text;
@@ -79,5 +80,7 @@ export const handleResponseError = (error) => {
   if (error.status === 401 || error.status === 403) {
     store.dispatch(setBlurPage());
     UnAuthenticatedModal();
+  } else {
+    Toast(error.msg ? error.msg : error.data.msg, false, true);
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useLayoutEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ThemeContext from "../../context/themeContext";
 import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -20,21 +20,30 @@ import { FaRegUser } from "react-icons/fa";
 import { BsKey } from "react-icons/bs";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SetUserData, SetUserToken } from "@/redux/features/userSlice";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
-import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useUserSigninMutation } from "@/redux/api/user";
+import { UserRtkService, useUserSigninMutation } from "@/redux/api/user";
+import { TodoRtkService } from "@/redux/api/todos";
+import { CategoryRtkService } from "@/redux/api/categories";
+import { WorkspacesRtkService } from "@/redux/api/workspaces";
+import { deactiveBlur } from "@/redux/features/settingSlice";
 
 const Login = () => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { headerPosition } = useSelector((state: RootState) => state.settings);
+  const {} = useSelector((state: RootState) => state.settings);
   const [loginUserRequest, loginUserResponse] = useUserSigninMutation();
-
+  useEffect(() => {
+    dispatch(TodoRtkService.util.resetApiState());
+    dispatch(CategoryRtkService.util.resetApiState());
+    dispatch(UserRtkService.util.resetApiState());
+    dispatch(WorkspacesRtkService.util.resetApiState());
+    dispatch(deactiveBlur());
+  }, []);
   const YupObjectValidationFields = Yup.object({}).shape({
     username: Yup.string()
       .min(3, "Must Greater than 3 charachters")
@@ -63,7 +72,6 @@ const Login = () => {
       loginUserRequest({ email: values.username, password: values.password })
         .unwrap()
         .then((response) => {
-          console.log(response);
           const { email, fname, lname, gender, token, userName } = response;
 
           dispatch(
@@ -85,8 +93,7 @@ const Login = () => {
           Toast(response.msg, true, true);
         })
         .catch((error) => {
-          console.log(error);
-          Toast(error.response.msg, false, true);
+          console.log("aaa>", error);
         });
     },
   });

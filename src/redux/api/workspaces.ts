@@ -63,6 +63,16 @@ export const WorkspacesRtkService = createApi({
         handleResponseError(error);
       },
     }),
+
+    deleteWs: builder.mutation({
+      query: ({ id }) => ({
+        url: `delete?id=${id}`,
+        method: "DELETE",
+      }),
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
   }),
 });
 
@@ -72,4 +82,5 @@ export const {
   useStoreNewWsMutation,
   useActiveWsMutation,
   useRenameWsMutation,
+  useDeleteWsMutation,
 } = WorkspacesRtkService;
