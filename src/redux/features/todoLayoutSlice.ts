@@ -23,7 +23,7 @@ const initialState: ITodoPageLayout = {
 };
 
 export const todoLayoutSlice = createSlice({
-  name: "todoPageLayout",
+  name: "todo-page-layout",
   initialState,
   reducers: {
     changeTodoFilterLayout: (state, action) => {

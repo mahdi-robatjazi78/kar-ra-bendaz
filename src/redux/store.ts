@@ -24,6 +24,7 @@ const persistConfig = {
   key: "root",
   storage: storage,
   version: 1,
+  blacklist: ["workspaces", "users", "todos", "categories"],
 };
 
 export const rootReducers = combineReducers({

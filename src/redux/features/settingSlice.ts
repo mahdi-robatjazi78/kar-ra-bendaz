@@ -40,7 +40,7 @@ const initialState: ISettings = {
 };
 
 export const appSettings = createSlice({
-  name: "settings",
+  name: "setting-slice",
   initialState,
   reducers: {
     setBlurPage: (state) => {
