@@ -62,11 +62,12 @@ const TodoList = (props: any) => {
   return (
     <Grid container spacing={2} id="todo-grid-list">
       {todoItems.map(
-        ({ _id, body, flag, categoId }, index: number, array: []) => (
+        ({ _id, body, flag, categoId , priority }, index: number, array: []) => (
           <TodoBox
             key={_id}
             id={_id}
             body={body}
+            priority={priority}
             flag={flag}
             index={index}
             todos={array}

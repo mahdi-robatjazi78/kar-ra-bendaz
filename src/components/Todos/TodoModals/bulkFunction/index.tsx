@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Box, IconButton, Tooltip } from "@mui/material";
+import { Autocomplete, Box, IconButton, Stack, Tooltip } from "@mui/material";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import Text from "@/styles/styled/styled_typography";
 import { MdOutlineClose, MdDone } from "react-icons/md";
@@ -7,6 +7,7 @@ import {
   useTodoSetDoneBulkMutation,
   useTodoDeleteBulkMutation,
   useTodosAssignBulkMutation,
+  useUpdatePriorityBulkMutation,
 } from "@/redux/api/todos";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -15,10 +16,11 @@ import StyledButton from "@/styles/styled/styled_button";
 import { removeMouseSelectedItemWithId } from "@/redux/features/todoPageConfigSlice";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import StyledBadge from "@/styles/styled/styled_badge";
-import { BsFolderSymlink } from "react-icons/bs";
+import { BsFlag, BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
 import { soundPlay } from "@/util/funcs";
 import "./bulkFunctionStyles.scss";
+import { FcHighPriority, FcLowPriority, FcMediumPriority } from "react-icons/fc";
 const BulkFunction = (props) => {
   const {
     data,
@@ -37,7 +39,7 @@ const BulkFunction = (props) => {
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
   const [todoSetDoneRequest, todoSetDoneResponse] =
     useTodoSetDoneBulkMutation();
-
+  const [updatePriorityBulkRequest,updatePriorityBulkResponse ] = useUpdatePriorityBulkMutation()
   const [todoAssignBulkRequest, todosAssignBulkResponse] =
     useTodosAssignBulkMutation();
   const [stateFunction, setStateFunction] = useState(null);
@@ -108,6 +110,32 @@ const BulkFunction = (props) => {
     checkSelectedItems();
   }, []);
 
+
+
+
+  const handleSetNewPriority = (n: Number) => {
+    updatePriorityBulkRequest({list : data.items.map((item) => item.boxTodoId) , priority:n })
+      .then((response) => {
+        Toast(response.data.msg, true, true);
+        setStateFunction(null)
+        if (playSound) {
+          soundPlay("sound5.wav");
+        }
+        UpdateOnlyTodos();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+
+
+
+
+
+
+
   return (
     <Styled_Modal
       aria-labelledby="transition-modal-title"
@@ -135,7 +163,7 @@ const BulkFunction = (props) => {
           ))}
         </Box>
         <Box className="d-flex-around-column bulk-function-parent-modal bulk-function-operation">
-          <div
+          <Box
             className={`drawer-icon-box ${
               stateFunction === "multy-done" ? "bordered" : ""
             }`}
@@ -149,7 +177,7 @@ const BulkFunction = (props) => {
                 <MdDone className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
-          </div>
+          </Box>
 
           <Box
             className={`drawer-icon-box  ${
@@ -177,6 +205,26 @@ const BulkFunction = (props) => {
                 <SlTrash className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
+          </Box>
+
+
+          <Box 
+
+          className={`drawer-icon-box ${
+              stateFunction === "multy-priority" ? "bordered" : ""
+            }`}
+>
+
+<Tooltip arrow title="Set new priority">
+              <IconButton
+                onClick={(e) => {
+                  setStateFunction("multy-priority");
+                }}
+              >
+                <BsFlag className="drawer-footer-icon" />
+              </IconButton>
+            </Tooltip>
+
           </Box>
         </Box>
 
@@ -282,9 +330,51 @@ const BulkFunction = (props) => {
                 Assign
               </StyledButton>
             </Box>
-          ) : (
-            <></>
-          )}
+          ) : stateFunction === "multy-priority" ? (
+            
+
+            <Stack direction="row"  justifyContent="space-around">
+            <Tooltip title="Set Low Priority">
+              <IconButton
+                onClick={() => {
+                   
+                  handleSetNewPriority(0);
+                 
+                }}
+              
+              >
+                <FcLowPriority fontSize="3rem" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Set Medium Priority">
+              <IconButton
+                onClick={() => {
+        
+                    handleSetNewPriority(1);
+                  
+                }} 
+              >
+                <FcMediumPriority fontSize="3rem" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Set High Priority">
+              <IconButton
+                onClick={() => {
+             
+                    handleSetNewPriority(2);
+              
+                }} 
+              >
+                <FcHighPriority fontSize="3rem" />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+
+
+
+
+
+          ):(<></>)}
         </Box>
       </Box>
     </Styled_Modal>

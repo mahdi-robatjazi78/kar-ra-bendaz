@@ -103,6 +103,41 @@ export const TodoRtkService = createApi({
         handleResponseError(error);
       },
     }),
+    updatePriority: builder.mutation({
+      query: ({ todoId ,  priority }) => ({
+        url: `update-priority`,
+        method: "PUT",
+        body: {
+          id: todoId,
+          priority,
+        
+      },
+      }),
+
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+    updatePriorityBulk: builder.mutation({
+      query: ({ list ,  priority }) => ({
+        url: `update-priority-many`,
+        method: "PUT",
+        body: {
+          todoListIds:list,
+          priority,
+        
+      },
+      }),
+
+      transformErrorResponse: (error) => {
+        handleResponseError(error);
+      },
+    }),
+
+
+
+
+
 
     todoAssignToCategory: builder.mutation({
       query: ({ todoId, categoId }) => ({
@@ -163,4 +198,6 @@ export const {
   useTodoDeleteBulkMutation,
   useTodoSetDoneBulkMutation,
   useTodosAssignBulkMutation,
+  useUpdatePriorityMutation,
+  useUpdatePriorityBulkMutation,
 } = TodoRtkService;

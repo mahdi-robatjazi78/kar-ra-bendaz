@@ -59,6 +59,8 @@ const Todos = () => {
     meta,
     layout_nav_show,
     mouse_selected_items,
+ 
+
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition, playSound } = useSelector(
     (state: RootState) => state.settings
@@ -96,6 +98,10 @@ const Todos = () => {
   const [openBulkFunctionModal, setOpenBulkFunctionModal] =
     React.useState(false);
   const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
+    setTodoList([]);
+    
+    
+
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
       page: p ? p : meta?.page || 1,
@@ -104,6 +110,7 @@ const Todos = () => {
     })
       .unwrap()
       .then((resp) => {
+
         setTodoList(resp?.todos);
         dispatch(
           handleChangeMetaItem({
@@ -140,24 +147,27 @@ const Todos = () => {
     dispatch(deactiveBlur());
   };
 
-  const HandleTodoAssignToCategory = (todoId, categoId) => {
-    todoAssignRequest({ todoId, categoId })
+  const HandleTodoAssignToCategory = (categoId) => {
+    todoAssignRequest({ todoId :DrawerTodoId, categoId })
       .then((resp) => {
         if (playSound) {
           soundPlay("sound6.wav");
         }
-        Toast(resp.data.msg);
+        Toast(resp.data.msg , true, true);
         UpdateTodoAndCategories();
       })
       .catch((error) => {});
   };
 
-  const HandleTodoChangeBody = (todoId, todoBody) => {
-    changeBodyRequest({ todoId, todoBody });
-    if (playSound) {
-      soundPlay("sound4.wav");
-    }
-    UpdateOnlyTodos();
+  const HandleTodoChangeBody = (todoId:string, todoBody:string) => {
+    changeBodyRequest({ todoId, todoBody }).then((resp)=>{
+      Toast(resp?.data?.msg, true, true);
+
+      if (playSound) {
+        soundPlay("sound4.wav");
+      }
+      UpdateOnlyTodos();
+    }).catch(error=>{console.log(error)});
   };
   useEffect(() => {
     if (ActiveWorkspaceID) {

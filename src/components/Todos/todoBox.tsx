@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, CSSProperties } from "react";
 import { useDrag } from "react-dnd";
 import { Card, CardContent, Grid } from "@mui/material";
-
+import { motion } from "framer-motion";
 import ThemeContext from "../../context/themeContext";
 import Toast from "@utils/toast";
 import { useDragDropAssignToCategoryMutation } from "@/redux/api/todos";
@@ -27,7 +27,7 @@ const TodoBox = (props: any) => {
   );
   const { playSound } = useSelector((state: RootState) => state.settings);
 
-  const { id, categoId, flag, body, todos, index, UpdateTodoAndCategories } =
+  const { id, categoId, flag, body, todos, index, UpdateTodoAndCategories , priority } =
     props;
 
   const [category, setCategory] = useState(categoId ? categoId : "");
@@ -186,13 +186,23 @@ const TodoBox = (props: any) => {
         }}
       >
         <CardContent
-          style={{
-            position: "relative",
-            wordWrap: "break-word",
-          }}
+          className="card-content"
         >
-          <div
-            className={
+          
+          
+          <motion.div
+              initial={{ x: -30, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ ease: "easeOut", duration: 0.7 }}
+              className={priority === 2 ? "priority-highlight-high": priority === 1 ? "priority-highlight-medium" : "priority-highlight-low"}>
+
+              </motion.div>
+          
+          
+          
+          
+            <div
+              className={
               flag === "isDone"
                 ? `todoBoxDone f-f-r-dongle`
                 : "todoBox f-f-r-dongle"

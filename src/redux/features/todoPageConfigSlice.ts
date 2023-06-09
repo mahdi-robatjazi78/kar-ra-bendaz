@@ -20,6 +20,7 @@ export interface ITodoDrawer {
     flag: string;
     categoId: string;
     owner: string;
+    priority: number;
     date: Date | string;
   };
 }
@@ -62,7 +63,7 @@ const initialState: ITodoPage = {
     open: false,
     state: "todo",
     anchor: "right",
-    item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" },
+    item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" ,priority:null },
   },
   meta: {
     page: 1,
@@ -125,6 +126,9 @@ export const todoPageConfigSlice = createSlice({
         item: action.payload.item,
       };
     },
+    ChangePriorityDrawer:(state,action)=>{
+      state.drawer = {...state.drawer , item :{...state.drawer.item , priority:action.payload}}
+    },
     DrawerClose: (state) => {
       state.drawer = {
         open: false,
@@ -137,6 +141,7 @@ export const todoPageConfigSlice = createSlice({
           categoId: "",
           owner: "",
           date: "",
+          priority:null
         },
       };
     },
@@ -224,6 +229,7 @@ export const {
   NoActiveWorkspace,
   GetOutCompleted,
   DrawerOpen,
+  ChangePriorityDrawer,
   DrawerClose,
   SearchModeActive,
   SearchModeDeActive,

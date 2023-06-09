@@ -11,7 +11,7 @@ const ShowModalAddToCategory = (props) => {
   const theme = useContext(ThemeContext);
 
   const dispatch :AppDispatch = useDispatch()
-  const addToCategoryModal = async (id) => {
+  const addToCategoryModal = async () => {
     try {
       const allCategories = CategoryList;
 
@@ -38,7 +38,7 @@ const ShowModalAddToCategory = (props) => {
 
       if (selectedCategoryIndex.value) {
         const categoId = allCategories[selectedCategoryIndex.value].uuid;
-        HandleTodoAssignToCategory(id , categoId)
+        HandleTodoAssignToCategory( categoId)
         dispatch(deactiveBlur())
       }
       
@@ -49,7 +49,7 @@ const ShowModalAddToCategory = (props) => {
   };
 
   useEffect(() => {
-    // addToCategoryModal(drawerState?.item?._id);
+    addToCategoryModal();
     // setDrawerState({
     //   open: false,
     //   item: {},

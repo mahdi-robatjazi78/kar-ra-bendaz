@@ -1,3 +1,9 @@
+$HIGH-PRIORITY: red;
+$MEDIUM-PRIORITY: orange;
+$LOW-PRIORITY: var(--hoverSuccess);
+
+
+
 %drawer-icon-box {
   .drawer-icon-box {
     display: flex;
@@ -124,12 +130,37 @@
               min-height: 6rem;
               max-height: 6rem;
               border: 2px solid gray;
+              .card-content{
+                position: relative;
+                word-wrap: break-word;
+                display:flex;
+                padding-left:.6rem;
+           
+              .priority-highlight-high {
+                margin-right:9px;
+                width:2px;
+                height:65px;
+                background-color:$HIGH-PRIORITY;
+              }
+              .priority-highlight-medium {
+                margin-right:9px;
+                width:2px;
+                height:65px;
+                background-color:$MEDIUM-PRIORITY;
+              }
+              .priority-highlight-low {
+                margin-right:9px;
+                width:2px;
+                height:65px;
+                background-color:$LOW-PRIORITY;
+              }
+
               .todoBox {
                 font-size: 1rem;
                 line-height: 1rem;
                 color: black;
               }
-
+       
               .todoBoxDone {
                 font-size: 1rem;
                 line-height: 1rem;
@@ -144,6 +175,7 @@
                 border-radius: 4px;
                 line-height: 1rem;
               }
+            }
             }
           }
         }
