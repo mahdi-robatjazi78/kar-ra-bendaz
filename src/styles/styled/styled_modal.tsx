@@ -9,7 +9,7 @@ const CustomeStyledModalBox = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--background);
+  background-color: var(--header);
   border: 2px solid var(--borders);
   border-radius: 8px;
   outline: none !important;

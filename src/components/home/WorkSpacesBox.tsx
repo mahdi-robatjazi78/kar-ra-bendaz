@@ -19,7 +19,7 @@ import { IoCloseSharp, IoReloadOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import Toast from "@/util/toast";
-import SwitchCustomized from "../../styles/styled/CustomeSwitch";
+import StyledSwitch from "../../styles/styled/styled_switch";
 import EmptyListAnimation from "@/util/emptyList/emptyListAnimation";
 import {
   useWsListQuery,
@@ -415,6 +415,7 @@ const WorkspacesTable = () => {
       </Box>
       <Box className="add-space-item-box">
         <StyledTabs
+          backLight={true}
           variant="scrollable"
           value={value}
           onChange={handleChange}
@@ -470,11 +471,17 @@ const WorkspacesTable = () => {
                   <TableBody>
                     {data.workspaces.map((item: any) => (
                       <StyledTableRow darkMode={theme.isDarkMode} key={item.id}>
-                        <StyledTableCell>{item.title}</StyledTableCell>
-                        <StyledTableCell>{item.categorySum}</StyledTableCell>
-                        <StyledTableCell>{item.todoSum}</StyledTableCell>
+                        <StyledTableCell className="workspace-home-box-title">
+                          {item.title}
+                        </StyledTableCell>
+                        <StyledTableCell className="workspace-home-box-title">
+                          {item.categorySum}
+                        </StyledTableCell>
+                        <StyledTableCell className="workspace-home-box-title">
+                          {item.todoSum}
+                        </StyledTableCell>
                         <StyledTableCell>
-                          <SwitchCustomized
+                          <StyledSwitch
                             isOn={item.active}
                             name="active-sys-log"
                             id={item.id}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import DarkLight from "./darkLight";
+import DarkLight from "./mini/darkLight";
 import { FaUserAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { BiLogInCircle } from "react-icons/bi";

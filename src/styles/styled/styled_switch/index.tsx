@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-
-const SwitchCustomized = (props) => {
-  const { isOn, toggleSwitch, id } = props;
+import "./switchStyles.scss";
+const StyledSwitch = (props) => {
+  const { isOn, toggleSwitch, id, smallSwitch = false } = props;
   const spring = {
     type: "spring",
     stiffness: 700,
@@ -11,7 +11,7 @@ const SwitchCustomized = (props) => {
 
   return (
     <div
-      className="switch-custom"
+      className={smallSwitch ? "switch-custom-small" : "switch-custom"}
       data-isOn={Boolean(isOn).toString()}
       onClick={() => toggleSwitch(!isOn, id)}
     >
@@ -26,4 +26,4 @@ const SwitchCustomized = (props) => {
   );
 };
 
-export default SwitchCustomized;
+export default StyledSwitch;

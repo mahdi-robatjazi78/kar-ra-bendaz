@@ -10,7 +10,7 @@ import {
   Tab,
 } from "@mui/material";
 import HeaderPosition from "@/components/mini/headerPosition";
-import DarkLight from "@/components/darkLight";
+import DarkLight from "@/components/mini/darkLight";
 import ThemeContext from "@context/themeContext";
 import Text from "@/styles/styled/styled_typography";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,6 +44,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
 
 import { handlePresentAndFilterTodoLayout } from "@utils/funcs";
+import StyledSwitch from "@/styles/styled/styled_switch";
 
 const SettingModal = (props) => {
   const [settingItem, setSettingItem] = useState(0);
@@ -99,8 +100,7 @@ const SettingModal = (props) => {
     };
   }, []);
 
-  const handleChangeListenFromOs = (e) => {
-    const listen = e.target.checked;
+  const handleChangeListenFromOs = (listen) => {
     dispatch(handleListenFromOs(listen));
   };
 
@@ -169,6 +169,7 @@ const SettingModal = (props) => {
             onChange={handleChange}
             aria-label="setting-tabs"
             scrollButtons="auto"
+            style={{ margin: "2rem 2rem 0 2rem" }}
           >
             <Tab tabIndex={1} value={0} label="Overal" />
             <Tab tabIndex={2} value={1} label="Shortcuts" />
@@ -211,21 +212,30 @@ const SettingModal = (props) => {
                   {" "}
                   <Box className="head">Theme</Box>
                   <Box className="body">
-                    <Box className="flex-central">
+                    <Box
+                      className="flex-central"
+                      style={{ marginBottom: "3rem" }}
+                    >
                       <DarkLight />
                     </Box>
-                    <Box>
-                      <Checkbox
-                        checked={OsTheme.listen}
-                        onChange={handleChangeListenFromOs}
-                      />{" "}
+                    <Box className="d-flex-center">
+                      <StyledSwitch
+                        smallSwitch={true}
+                        isOn={OsTheme.listen}
+                        name="listen-to-os"
+                        id="listen-to-os"
+                        toggleSwitch={(checked, id) => {
+                          handleChangeListenFromOs(checked);
+                        }}
+                      />
                       <Text
                         variant="caption"
                         selectable={false}
-                        style={{ color: "white" }}
+                        onlyWhite={true}
+                        style={{ marginLeft: "1rem" }}
                       >
                         {" "}
-                        Listen to os{" "}
+                        Os Listen{" "}
                       </Text>
                     </Box>
                   </Box>
@@ -264,61 +274,61 @@ const SettingModal = (props) => {
           ) : settingItem === 1 ? (
             <Box sx={{ padding: "1rem 3rem" }}>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Home Page </Text>
-                <Text>
+                <Text onlyWhite={true}>Home Page </Text>
+                <Text onlyWhite={true}>
                   <code>alt</code> <code>ctrl</code> <code>h</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Todo Page </Text>
-                <Text>
+                <Text onlyWhite={true}>Todo Page </Text>
+                <Text onlyWhite={true}>
                   <code>alt</code> <code>ctrl</code> <code>t</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Profile Page </Text>
-                <Text>
+                <Text onlyWhite={true}>Profile Page </Text>
+                <Text onlyWhite={true}>
                   <code>alt</code> <code>ctrl</code> <code>p</code>
                 </Text>
               </Box>
               <hr />
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Setting Modal </Text>
-                <Text>
+                <Text onlyWhite={true}>Setting Modal </Text>
+                <Text onlyWhite={true}>
                   <code>ctrl</code> <code>shift</code> <code>s</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text> Header Position </Text>
-                <Text>
+                <Text onlyWhite={true}> Header Position </Text>
+                <Text onlyWhite={true}>
                   <code>ctrl</code> <code>shift</code> <code>arrow key</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Change Theme </Text>
-                <Text>
+                <Text onlyWhite={true}>Change Theme </Text>
+                <Text onlyWhite={true}>
                   <code>alt</code> <code>t</code>
                 </Text>
               </Box>
               <hr />
 
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>New Todo </Text>
-                <Text>
+                <Text onlyWhite={true}>New Todo </Text>
+                <Text onlyWhite={true}>
                   {" "}
                   <code>alt</code> <code>n</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>New Category </Text>
-                <Text>
+                <Text onlyWhite={true}>New Category </Text>
+                <Text onlyWhite={true}>
                   {" "}
                   <code>alt</code> <code>c</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
-                <Text>Search Mode </Text>
-                <Text>
+                <Text onlyWhite={true}>Search Mode </Text>
+                <Text onlyWhite={true}>
                   <code>ctrl</code> <code>shift</code> <code>f</code>
                 </Text>
               </Box>

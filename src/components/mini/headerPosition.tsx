@@ -14,7 +14,7 @@ import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
 
 const HeaderPosition = () => {
-  const { borders, text2 } = useContext(ThemeContext);
+  const { hoverSuccess, text2 } = useContext(ThemeContext);
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
   const sizeName = useWindowSize().sizeName;
@@ -38,12 +38,16 @@ const HeaderPosition = () => {
           }}
         >
           <TbArrowBigUpLines
-            style={{ color: headerPosition === "top" ? borders : text2 }}
+            style={{
+              color: headerPosition === "top" ? hoverSuccess : text2,
+              fontSize: "2rem",
+              transform: "translate(0px, 13px)",
+            }}
           />
         </IconButton>
       </Box>
       {sizeName !== "mobile" ? (
-        <Box display="flex" justifyContent="center" style={{ gap: "3rem" }}>
+        <Box display="flex" justifyContent="center" style={{ gap: "1.5rem" }}>
           <Box>
             {" "}
             <IconButton
@@ -52,7 +56,10 @@ const HeaderPosition = () => {
               }}
             >
               <TbArrowBigLeftLines
-                style={{ color: headerPosition === "left" ? borders : text2 }}
+                style={{
+                  color: headerPosition === "left" ? hoverSuccess : text2,
+                  fontSize: "2rem",
+                }}
               />
             </IconButton>
           </Box>
@@ -64,7 +71,10 @@ const HeaderPosition = () => {
               }}
             >
               <TbArrowBigRightLines
-                style={{ color: headerPosition === "right" ? borders : text2 }}
+                style={{
+                  color: headerPosition === "right" ? hoverSuccess : text2,
+                  fontSize: "2rem",
+                }}
               />
             </IconButton>
           </Box>
@@ -78,7 +88,11 @@ const HeaderPosition = () => {
           }}
         >
           <TbArrowBigDownLines
-            style={{ color: headerPosition === "bottom" ? borders : text2 }}
+            style={{
+              color: headerPosition === "bottom" ? hoverSuccess : text2,
+              fontSize: "2rem",
+              transform: "translate(0px, -13px)",
+            }}
           />
         </IconButton>
       </Box>

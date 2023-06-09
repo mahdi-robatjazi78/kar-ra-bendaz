@@ -18,7 +18,7 @@ import StyledBadge from "@/styles/styled/styled_badge";
 import { BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
 import { soundPlay } from "@/util/funcs";
-
+import "./bulkFunctionStyles.scss";
 const BulkFunction = (props) => {
   const {
     data,
@@ -35,15 +35,11 @@ const BulkFunction = (props) => {
   const { playSound } = useSelector((state: RootState) => state.settings);
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
-  const [
-    todoSetDoneRequest,
-    todoSetDoneResponse,
-  ] = useTodoSetDoneBulkMutation();
+  const [todoSetDoneRequest, todoSetDoneResponse] =
+    useTodoSetDoneBulkMutation();
 
-  const [
-    todoAssignBulkRequest,
-    todosAssignBulkResponse,
-  ] = useTodosAssignBulkMutation();
+  const [todoAssignBulkRequest, todosAssignBulkResponse] =
+    useTodosAssignBulkMutation();
   const [stateFunction, setStateFunction] = useState(null);
   const {
     active_ws: { id: ActiveWorkspaceID },
@@ -119,19 +115,8 @@ const BulkFunction = (props) => {
       open={open}
       onClose={onClose}
     >
-      <Box display="flex" style={{ height: "65%", marginBottom: "2rem" }}>
-        <Box
-          sx={{ p: 3 }}
-          style={{
-            borderRadius: "1rem",
-            backgroundColor: "var(--header)",
-            margin: "1rem",
-            padding: "1rem",
-            height: "100%",
-            flexBasis: "80%",
-            overflowY: "auto",
-          }}
-        >
+      <Box className="bulk-function-container">
+        <Box className="todo-list-box">
           {data.items.map((item) => (
             <Box className="d-flex-between">
               <Text variant="h6" onlyWhite={true}>
@@ -149,15 +134,7 @@ const BulkFunction = (props) => {
             </Box>
           ))}
         </Box>
-        <Box
-          className="d-flex-around-column bulk-function-parent-modal"
-          style={{
-            borderRadius: "1rem",
-            backgroundColor: "var(--header)",
-            margin: "1rem",
-            padding: "1rem",
-          }}
-        >
+        <Box className="d-flex-around-column bulk-function-parent-modal bulk-function-operation">
           <div
             className={`drawer-icon-box ${
               stateFunction === "multy-done" ? "bordered" : ""
@@ -202,16 +179,8 @@ const BulkFunction = (props) => {
             </Tooltip>
           </Box>
         </Box>
-      </Box>
-      <Box>
-        <Box
-          style={{
-            borderRadius: ".4rem",
-            backgroundColor: "var(--header)",
-            margin: "1rem",
-            padding: "1rem",
-          }}
-        >
+
+        <Box className={"footer"}>
           {!stateFunction ? (
             <Text variant="h6" onlyWhite={true}>
               You have selected{" "}

@@ -7,17 +7,19 @@ const Styled_Tabs = styled(Tabs)`
     padding: 4px 1rem;
     text-transform: capitalize;
     min-height: 30px;
-    color: var(--text1) !important;
-    font-size: 0.8rem;
+    color: #e1e1e1;
+    font-size: 1rem;
     margin: 0.5rem 0.5rem;
     filter: brightness(0.5);
   }
 
   & .Mui-selected {
-    color: var(--borders) !important;
+    color: ${(props) =>
+      props.backLight ? "var(--borders)!important" : "var(--text2)!important"};
+    border: ${(props) =>
+      props.backLight ? "2px solid var(--borders)" : "2px solid var(--text2)"};
     border-radius: 0 0 10px 10px;
-    border: 2px solid var(--borders);
-    font-size: 0.8rem;
+    font-size: 1rem;
     border-top: none;
     padding: 4px 8px;
     text-transform: capitalize;
@@ -31,5 +33,10 @@ const Styled_Tabs = styled(Tabs)`
 `;
 
 export default function StyledTabs(props: any) {
-  return <Styled_Tabs {...props}>{props.children}</Styled_Tabs>;
+  const { backLight = false } = props;
+  return (
+    <Styled_Tabs {...props} backLight={backLight}>
+      {props.children}
+    </Styled_Tabs>
+  );
 }

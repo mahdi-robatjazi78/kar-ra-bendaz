@@ -1,0 +1,36 @@
+.bulk-function-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  height: 75%;
+  margin-bottom: 2rem;
+  padding: 2rem;
+
+  .todo-list-box {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    // margin: 2rem;
+    padding: 1rem;
+    height: 100%;
+    flex-basis: 72%;
+    overflow-y: auto;
+    border: 1px solid var(--borders);
+  }
+  .bulk-function-operation {
+    // flex-basis: 13%;
+
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid var(--borders);
+  }
+}
+
+.footer {
+  border-radius: 0.5rem;
+
+  margin-top: 0.8rem;
+  padding: 1rem;
+  height: 7rem;
+  border: 1px solid var(--borders);
+  flex-basis: 100%;
+}

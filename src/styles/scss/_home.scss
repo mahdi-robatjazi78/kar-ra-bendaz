@@ -1,3 +1,4 @@
+@use "public";
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap");
 
 %font-styles {
@@ -27,9 +28,13 @@
   padding: 2rem;
   margin: auto;
   overflow-y: auto;
-
+  .workspace-home-box-title {
+    font-size: 1.2rem;
+    @include public.truncateTextMixin(350px);
+  }
   .MuiGrid-root {
     grid-gap: 1rem;
+
     .add-space-box {
       padding: 1rem 0.2rem 1rem 1rem !important;
       border: 1.5px solid var(--borders);

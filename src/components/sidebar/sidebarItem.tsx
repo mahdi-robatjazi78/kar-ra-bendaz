@@ -8,7 +8,6 @@ import {
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setBlurPage } from "@/redux/features/settingSlice";
-import { truncateText } from "@/util/funcs";
 import StyledBadge from "@/styles/styled/styled_badge";
 const SidebarItem = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -81,7 +80,7 @@ const SidebarItem = (props: any) => {
             : "task-title-style"
         }`}
       >
-        {truncateText(item.title, 17)}
+        {item.title}
       </div>
       <div>
         <StyledBadge

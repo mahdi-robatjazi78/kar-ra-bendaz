@@ -24,7 +24,7 @@
     border-radius: 0.4rem;
   }
   .drawer-icon-box {
-    @extend .flex-central;
+    @extend .flex-central !optional;
     width: clamp(3.2rem, 3.6vw, 3.6vw);
     height: clamp(3.2rem, 3.6vw, 3.6vw);
     background: transparent;
