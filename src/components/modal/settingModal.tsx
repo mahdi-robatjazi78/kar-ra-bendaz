@@ -278,19 +278,20 @@ const SettingModal = (props) => {
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
                 <Text onlyWhite={true}>Home Page </Text>
                 <Text onlyWhite={true}>
-                  <code>alt</code> <code>ctrl</code> <code>h</code>
+                  <code>alt</code> <code>h</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
                 <Text onlyWhite={true}>Todo Page </Text>
                 <Text onlyWhite={true}>
-                  <code>alt</code> <code>ctrl</code> <code>t</code>
+                  <code>alt</code> <code>w</code>
                 </Text>
               </Box>
               <Box className="d-flex-between" sx={{ m: 2, flexWrap: "nowrap" }}>
                 <Text onlyWhite={true}>Profile Page </Text>
                 <Text onlyWhite={true}>
-                  <code>alt</code> <code>ctrl</code> <code>p</code>
+                  <code>alt</code>
+                  <code>p</code>
                 </Text>
               </Box>
               <hr />

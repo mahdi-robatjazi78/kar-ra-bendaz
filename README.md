@@ -2,13 +2,6 @@
 
 > #### Shortcuts Cheetsheet
 
+_Change Page_ - `Alt + t` : Todos Page - `Alt + p` : Profile Page - `Alt + w    ` : Home Page
 
-*Change Page*
-    - `Ctrl + Alt + t` : Todos Page
-    - `Ctrl + Alt + p` : Profile Page
-    - `Ctrl + Alt + h` : Home Page
-
-*Todo Page Shortcuts*
-    - `Alt + n` : New Todo
-    - `Alt + c` : New Category
-
+_Todo Page Shortcuts_ - `Alt + n` : New Todo - `Alt + c` : New Category

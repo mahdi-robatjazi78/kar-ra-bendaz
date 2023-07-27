@@ -425,6 +425,7 @@ const WorkspacesTable = () => {
           <Tab value={0} label="Todo Workspace" />
           <Tab value={1} label="Note Boards" />
           <Tab value={2} label="Widget Dashboards" />
+          <Tab value={3} label="Music Player" />
         </StyledTabs>
 
         <TabPanel value={value} index={0}>
@@ -541,6 +542,12 @@ const WorkspacesTable = () => {
         <TabPanel value={value} index={2}>
           <Text style={{ fontSize: "1.5em" }} className="flex-central">
             Widget Dashboards Coming Soon Available 👻👻👻
+          </Text>
+        </TabPanel>
+
+        <TabPanel value={value} index={3}>
+          <Text style={{ fontSize: "1.5em" }} className="flex-central">
+            Music Player Coming Soon Available 👻👻👻
           </Text>
         </TabPanel>
       </Box>

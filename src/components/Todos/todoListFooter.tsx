@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
-import { Box, IconButton, InputAdornment, Tooltip } from "@mui/material";
+import { Badge, Box, IconButton, InputAdornment, Tooltip } from "@mui/material";
 import { FiSearch } from "react-icons/fi";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import { VscChromeClose } from "react-icons/vsc";
@@ -76,10 +76,8 @@ const TodoPageFooter = (props) => {
     600
   );
 
-  const [
-    anchorElBoxIconsPopop,
-    setAnchorElBoxIconsPopop,
-  ] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorElBoxIconsPopop, setAnchorElBoxIconsPopop] =
+    React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorElBoxIconsPopop);
   const id = open ? "Box-Icons-Popop" : undefined;
 
@@ -173,8 +171,19 @@ const TodoPageFooter = (props) => {
             {+mouse_selected_items.count > 0 && (
               <FooterButton
                 title={`You have selected ${mouse_selected_items?.count} ${mouse_selected_items?.entity} items`}
-                icon={<GrMultiple />}
-                onClick={(e) => {
+                icon={
+                  <Badge
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    badgeContent={+mouse_selected_items.count}
+                    color="success"
+                  >
+                    <GrMultiple />
+                  </Badge>
+                }
+                onClick={() => {
                   setOpenBulkFunctionModal(true);
                 }}
               />

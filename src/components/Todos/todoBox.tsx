@@ -22,9 +22,11 @@ interface DropResult {
 }
 
 const TodoBox = (props: any) => {
-  const { searchMode, searchText } = useSelector(
-    (state: RootState) => state.todoPageConfig
-  );
+  const {
+    searchMode,
+    searchText,
+    mouse_selected_items: EntitySelection,
+  } = useSelector((state: RootState) => state.todoPageConfig);
   const { playSound } = useSelector((state: RootState) => state.settings);
 
   const {

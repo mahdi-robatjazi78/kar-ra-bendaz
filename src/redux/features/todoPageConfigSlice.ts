@@ -63,7 +63,15 @@ const initialState: ITodoPage = {
     open: false,
     state: "todo",
     anchor: "right",
-    item: { _id: "", body: "", flag: "", categoId: "", owner: "", date: "" ,priority:null },
+    item: {
+      _id: "",
+      body: "",
+      flag: "",
+      categoId: "",
+      owner: "",
+      date: "",
+      priority: null,
+    },
   },
   meta: {
     page: 1,
@@ -126,8 +134,11 @@ export const todoPageConfigSlice = createSlice({
         item: action.payload.item,
       };
     },
-    ChangePriorityDrawer:(state,action)=>{
-      state.drawer = {...state.drawer , item :{...state.drawer.item , priority:action.payload}}
+    ChangePriorityDrawer: (state, action) => {
+      state.drawer = {
+        ...state.drawer,
+        item: { ...state.drawer.item, priority: action.payload },
+      };
     },
     DrawerClose: (state) => {
       state.drawer = {
@@ -141,7 +152,7 @@ export const todoPageConfigSlice = createSlice({
           categoId: "",
           owner: "",
           date: "",
-          priority:null
+          priority: null,
         },
       };
     },
@@ -190,6 +201,13 @@ export const todoPageConfigSlice = createSlice({
         count: action.payload.count,
         entity: action.payload.entity,
         items: action.payload.items,
+      };
+    },
+    AddNewMouseSelectedItems: (state, action) => {
+      state.mouse_selected_items = {
+        count: +state?.mouse_selected_items?.count + 1,
+        entity: action.payload.entity,
+        items: [...state.mouse_selected_items?.items, action.payload.newItem],
       };
     },
     clearMouseSelectedItems: (state) => {
@@ -242,6 +260,7 @@ export const {
   showLayoutNav,
   hideLayoutNav,
   AddMouseSelectedItems,
+  AddNewMouseSelectedItems,
   clearMouseSelectedItems,
   removeMouseSelectedItemWithId,
   todosLayoutChange,

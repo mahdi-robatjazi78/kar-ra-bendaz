@@ -20,7 +20,11 @@ import { BsFlag, BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
 import { soundPlay } from "@/util/funcs";
 import "./bulkFunctionStyles.scss";
-import { FcHighPriority, FcLowPriority, FcMediumPriority } from "react-icons/fc";
+import {
+  FcHighPriority,
+  FcLowPriority,
+  FcMediumPriority,
+} from "react-icons/fc";
 const BulkFunction = (props) => {
   const {
     data,
@@ -39,7 +43,8 @@ const BulkFunction = (props) => {
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
   const [todoSetDoneRequest, todoSetDoneResponse] =
     useTodoSetDoneBulkMutation();
-  const [updatePriorityBulkRequest,updatePriorityBulkResponse ] = useUpdatePriorityBulkMutation()
+  const [updatePriorityBulkRequest, updatePriorityBulkResponse] =
+    useUpdatePriorityBulkMutation();
   const [todoAssignBulkRequest, todosAssignBulkResponse] =
     useTodosAssignBulkMutation();
   const [stateFunction, setStateFunction] = useState(null);
@@ -97,27 +102,14 @@ const BulkFunction = (props) => {
     }
   }, [data?.count]);
 
-  useEffect(() => {
-    function checkSelectedItems() {
-      const elements = document.querySelectorAll(".mouse-drag-selected");
-
-      if (elements?.length !== data?.count) {
-        Toast("Please select again", false, true, "⚠️");
-        onClose();
-      }
-    }
-
-    checkSelectedItems();
-  }, []);
-
-
-
-
   const handleSetNewPriority = (n: Number) => {
-    updatePriorityBulkRequest({list : data.items.map((item) => item.boxTodoId) , priority:n })
+    updatePriorityBulkRequest({
+      list: data.items.map((item) => item.boxTodoId),
+      priority: n,
+    })
       .then((response) => {
         Toast(response.data.msg, true, true);
-        setStateFunction(null)
+        setStateFunction(null);
         if (playSound) {
           soundPlay("sound5.wav");
         }
@@ -127,14 +119,6 @@ const BulkFunction = (props) => {
         console.log(error);
       });
   };
-
-
-
-
-
-
-
-
 
   return (
     <Styled_Modal
@@ -207,15 +191,12 @@ const BulkFunction = (props) => {
             </Tooltip>
           </Box>
 
-
-          <Box 
-
-          className={`drawer-icon-box ${
+          <Box
+            className={`drawer-icon-box ${
               stateFunction === "multy-priority" ? "bordered" : ""
             }`}
->
-
-<Tooltip arrow title="Set new priority">
+          >
+            <Tooltip arrow title="Set new priority">
               <IconButton
                 onClick={(e) => {
                   setStateFunction("multy-priority");
@@ -224,7 +205,6 @@ const BulkFunction = (props) => {
                 <BsFlag className="drawer-footer-icon" />
               </IconButton>
             </Tooltip>
-
           </Box>
         </Box>
 
@@ -331,50 +311,38 @@ const BulkFunction = (props) => {
               </StyledButton>
             </Box>
           ) : stateFunction === "multy-priority" ? (
-            
-
-            <Stack direction="row"  justifyContent="space-around">
-            <Tooltip title="Set Low Priority">
-              <IconButton
-                onClick={() => {
-                   
-                  handleSetNewPriority(0);
-                 
-                }}
-              
-              >
-                <FcLowPriority fontSize="3rem" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Set Medium Priority">
-              <IconButton
-                onClick={() => {
-        
+            <Stack direction="row" justifyContent="space-around">
+              <Tooltip title="Set Low Priority">
+                <IconButton
+                  onClick={() => {
+                    handleSetNewPriority(0);
+                  }}
+                >
+                  <FcLowPriority fontSize="3rem" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Set Medium Priority">
+                <IconButton
+                  onClick={() => {
                     handleSetNewPriority(1);
-                  
-                }} 
-              >
-                <FcMediumPriority fontSize="3rem" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Set High Priority">
-              <IconButton
-                onClick={() => {
-             
+                  }}
+                >
+                  <FcMediumPriority fontSize="3rem" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Set High Priority">
+                <IconButton
+                  onClick={() => {
                     handleSetNewPriority(2);
-              
-                }} 
-              >
-                <FcHighPriority fontSize="3rem" />
-              </IconButton>
-            </Tooltip>
-          </Stack>
-
-
-
-
-
-          ):(<></>)}
+                  }}
+                >
+                  <FcHighPriority fontSize="3rem" />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
     </Styled_Modal>

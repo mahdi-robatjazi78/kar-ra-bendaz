@@ -3,12 +3,12 @@ import Signup from "./profile/Signup";
 import Login from "./profile/Login";
 import Profile from "./profile/Profile";
 import HomePage from "./home";
-import {  Routes, Route, useNavigate } from "react-router-dom";
-import { Box} from "@mui/material";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 import Todos from "./Todos";
 import NoteBoard from "./notes";
 import { useHotkeys } from "react-hotkeys-hook";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
 interface IPerson {
@@ -27,12 +27,11 @@ interface ISignupData {
 }
 const RouteBox = () => {
   const navigate = useNavigate();
-  const  {blur} = useSelector((state:RootState)=>state.settings)
- 
-  useHotkeys("alt+ctrl+h", () => navigate("/"));
-  useHotkeys("alt+ctrl+t", () => navigate("/todos"));
-  useHotkeys("alt+ctrl+p", () => navigate("/profile"));
+  const { blur } = useSelector((state: RootState) => state.settings);
 
+  useHotkeys("alt+h", () => navigate("/"));
+  useHotkeys("alt+w", () => navigate("/todos"));
+  useHotkeys("alt+p", () => navigate("/profile"));
 
   const [userSignupData, setUserSignupData] = useState<ISignupData>({
     firstName: "",
@@ -44,30 +43,27 @@ const RouteBox = () => {
 
   return (
     <Box
-      style=
-      {
-        {
-          ...(blur.body && {filter:`blur(${blur.size}px)`}),
-          width:"100%"
-        }
-      }
-      >
+      style={{
+        ...(blur.body && { filter: `blur(${blur.size}px)` }),
+        width: "100%",
+      }}
+    >
       <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route
-        path="signup"
-        element={
-          <Signup
-            userSignupData={userSignupData}
-            setUserSignupData={setUserSignupData}
-          />
-        }
-      />
-      <Route path="login" element={<Login />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="todos" element={<Todos />} />
-      <Route path="notes" element={<NoteBoard />} />
-    </Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="signup"
+          element={
+            <Signup
+              userSignupData={userSignupData}
+              setUserSignupData={setUserSignupData}
+            />
+          }
+        />
+        <Route path="login" element={<Login />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="todos" element={<Todos />} />
+        <Route path="notes" element={<NoteBoard />} />
+      </Routes>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import TodoBox from "./todoBox";
 import Selecto from "react-selecto";
@@ -18,9 +18,14 @@ const TodoList = (props: any) => {
   const { todoPageLayout: show } = useSelector(
     (state: RootState) => state.todoLayout
   );
+  const { mouse_selected_items: EntitySelection } = useSelector(
+    (state: RootState) => state.todoPageConfig
+  );
   const dispatch = useDispatch();
   const filter = show[1];
   const [listState, setListState] = useState([]);
+
+  const todoBoxGridRef = useRef(null);
 
   useEffect(() => {
     if (filter === "done") {
@@ -69,8 +74,32 @@ const TodoList = (props: any) => {
     dispatch(clearMouseSelectedItems());
   };
 
+  useEffect(() => {
+    if (
+      EntitySelection.entity === "todo" &&
+      EntitySelection.count &&
+      todoBoxGridRef.current
+    ) {
+      const listOfTodoBoxElements =
+        todoBoxGridRef.current.getElementsByClassName("todo-box");
+
+      for (const l of listOfTodoBoxElements) {
+        const activeBoxElement = l.getAttribute("box-todo-id");
+
+        const result = EntitySelection.items.find(
+          (item) =>
+            item.boxTodoId === activeBoxElement &&
+            !l.classList.contains("mouse-drag-selected")
+        );
+        if (result?.boxTodoId) {
+          l.classList.add("mouse-drag-selected");
+        }
+      }
+    }
+  }, [EntitySelection.count, todoBoxGridRef.current]);
+
   return (
-    <Grid container spacing={2} id="todo-grid-list">
+    <Grid container spacing={2} id="todo-grid-list" ref={todoBoxGridRef}>
       {todoItems.map(
         ({ _id, body, flag, categoId, priority }, index: number, array: []) => (
           <TodoBox
