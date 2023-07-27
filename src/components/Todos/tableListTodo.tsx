@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Table,
@@ -7,20 +7,20 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-
-
-
-import ThemeContext from "../../context/themeContext";
+import { useDispatch } from "react-redux";
 import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin3Fill } from "react-icons/ri";
-import { MdOutlineDownloadDone } from "react-icons/md";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-
+import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
+import moment from "moment";
 
 const TableListTodo = (props) => {
-  const { sidebar_open:open } = useSelector((state : RootState)=>state.todoPageConfig);
+  const { sidebar_open: open } = useSelector(
+    (state: RootState) => state.todoPageConfig
+  );
   const {
     todos,
     getAllTodos,
@@ -30,51 +30,108 @@ const TableListTodo = (props) => {
     setTodoDone,
   } = props;
 
-  const theme = useContext(ThemeContext);
-  const iconStyle = {
-    padding: "0 .7rem",
-  };
+  const dispatch = useDispatch();
+
+  const [isDateFormat, setIsDateFormat] = useState(true);
+  const toggleDateFormat = () => setIsDateFormat((prevState) => !prevState);
+
   return (
     <Box>
       <TableContainer>
         <Table
-          sx={{ width: !open  ? "90vw" : "84vw" }}
+          sx={{ width: !open ? "90vw" : "84vw" }}
           aria-label="a dense table"
         >
           <TableHead>
-              <TableCell sx={{ color: theme.text1 }}>Title</TableCell>
-              <TableCell sx={{ color: theme.text1 }} align="left">Actions</TableCell>
+            {" "}
+            <TableCell
+              sx={{
+                color: "var(--text1)",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Title
+            </TableCell>
+            <TableCell
+              onClick={toggleDateFormat}
+              sx={{
+                color: "var(--text1)",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Created At
+            </TableCell>
+            <TableCell
+              sx={{
+                color: "var(--text1)",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Status
+            </TableCell>
+            <TableCell
+              sx={{
+                color: "var(--text1)",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Priority
+            </TableCell>
+            <TableCell
+              sx={{
+                color: "var(--text1)",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+              align="left"
+            >
+              Action
+            </TableCell>
           </TableHead>
           <TableBody>
-            {todos.map((row , idx) => (
+            {todos.map((row, idx) => (
               <TableRow
                 key={idx}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
-                  ...(row.flag === "isDone" && { background: "#E6FFE9"   }),
                 }}
-                // style={row.flag === "isDone" && {background:"gray"}}
               >
-                <TableCell
-                  sx={{ color:  row.flag === "isDone" ? "black" : theme.text1, }}
-    
-                 
-                >
+                <TableCell sx={{ color: "var(--text1)", maxWidth: 300 }}>
                   {row.body}
                 </TableCell>
-
                 <TableCell
-                  sx={{ color:  row.flag === "isDone" ? "black" : theme.text1, }}
+                  sx={{ color: "var(--text1)", cursor: "pointer" }}
+                  onClick={toggleDateFormat}
                 >
-                  <FaEdit style={iconStyle} onClick={() => editTodo(row)} />
-                  <RiDeleteBin3Fill
-                    style={iconStyle}
-                    onClick={() => deleteTodo(row)}
-                  />
-                  <MdOutlineDownloadDone
-                    style={iconStyle}
-                    onClick={() => setTodoDone(row)}
-                  />
+                  {moment(row.date).format(
+                    isDateFormat ? "YYYY-MM-DD" : "HH:MM:DD"
+                  )}
+                </TableCell>
+                <TableCell sx={{ color: "var(--text1)" }}>
+                  {row.flag === "isDone" ? "Is Done" : "Created"}
+                </TableCell>
+                <TableCell sx={{ color: "var(--text1)" }}>
+                  {row?.priority === 0
+                    ? "Low"
+                    : row?.priority === 1
+                    ? "Medium"
+                    : "High"}
+                </TableCell>
+
+                <TableCell>
+                  <Box className="d-flex">
+                    <IconButton
+                      onClick={() => {
+                        dispatch(DrawerOpen({ state: "todo", item: row }));
+                      }}
+                    >
+                      <FaEdit color="var(--text1)" />
+                    </IconButton>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}

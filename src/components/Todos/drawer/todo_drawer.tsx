@@ -42,10 +42,8 @@ const TodoDrawer = (props) => {
   } = props.props;
   const { modalOpen, setModalOpen } = props;
   const [todoSetDoneRequest, todoSetDoneResponse] = useTodoSetDoneMutation();
-  const [
-    updatePriorityRequest,
-    updatePriorityResponse,
-  ] = useUpdatePriorityMutation();
+  const [updatePriorityRequest, updatePriorityResponse] =
+    useUpdatePriorityMutation();
   const [todoTextEdited, setTodoTextEdited] = useState(false);
   const [changePriorityBox, setChangePriorityBox] = useState(false);
   const textAreaRef = useRef(null);
@@ -79,6 +77,9 @@ const TodoDrawer = (props) => {
         Toast(response.data.msg, true, true);
         dispatch(ChangePriorityDrawer(n));
         setChangePriorityBox(false);
+        if (playSound) {
+          soundPlay("sound5.wav");
+        }
         UpdateOnlyTodos();
       })
       .catch((error) => {
@@ -109,7 +110,11 @@ const TodoDrawer = (props) => {
           }}
         />
         <Box id="text-area-footer">
-          <Stack direction="row" spacing={1} justifyContent="space-between">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             {changePriorityBox ? (
               <Stack direction="row" spacing={3}>
                 <Tooltip title="Set Low Priority">

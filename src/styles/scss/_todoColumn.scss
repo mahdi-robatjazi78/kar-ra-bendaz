@@ -2,8 +2,6 @@ $HIGH-PRIORITY: red;
 $MEDIUM-PRIORITY: orange;
 $LOW-PRIORITY: var(--hoverSuccess);
 
-
-
 %drawer-icon-box {
   .drawer-icon-box {
     display: flex;
@@ -130,52 +128,52 @@ $LOW-PRIORITY: var(--hoverSuccess);
               min-height: 6rem;
               max-height: 6rem;
               border: 2px solid gray;
-              .card-content{
+              .card-content {
                 position: relative;
                 word-wrap: break-word;
-                display:flex;
-                padding-left:.6rem;
-           
-              .priority-highlight-high {
-                margin-right:9px;
-                width:2px;
-                height:65px;
-                background-color:$HIGH-PRIORITY;
-              }
-              .priority-highlight-medium {
-                margin-right:9px;
-                width:2px;
-                height:65px;
-                background-color:$MEDIUM-PRIORITY;
-              }
-              .priority-highlight-low {
-                margin-right:9px;
-                width:2px;
-                height:65px;
-                background-color:$LOW-PRIORITY;
-              }
+                display: flex;
+                padding-left: 0.6rem;
 
-              .todoBox {
-                font-size: 1rem;
-                line-height: 1rem;
-                color: black;
-              }
-       
-              .todoBoxDone {
-                font-size: 1rem;
-                line-height: 1rem;
-                color: black;
-              }
+                .priority-highlight-high {
+                  margin-right: 9px;
+                  width: 2px;
+                  height: 65px;
+                  background-color: $HIGH-PRIORITY;
+                }
+                .priority-highlight-medium {
+                  margin-right: 9px;
+                  width: 2px;
+                  height: 65px;
+                  background-color: $MEDIUM-PRIORITY;
+                }
+                .priority-highlight-low {
+                  margin-right: 9px;
+                  width: 2px;
+                  height: 65px;
+                  background-color: $LOW-PRIORITY;
+                }
 
-              .highlighted-todo-text {
-                background-color: var(--text3);
-                color: var(--foreground);
-                letter-spacing: 1px;
-                padding: 0 4px;
-                border-radius: 4px;
-                line-height: 1rem;
+                .todoBox {
+                  font-size: 1rem;
+                  line-height: 1rem;
+                  color: black;
+                }
+
+                .todoBoxDone {
+                  font-size: 1rem;
+                  line-height: 1rem;
+                  color: black;
+                }
+
+                .highlighted-todo-text {
+                  background-color: var(--text3);
+                  color: var(--foreground);
+                  letter-spacing: 1px;
+                  padding: 0 4px;
+                  border-radius: 4px;
+                  line-height: 1rem;
+                }
               }
-            }
             }
           }
         }

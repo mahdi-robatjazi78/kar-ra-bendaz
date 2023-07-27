@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Drawer } from "@mui/material";
 import useWindowSize from "@hooks/useWindowSize";
 import { deactiveBlur } from "@/redux/features/settingSlice";
@@ -7,9 +7,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import TodoDrawer from "./todo_drawer";
 import CategoryDrawer from "./category_drawer";
+import { deselectAllTodos } from "@/util/funcs";
 
 const TodoPageDrawer = (props) => {
-  const { UpdateOnlyCategories ,UpdateOnlyTodos } = props;
+  const { UpdateOnlyCategories, UpdateOnlyTodos } = props;
   const [modalOpen, setModalOpen] = useState({
     status: false,
     modal: "",
@@ -25,6 +26,12 @@ const TodoPageDrawer = (props) => {
     dispatch(DrawerClose());
   };
 
+  useEffect(() => {
+    if (Open) {
+      // debugger;
+      deselectAllTodos();
+    }
+  }, [Open]);
   return (
     <Box id="drawer-parent" sx={modalOpen.status ? { zIndex: 3 } : {}}>
       <Drawer

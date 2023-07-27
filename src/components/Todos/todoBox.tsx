@@ -27,8 +27,16 @@ const TodoBox = (props: any) => {
   );
   const { playSound } = useSelector((state: RootState) => state.settings);
 
-  const { id, categoId, flag, body, todos, index, UpdateTodoAndCategories , priority } =
-    props;
+  const {
+    id,
+    categoId,
+    flag,
+    body,
+    todos,
+    index,
+    UpdateTodoAndCategories,
+    priority,
+  } = props;
 
   const [category, setCategory] = useState(categoId ? categoId : "");
 
@@ -146,7 +154,7 @@ const TodoBox = (props: any) => {
       opacity,
       background:
         flag === "isDone"
-          ? "rgb(163, 206, 168)"
+          ? "rgb(175 209 179 / 57%)"
           : isDragging
           ? "gray"
           : theme.isDarkMode
@@ -185,24 +193,22 @@ const TodoBox = (props: any) => {
           dispatch(setBlurPage());
         }}
       >
-        <CardContent
-          className="card-content"
-        >
-          
-          
+        <CardContent className="card-content">
           <motion.div
-              initial={{ x: -30, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ ease: "easeOut", duration: 0.7 }}
-              className={priority === 2 ? "priority-highlight-high": priority === 1 ? "priority-highlight-medium" : "priority-highlight-low"}>
+            initial={{ x: -30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ ease: "easeOut", duration: 0.7 }}
+            className={
+              priority === 2
+                ? "priority-highlight-high"
+                : priority === 1
+                ? "priority-highlight-medium"
+                : "priority-highlight-low"
+            }
+          ></motion.div>
 
-              </motion.div>
-          
-          
-          
-          
-            <div
-              className={
+          <div
+            className={
               flag === "isDone"
                 ? `todoBoxDone f-f-r-dongle`
                 : "todoBox f-f-r-dongle"

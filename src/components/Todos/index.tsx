@@ -36,7 +36,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
-import { soundPlay } from "@/util/funcs";
+import { deselectAllTodos, soundPlay } from "@/util/funcs";
 import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
 import { useGetActiveWsQuery } from "@/redux/api/workspaces";
 
@@ -59,8 +59,6 @@ const Todos = () => {
     meta,
     layout_nav_show,
     mouse_selected_items,
- 
-
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { blur, headerPosition, playSound } = useSelector(
     (state: RootState) => state.settings
@@ -99,8 +97,6 @@ const Todos = () => {
     React.useState(false);
   const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
     setTodoList([]);
-    
-    
 
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
@@ -110,7 +106,6 @@ const Todos = () => {
     })
       .unwrap()
       .then((resp) => {
-
         setTodoList(resp?.todos);
         dispatch(
           handleChangeMetaItem({
@@ -148,26 +143,30 @@ const Todos = () => {
   };
 
   const HandleTodoAssignToCategory = (categoId) => {
-    todoAssignRequest({ todoId :DrawerTodoId, categoId })
+    todoAssignRequest({ todoId: DrawerTodoId, categoId })
       .then((resp) => {
         if (playSound) {
           soundPlay("sound6.wav");
         }
-        Toast(resp.data.msg , true, true);
+        Toast(resp.data.msg, true, true);
         UpdateTodoAndCategories();
       })
       .catch((error) => {});
   };
 
-  const HandleTodoChangeBody = (todoId:string, todoBody:string) => {
-    changeBodyRequest({ todoId, todoBody }).then((resp)=>{
-      Toast(resp?.data?.msg, true, true);
+  const HandleTodoChangeBody = (todoId: string, todoBody: string) => {
+    changeBodyRequest({ todoId, todoBody })
+      .then((resp) => {
+        Toast(resp?.data?.msg, true, true);
 
-      if (playSound) {
-        soundPlay("sound4.wav");
-      }
-      UpdateOnlyTodos();
-    }).catch(error=>{console.log(error)});
+        if (playSound) {
+          soundPlay("sound4.wav");
+        }
+        UpdateOnlyTodos();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   useEffect(() => {
     if (ActiveWorkspaceID) {
@@ -228,12 +227,7 @@ const Todos = () => {
   const handleCloseBulkFunctionModal = () => {
     setOpenBulkFunctionModal(false);
     dispatch(clearMouseSelectedItems());
-    const elements = document.querySelectorAll(".mouse-drag-selected");
-    if (elements.length) {
-      elements.forEach(function (element) {
-        element.classList.remove("mouse-drag-selected");
-      });
-    }
+    deselectAllTodos();
   };
 
   return (

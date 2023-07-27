@@ -6,6 +6,7 @@ import useDebounce from "@hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import {
   AddMouseSelectedItems,
+  DrawerOpen,
   clearMouseSelectedItems,
 } from "@/redux/features/todoPageConfigSlice";
 import { useSelector } from "react-redux";
@@ -36,7 +37,16 @@ const TodoList = (props: any) => {
 
   useDebounce(
     () => {
-      if (listState.length) {
+      if (listState.length > 0 && listState.length === 1) {
+        const x = todoList.filter((item) => {
+          if (item?._id === listState[0].boxTodoId) {
+            return item;
+          }
+        });
+
+        console.log("item >>>> ", x);
+        dispatch(DrawerOpen({ state: "todo", item: x[0] }));
+      } else if (listState.length && listState.length > 1) {
         let data = {
           count: listState.length,
           entity: "todo",
@@ -62,7 +72,7 @@ const TodoList = (props: any) => {
   return (
     <Grid container spacing={2} id="todo-grid-list">
       {todoItems.map(
-        ({ _id, body, flag, categoId , priority }, index: number, array: []) => (
+        ({ _id, body, flag, categoId, priority }, index: number, array: []) => (
           <TodoBox
             key={_id}
             id={_id}

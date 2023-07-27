@@ -11,6 +11,7 @@ import {
 } from "@/redux/features/todoLayoutSlice";
 import { store } from "@/redux/store";
 import Toast from "./toast";
+import { clearMouseSelectedItems } from "@/redux/features/todoPageConfigSlice";
 
 export const truncateText = (text: string, size: number) => {
   return text.length > size ? text.slice(0, size - 1) + "…" : text;
@@ -83,4 +84,14 @@ export const handleResponseError = (error) => {
   } else {
     Toast(error.msg ? error.msg : error.data.msg, false, true);
   }
+};
+
+export const deselectAllTodos = () => {
+  const elements = document.querySelectorAll(".mouse-drag-selected");
+  if (elements.length) {
+    elements.forEach(function (element) {
+      element.classList.remove("mouse-drag-selected");
+    });
+  }
+  store.dispatch(clearMouseSelectedItems());
 };

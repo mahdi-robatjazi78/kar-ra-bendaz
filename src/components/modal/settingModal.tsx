@@ -194,6 +194,7 @@ const SettingModal = (props) => {
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"
+                          style={{ cursor: "pointer" }}
                         />
                       ) : (
                         <GiSoundOff
@@ -202,6 +203,7 @@ const SettingModal = (props) => {
                           }}
                           fontSize={"6rem"}
                           color="var(--text2)"
+                          style={{ cursor: "pointer" }}
                         />
                       )}
                     </Box>
@@ -334,7 +336,7 @@ const SettingModal = (props) => {
               </Box>
             </Box>
           ) : settingItem === 2 ? (
-            <Box>
+            <Box style={{ margin: "auto", width: "80%", paddingTop: "2rem" }}>
               <Accordion
                 tabIndex={4}
                 expanded={accordionExpanded === "settings"}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
 
-const FooterButton = (props) => {
+const FooterButton = (props: any) => {
   const { icon, title, onClick } = props;
 
   return (
