@@ -7,7 +7,7 @@ const StyledTextFieldWhite = styled(TextField)`
       props.lighter ? "white" : "var(--text1)"};
     caret-color:var(--text2);  
     letter-spacing: 2px;
-    font-family: system-ui monospace cursive;
+    font-family: "Space Grotesk";
   }
 
   
@@ -16,8 +16,8 @@ const StyledTextFieldWhite = styled(TextField)`
   & input:-webkit-autofill,
   input:-webkit-autofill:focus {
     -webkit-text-fill-color: ${(props: any) =>
-      props.lighter ? "var(--text2)" : "white"}
-    background:none !important;
+      props.lighter ? "var(--text2)" : "white"};
+    background:"none !important";
     font-size:1.2rem;
     transition: background-color 600000s 0s, green 600000s 0s;
   }
@@ -28,7 +28,7 @@ const StyledTextFieldWhite = styled(TextField)`
     background: var(--background);
     padding-right: 6px; 
   }
-  }
+  
   fieldset {
     border-color: ${(props: any) =>
       props.lighter ? "var(--text2) !important" : "var(--text1) !important"};
@@ -50,7 +50,7 @@ const StyledTextFieldWhite = styled(TextField)`
   & svg {
     color: ${(props: any) => (props.lighter ? "var(--text2)" : "var(--text2)")};
   };
-  }
+
 `;
 
 export default StyledTextFieldWhite;

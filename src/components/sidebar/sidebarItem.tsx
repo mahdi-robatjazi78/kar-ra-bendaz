@@ -85,7 +85,7 @@ const SidebarItem = (props: any) => {
       <div>
         <StyledBadge
           bordered={ActiveCategory.id && ActiveCategory.id === item.uuid}
-          style={{ margin: "1.2rem" }}
+          style={{ margin: "1.2rem" , userSelect:"none"}}
           badgeContent={item.task_count || "0"}
         ></StyledBadge>
       </div>

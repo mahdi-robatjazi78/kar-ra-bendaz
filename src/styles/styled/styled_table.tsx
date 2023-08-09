@@ -5,12 +5,15 @@ export const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
     padding: ".4rem",
     color: "var(--text1)",
-    fontWeight: "bold",
+    fontWeight: 300,
+    fontFamily:"Changa"
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 16,
+    fontSize: 13,
     padding: ".4rem .4rem .4rem .7rem",
     color: "var(--text1)",
+    fontWeight: 300,
+    fontFamily:"Space Grotesk"
   },
 });
 

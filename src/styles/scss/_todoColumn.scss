@@ -121,7 +121,7 @@ $LOW-PRIORITY: var(--hoverSuccess);
           padding: 1rem;
           .todo-box-grid {
             .mouse-drag-selected {
-              border: 2px solid var(--hoverSuccess) !important;
+              border: 3px solid var(--hoverSuccess) !important;
             }
             .todo-box {
               @extend %box-styles;

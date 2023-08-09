@@ -70,13 +70,13 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/, // styles files
         use: ["style-loader", "css-loader", "sass-loader"],
       },
-      {
-        test: /\.(png|woff|woff2|eot|ttf|svg|ico)$/, // to import images and fonts
-        use: {
-          loader: "url-loader",
-          options: { limit: 50000 },
-        },
-      },
+      // {
+      //   test: /\.(png|woff|woff2|eot|ttf|svg|ico)$/, // to import images and fonts
+      //   use: {
+      //     loader: "url-loader",
+      //     options: { limit: 50000 },
+      //   },
+      // },
     ],
   },
 };

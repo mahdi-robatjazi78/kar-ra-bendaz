@@ -27,9 +27,8 @@ const StyledButton = styled(Button)`
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
   & span {
     text-transform:capitalize;
-    text-decoration: none;
-    font-weight:bold;
-    font-family:system-ui monospace cursive;
+    text-decoration: none; 
+    font-family:"Changa";
   }
   &:hover &:focus {
 

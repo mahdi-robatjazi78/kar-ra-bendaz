@@ -12,6 +12,7 @@
   max-width: 230px;
 
   .ws-title {
+    font-family: Changa;
     margin: 0 1rem;
     color: var(--hoverSuccess);
     font-size: 1.2rem;
@@ -42,7 +43,7 @@
       .task-title-style {
         font-weight: 500;
         font-size: 1.1rem;
-        font-family: sans-serif;
+        font-family: Changa;
         letter-spacing: 1px;
         user-select: none;
         line-height: 2rem;
@@ -51,7 +52,7 @@
       .task-title-style-active {
         font-weight: 500;
         font-size: 1.1rem;
-        font-family: sans-serif;
+        font-family: Changa;
         letter-spacing: 1px;
         user-select: none;
         line-height: 2rem;

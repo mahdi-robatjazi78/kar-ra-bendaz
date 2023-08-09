@@ -104,14 +104,13 @@ export const TodoRtkService = createApi({
       },
     }),
     updatePriority: builder.mutation({
-      query: ({ todoId ,  priority }) => ({
+      query: ({ todoId, priority }) => ({
         url: `update-priority`,
         method: "PUT",
         body: {
           id: todoId,
           priority,
-        
-      },
+        },
       }),
 
       transformErrorResponse: (error) => {
@@ -119,25 +118,19 @@ export const TodoRtkService = createApi({
       },
     }),
     updatePriorityBulk: builder.mutation({
-      query: ({ list ,  priority }) => ({
+      query: ({ list, priority }) => ({
         url: `update-priority-many`,
         method: "PUT",
         body: {
-          todoListIds:list,
+          todoListIds: list,
           priority,
-        
-      },
+        },
       }),
 
       transformErrorResponse: (error) => {
         handleResponseError(error);
       },
     }),
-
-
-
-
-
 
     todoAssignToCategory: builder.mutation({
       query: ({ todoId, categoId }) => ({

@@ -31,11 +31,6 @@ const TableListTodo = (props) => {
   );
   const {
     todos,
-    getAllTodos,
-    setSelectedEditTask,
-    deleteTodo,
-    editTodo,
-    setTodoDone,
   } = props;
 
   const dispatch = useDispatch();
@@ -96,6 +91,7 @@ const TableListTodo = (props) => {
     <Box>
       <TableContainer sx={{ width: "80%", m: "auto" }}>
         <Table
+        style={{userSelect:'none'}}
           // sx={{ width: !open ? "90vw" : "84vw" " }}
           aria-label="a dense table"
         >

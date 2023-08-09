@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Checkbox } from "@mui/material";
+import ThemeContext from "@/context/themeContext";
 
 const Styled_Checkbox = (props) => {
+
+  const theme = useContext(ThemeContext)
+
+
   return (
     <Checkbox
       {...props}
       sx={{
-        color: "var(--text2)",
+        color:theme.isDarkMode ? "var(--text2)" : "var(--header)",
         "&.Mui-checked": {
           color: "var(--hoverSuccess)",
         },

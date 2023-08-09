@@ -23,6 +23,7 @@ import {
   handleChangeMetaItem,
   clearMouseSelectedItems,
   SetActiveWs,
+  AddMouseSelectedItems,
 } from "@/redux/features/todoPageConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
@@ -143,6 +144,9 @@ const Todos = () => {
   };
 
   const HandleTodoAssignToCategory = (categoId) => {
+    alert(
+    'here'
+    )
     todoAssignRequest({ todoId: DrawerTodoId, categoId })
       .then((resp) => {
         if (playSound) {
@@ -229,6 +233,33 @@ const Todos = () => {
     dispatch(clearMouseSelectedItems());
     deselectAllTodos();
   };
+
+
+
+
+  useHotkeys("ctrl+a", () => {
+
+        console.log(todoList.map(item=>{return {boxTodoId : item._id , innerTodoText : item.body }}))
+
+    dispatch(AddMouseSelectedItems(
+
+      {
+        count : todoList.length ,
+        entity: "todo" , 
+        items:  todoList.map(item=>{return {boxTodoId : item._id , innerTodoText : item.body }})
+      }
+
+    ))
+
+
+  });
+
+
+
+
+
+
+
 
   return (
     <DndProvider backend={HTML5Backend}>

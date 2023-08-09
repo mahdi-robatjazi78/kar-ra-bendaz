@@ -21,6 +21,8 @@ export default function Toast(
         padding: "5px 10px",
         background: "var(--header)",
         color: "white",
+        fontFamily:"Space Grotesk",
+        fontWeight:400
       },
     });
   } else {

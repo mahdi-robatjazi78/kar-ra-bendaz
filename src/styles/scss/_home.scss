@@ -1,9 +1,9 @@
 @use "public";
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito&display=swap");
 
 %font-styles {
   color: var(--text1);
-  font-family: "Noto Sans", sans-serif;
+  font-family:  "Space Grotesk";
   font-size: 0.8rem;
 }
 %box-styles {

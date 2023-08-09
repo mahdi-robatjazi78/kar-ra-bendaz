@@ -11,6 +11,8 @@ const Styled_Tabs = styled(Tabs)`
     font-size: 1rem;
     margin: 0.5rem 0.5rem;
     filter: brightness(0.5);
+    font-family:"Changa";
+    font-weight: 400; 
   }
 
   & .Mui-selected {

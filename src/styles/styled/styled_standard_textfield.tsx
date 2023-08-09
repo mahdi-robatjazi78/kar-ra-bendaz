@@ -10,7 +10,7 @@ const CssTextField = styled(TextField)({
     "caret-color": "var(--text2)",
     color: "var(--text1)",
     "letter-spacing": "2px",
-    "font-family": "system-ui monospace cursive",
+    "font-family": "Space Grotesk",
   },
   "& input:-webkit-autofill, input:-webkit-autofill:focus": {
     "-webkit-text-fill-color":

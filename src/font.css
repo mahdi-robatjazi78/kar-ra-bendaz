@@ -1,0 +1,104 @@
+/* Space Grotesk */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Space Grotesk"),
+    url("../public/fonts/space-grotesk/SpaceGrotesk-Light.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Space Grotesk"),
+    url("../public/fonts/space-grotesk/SpaceGrotesk-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Space Grotesk"),
+    url("../public/fonts/space-grotesk/SpaceGrotesk-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Space Grotesk"),
+    url("../public/fonts/space-grotesk/SpaceGrotesk-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Space Grotesk"),
+    url("../public/fonts/space-grotesk/SpaceGrotesk-Bold.ttf") format("truetype");
+}
+
+
+
+
+
+/* Changa */
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 200;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-ExtraLight.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-Light.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Changa";
+  font-style: normal;
+  font-weight: 800;
+  src: local("Changa"),
+    url("../public/fonts/changa/Changa-ExtraBold.ttf") format("truetype");
+}

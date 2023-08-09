@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Box, IconButton, Stack, Tooltip } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Divider,
+  IconButton,
+  Stack,
+  Tooltip,
+} from "@mui/material";
 import Styled_Modal from "@/styles/styled/styled_modal";
 import Text from "@/styles/styled/styled_typography";
 import { MdOutlineClose, MdDone } from "react-icons/md";
@@ -18,7 +25,7 @@ import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import StyledBadge from "@/styles/styled/styled_badge";
 import { BsFlag, BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
-import { soundPlay } from "@/util/funcs";
+import { soundPlay, truncateText } from "@/util/funcs";
 import "./bulkFunctionStyles.scss";
 import {
   FcHighPriority,
@@ -41,12 +48,18 @@ const BulkFunction = (props) => {
   const { playSound } = useSelector((state: RootState) => state.settings);
 
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
-  const [todoSetDoneRequest, todoSetDoneResponse] =
-    useTodoSetDoneBulkMutation();
-  const [updatePriorityBulkRequest, updatePriorityBulkResponse] =
-    useUpdatePriorityBulkMutation();
-  const [todoAssignBulkRequest, todosAssignBulkResponse] =
-    useTodosAssignBulkMutation();
+  const [
+    todoSetDoneRequest,
+    todoSetDoneResponse,
+  ] = useTodoSetDoneBulkMutation();
+  const [
+    updatePriorityBulkRequest,
+    updatePriorityBulkResponse,
+  ] = useUpdatePriorityBulkMutation();
+  const [
+    todoAssignBulkRequest,
+    todosAssignBulkResponse,
+  ] = useTodosAssignBulkMutation();
   const [stateFunction, setStateFunction] = useState(null);
   const {
     active_ws: { id: ActiveWorkspaceID },
@@ -130,20 +143,27 @@ const BulkFunction = (props) => {
       <Box className="bulk-function-container">
         <Box className="todo-list-box">
           {data.items.map((item) => (
-            <Box className="d-flex-between">
-              <Text variant="h6" onlyWhite={true}>
-                {item.innerTodoText}
+            <>
+              <Box className="d-flex-between">
+                <Text variant="h6">
+                  {truncateText(item.innerTodoText, 120)}
+                </Text>
+                <IconButton
+                  onClick={() =>
+                    dispatch(
+                      removeMouseSelectedItemWithId({ id: item.boxTodoId })
+                    )
+                  }
+                >
+                  <Text>
+                    <MdOutlineClose />
+                  </Text>
+                </IconButton>
+              </Box>
+              <Text>
+                <Divider />
               </Text>
-              <IconButton
-                onClick={() =>
-                  dispatch(
-                    removeMouseSelectedItemWithId({ id: item.boxTodoId })
-                  )
-                }
-              >
-                <MdOutlineClose color="white" />
-              </IconButton>
-            </Box>
+            </>
           ))}
         </Box>
         <Box className="d-flex-around-column bulk-function-parent-modal bulk-function-operation">

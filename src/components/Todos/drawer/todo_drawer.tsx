@@ -215,7 +215,7 @@ const TodoDrawer = (props) => {
             </Tooltip>
           </Box>
         )}
-        {(Item?.categoId === "other" || Item?.categoId == null) && (
+        {/* {(Item?.categoId === "other" || Item?.categoId == null) && ( */}
           <Box className="drawer-icon-box">
             <Tooltip arrow title="Add To Category">
               <IconButton
@@ -227,7 +227,7 @@ const TodoDrawer = (props) => {
               </IconButton>
             </Tooltip>
           </Box>
-        )}
+        {/* // )} */}
         <Box className="drawer-icon-box">
           <Tooltip arrow title="Delete Todo">
             <IconButton

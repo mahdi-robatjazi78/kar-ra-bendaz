@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
 import {
   Tab,
   Box,
@@ -222,6 +222,22 @@ const WorkspacesTable = () => {
     isSuccess,
     refetch,
   } = useWsListQuery(resultText);
+
+  useLayoutEffect(() => {
+    //  set active workspace after page loaded
+
+    if (isSuccess) {
+      const activeWorkspace = data.workspaces.find((item) => item.active); 
+      if (activeWorkspace?.id) {
+        dispatch(
+          SetActiveWs({
+            id: activeWorkspace?.id,
+            title: activeWorkspace?.title,
+          })
+        );
+      }
+    }
+  }, [isSuccess]);
   const [storeNewWs, respStoreNewWs] = useStoreNewWsMutation();
   const [activeWs, respActiveWs] = useActiveWsMutation();
   const [renameWs, respRenameWs] = useRenameWsMutation();
@@ -422,10 +438,11 @@ const WorkspacesTable = () => {
           aria-label="note board and todo workspace tabs"
           scrollButtons="auto"
         >
-          <Tab value={0} label="Todo Workspace" />
+          <Tab value={0} label="Todo Workspace"  />
           <Tab value={1} label="Note Boards" />
           <Tab value={2} label="Widget Dashboards" />
           <Tab value={3} label="Music Player" />
+          <Tab value={4} label="Leitner Box" />
         </StyledTabs>
 
         <TabPanel value={value} index={0}>
@@ -548,6 +565,11 @@ const WorkspacesTable = () => {
         <TabPanel value={value} index={3}>
           <Text style={{ fontSize: "1.5em" }} className="flex-central">
             Music Player Coming Soon Available 👻👻👻
+          </Text>
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <Text style={{ fontSize: "1.5em" }} className="flex-central">
+            Leitner Box Coming Soon Available 👻👻👻
           </Text>
         </TabPanel>
       </Box>
