@@ -2,7 +2,7 @@ const themes = {
   light: {
     foreground: "rgb(255, 255, 255)",
     background: "rgb(225, 225, 225)",
-    borders: "rgb(0, 0, 255)",
+    borders: "rgb(38, 18, 49)",
     errorBorder: "rgb(177, 34, 34)",
     sidebar: "rgb(184 184 184)",
     secondSidebar: "rgb(38, 18, 49)",

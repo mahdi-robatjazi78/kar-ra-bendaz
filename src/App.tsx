@@ -12,7 +12,8 @@ import {
   Provider,
 } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-
+import { ThemeProvider } from "@mui/material";
+import OverridedTheme from "./styles/mui/theme";
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -24,7 +25,9 @@ function App() {
         <AppRouter history={history}>
           <ThemeContextProvider>
             <Toaster position="bottom-center" reverseOrder={true} />
-            <Main />
+            <ThemeProvider theme={OverridedTheme}>
+              <Main />
+            </ThemeProvider>
           </ThemeContextProvider>
         </AppRouter>
       </PersistGate>

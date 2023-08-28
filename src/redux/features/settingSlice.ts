@@ -65,7 +65,7 @@ export const appSettings = createSlice({
         head: action?.payload?.head || false,
         body: action?.payload?.body || false,
         sidebar: action?.payload?.sidebar || false,
-        size: action?.payload?.size || 5,
+        size: action?.payload?.size,
       };
     },
     changeHeaderPosition: (state, action) => {

@@ -1,12 +1,15 @@
 .bulk-function-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  height: 75%;
-  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(10 , 1fr);
+  grid-template-rows: repeat(10 , 1fr);
+  height:min(550px);
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
   padding: 2rem;
 
   .todo-list-box {
+    grid-column:1/10;
+    grid-row:1/9;
     padding: 1rem;
     border-radius: 0.5rem;
     // margin: 2rem;
@@ -15,19 +18,40 @@
     flex-basis: 72%;
     overflow-y: auto;
     border: 1px solid var(--borders);
+    @media only screen and (max-width: 500px) {
+      grid-column:1/11;
+      grid-row:1/7;
+    }
+
   }
   .bulk-function-operation {
-    // flex-basis: 13%;
+    grid-column:10/11;
+    grid-row:1/9;
     border-radius: 0.5rem;
-    padding: 1rem;
     border: 1px solid var(--borders);
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+
+    @media only screen and (max-width: 500px) {
+      grid-column:1/11;
+      grid-row:7/9;
+      padding: .5rem;
+
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row;
+    }
+
   }
 }
 
 .footer {
   border-radius: 0.5rem;
+  grid-column:1/11;
+  grid-rows:9/11;
 
-  margin-top: 0.8rem;
   padding: 1rem;
   height: 7rem;
   border: 1px solid var(--borders);

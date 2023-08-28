@@ -8,7 +8,7 @@ const FooterButton = (props: any) => {
     <Box className="footer-icon-box">
       <Tooltip arrow title={title}>
         <Box className="icon-box" onClick={onClick}>
-          <IconButton>{icon}</IconButton>
+          {icon}
         </Box>
       </Tooltip>
     </Box>

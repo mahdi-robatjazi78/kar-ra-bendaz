@@ -11,7 +11,7 @@ import {
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import StyledSelectWhiteComponent from "@/styles/styled/styled_Selectbox";
 import styled from "@emotion/styled";
-
+import useWindowSize from "@hooks/useWindowSize";
 
 
 const StyledInputLabelWhite = styled(InputLabel)`
@@ -23,7 +23,6 @@ const StyledInputLabelWhite = styled(InputLabel)`
 
 const PaginationComponent = (props: any) => {
   const { meta, handleChangeMeta } = props;
-
   return (
     <Box sx={{ marginTop: "5px" }}>
       <Stack spacing={2}>
@@ -48,9 +47,10 @@ const PaginationComponent = (props: any) => {
 
 const PerPageComponent = (props) => {
   const { meta, handleChangeMeta ,fullWidth=false } = props;
+  const [width , height] = useWindowSize().size
 
   return (
-    <Box width={fullWidth ? "100%" : 120} style={{ margin: ".6rem 2.2rem 0rem 2rem" }}>
+    <Box width={fullWidth ? "100%" : 120} style={width > 600 ?{ margin: ".6rem 2.2rem 0rem 2rem" } :{}}>
       <FormControl fullWidth size="small">
         <StyledInputLabelWhite id="per-page-select-label">
           Per Page

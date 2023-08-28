@@ -166,7 +166,7 @@ const BulkFunction = (props) => {
             </>
           ))}
         </Box>
-        <Box className="d-flex-around-column bulk-function-parent-modal bulk-function-operation">
+        <Box className=" bulk-function-parent-modal bulk-function-operation">
           <Box
             className={`drawer-icon-box ${
               stateFunction === "multy-done" ? "bordered" : ""

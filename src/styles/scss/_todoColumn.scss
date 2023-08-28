@@ -48,16 +48,18 @@ $LOW-PRIORITY: var(--hoverSuccess);
 
 %footer-icon-box {
   width: 38px;
+  height: 38px;
   margin: 0.8rem 0.5rem 0.3rem 0.5rem;
 
   .icon-box {
     border-radius: 25%;
     background-color: var(--text1) !important;
-
+    height:37px;
     svg {
       font-size: 1.3rem;
       color: var(--background);
-
+      margin:.5rem;
++
       path {
         stroke-width: 1;
         stroke: var(--background);
@@ -188,6 +190,10 @@ $LOW-PRIORITY: var(--hoverSuccess);
 
     .search-in-todos-box {
       width: 50%;
+
+      @media only screen and (max-width: 600px) {
+        width: 90%;
+      }
     }
     .selected-category-box {
       display: flex;

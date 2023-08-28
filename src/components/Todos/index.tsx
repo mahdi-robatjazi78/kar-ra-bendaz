@@ -1,59 +1,59 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import TodoPageFooter from "./todoListFooter";
 import TodoList from "./todoList";
-import { Box } from "@mui/material";
+import {Box} from "@mui/material";
 import TableListTodo from "./tableListTodo";
 import SettingBar from "./settingBar";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
 import TodoPageDrawer from "./drawer";
 import ShowModalNewTodo from "./TodoModals/newTodo";
-import { useHotkeys } from "react-hotkeys-hook";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import {useHotkeys} from "react-hotkeys-hook";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 import Sidebar from "../sidebar";
 import useWindowSize from "@/hooks/useWindowSize";
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
+  AddMouseSelectedItems,
+  clearMouseSelectedItems,
+  CloseSidebar,
   GetOutCompleted,
+  handleChangeMetaItem,
+  OpenSidebar,
   SearchModeActive,
   SearchModeDeActive,
-  CloseSidebar,
-  OpenSidebar,
-  handleChangeMetaItem,
-  clearMouseSelectedItems,
   SetActiveWs,
-  AddMouseSelectedItems,
 } from "@/redux/features/todoPageConfigSlice";
-import { useNavigate } from "react-router-dom";
-import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
+import {useNavigate} from "react-router-dom";
+import {useLazyGetCategoryIndexQuery} from "@/redux/api/categories";
 import {
-  useLazyGetTodoIndexQuery,
-  useTodoDeleteMutation,
-  useTodoAssignToCategoryMutation,
   useChangeBodyMutation,
+  useLazyGetTodoIndexQuery,
+  useTodoAssignToCategoryMutation,
+  useTodoDeleteMutation,
 } from "@/redux/api/todos";
-import { AppDispatch, RootState } from "@/redux/store";
-import { deactiveBlur } from "@/redux/features/settingSlice";
+import {AppDispatch, RootState} from "@/redux/store";
+import {deactiveBlur} from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
-import { deselectAllTodos, soundPlay } from "@/util/funcs";
-import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
-import { useGetActiveWsQuery } from "@/redux/api/workspaces";
+import {deselectAllTodos, soundPlay} from "@/util/funcs";
+import {setThreeColAll} from "@/redux/features/todoLayoutSlice";
+import {useGetActiveWsQuery} from "@/redux/api/workspaces";
 
 const Todos = () => {
-  const { todoPageLayout: show } = useSelector(
+  const {todoPageLayout: show} = useSelector(
     (state: RootState) => state.todoLayout
   );
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {
-    active_ws: { id: ActiveWorkspaceID, title: ActiveWorkspaceTitle },
-    active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
+    active_ws: {id: ActiveWorkspaceID},
+    active_category: {id: ActiveCategoryID},
     get_out: GetOutFromTodoPage,
     drawer: {
-      item: { _id: DrawerTodoId },
+      item: {_id: DrawerTodoId},
     },
     sidebar_open: open,
     searchMode,
@@ -61,7 +61,7 @@ const Todos = () => {
     layout_nav_show,
     mouse_selected_items,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const { blur, headerPosition, playSound } = useSelector(
+  const {blur, headerPosition, playSound} = useSelector(
     (state: RootState) => state.settings
   );
   const {
@@ -112,8 +112,8 @@ const Todos = () => {
           handleChangeMetaItem({
             page: +resp?.meta?.page,
             limit: +resp?.meta?.limit,
-            total_items: +resp?.meta?.total_items,
-            total_pages: +resp?.meta?.total_pages,
+            total_items: resp?.meta?.total_items,
+            total_pages: resp?.meta?.total_pages,
           })
         );
       });
@@ -135,7 +135,7 @@ const Todos = () => {
   }, [meta.page, meta.limit]);
 
   const DeleteTodoOperation = () => {
-    todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID });
+    todoDeleteRequest({id: DrawerTodoId, ws: ActiveWorkspaceID});
     UpdateTodoAndCategories();
     if (playSound) {
       soundPlay("sound1.wav");
@@ -144,10 +144,7 @@ const Todos = () => {
   };
 
   const HandleTodoAssignToCategory = (categoId) => {
-    alert(
-    'here'
-    )
-    todoAssignRequest({ todoId: DrawerTodoId, categoId })
+    todoAssignRequest({todoId: DrawerTodoId, categoId})
       .then((resp) => {
         if (playSound) {
           soundPlay("sound6.wav");
@@ -155,11 +152,12 @@ const Todos = () => {
         Toast(resp.data.msg, true, true);
         UpdateTodoAndCategories();
       })
-      .catch((error) => {});
+      .catch((error) => {
+      });
   };
 
   const HandleTodoChangeBody = (todoId: string, todoBody: string) => {
-    changeBodyRequest({ todoId, todoBody })
+    changeBodyRequest({todoId, todoBody})
       .then((resp) => {
         Toast(resp?.data?.msg, true, true);
 
@@ -177,9 +175,9 @@ const Todos = () => {
       UpdateTodoAndCategories();
     } else {
       if (iSuccessGetActiveWsQuery) {
-        const { id, title } = DataGetActiveWsQuery.activeWorkspace;
+        const {id, title} = DataGetActiveWsQuery.activeWorkspace;
 
-        dispatch(SetActiveWs({ id, title }));
+        dispatch(SetActiveWs({id, title}));
       }
     }
   }, [ActiveWorkspaceID, iSuccessGetActiveWsQuery]);
@@ -192,12 +190,12 @@ const Todos = () => {
   }, [GetOutFromTodoPage]);
 
   const handleChangeMeta = (page, perPage) => {
-    dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
+    dispatch(handleChangeMetaItem({page: page, limit: perPage}));
   };
 
   useHotkeys("alt+n", () => setShowModalAddTodo(true));
   useHotkeys("alt+c", () =>
-    setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
+    setShowAddCategoryModal({show: true, state: "add", prevText: ""})
   );
   useHotkeys("ctrl+shift+f", () => {
     dispatch(SearchModeActive());
@@ -235,30 +233,19 @@ const Todos = () => {
   };
 
 
-
-
   useHotkeys("ctrl+a", () => {
-
-        console.log(todoList.map(item=>{return {boxTodoId : item._id , innerTodoText : item.body }}))
-
     dispatch(AddMouseSelectedItems(
-
       {
-        count : todoList.length ,
-        entity: "todo" , 
-        items:  todoList.map(item=>{return {boxTodoId : item._id , innerTodoText : item.body }})
+        count: todoList.length,
+        entity: "todo",
+        items: todoList.map(item => {
+          return {boxTodoId: item._id, innerTodoText: item.body}
+        })
       }
-
     ))
 
 
   });
-
-
-
-
-
-
 
 
   return (
@@ -270,7 +257,7 @@ const Todos = () => {
               ? "parent-ghost-sidebar"
               : "parent-normal-sidebar"
           }`}
-          style={{ ...(blur.sidebar && { filter: `blur(${blur.size}px)` }) }}
+          style={{...(blur.sidebar && {filter: `blur(${blur.size}px)`})}}
         >
           {open && (
             <Sidebar
@@ -280,7 +267,7 @@ const Todos = () => {
           )}
 
           {layout_nav_show ? (
-            <SettingBar setShowAddCategoryModal={setShowAddCategoryModal} />
+            <SettingBar setShowAddCategoryModal={setShowAddCategoryModal}/>
           ) : null}
         </Box>
         {(sizeName === "mobile" || sizeName === "tablet") &&
@@ -296,15 +283,15 @@ const Todos = () => {
             style={
               headerPosition === "top" || headerPosition === "bottom"
                 ? {
-                    justifyContent: "space-between",
-                    height: window.innerHeight - 70,
-                  }
+                  justifyContent: "space-between",
+                  height: window.innerHeight - 70,
+                }
                 : headerPosition === "left" || headerPosition === "right"
-                ? {
+                  ? {
                     justifyContent: "space-between",
                     height: window.innerHeight,
                   }
-                : {
+                  : {
                     justifyContent: "space-between",
                     height: window.innerHeight,
                   }
@@ -313,18 +300,18 @@ const Todos = () => {
             <Box className="todo-list">
               {!todoList?.length && !searchMode ? (
                 <Box>
-                  <EmptyListAnimation text="Empty List 😐" />
+                  <EmptyListAnimation text="Empty List 😐"/>
                 </Box>
               ) : show[0] === "table" ? (
-                <TableListTodo todos={todoList} />
+                <TableListTodo todos={todoList}/>
               ) : (
                 <TodoList
                   todoList={
                     !ActiveCategoryID
                       ? todoList
                       : todoList.filter(
-                          (item) => item.categoId === ActiveCategoryID
-                        )
+                        (item) => item.categoId === ActiveCategoryID
+                      )
                   }
                   UpdateTodoAndCategories={UpdateTodoAndCategories}
                 />

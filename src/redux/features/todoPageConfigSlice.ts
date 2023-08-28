@@ -183,10 +183,10 @@ export const todoPageConfigSlice = createSlice({
     },
     handleChangeMetaItem: (state, action) => {
       state.meta = {
-        page: action?.payload?.page || state.meta.page,
-        limit: action?.payload?.limit || state.meta.limit,
-        total_items: action?.payload?.total_items || state.meta.total_items,
-        total_pages: action?.payload?.total_pages || state.meta.total_pages,
+        page: action?.payload?.page ,
+        limit: action?.payload?.limit,
+        total_items: action?.payload?.total_items,
+        total_pages: action?.payload?.total_pages,
       };
     },
     showLayoutNav: (state) => {

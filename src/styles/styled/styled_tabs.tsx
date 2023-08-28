@@ -16,14 +16,14 @@ const Styled_Tabs = styled(Tabs)`
   }
 
   & .Mui-selected {
-    color: ${(props) =>
-      props.backLight ? "var(--borders)!important" : "var(--text2)!important"};
-    border: ${(props) =>
-      props.backLight ? "2px solid var(--borders)" : "2px solid var(--text2)"};
+    color: ${(props:any) =>
+      props.isDarkMode ? "var(--borders)!important" : "var(--header) !important"};
+    border: ${(props:any) =>
+      props.isDarkMode ? "2px solid var(--borders)" : "2px solid var(--header)"};
     border-radius: 0 0 10px 10px;
     font-size: 1rem;
     border-top: none;
-    padding: 4px 8px;
+    padding: 4px 14px;
     text-transform: capitalize;
     min-height: 30px;
     filter: brightness(1);
@@ -35,9 +35,9 @@ const Styled_Tabs = styled(Tabs)`
 `;
 
 export default function StyledTabs(props: any) {
-  const { backLight = false } = props;
+  const { backLight = false  , isDarkMode} = props;
   return (
-    <Styled_Tabs {...props} backLight={backLight}>
+    <Styled_Tabs {...props} backLight={backLight} isDarkMode={isDarkMode}>
       {props.children}
     </Styled_Tabs>
   );

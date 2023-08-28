@@ -37,7 +37,7 @@ const Burger = () => {
           "Please first select a workspace then go to todo page",
           true,
           true,
-          "⚠"
+          "⛔"
         );
         return;
       }

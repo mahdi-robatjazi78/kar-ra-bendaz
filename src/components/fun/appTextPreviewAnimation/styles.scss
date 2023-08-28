@@ -1,0 +1,54 @@
+$bg: var(--text1);
+
+.AppTextPreviewAnimation {
+	width: 100%;
+	font-family: 'Space Grotesk';
+	margin: 0 auto;
+	height: 100%;
+	top: 50%;
+	// left: 50%;
+    position: absolute;
+	text-align: center;
+	h1 {
+        user-select: none;
+		//text-transform: lowercase;
+		transform: skew(10deg) rotate(-10deg);
+		font-size: 10vw;
+		margin: 0;
+	
+		text-rendering: optimizeLegibility;
+		font-weight: 900;
+		color: var(--background);
+		text-shadow: 1px 4px 6px $bg, 0 0 0 #66303a, 1px 4px 6px $bg;
+		white-space: nowrap;
+		
+		&:before {
+			content: attr(data-content);
+			position: absolute;
+			left: -0.7%;
+			top: -4.8%;
+			overflow: hidden;
+			width: 100%;
+			height: 50%;
+			color: var(--borders);
+			transform: translate(1.6vw, 0) skew(-13deg) scale(1, 1.2);
+			z-index: 2;
+			text-shadow: 2px -1px 6px rgba(0,0,0,0.2);
+		}
+		
+		&:after {
+			content: attr(data-content);
+			position: absolute;
+			left: 0;
+			top: 0;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			color: var(--text3);
+			transform: translate(0vw, 0) skew(13deg) scale(1, 0.8);
+			clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0% 100%);
+			text-shadow: 2px -1px 6px rgba(0,0,0,0.3);
+		}
+	}
+}

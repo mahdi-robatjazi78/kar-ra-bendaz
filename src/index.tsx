@@ -5,9 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import "./font.css";
 import "./styles/scss/index.scss"     
-
-
- 
+import 'animate.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

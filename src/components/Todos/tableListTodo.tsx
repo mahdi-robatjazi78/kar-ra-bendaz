@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect} from "react";
 import {
   Box,
   Table,
@@ -26,15 +26,15 @@ import Styled_Checkbox from "@/styles/styled/styled_checkbox";
 import { StyledTableCell, StyledTableRow } from "@/styles/styled/styled_table";
 
 const TableListTodo = (props) => {
-  const { sidebar_open: open } = useSelector(
-    (state: RootState) => state.todoPageConfig
+  const todoPageLayout = useSelector(
+    (state: RootState) => state.todoLayout.todoPageLayout
   );
   const {
     todos,
   } = props;
 
   const dispatch = useDispatch();
-  const { mouse_selected_items: EntitySelection } = useSelector(
+  const { mouse_selected_items: EntitySelection , layout: Layout } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
   const [isDateFormat, setIsDateFormat] = useState(true);
@@ -86,6 +86,18 @@ const TableListTodo = (props) => {
       }
     }
   };
+
+
+  const [finalTodoList , setFinalTodoList] = useState([])
+
+  useEffect(()=>{
+
+    setFinalTodoList(todoPageLayout[1] ===  "all" ? todos : todos.filter(item=>item.flag === "isDone") )
+
+
+  },[todoPageLayout])
+
+
 
   return (
     <Box>
@@ -158,7 +170,7 @@ const TableListTodo = (props) => {
             </StyledTableCell>
           </TableHead>
           <TableBody>
-            {todos.map((row, idx: number) => (
+            {finalTodoList.map((row, idx: number) => (
               <StyledTableRow
                 key={idx}
                 sx={{

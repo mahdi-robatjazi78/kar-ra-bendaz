@@ -15,7 +15,7 @@ import {
 import { MdWorkspacesOutline } from "react-icons/md";
 import ThemeContext from "@context/themeContext";
 import { FiSearch } from "react-icons/fi";
-import { IoCloseSharp, IoReloadOutline } from "react-icons/io5";
+import { IoCloseSharp, IoEnterOutline, IoReloadOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import Toast from "@/util/toast";
@@ -29,6 +29,7 @@ import {
   useDeleteWsMutation,
 } from "../../redux/api/workspaces";
 import todoPageConfigSlice, {
+  OpenSidebar,
   SetActiveWs,
   UnActiveWs,
 } from "@/redux/features/todoPageConfigSlice";
@@ -41,6 +42,9 @@ import { TodoRtkService } from "@/redux/api/todos";
 import { CategoryRtkService } from "@/redux/api/categories";
 import StyledButton from "@/styles/styled/styled_button";
 import { RootState } from "@/redux/store";
+import useWindowSize from "@/hooks/useWindowSize";
+import { soundPlay, truncateText } from "@/util/funcs";
+import { useNavigate } from "react-router-dom";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -111,12 +115,8 @@ const AddOrSearchUi = (props) => {
   const getLabel = () => {
     if (state === "add" && space === "workspace") {
       return "Add new workspace";
-    } else if (state === "add" && space === "board") {
-      return "Add new board";
     } else if (state === "search" && space === "workspace") {
       return "Search in workspaces";
-    } else if (state === "search" && space === "board") {
-      return "Search in boards";
     } else {
       return "";
     }
@@ -152,49 +152,45 @@ const AddOrSearchUi = (props) => {
                   }
                 >
                   {state === "add" ? (
-                    <IconButton
+                    <RiAddLine
                       onClick={(e) => {
                         console.log("click");
                         if (space === "workspace") {
                           AddWorkspace();
                         }
                       }}
-                    >
-                      <RiAddLine className="add-space-icon" />
-                    </IconButton>
+                      className="add-space-icon cp"
+                    />
                   ) : state === "rename" ? (
-                    <IconButton
+                    <CiEdit
                       onClick={() => {
                         if (space === "workspace") {
                           editWorkspaceTitle();
                         }
                       }}
-                    >
-                      <CiEdit className="add-space-icon" />
-                    </IconButton>
+                      className="add-space-icon cp"
+                    />
                   ) : (
-                    <IconButton
+                    <FiSearch
                       onClick={() => {
                         if (space === "workspace") {
                           SearchInWorkspace();
                         }
                       }}
-                    >
-                      <FiSearch className="add-space-icon" />{" "}
-                    </IconButton>
+                      className="add-space-icon cp"
+                    />
                   )}
                 </Tooltip>
               </InputAdornment>
 
               <InputAdornment position="end">
                 <Tooltip title={"Close"}>
-                  <IconButton
+                  <IoCloseSharp
+                    className="add-space-icon cp"
                     onClick={() => {
                       backToIcons();
                     }}
-                  >
-                    <IoCloseSharp className="add-space-icon" />
-                  </IconButton>
+                  />
                 </Tooltip>
               </InputAdornment>
             </>
@@ -213,6 +209,8 @@ const WorkspacesTable = () => {
   const [inputText, setInputText] = useState("");
   const [resultText, setResultText] = useState("");
   const backToIcons = () => {
+    setInputText("");
+    setResultText("");
     setWsSelectedId("");
     setState("icons");
   };
@@ -222,12 +220,13 @@ const WorkspacesTable = () => {
     isSuccess,
     refetch,
   } = useWsListQuery(resultText);
+  const sizeName = useWindowSize().sizeName;
 
   useLayoutEffect(() => {
     //  set active workspace after page loaded
 
     if (isSuccess) {
-      const activeWorkspace = data.workspaces.find((item) => item.active); 
+      const activeWorkspace = data?.workspaces?.find((item) => item.active);
       if (activeWorkspace?.id) {
         dispatch(
           SetActiveWs({
@@ -245,6 +244,8 @@ const WorkspacesTable = () => {
   const {
     active_ws: { id: ActiveWorkspaceId },
   } = useSelector((state: RootState) => state.todoPageConfig);
+  const { playSound } = useSelector((state: RootState) => state.settings);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const AddWorkspace = () => {
@@ -357,35 +358,46 @@ const WorkspacesTable = () => {
       });
   };
 
+  const handleOpenWorkspace = () => {
+    dispatch(OpenSidebar());
+
+    if (playSound) {
+      soundPlay("sound8.wav");
+    }
+
+    navigate("/todos");
+  };
+
   return (
-    <Box
-      className="add-space-box"
-      style={{ height: "90vh", position: "relative" }}
-    >
-      <Box className="add-space-icon-box d-flex-between">
-        <IconButton>
+    <Box className="add-space-box">
+      <Box
+        className="add-space-icon-box d-flex-between"
+        style={{ height: "3rem" }}
+      >
+        <IconButton style={{ width: 37 }}>
           <MdWorkspacesOutline className="add-space-icon" />
         </IconButton>
-        {state === "icons" ? (
+        {state === "icons" && value === 0 ? (
           <Box>
-            <Tooltip title={value == 0 ? "Add new workspace" : "Add new board"}>
-              <IconButton onClick={() => setState("add")}>
+            <Tooltip title="Add new workspace">
+              <IconButton onClick={() => setState("add")} style={{ width: 37 }}>
                 <RiAddLine className="add-space-icon" />
               </IconButton>
             </Tooltip>
-            <Tooltip
-              title={value == 0 ? "Search in workspaces" : "Search in boards"}
-            >
-              <IconButton onClick={() => setState("search")}>
+            <Tooltip title="Search in workspaces">
+              <IconButton
+                onClick={() => setState("search")}
+                style={{ width: 37 }}
+              >
                 <FiSearch className="add-space-icon" />
               </IconButton>
             </Tooltip>
-
             <Tooltip title="Reload">
               <IconButton
                 onClick={() => {
                   refetch();
                 }}
+                style={{ width: 37 }}
               >
                 <IoReloadOutline className="add-space-icon" />
               </IconButton>
@@ -394,7 +406,7 @@ const WorkspacesTable = () => {
         ) : state === "add" || state === "search" || state === "rename" ? (
           <AddOrSearchUi
             state={state}
-            space={value == 0 ? "workspace" : "board"}
+            space={"workspace"}
             backToIcons={backToIcons}
             refetch={refetch}
             text={inputText}
@@ -410,15 +422,15 @@ const WorkspacesTable = () => {
               <Text>
                 Do you want Delete{" "}
                 {wsSelectedTitle ? (
-                  <code> {`${wsSelectedTitle} ?`}</code>
+                  <code> {`${truncateText(wsSelectedTitle, 15)} ?`}</code>
                 ) : (
                   "it ? "
                 )}
               </Text>
-              <StyledButton size="medium" onClick={() => setState("icons")}>
+              <StyledButton size="small" onClick={() => setState("icons")}>
                 Cancel
               </StyledButton>
-              <StyledButton size="medium" onClick={handleDeleteWorkspace}>
+              <StyledButton size="small" onClick={handleDeleteWorkspace}>
                 Delete It
               </StyledButton>
             </Box>
@@ -431,6 +443,7 @@ const WorkspacesTable = () => {
       </Box>
       <Box className="add-space-item-box">
         <StyledTabs
+          isDarkMode={theme.isDarkMode}
           backLight={true}
           variant="scrollable"
           value={value}
@@ -438,7 +451,7 @@ const WorkspacesTable = () => {
           aria-label="note board and todo workspace tabs"
           scrollButtons="auto"
         >
-          <Tab value={0} label="Todo Workspace"  />
+          <Tab value={0} label="Todo Workspace" />
           <Tab value={1} label="Note Boards" />
           <Tab value={2} label="Widget Dashboards" />
           <Tab value={3} label="Music Player" />
@@ -460,95 +473,138 @@ const WorkspacesTable = () => {
                 ))}
             </Box>
           ) : (
-            <TableContainer sx={{ p: 0 }}>
-              <Table>
-                <TableHead
-                  sx={{
-                    borderBottom: theme.isDarkMode ? "1px solid white" : "none",
+            <>
+              {!isSuccess || !data?.workspaces?.length ? (
+                <Box
+                  className="position-central"
+                  style={{
+                    width: "100%",
+                    height: 120,
                   }}
                 >
-                  <TableRow>
-                    <StyledTableCell>Title</StyledTableCell>
-                    <StyledTableCell>Categories</StyledTableCell>
-                    <StyledTableCell>Todos</StyledTableCell>
-                    <StyledTableCell>Active</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                {!isSuccess || !data?.workspaces?.length ? (
-                  <Box
-                    style={{
-                      width: "100%",
-                      height: 120,
-                      position: "absolute",
-                      bottom: 50,
-                    }}
-                  >
-                    <EmptyListAnimation text="Empty List 📝" fontSize="2rem" />
-                  </Box>
-                ) : (
-                  <TableBody>
-                    {data.workspaces.map((item: any) => (
-                      <StyledTableRow darkMode={theme.isDarkMode} key={item.id}>
-                        <StyledTableCell className="workspace-home-box-title">
-                          {item.title}
-                        </StyledTableCell>
-                        <StyledTableCell className="workspace-home-box-title">
-                          {item.categorySum}
-                        </StyledTableCell>
-                        <StyledTableCell className="workspace-home-box-title">
-                          {item.todoSum}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <StyledSwitch
-                            isOn={item.active}
-                            name="active-sys-log"
-                            id={item.id}
-                            toggleSwitch={(checked, id) => {
-                              console.log("....", checked, id);
-                              handleActiveWorkspace(checked, id);
-                            }}
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <Tooltip title="Edit Workspace Title">
-                            <IconButton
-                              onClick={() => {
-                                setWsSelectedId(item.id);
-                                setState("rename");
+                  <EmptyListAnimation text="Empty List 📝" fontSize="2rem" />
+                </Box>
+              ) : (
+                <TableContainer sx={{ p: 0 }}>
+                  <Table>
+                    <TableHead
+                      sx={{
+                        borderBottom: theme.isDarkMode
+                          ? "1px solid white"
+                          : "none",
+                      }}
+                    >
+                      <TableRow>
+                        <StyledTableCell>Title</StyledTableCell>
+                        {sizeName !== "mobile" && (
+                          <>
+                            <StyledTableCell>Categories</StyledTableCell>
+                            <StyledTableCell>Todos</StyledTableCell>
+                          </>
+                        )}
+                        <StyledTableCell>Active</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.workspaces.map((item: any) => (
+                        <StyledTableRow
+                          darkMode={theme.isDarkMode}
+                          key={item.id}
+                        >
+                          <StyledTableCell className="workspace-home-box-title">
+                            {item.title}
+                          </StyledTableCell>
+                          {sizeName !== "mobile" && (
+                            <>
+                              <StyledTableCell className="workspace-home-box-title">
+                                {item.categorySum}
+                              </StyledTableCell>
+                              <StyledTableCell className="workspace-home-box-title">
+                                {item.todoSum}
+                              </StyledTableCell>
+                            </>
+                          )}
+                          <StyledTableCell>
+                            <StyledSwitch
+                              isOn={item.active}
+                              name="active-sys-log"
+                              id={item.id}
+                              toggleSwitch={(checked, id) => {
+                                console.log("....", checked, id);
+                                handleActiveWorkspace(checked, id);
                               }}
-                            >
-                              <CiEdit
-                                style={{
-                                  color: theme.text1,
-                                  fontSize: "1.2rem",
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ minWidth: 123 }}>
+                            <Tooltip title="Edit Workspace Title">
+                              <IconButton
+                                onClick={() => {
+                                  setWsSelectedId(item.id);
+                                  setState("rename");
                                 }}
-                              />
-                            </IconButton>
-                          </Tooltip>
+                                style={{ width: 37 }}
+                              >
+                                <CiEdit
+                                  style={{
+                                    color: theme.text1,
+                                    fontSize: "1.2rem",
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
 
-                          <Tooltip title="Remove Workspace">
-                            <IconButton
-                              onClick={() => {
-                                setState("remove");
-                                setWsSelectedId(item.id);
-                                setWsSelectedTitle(item.title);
-                              }}
-                            >
-                              <CiTrash
-                                style={{
-                                  color: theme.text1,
-                                  fontSize: "1.2rem",
+                            <Tooltip title="Remove Workspace">
+                              <IconButton
+                                onClick={() => {
+                                  setState("remove");
+                                  setWsSelectedId(item.id);
+                                  setWsSelectedTitle(item.title);
                                 }}
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
+                                style={{ width: 37 }}
+
+                              >
+                                <CiTrash
+                                  style={{
+                                    color: theme.text1,
+                                    fontSize: "1.2rem",
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                            {item.active ? (
+                              <Tooltip title="Open Workspace">
+                                <IconButton
+                                  onClick={() => {
+                                    if (ActiveWorkspaceId) {
+                                      handleOpenWorkspace();
+                                    }
+                                  }}
+                                style={{ width: 37 }}
+
+                                >
+                                  <IoEnterOutline
+                                    style={{
+                                      color: theme.text1,
+                                      fontSize: "1.2rem",
+                                    }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <div style={{
+                                display:"inline-block",
+                                width:37,
+                                height:18
+                              }}></div>
+                            )}
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            </>
           )}
         </TabPanel>
         <TabPanel value={value} index={1}>

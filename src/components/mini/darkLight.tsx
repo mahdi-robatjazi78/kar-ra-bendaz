@@ -5,6 +5,7 @@ import { BsFillMoonStarsFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { TbSunFilled } from "react-icons/tb";
+import {pairColors} from "@/util/funcs";
 
 const DarkLight = () => {
   const { theme: OsTheme } = useSelector((state: RootState) => state.settings);
@@ -33,27 +34,27 @@ const DarkLight = () => {
   }, [OsTheme]);
 
   return (
-    <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop" }}>
+    <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop"}}>
       <Box
         onClick={handleChangeTheme}
-        style={{
-          padding: "1rem",
-          display: "inline-block",
-        }}
+
+
       >
         {isDarkMode ? (
           <TbSunFilled
             viewBox="0 0 25 25"
+            className="d-flex-center"
             style={{
               animation: "App-logo-spin infinite 20s linear",
               fontSize: "4.3rem",
-              color: "var(--text2)",
+              color:pairColors("var(--header)", "var(--text2)", isDarkMode),
+
             }}
           />
         ) : (
           <BsFillMoonStarsFill
-            fontSize={"3.4rem"}
-            style={{ color: "var(--text2)" }}
+
+            style={{color:pairColors("var(--header)", "var(--text2)", isDarkMode) , fontSize:"3rem"}}
           />
         )}
       </Box>

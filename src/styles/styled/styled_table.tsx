@@ -13,7 +13,8 @@ export const StyledTableCell = styled(TableCell)({
     padding: ".4rem .4rem .4rem .7rem",
     color: "var(--text1)",
     fontWeight: 300,
-    fontFamily:"Space Grotesk"
+    fontFamily:"Space Grotesk",
+
   },
 });
 
@@ -23,6 +24,7 @@ export const StyledTableRow = styled(TableRow)(
       backgroundColor: "var(--background)",
       filter: "brightness(90%)",
     },
+    height:"60px !important"
   }
   // hide last border
   // "&:last-child td, &:last-child th": {

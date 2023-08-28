@@ -11,36 +11,35 @@
   border: 0.7px solid gray;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  cursor: pointer;
 }
 
 %selected-setting {
   background: var(--sidebar);
   border-radius: 0.4rem;
   border: 1px solid orange;
-  cursor: pointer;
+  cursor: pointer;  
 }
 
 #home-page {
   @extend %font-styles;
-  height: 100%;
-  width: 100%;
-  padding: 2rem;
+  height: 100vh;
+  width: min(900px,95%);
+  padding: 2rem .5rem;
   margin: auto;
   overflow-y: auto;
   .workspace-home-box-title {
-    font-size: 1.2rem;
+    font-size: min(1rem,1.2rem);
     @include public.truncateTextMixin(350px);
   }
-  .MuiGrid-root {
-    grid-gap: 1rem;
-
+ 
     .add-space-box {
       padding: 1rem 0.2rem 1rem 1rem !important;
       border: 1.5px solid var(--borders);
-      border-radius: 12px 12px 12px 0;
+      border-radius: 10px;
       width: 100%;
-      height: 200px;
+      height: 75vh; 
+      position: relative;
+      overflow: hidden;
 
       @extend %box-styles;
       .add-space-icon-box {
@@ -60,13 +59,12 @@
           @extend %font-styles;
           user-select: none;
           padding: 10px 10px;
-          cursor: pointer;
+
           &:hover {
             border: 1px solid var(--borders);
             color: var(--text1);
           }
         }
       }
-    }
-  }
+    } 
 }

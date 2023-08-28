@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import RouteBox from "./routeBox";
 import { Box } from "@mui/material";
 import { RootState } from "@/redux/store";
-import SettingModal from "./modal/settingModal";
+import SettingModal from "./modal/setting";
 import {
   handleSettingModalOpen,
   handleSettingModalClose,
@@ -15,15 +15,11 @@ import {
 } from "@/redux/features/settingSlice";
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
+import usePrefersColorScheme from "@hooks/useOsTheme"
 
 const Main = () => {
-  const auth = useSelector((state: RootState) => state.auth);
-  const theme = useSelector((state: RootState) => state.settings.theme);
-  const {
-    headerPosition,
-    modal,
-    theme: { listen: ListenOsTheme },
-  } = useSelector((state: RootState) => state.settings);
+
+  const { headerPosition, modal, theme, } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
   const {
@@ -62,49 +58,33 @@ const Main = () => {
     dispatch(changeHeaderPosition("right"));
   });
 
-  // useEffect(() => {
-  // check and set localstorage default essentials
-  // localStorageSetFirstEssentials(dispatch, setThreeColAll);
-  // }, []);
+  const osThemeChanged = usePrefersColorScheme()
+
+
   useEffect(() => {
-    handleSeeOsDarkMode();
-  }, [ListenOsTheme]);
-
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => {
+    if(theme.listen){
       handleSeeOsDarkMode();
-    });
-
-  // .matchMedia("(prefers-color-scheme: dark)")
-  // .addEventListener("change", (event) => {
-  //   const newColorScheme = event.matches ? "dark" : "light";
-
-  //   console.log(" newColorScheme  ???", newColorScheme);
-
-  let mm = window.matchMedia("(prefers-color-scheme: light)");
-  mm.addEventListener("change", (scheme) => {
-    if (scheme.matches) {
-      console.log("We have browser/system light scheme 1", scheme.matches);
-    } else {
-      console.log("We have browser/system light scheme 2", scheme.matches);
     }
-  });
+  }, [theme.listen , osThemeChanged]);
+
 
   const handleSeeOsDarkMode = () => {
-    const isDarkMode =
+     const OsIsDarkMode =
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme:dark)").matches;
 
-    if (theme.osTheme) {
-      if (isDarkMode) {
+
+    if (theme.listen && theme.mode !== osThemeChanged ) {
+
+
+      if (OsIsDarkMode) {
         dispatch(handleOsTheme("dark"));
-        if (DarkModeContext !== isDarkMode) {
+        if (DarkModeContext !== OsIsDarkMode) {
           setDark();
         }
       } else {
         dispatch(handleOsTheme("light"));
-        if (DarkModeContext !== isDarkMode) {
+        if (DarkModeContext !== OsIsDarkMode) {
           setLight();
         }
       }

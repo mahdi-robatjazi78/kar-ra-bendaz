@@ -12,9 +12,10 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
+import {pairColors} from "@/util/funcs";
 
 const HeaderPosition = () => {
-  const { hoverSuccess, text2 } = useContext(ThemeContext);
+  const { hoverSuccess ,isDarkMode } = useContext(ThemeContext);
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
   const sizeName = useWindowSize().sizeName;
@@ -29,72 +30,70 @@ const HeaderPosition = () => {
   }, [sizeName]);
 
   return (
-    <Box>
-      <Box style={{ textAlign: "center" }}>
-        {" "}
-        <IconButton
-          onClick={() => {
-            dispatch(changeHeaderPosition("top"));
-          }}
-        >
+    <Box className="header-position-parent">
+      <Box style={{ textAlign: "center" , transform: "translate(0px, 13px)", }}
+      
+      onClick={() => {
+        dispatch(changeHeaderPosition("top"));
+      }}
+
+      >
+      
+          
+
           <TbArrowBigUpLines
+            className="header-alignment"
             style={{
-              color: headerPosition === "top" ? hoverSuccess : text2,
+              color: headerPosition === "top" ? hoverSuccess : pairColors("var(--header)", "var(--text2)", isDarkMode),
               fontSize: "2rem",
-              transform: "translate(0px, 13px)",
+
             }}
-          />
-        </IconButton>
+          /> 
       </Box>
       {sizeName !== "mobile" ? (
-        <Box display="flex" justifyContent="center" style={{ gap: "1.5rem" }}>
+        <Box display="flex" justifyContent="center" style={{ gap: "1.5rem" }}
+        onClick={() => {
+          dispatch(changeHeaderPosition("left"));
+        }}
+        
+        >
           <Box>
-            {" "}
-            <IconButton
-              onClick={() => {
-                dispatch(changeHeaderPosition("left"));
-              }}
-            >
+           
               <TbArrowBigLeftLines
                 style={{
-                  color: headerPosition === "left" ? hoverSuccess : text2,
+                  color: headerPosition === "left" ? hoverSuccess : pairColors("var(--header)", "var(--text2)", isDarkMode),
                   fontSize: "2rem",
                 }}
               />
-            </IconButton>
-          </Box>
-          <Box>
-            {" "}
-            <IconButton
-              onClick={() => {
+           </Box>
+          <Box  
+           onClick={() => {
                 dispatch(changeHeaderPosition("right"));
-              }}
-            >
+              }}>
+           
               <TbArrowBigRightLines
                 style={{
-                  color: headerPosition === "right" ? hoverSuccess : text2,
+                  color: headerPosition === "right" ? hoverSuccess : pairColors("var(--header)", "var(--text2)", isDarkMode),
                   fontSize: "2rem",
                 }}
               />
-            </IconButton>
+            
+
           </Box>
         </Box>
       ) : null}
-      <Box style={{ textAlign: "center" }}>
-        {" "}
-        <IconButton
-          onClick={() => {
+      <Box   onClick={() => {
             dispatch(changeHeaderPosition("bottom"));
-          }}
-        >
+          }}  style={{transform: "translate(0px, -13px)",  textAlign: "center" }}>
+       
           <TbArrowBigDownLines
+            className="header-alignment"
             style={{
-              color: headerPosition === "bottom" ? hoverSuccess : text2,
-              fontSize: "2rem",
-              transform: "translate(0px, -13px)",
+              color: headerPosition === "bottom" ? hoverSuccess : pairColors("var(--header)", "var(--text2)", isDarkMode),
+              fontSize: "2rem"
             }}
           />
-        </IconButton>
+       
       </Box>
     </Box>
   );

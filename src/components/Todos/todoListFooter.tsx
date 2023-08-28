@@ -52,7 +52,7 @@ const TodoPageFooter = (props) => {
   useEffect(() => {
     if (searchMode) {
       emptyTodoList();
-      dispatch(customBlur({ head: true, sidebar: true, body: false }));
+      dispatch(customBlur({ head: true, sidebar: true, body: false  }));
       setCloseSidebar();
     }
   }, [searchMode]);
@@ -66,7 +66,7 @@ const TodoPageFooter = (props) => {
   };
 
   // DeBounce Function
-  useDebounce(
+ useDebounce(
     () => {
       if (searchText) {
         UpdateOnlyTodos(null, null, searchText);

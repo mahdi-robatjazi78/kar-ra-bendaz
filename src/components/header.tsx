@@ -20,6 +20,7 @@ import { AiFillSetting } from "react-icons/ai";
 import { Styled_Menu, Styled_Menu_Item } from "@/styles/styled/styled_menu";
 import { soundPlay } from "@/util/funcs";
 import { useUserSignoutMutation } from "@/redux/api/user";
+import { UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 
 const Header = (props) => {
   const { handleOpenSettingModal } = props;
@@ -45,7 +46,7 @@ const Header = (props) => {
       .then((response) => {
         handleClose();
         dispatch(LogoutAction({}));
-
+        dispatch(UnActiveWs());
         if (playSound) {
           soundPlay("sound7.wav");
         }
@@ -64,12 +65,14 @@ const Header = (props) => {
         headerPosition === "left" || headerPosition === "right"
           ? {
               width: 70,
+              zIndex: 9,
               flexDirection: "column",
               height: "100vh",
               ...(blur.head && { filter: `blur(${blur.size}px)` }),
             }
           : {
               height: 70,
+              zIndex: 9,
               flexDirection: "row",
               width: "100vw",
               ...(blur.head && { filter: `blur(${blur.size}px)` }),
@@ -156,20 +159,9 @@ const Header = (props) => {
             </Styled_Menu_Item>
           </Styled_Menu>
         ) : (
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem style={{ width: "15rem", display: "block" }}>
-              <NavLink
-                style={{ color: "black", textDecoration: "none" }}
-                to={"/signup"}
-              >
+          <Styled_Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <Styled_Menu_Item>
+              <NavLink style={{ textDecoration: "none" }} to={"/signup"}>
                 <Box className="d-flex-between">
                   <Box>Register</Box>
                   <BiLogInCircle
@@ -177,13 +169,10 @@ const Header = (props) => {
                   />
                 </Box>
               </NavLink>
-            </MenuItem>
+            </Styled_Menu_Item>
 
-            <MenuItem style={{ width: "15rem", display: "block" }}>
-              <NavLink
-                style={{ color: "black", textDecoration: "none" }}
-                to={"/login"}
-              >
+            <Styled_Menu_Item>
+              <NavLink style={{ textDecoration: "none" }} to={"/login"}>
                 <Box className="d-flex-between">
                   <Box>Login</Box>{" "}
                   <RiUserAddLine
@@ -191,8 +180,8 @@ const Header = (props) => {
                   />
                 </Box>
               </NavLink>
-            </MenuItem>
-          </Menu>
+            </Styled_Menu_Item>
+          </Styled_Menu>
         )}
       </Box>
       <Outlet />

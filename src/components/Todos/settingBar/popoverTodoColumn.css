@@ -8,7 +8,8 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  max-width:50px
+  max-width:50px;
+  font-family:"Space Grotesk";
 }
 .todo-view-item {
   padding: 0.5rem 1rem;

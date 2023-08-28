@@ -2,12 +2,15 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import history from "@/services/appHistory";
 import { store } from "@/redux/store";
-import { deactiveBlur, setBlurPage } from "@/redux/features/settingSlice";
+import {deactiveBlur, handleSettingModalClose, setBlurPage} from "@/redux/features/settingSlice";
 import { LogoutAction } from "@/redux/features/userSlice";
 
 const UnAuthenticatedModal = () => {
   const MySwal = withReactContent(Swal);
   const mode = store.getState().settings.theme.mode;
+  if(store.getState().settings.modal.open){
+    store.dispatch(handleSettingModalClose())
+  }
 
   const showAlertExpirationAccout = () => {
     MySwal.fire({
@@ -27,6 +30,8 @@ const UnAuthenticatedModal = () => {
       if (result.isConfirmed) {
         store.dispatch(deactiveBlur());
         store.dispatch(LogoutAction());
+
+
         history.replace("/login");
       }
       if (result.isDismissed) {

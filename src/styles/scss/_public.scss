@@ -50,6 +50,11 @@
   justify-content: space-around;
   align-items: center;
 }
+%d-flex-around{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 .d-flex-around-wrap {
   display: flex;
   justify-content: space-around;
@@ -80,7 +85,7 @@
 }
 
 .background-style2 {
-  background-color: var(--header);
+  background-color: var(--sidebar);
   color: var(--text1);
   padding: 1.2rem 2rem !important;
 }

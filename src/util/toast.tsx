@@ -13,16 +13,17 @@ export default function Toast(
         : !icon && success
         ? "✅"
         : !icon && !success
-        ? "✖️"
+        ? "❌"
         : "👻",
       style: {
-        borderRadius: "10px",
-        border: "1px solid var(--borders)",
+        borderRadius: "8px",
+        border: 
+        !success ? "2px solid var(--errorBorder)" :"1px solid var(--borders)",
         padding: "5px 10px",
         background: "var(--header)",
-        color: "white",
+        color:"white",
         fontFamily:"Space Grotesk",
-        fontWeight:400
+        fontWeight:400, 
       },
     });
   } else {

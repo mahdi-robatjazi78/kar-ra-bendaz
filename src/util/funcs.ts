@@ -95,3 +95,25 @@ export const deselectAllTodos = () => {
   }
   store.dispatch(clearMouseSelectedItems());
 };
+
+
+export const pairColors = (c1 , c2 , darkmode )=>{
+
+
+  /* c1 is light color
+   c2 is  dark color
+   theme light or dark */
+
+
+  if(!darkmode){
+    return c1
+  }else {
+    return c2
+  }
+
+
+
+}
+
+
+
