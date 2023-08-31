@@ -21,3 +21,16 @@ export interface ITodoStructure {
   categoId: string;
   ws: string;
 }
+
+
+export interface IWsStructure {
+  _id:string;
+  title:string;
+  date:string;
+  owner:string;
+  id:string;
+  active:Boolean;
+  categorySum:number;
+  todoSum:number;
+  __v:number;
+}

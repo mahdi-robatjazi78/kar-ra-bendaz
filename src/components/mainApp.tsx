@@ -41,7 +41,7 @@ const Main = () => {
   useHotkeys("ctrl+shift+s", () => {
     handleOpenSettingModal();
   });
-  useHotkeys("alt+t", () => {
+  useHotkeys("ctrl+alt+t", () => {
     toggleDark();
   });
   useHotkeys("ctrl+shift+keydown", () => {

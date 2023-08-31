@@ -9,14 +9,24 @@ export const UserRtkService = createApi({
   reducerPath: "users",
   baseQuery: fetchBaseQuery({
     baseUrl: base_url + "/users",
-    prepareHeaders(headers, { getState }) {
+    prepareHeaders(headers, { getState , endpoint  }) {
+
+      console.log('endpoint >>>'  , endpoint)
+
       const { auth } = getState() as { auth: IUser };
       if (!headers.has("x-auth-token") && auth?.token) {
         headers.set("x-auth-token", auth?.token);
       }
-      if (!headers.has("Content-Type")) {
-        headers.set("Content-Type", "application/json");
+
+      if(endpoint === "uploadAvatarImage"){
+        headers.delete("Content-Type")
+      }else {
+        if (!headers.has("Content-Type")) {
+          headers.set("Content-Type", "application/json");
+        }
       }
+      
+     
       return headers;
     },
   }),
@@ -53,11 +63,45 @@ export const UserRtkService = createApi({
         handleResponseError(error);
       },
     }),
+
+
+
+  uploadAvatarImage: builder.mutation({
+    query: ({file , avatarUploaded }) => {
+
+      console.log("back  __> >",file  , avatarUploaded)
+
+      const formData = new FormData();
+      formData.append('file', file , file.name);
+      formData.append('avatarUploaded', avatarUploaded);
+      
+      return {
+        url: '/upload-avatar',
+        method: 'POST',
+        body:formData, 
+        formData:true, 
+      };
+    },
+    transformErrorResponse: (error) => {
+      handleResponseError(error);
+    },
   }),
+
+  getProfileMeData: builder.query({
+    query: () =>"get-profile-me-data",
+    transformErrorResponse: (error) => {
+      handleResponseError(error);
+    },
+  }),
+
+}),
+
 });
 
 export const {
   useUserSigninMutation,
   useUserSignoutMutation,
   useUserSignupMutation,
+  useUploadAvatarImageMutation,
+  useLazyGetProfileMeDataQuery
 } = UserRtkService;

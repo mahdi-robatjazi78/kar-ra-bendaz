@@ -1,10 +1,7 @@
 import React, { useContext, useState , useEffect } from "react";
 import ThemeContext from "../../context/themeContext";
 import Avatar from "@mui/material/Avatar";
-import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

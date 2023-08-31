@@ -29,16 +29,6 @@ code {
   background-clip: content-box;
 }
 
-/* @font-face {
-  font-family: "Dongle-Light";
-  src: local("Dongle-Light"),
-   url("/public/assets/fonts/Dongle-Light.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Dongle-Bold";
-  src: local("Dongle-Bold"),
-   url("/public/assets/fonts/Dongle-Bold.ttf") format("truetype");
-} */
 
 .f-f-r-dongle,.f-f-s-g, a{
   font-family: "Space Grotesk";

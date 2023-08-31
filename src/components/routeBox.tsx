@@ -46,6 +46,7 @@ const RouteBox = () => {
       style={{
         ...(blur.body && { filter: `blur(${blur.size}px)` }),
         width: "100%",
+       
       }}
     >
       <Routes>

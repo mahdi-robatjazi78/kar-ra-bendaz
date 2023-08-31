@@ -6,6 +6,10 @@ export interface IUserData {
   gender: String;
   lname: String;
   userName: String;
+  picture:{
+    avatar: String | null,
+    banner: String | null
+  }
 }
 export interface IUser {
   token: String;

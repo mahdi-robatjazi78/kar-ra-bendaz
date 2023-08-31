@@ -43,7 +43,7 @@ const ShortcutsList = (props) => {
       <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
         <Text>Change Theme </Text>
         <Text>
-          <code>alt</code> <code>t</code>
+        <code>ctrl</code> <code>alt</code> <code>t</code>
         </Text>
       </Box>
       <hr/>

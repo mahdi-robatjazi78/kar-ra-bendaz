@@ -1,12 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import ThemeContext from "../../context/themeContext";
 import { useNavigate } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
 import {
-  Grid,
   Box,
-  Typography,
-  Container,
   Avatar,
   InputAdornment,
   IconButton,
@@ -40,8 +36,6 @@ const Login = () => {
   const [loginUserRequest, loginUserResponse] = useUserSigninMutation();
   const [width, height] = useWindowSize().size;
 
-
-
   useEffect(() => {
     dispatch(TodoRtkService.util.resetApiState());
     dispatch(CategoryRtkService.util.resetApiState());
@@ -74,14 +68,13 @@ const Login = () => {
     validateOnMount: false,
     validateOnChange: true,
     validateOnBlur: true,
-
     validationSchema: YupObjectValidationFields,
 
     onSubmit: (values) => {
       loginUserRequest({ email: values.username, password: values.password })
         .unwrap()
         .then((response) => {
-          const { email, fname, lname, gender, token, userName } = response;
+          const { email, fname, lname, gender, token, userName , picture } = response;
 
           dispatch(
             SetUserToken({
@@ -95,6 +88,7 @@ const Login = () => {
               lname,
               gender,
               userName,
+              picture
             })
           );
 
