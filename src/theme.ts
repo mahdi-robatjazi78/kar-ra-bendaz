@@ -24,7 +24,7 @@ const themes = {
     text2: "rgb(166, 166, 249)",
     text3: "rgb(165, 168, 228)",
     header: "rgb(0, 18, 59)",
-    hoverSuccess: "rgb(51, 255, 51)",
+    hoverSuccess: "rgb(103, 219, 103)",
     disabled:"rgb(116,125,169)"
 
   },

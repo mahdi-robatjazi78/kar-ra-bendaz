@@ -1,0 +1,122 @@
+#edit-profile-parent {
+  position: relative;
+
+  // .avatar {
+  //   bottom: 32% !important;
+  // }
+
+  .profile-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90%, 50rem);
+    height: max(53%, 20rem);
+
+    border-radius: 1rem;
+    background-color: rgba(121, 121, 121, 0.155);
+    box-shadow: 1px 1px 4px -3px var(--header);
+    // overflow-y: auto;
+
+    .tabs {
+      margin: 2rem auto;
+      padding-left: 2rem;
+      @media only screen and (max-width: 700px)  {
+       padding-left: .5rem !important;
+        
+      }
+    }
+    .edit-profile-data-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      form {
+        margin: 3rem auto;
+        max-width: 444px;
+        @media only screen and (max-width: 500px) {
+          margin: 1rem 1rem;
+        }
+
+        button[type="submit"] {
+          float: left;
+        }
+        button[type="submit"].passwd-submit-button {
+          margin-top:1rem;
+        }
+        input[type="radio"]{
+          display: none;
+        }
+
+        .gender-box {
+          text-align:right;
+
+        .activeGenderIconStyle{
+          color: var(--hoverSuccess);
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 10px 4px;
+          
+        }
+    
+        .deactiveGenderIconStyle{
+          color: var(--borders);
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 10px 4px;
+        }
+          
+        }
+       
+      }
+    }
+    .dropzone {
+      border: 1px dashed var(--borders);
+      height: 140px;
+      padding: 0 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      p {
+        font-size: 1rem;
+        color: var(--text2);
+      }
+    }
+    #profile-header {
+      width: 100%;
+      height: 8rem;
+      background-color: rgba(102, 102, 102, 0.27);
+      position: relative;
+
+      .profile-avatar-container {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 50%);
+
+        .MuiAvatar-root {
+          width: 7rem;
+          height: 7rem;
+          background-color: var(--header);
+        }
+      }
+    }
+
+    .edit-users-images-section {
+      .row {
+        margin: 4rem 2rem 2rem 2rem;
+
+        @media only screen and (max-width: 600px) {
+          margin: 1rem 0;
+          .both-side-image {
+            display: none;
+          }
+          .dropzone-text {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}

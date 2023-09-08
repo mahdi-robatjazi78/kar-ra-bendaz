@@ -2,7 +2,7 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import history from "@/services/appHistory";
 import { store } from "@/redux/store";
-import {deactiveBlur, handleSettingModalClose, setBlurPage} from "@/redux/features/settingSlice";
+import {deactiveBlur, handleSettingModalClose} from "@/redux/features/settingSlice";
 import { LogoutAction } from "@/redux/features/userSlice";
 
 const UnAuthenticatedModal = () => {
@@ -14,7 +14,7 @@ const UnAuthenticatedModal = () => {
 
   const showAlertExpirationAccout = () => {
     MySwal.fire({
-      title: "Expiration Token",
+      title: "Token Expired",
       icon: "info",
       confirmButtonText: "Go To Login",
       customClass: {
@@ -29,7 +29,7 @@ const UnAuthenticatedModal = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         store.dispatch(deactiveBlur());
-        store.dispatch(LogoutAction());
+        store.dispatch(LogoutAction({}));
 
 
         history.replace("/login");
@@ -39,7 +39,9 @@ const UnAuthenticatedModal = () => {
       }
     });
   };
-  showAlertExpirationAccout();
+
+    showAlertExpirationAccout();
+  
 };
 
 export default UnAuthenticatedModal;

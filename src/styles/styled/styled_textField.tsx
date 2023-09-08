@@ -8,10 +8,8 @@ const StyledTextFieldWhite = styled(TextField)`
     caret-color:var(--text2);  
     letter-spacing: 2px;
     font-family: "Space Grotesk";
-  }
-
-  
-  
+    text-align:center;
+  } 
   
   & input:-webkit-autofill,
   input:-webkit-autofill:focus {
@@ -23,15 +21,14 @@ const StyledTextFieldWhite = styled(TextField)`
   }
   & label {
     color:${(props: any) =>
-      props.lighter ? "var(--text2) !important" : "#868686 !important"};
-    letter-spacing:1px; 
-    background: var(--background);
+      props.valid ? 'var(--hoverSuccess) !important' :props.lighter ? "var(--text2) !important" : "#868686 !important"};
     padding-right: 6px; 
+    font-family:Changa;
   }
   
   fieldset {
     border-color: ${(props: any) =>
-      props.lighter ? "var(--text2) !important" : "var(--text1) !important"};
+      props.valid ? 'var(--hoverSuccess) !important' : props.lighter ? "var(--text2) !important" : "var(--text1) !important"};
   }
   & .Mui-disabled {
     color: var(--disabled) !important;

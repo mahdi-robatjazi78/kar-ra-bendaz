@@ -50,7 +50,7 @@
   justify-content: space-around;
   align-items: center;
 }
-%d-flex-around{
+%d-flex-around {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -140,4 +140,51 @@ code {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.bold-success {
+  font-weight: bold;
+  color: var(--hoverSuccess);
+}
+
+div:has(.password-popover-paper-override) {
+  margin-left: 70px;
+  @media only screen and (max-width: 800px) {
+    margin-top: 40px;
+    margin-left: 30px;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+}
+
+div:has(.username-popover-paper-override) {
+  margin-left: 70px;
+
+  @media only screen and (max-width: 800px) {
+    margin-top: 30px;
+    margin-left: 30px;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
+}
+div:has(.username-popover-paper-override-near) {
+  margin-left:43px;
+
+  @media only screen and (max-width: 800px) {
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
+}
+
+
+div:has(.signup-image-popover) {
+  margin-top: 15px;
+  margin-left: 5px;
 }

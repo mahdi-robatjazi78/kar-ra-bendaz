@@ -26,6 +26,15 @@ const OverridedTheme = createTheme({
 
       },
     },
+    MuiPopover:{
+      styleOverrides:{
+        paper:{
+          background:'var(--header)',
+          border:"1px solid var(--borders)",
+          padding:".6rem",
+        }, 
+      }
+    }
   },
 });
 

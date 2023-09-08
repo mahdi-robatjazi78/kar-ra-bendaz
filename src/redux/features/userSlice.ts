@@ -1,29 +1,20 @@
+import { IUser , IUserMeData } from "@/types/types";
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface IUserData {
-  email: String;
-  fname: String;
-  gender: String;
-  lname: String;
-  userName: String;
-  picture:{
-    avatar: String | null,
-    banner: String | null
-  }
-}
-export interface IUser {
-  token: String;
-  me: IUserData;
-}
+
 
 const initialState: IUser = {
   token: null,
   me: {
-    email: null,
     fname: null,
-    gender: null,
     lname: null,
+    email: null,
     userName: null,
+    accountType:null,
+    picture:{
+      avatar: null,
+      banner: null
+    }
   },
 };
 
@@ -38,14 +29,8 @@ export const userSlice = createSlice({
       state.token = action.payload.token;
     },
     LogoutAction: (state, action) => {
-      state.token = null;
-      state.me = {
-        email: null,
-        fname: null,
-        gender: null,
-        lname: null,
-        userName: null,
-      };
+      state.token = initialState.token;
+      state.me = initialState.me
     },
   },
 });

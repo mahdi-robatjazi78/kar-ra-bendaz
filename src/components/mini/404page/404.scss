@@ -1,0 +1,84 @@
+.notfound-page{
+    
+
+  .text-box-404{
+    position: absolute;
+    top:35%;
+    left:50%;
+    transform: translate(-50% , -50%);
+    width:60%;
+    padding: 0 1.5rem;
+    @media only screen and (max-width: 600px) {
+      width:100%;
+    }
+    p.text-404 {
+
+      font-family: 'space Grotesk' ,  Changa sans-serief;
+      color: var(--header);
+      font-size: 180px;
+      letter-spacing: 10px;
+      margin: 0;
+      font-weight: 700;
+      text-shadow: 2px 2px 0 var(--text2), -2px -2px 0 #c9c9c9;
+      text-align: center;
+      @media only screen and (max-width: 600px) {
+        font-size:120px;
+      }
+  
+      @media only screen and (min-width: 600px) and (max-width:950px) {
+        font-size: 140px;
+  
+  
+      }
+
+      > span {
+        text-shadow:2px 2px 0 var(--borders), -2px -2px 0 var(--borders), 0 0 8px #ff8700;
+      }
+    }
+    
+
+    .desc-box-404{
+      p{
+        font-size:2rem;
+        text-align: center;
+      @media only screen and (max-width: 600px) {
+        font-size:1rem;
+
+
+      }
+
+      @media only screen and (min-width: 600px) and (max-width:950px) {
+        font-size:1.5rem;
+
+
+      }
+
+      }
+    }
+
+    .button-links{
+      margin-top:2rem;
+      text-align: center;
+      button  {
+        font-size:2rem;
+      font-family: 'space Grotesk' ,Changa sans-serief;
+        
+        @media only screen and (min-width: 600px) and (max-width:900px) {
+          font-size:1.3rem;
+  
+  
+        }
+        
+        @media only screen and (max-width: 600px) {
+          font-size:1rem;
+  
+  
+        }
+      }
+    }
+    
+    
+    
+  }
+
+}

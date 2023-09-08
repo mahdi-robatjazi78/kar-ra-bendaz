@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 const StyledButton = styled(Button)`
   align-items: center;
   background ${(props: any) =>
-    props.transparent ? "transparent !important" : ""};
+    props.transparent ? "transparent !important" : "transparent !important "};
   border-radius: 0.25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
@@ -20,15 +20,19 @@ const StyledButton = styled(Button)`
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
+  text-transform:capitalize !important;
+  font-family: Changa;
+
+
   border:  ${(props: any) =>
     props.transparent
       ? "1px solid var(--text2) !important"
       : "1px solid var(--text3) !important"};
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-  & span {
+  > span {
     text-transform:capitalize;
     text-decoration: none; 
-    font-family:"Changa";
+  font-family: Changa;
   }
   &:hover &:focus {
 
@@ -58,8 +62,8 @@ const StyledButton = styled(Button)`
 
   &:disabled {
     filter: brightness(0.4);
-    color: var(--borders);
-    border: 1px solid var(--borders);
+    border-color: #dadada4d !important;
+    color: #dadada4d !important;
 
     & .submit-button-text {
       color: var(--text1);

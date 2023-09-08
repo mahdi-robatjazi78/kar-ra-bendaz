@@ -1,17 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ITodoPageLayoutSliceStructure } from "@/types/types";
 
-export interface ITodoPageLayout {
-  todoPageLayout: Array<String | Number | null>;
-  todoFilterLayout: {
-    filter: String;
-    config: {
-      start: Number | String;
-      end: Number | String;
-    };
-  };
-}
-
-const initialState: ITodoPageLayout = {
+const initialState: ITodoPageLayoutSliceStructure = {
   todoPageLayout: ["3col", "all", 3],
   todoFilterLayout: {
     filter: "all",

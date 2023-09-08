@@ -12,10 +12,6 @@ import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from "@hooks/useDebounce";
 import { soundPlay } from "@/util/funcs";
 
-export interface BoxProps {
-  name: string;
-}
-
 interface DropResult {
   name: string;
   id: string;

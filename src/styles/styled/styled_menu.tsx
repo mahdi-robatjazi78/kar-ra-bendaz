@@ -4,6 +4,7 @@ import { Menu, MenuItem } from "@mui/material";
 const Styled_Menu = (props) => {
   return (
     <Menu
+      onMouseLeave={props.onClose}
       {...props}
       PaperProps={{
         elevation: 0,

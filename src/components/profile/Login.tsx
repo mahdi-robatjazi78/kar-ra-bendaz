@@ -1,12 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import ThemeContext from "../../context/themeContext";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Avatar,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
+import { Box, Avatar, InputAdornment, IconButton, Tooltip } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Toast from "../../util/toast";
 import StyledButton from "@/styles/styled/styled_button";
@@ -19,20 +14,28 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUserData, SetUserToken } from "@/redux/features/userSlice";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
-import {RootState, store} from "@/redux/store";
+import { RootState, store } from "@/redux/store";
 import { UserRtkService, useUserSigninMutation } from "@/redux/api/user";
 import { TodoRtkService } from "@/redux/api/todos";
 import { CategoryRtkService } from "@/redux/api/categories";
 import { WorkspacesRtkService } from "@/redux/api/workspaces";
-import {deactiveBlur, handleSettingModalClose} from "@/redux/features/settingSlice";
+import {
+  deactiveBlur,
+  handleSettingModalClose,
+} from "@/redux/features/settingSlice";
 import useWindowSize from "@/hooks/useWindowSize";
-import Text from "@/styles/styled/styled_typography";
+import Text from "@/styles/styled/styled_typography"; 
+
+
+
 const Login = () => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const {modal : {open : OpenSettingModal}} = useSelector((state: RootState) => state.settings);
+  const {
+    modal: { open: OpenSettingModal },
+  } = useSelector((state: RootState) => state.settings);
   const [loginUserRequest, loginUserResponse] = useUserSigninMutation();
   const [width, height] = useWindowSize().size;
 
@@ -43,8 +46,8 @@ const Login = () => {
     dispatch(WorkspacesRtkService.util.resetApiState());
     dispatch(deactiveBlur());
 
-    if(OpenSettingModal){
-      dispatch(handleSettingModalClose())
+    if (OpenSettingModal) {
+      dispatch(handleSettingModalClose());
     }
   }, []);
   const YupObjectValidationFields = Yup.object({}).shape({
@@ -74,7 +77,8 @@ const Login = () => {
       loginUserRequest({ email: values.username, password: values.password })
         .unwrap()
         .then((response) => {
-          const { email, fname, lname, gender, token, userName , picture } = response;
+          const { email, fname, lname, token, userName, picture, accountType ,gender } =
+            response;
 
           dispatch(
             SetUserToken({
@@ -88,7 +92,8 @@ const Login = () => {
               lname,
               gender,
               userName,
-              picture
+              picture,
+              accountType,
             })
           );
 
@@ -115,11 +120,7 @@ const Login = () => {
           className="container"
         >
           {height > 470 && <Avatar></Avatar>}
-          {height > 430 && (
-            <Text style={{textAlign:"center"}}>
-              Login
-            </Text>
-          )}
+          {height > 430 && <Text style={{ textAlign: "center" }}>Login</Text>}
 
           <form onSubmit={formik.handleSubmit} style={{ marginTop: "2rem" }}>
             <StyledTextFieldWhite
@@ -187,23 +188,35 @@ const Login = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     {!showPassword ? (
-                      <IconButton onClick={() => setShowPassword(true)}>
-                        <HiOutlineEye style={{ color: theme.borders }} />{" "}
-                      </IconButton>
+                      <HiOutlineEye
+                        onClick={() => setShowPassword(true)}
+                        style={{
+                          color: theme.borders,
+                          fontSize: "1.5rem",
+                          cursor: "pointer",
+                          zIndex: 4,
+                        }}
+                      />
                     ) : (
-                      <IconButton onClick={() => setShowPassword(false)}>
-                        <HiOutlineEyeOff style={{ color: theme.borders }} />{" "}
-                      </IconButton>
+                      <HiOutlineEyeOff
+                        onClick={() => setShowPassword(false)}
+                        style={{
+                          color: theme.borders,
+                          fontSize: "1.5rem",
+                          cursor: "pointer",
+                          zIndex: 4,
+                        }}
+                      />
                     )}
                   </InputAdornment>
                 ),
               }}
             />
 
+          
+
             <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
+              className="d-flex-between"
               style={{ marginTop: "1.5rem" }}
             >
               <NavLink to="/signup" className="linkStyles">

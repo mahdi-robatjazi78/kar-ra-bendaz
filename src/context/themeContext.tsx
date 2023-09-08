@@ -3,24 +3,8 @@ import themes from "../theme";
 import { handleAppThemeChange } from "@/redux/features/settingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import {ITheme} from '../types/types'
 
-interface ITheme {
-  foreground: string;
-  background: string;
-  borders: string;
-  errorBorder: string;
-  sidebar: string;
-  secondSidebar: string;
-  text1: string;
-  text2: string;
-  header: string;
-  text3: string;
-  hoverSuccess: string;
-  isDarkMode: boolean;
-  toggleDark(): void;
-  setDark(): void;
-  setLight(): void;
-}
 
 const ThemeContext = React.createContext<ITheme>({
   foreground: "",
@@ -60,7 +44,7 @@ export const ThemeContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     setIsDarkMode(mode === "dark");
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     if (isDarkMode) {

@@ -16,10 +16,15 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 import ThemeContext from "@/context/themeContext";
 import usePrefersColorScheme from "@hooks/useOsTheme"
+import Toast from "@/util/toast";
+import { useNavigate } from "react-router-dom";
+
 
 const Main = () => {
 
   const { headerPosition, modal, theme, } = useSelector((state: RootState) => state.settings);
+  const {token} = useSelector((state: RootState) => state.auth);
+  const Navigate = useNavigate()
   const dispatch = useDispatch();
 
   const {
@@ -39,52 +44,84 @@ const Main = () => {
   };
 
   useHotkeys("ctrl+shift+s", () => {
-    handleOpenSettingModal();
+    if(token){
+      handleOpenSettingModal();
+    }
   });
+
+  
   useHotkeys("ctrl+alt+t", () => {
-    toggleDark();
+    if(token){
+    if (theme.listen) {
+      Toast(
+        "Please first disable listen to os theme option from setting modal",
+        true,
+        true,
+        "⛔"
+      );
+    }else{
+      
+      toggleDark();
+
+    }
+  }
   });
   useHotkeys("ctrl+shift+keydown", () => {
+    if(token){
     dispatch(changeHeaderPosition("bottom"));
-  });
+  }});
   useHotkeys("ctrl+shift+keyup", () => {
-    dispatch(changeHeaderPosition("top"));
+    if(token){
+      dispatch(changeHeaderPosition("top"));
+    }
   });
 
   useHotkeys("ctrl+shift+keyleft", () => {
+    if(token){
     dispatch(changeHeaderPosition("left"));
+    }
   });
   useHotkeys("ctrl+shift+keyright", () => {
-    dispatch(changeHeaderPosition("right"));
+    if(token){
+      dispatch(changeHeaderPosition("right"));
+    }
   });
+
+  // useEffect(()=>{
+  //   if(!token){
+  //     Navigate('/login')
+  //   }
+  // },[token])
 
   const osThemeChanged = usePrefersColorScheme()
 
 
   useEffect(() => {
     if(theme.listen){
-      handleSeeOsDarkMode();
+      handleSeeOsThemeMode();
     }
   }, [theme.listen , osThemeChanged]);
 
 
-  const handleSeeOsDarkMode = () => {
+  const handleSeeOsThemeMode = () => {
      const OsIsDarkMode =
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme:dark)").matches;
 
 
-    if (theme.listen && theme.mode !== osThemeChanged ) {
+   const getDiffOsThemeAndAppTheme =  OsIsDarkMode && theme.mode === "dark" ? true : !OsIsDarkMode && theme.mode === "light"  ? true : false
+
+    if (theme.listen && !getDiffOsThemeAndAppTheme ) {
 
 
       if (OsIsDarkMode) {
         dispatch(handleOsTheme("dark"));
-        if (DarkModeContext !== OsIsDarkMode) {
+        if (theme.mode !== "dark") {
           setDark();
         }
       } else {
         dispatch(handleOsTheme("light"));
-        if (DarkModeContext !== OsIsDarkMode) {
+        if (theme.mode !== "light") {
           setLight();
         }
       }

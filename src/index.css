@@ -41,3 +41,9 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
   -webkit-text-fill-color:var(--text1) !important;
 }
 .cp{cursor:pointer}
+.usn{user-select:none}
+
+
+li{
+  color: var(--text1);
+}

@@ -49,7 +49,6 @@ const TodoList = (props: any) => {
           }
         });
 
-        console.log("item >>>> ", x);
         dispatch(DrawerOpen({ state: "todo", item: x[0] }));
       } else if (listState.length && listState.length > 1) {
         let data = {

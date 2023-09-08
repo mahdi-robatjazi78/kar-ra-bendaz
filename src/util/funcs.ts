@@ -12,7 +12,6 @@ import {
 import { store } from "@/redux/store";
 import Toast from "./toast";
 import { clearMouseSelectedItems } from "@/redux/features/todoPageConfigSlice";
-
 export const truncateText = (text: string, size: number) => {
   return text.length > size ? text.slice(0, size - 1) + "…" : text;
 };
@@ -78,7 +77,7 @@ export const handlePresentAndFilterTodoLayout = (id: string, n = null) => {
 };
 
 export const handleResponseError = (error) => {
-  if (error.status === 401 || error.status === 403) {
+  if ((error.status === 401 || error.status === 403 )&& store.getState().auth.token ) {
     store.dispatch(setBlurPage());
     UnAuthenticatedModal();
   } else {
@@ -96,24 +95,14 @@ export const deselectAllTodos = () => {
   store.dispatch(clearMouseSelectedItems());
 };
 
-
-export const pairColors = (c1 , c2 , darkmode )=>{
-
-
+export const pairColors = (c1, c2, darkmode) => {
   /* c1 is light color
    c2 is  dark color
    theme light or dark */
 
-
-  if(!darkmode){
-    return c1
-  }else {
-    return c2
+  if (!darkmode) {
+    return c1;
+  } else {
+    return c2;
   }
-
-
-
-}
-
-
-
+};
