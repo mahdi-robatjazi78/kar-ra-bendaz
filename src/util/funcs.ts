@@ -77,10 +77,20 @@ export const handlePresentAndFilterTodoLayout = (id: string, n = null) => {
 };
 
 export const handleResponseError = (error) => {
-  if ((error.status === 401 || error.status === 403 )&& store.getState().auth.token ) {
-    store.dispatch(setBlurPage());
+  if (
+    (error.status === 401 || error.status === 403) &&
+    store.getState().auth.token
+  ) {
+    if (store.getState().settings.playSound) {
+      soundPlay("sound10_error2.mp3");
+    }
+
     UnAuthenticatedModal();
   } else {
+    if (store.getState().settings.playSound) {
+      soundPlay("sound9_error1.wav");
+    }
+
     Toast(error.msg ? error.msg : error.data.msg, false, true);
   }
 };

@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import Page404 from "@/components/mini/404page/404";
 import { LogoutAction } from "@/redux/features/userSlice";
-import { useDispatch } from "react-redux";
+import Toast from "@/util/toast";
 
 const CheckUserSinginAndProtectRoutes = ({
   userIsSignin,
@@ -38,7 +38,12 @@ const RouteBox = () => {
   const navigate = useNavigate();
   const { blur } = useSelector((state: RootState) => state.settings);
   const { token } = useSelector((state: RootState) => state.auth);
+  const { active_ws:ActiveWs } = useSelector((state: RootState) => state.todoPageConfig);
   let userSignin = token ? true : false;
+
+
+
+
   useHotkeys("alt+h", () => {
     if (token) {
       navigate("/");
@@ -46,7 +51,13 @@ const RouteBox = () => {
   });
   useHotkeys("alt+w", () => {
     if (token) {
-      navigate("/todos");
+      if(ActiveWs?.id){
+        navigate("/todos");
+      }else{
+        Toast("Please first active one workspace then go to todo page" , false , true , "⛔")
+        navigate("/");
+      }
+      
     }
   });
   useHotkeys("alt+p", () => {

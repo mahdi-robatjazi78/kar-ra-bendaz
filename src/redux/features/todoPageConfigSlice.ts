@@ -40,7 +40,7 @@ export interface ITodoPage {
   active_ws: IActiveWs;
   active_category: IActiveWs;
   drawer: ITodoDrawer;
-  get_out: Boolean;
+  
   searchMode: Boolean;
   searchText: String;
   sidebar_open: Boolean;
@@ -78,8 +78,7 @@ const initialState: ITodoPage = {
     limit: 15,
     total_items: null,
     total_pages: null,
-  },
-  get_out: false,
+  }, 
   searchMode: false,
   searchText: "",
   sidebar_open: true,
@@ -120,12 +119,8 @@ export const todoPageConfigSlice = createSlice({
         title: null,
       };
     },
-    NoActiveWorkspace: (state) => {
-      state.get_out = true;
-    },
-    GetOutCompleted: (state) => {
-      state.get_out = false;
-    },
+ 
+   
     DrawerOpen: (state, action) => {
       state.drawer = {
         open: true,
@@ -245,7 +240,7 @@ export const {
   SetActiveCategory,
   UnActiveCategory,
   NoActiveWorkspace,
-  GetOutCompleted,
+ 
   DrawerOpen,
   ChangePriorityDrawer,
   DrawerClose,

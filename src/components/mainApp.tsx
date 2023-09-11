@@ -67,7 +67,7 @@ const Main = () => {
   }
   });
   useHotkeys("ctrl+shift+keydown", () => {
-    if(token){
+    if(token && window.location.pathname !== "/"){
     dispatch(changeHeaderPosition("bottom"));
   }});
   useHotkeys("ctrl+shift+keyup", () => {

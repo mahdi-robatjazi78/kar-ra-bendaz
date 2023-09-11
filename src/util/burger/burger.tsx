@@ -37,7 +37,7 @@ const Burger = (props: any) => {
         navigate("/todos");
       } else {
         Toast(
-          "Please first select a workspace then go to todo page",
+          "Please first active one workspace then go to todo page",
           true,
           true,
           "⛔"

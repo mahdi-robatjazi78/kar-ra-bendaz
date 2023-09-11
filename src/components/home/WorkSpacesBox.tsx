@@ -88,7 +88,6 @@ const AddOrSearchUi = (props) => {
   const handlekeydown = (e) => {
     if (e.keyCode == 13) {
       // enter key
-      console.log("enter");
       switch (state) {
         case "add":
           AddWorkspace();
@@ -112,15 +111,7 @@ const AddOrSearchUi = (props) => {
     setText(e.target.value);
   };
 
-  const getLabel = () => {
-    if (state === "add" && space === "workspace") {
-      return "Add new workspace";
-    } else if (state === "search" && space === "workspace") {
-      return "Search in workspaces";
-    } else {
-      return "";
-    }
-  };
+  
 
   const SearchInWorkspace = async () => {
     setResultText(text);
@@ -134,7 +125,7 @@ const AddOrSearchUi = (props) => {
         type="text"
         size="small"
         variant="standard"
-        label={<>{getLabel()}</>}
+        label={state === "add"  ? "Add new workspace" : "searh in workspaces"}
         value={text}
         onChange={handleChangeValue}
         onKeyDown={handlekeydown}
@@ -249,13 +240,17 @@ const WorkspacesTable = () => {
 
   const dispatch = useDispatch();
   const AddWorkspace = () => {
-    if (inputText) {
+    if (inputText && inputText.length >= 3  && inputText.length <= 25) {
       storeNewWs({ title: inputText })
         .unwrap()
-        .then((res) => {})
+        .then((res) => {
+
+        })
         .catch((err) => {
           console.log(err);
         });
+    }else{
+      Toast("Minimum 3 And Maximum 25 characters" , false , true)
     }
   };
 
@@ -283,6 +278,9 @@ const WorkspacesTable = () => {
     // AFTER STORE REQUEST
     if (respStoreNewWs.isSuccess) {
       Toast(respStoreNewWs?.data?.msg, true, true);
+      if (playSound) {
+        soundPlay("sound5.wav")
+      }
       backToIcons();
       setInputText("");
       refetch();
@@ -326,6 +324,9 @@ const WorkspacesTable = () => {
           })
         );
       }
+      if (playSound) {
+        soundPlay("sound2.mp3")
+      }
       Toast(respRenameWs?.data?.msg, true, true);
     }
   }, [respRenameWs.isSuccess]);
@@ -347,10 +348,15 @@ const WorkspacesTable = () => {
           dispatch(UnActiveWs());
         }
 
+    
+
         setWsSelectedId("");
         setWsSelectedTitle("");
         refetch();
         setState("icons");
+        if (playSound) {
+          soundPlay("sound1.wav");
+        }
         Toast(response?.msg, true, true);
       })
       .catch((error) => {

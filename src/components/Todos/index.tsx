@@ -18,7 +18,7 @@ import {
   AddMouseSelectedItems,
   clearMouseSelectedItems,
   CloseSidebar,
-  GetOutCompleted,
+ 
   handleChangeMetaItem,
   OpenSidebar,
   SearchModeActive,
@@ -51,7 +51,6 @@ const Todos = () => {
   const {
     active_ws: {id: ActiveWorkspaceID},
     active_category: {id: ActiveCategoryID},
-    get_out: GetOutFromTodoPage,
     drawer: {
       item: {_id: DrawerTodoId},
     },
@@ -174,20 +173,18 @@ const Todos = () => {
     if (ActiveWorkspaceID) {
       UpdateTodoAndCategories();
     } else {
-      if (iSuccessGetActiveWsQuery) {
+      if (iSuccessGetActiveWsQuery && DataGetActiveWsQuery.activeWorkspace.id) {
         const {id, title} = DataGetActiveWsQuery.activeWorkspace;
 
         dispatch(SetActiveWs({id, title}));
+      }else{
+        Toast("Please first active one workspace then go to todo page" , false , true , "⛔")
+        navigate("/");
       }
     }
   }, [ActiveWorkspaceID, iSuccessGetActiveWsQuery]);
 
-  useEffect(() => {
-    if (GetOutFromTodoPage) {
-      dispatch(GetOutCompleted());
-      navigate("/");
-    }
-  }, [GetOutFromTodoPage]);
+ 
 
   const handleChangeMeta = (page, perPage) => {
     dispatch(handleChangeMetaItem({page: page, limit: perPage}));
@@ -243,8 +240,6 @@ const Todos = () => {
         })
       }
     ))
-
-
   });
 
 
