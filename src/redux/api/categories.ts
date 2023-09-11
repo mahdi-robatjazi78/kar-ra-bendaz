@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { handleResponseError } from "@utils/funcs";
 import { IUser } from "../features/userSlice";
-const base_url = `http://localhost:8888`;
+const base_url = process.env.BACKEND_APP_BASE_URL;
 
 // Define a service using a base URL and expected endpoints
 
 export const CategoryRtkService = createApi({
   reducerPath: "categories",
   baseQuery: fetchBaseQuery({
-    baseUrl: base_url + "/category/",
+    baseUrl: base_url + "/category",
     prepareHeaders(headers, { getState }) {
       const { auth } = getState() as { auth: IUser };
 

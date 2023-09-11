@@ -33,7 +33,7 @@
   }
  
     .add-space-box {
-      padding: 1rem 0.2rem 1rem 1rem !important;
+      padding: 0 1rem !important;
       border: 1.5px solid var(--borders);
       border-radius: 10px;
       width: 100%;
@@ -42,10 +42,9 @@
       overflow: hidden;
 
       @extend %box-styles;
-      .add-space-icon-box {
-        padding-bottom: 5px;
+      .add-space-icon-box { 
         border-bottom: 1px solid var(--borders);
-
+        height:4rem;
         .add-space-icon {
           font-size: 1.2rem;
           color: var(--borders);

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { handleResponseError } from "@utils/funcs";
 import { IUser } from "../../types/types";
-const base_url = `http://localhost:8888`;
+const base_url = process.env.BACKEND_APP_BASE_URL;
 
 // Define a service using a base URL and expected endpoints
 

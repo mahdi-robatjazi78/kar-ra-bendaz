@@ -232,7 +232,7 @@ const Header = (props) => {
                 ? "user-profile-avatar"
                 : auth.me.fname || auth.me.email
             }
-            src={`http://localhost:8888/uploads/${auth.me?.picture?.avatar}`}
+            src={`${process.env.BACKEND_APP_BASE_URL_UPLOADS}/${auth.me?.picture?.avatar}`}
             sx={{
               width: 40,
               cursor: "pointer",
@@ -292,7 +292,7 @@ const Header = (props) => {
             <Styled_Menu_Item>
               <NavLink style={{ textDecoration: "none" }} to={"/signup"}>
                 <Box className="d-flex-between">
-                  <Box>Register</Box>
+                  <Box>Signup</Box>
                   <BiLogInCircle
                     style={{ padding: ".2rem", fontSize: "1.5rem" }}
                   />

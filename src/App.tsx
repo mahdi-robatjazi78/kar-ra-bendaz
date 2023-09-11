@@ -14,10 +14,18 @@ import {
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "@mui/material";
 import OverridedTheme from "./styles/mui/theme";
+ 
+
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 const { persistor } = persistorInitial();
+
+console.log("1111--->",process.env.REACT_APP_ENVIRONMENT)
+
+
+
+
 function App() {
   return (
     <Provider store={store}>

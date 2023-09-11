@@ -36,6 +36,11 @@ const Login = () => {
   const {
     modal: { open: OpenSettingModal },
   } = useSelector((state: RootState) => state.settings);
+
+
+  const {token:_Token , me: {email:_Email}} = useSelector((state: RootState) => state.auth);
+
+
   const [loginUserRequest, loginUserResponse] = useUserSigninMutation();
   const [width, height] = useWindowSize().size;
 
@@ -97,14 +102,18 @@ const Login = () => {
             })
           );
 
-          navigate("/");
           Toast(response.msg, true, true);
+        }).then(()=>{
+          navigate("/");
+
         })
         .catch((error) => {
-          console.log("aaa>", error);
+          console.log(error);
         });
     },
-  });
+  }); 
+
+
 
   return (
     <Box

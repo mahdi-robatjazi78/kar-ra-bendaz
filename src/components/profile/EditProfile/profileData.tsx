@@ -140,7 +140,6 @@ const ProfileData = () => {
             labelBackground="rgba(121, 121, 121, 0.155)"
             tabIndex={1}
             margin="normal"
-            autoComplete="given-name"
             name="firstName"
             fullWidth
             id="firstName"
@@ -151,15 +150,15 @@ const ProfileData = () => {
             value={formik.values.firstName}
             size="small"
             error={
-              formik.values.firstName.length && formik.errors.firstName
+              formik.values.firstName && formik.errors.firstName
             }
             helperText={
-              formik.values.firstName.length && formik.errors.firstName
+              formik.values.firstName && formik.errors.firstName
                 ? formik.errors.firstName
                 : ""
             }
             valid={
-              formik.values.firstName.length && !formik.errors.firstName
+              formik.values.firstName && !formik.errors.firstName
             }
           />
 
@@ -175,15 +174,15 @@ const ProfileData = () => {
             value={formik.values.lastName}
             size="small"
             error={
-              formik.values.lastName.length && formik.errors.lastName
+              formik.values.lastName && formik.errors.lastName
             }
             helperText={
-              formik.values.lastName.length && formik.errors.lastName
+              formik.values.lastName && formik.errors.lastName
                 ? formik.errors.lastName
                 : ""
             }
             valid={
-              formik.values.lastName.length && !formik.errors.lastName
+              formik.values.lastName && !formik.errors.lastName
             }
           />
         </Box>

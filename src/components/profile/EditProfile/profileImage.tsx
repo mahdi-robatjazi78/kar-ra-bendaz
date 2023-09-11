@@ -48,14 +48,14 @@ const ProfileImageComponent = (props: any) => {
                   <IoCloseSharp color="red" />
                 </IconButton>
               </Tooltip>
-            </Box>
+          </Box>
           )}
 
           <img
             width={130}
             height={140}
             alt={`User-Profile-${item}`}
-            src={`http://localhost:8888/uploads/${AuthData.me?.picture?.[item]}`}
+            src={`${process.env.BACKEND_APP_BASE_URL_UPLOADS}/${AuthData.me?.picture?.[item]}`}
           />
         </Box>
         <Box

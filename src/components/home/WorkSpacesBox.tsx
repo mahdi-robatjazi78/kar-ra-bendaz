@@ -372,7 +372,6 @@ const WorkspacesTable = () => {
     <Box className="add-space-box">
       <Box
         className="add-space-icon-box d-flex-between"
-        style={{ height: "3rem" }}
       >
         <IconButton style={{ width: 37 }}>
           <MdWorkspacesOutline className="add-space-icon" />
@@ -418,7 +417,7 @@ const WorkspacesTable = () => {
           />
         ) : state === "remove" ? (
           <>
-            <Box className="d-flex-between" style={{ gap: "1rem" }}>
+            <Box className="d-flex-between" style={{ gap: "1rem", marginRight :"1rem" }}>
               <Text>
                 Do you want Delete{" "}
                 {wsSelectedTitle ? (

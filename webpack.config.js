@@ -1,8 +1,15 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const srcFolder = "src";
+const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
+ 
 
-module.exports = {
+module.exports = (env)=>{
+  console.log("env.NODE_ENV  --->" , process.env.NODE_ENV);
+  const isProduction = process.env.NODE_ENV === 'production';
+  const dotenvFilename = isProduction ? '.env.production' : '.env.development';
+  return {
   entry: {
     index: path.join(__dirname, srcFolder, "index.tsx"),
   },
@@ -27,7 +34,12 @@ module.exports = {
     },
     extensions: ["", ".md", ".js", ".ts", ".tsx", ".json"],
   },
+  mode:process.env.NODE_ENV,
   plugins: [
+    new Dotenv({path : `./${dotenvFilename}`}),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html", // to import index.html file inside index.js
       filename: "./index.html",
@@ -79,4 +91,5 @@ module.exports = {
       // },
     ],
   },
+}
 };

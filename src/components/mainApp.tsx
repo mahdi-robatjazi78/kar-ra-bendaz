@@ -87,11 +87,11 @@ const Main = () => {
     }
   });
 
-  // useEffect(()=>{
-  //   if(!token){
-  //     Navigate('/login')
-  //   }
-  // },[token])
+  useEffect(()=>{
+    if(!token && token === null){
+      Navigate('/login')
+    }
+  },[token])
 
   const osThemeChanged = usePrefersColorScheme()
 

@@ -136,7 +136,7 @@ export default function Profile() {
           style={
             AuthData.me?.picture?.banner
               ? {
-                  backgroundImage: `url(http://localhost:8888/uploads/${AuthData.me?.picture?.banner})`,
+                  backgroundImage: `url(${process.env.BACKEND_APP_BASE_URL_UPLOADS}/${AuthData.me?.picture?.banner})`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "100% 8rem",
                 }
@@ -153,7 +153,7 @@ export default function Profile() {
                   ? "user-profile-avatar"
                   : AuthData.me.fname || AuthData.me.email
               }
-              src={`http://localhost:8888/uploads/${AuthData.me?.picture?.avatar}`}
+              src={`${process.env.BACKEND_APP_BASE_URL_UPLOADS}/${AuthData.me?.picture?.avatar}`}
               sx={{
                 width: 140,
                 cursor: !AuthData.me?.picture?.avatar ? "pointer" : "none",

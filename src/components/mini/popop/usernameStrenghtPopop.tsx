@@ -15,7 +15,7 @@ const UsernameStrenghtPopop = (props) => {
 
 
 
-  let len = username.length;
+  let len = username?.length;
   
   const [w, h] = useWindowSize().size;
 

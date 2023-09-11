@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { handleResponseError } from "@utils/funcs";
-const base_url = `http://localhost:8888`;
+const base_url = process.env.BACKEND_APP_BASE_URL;
+
 // Define a service using a base URL and expected endpoints
 
 export const TodoRtkService = createApi({
   reducerPath: "todos",
   baseQuery: fetchBaseQuery({
-    baseUrl: base_url + "/todos/",
+    baseUrl: base_url + "/todos",
     prepareHeaders(headers, { getState }) {
       const state: any = getState();
 

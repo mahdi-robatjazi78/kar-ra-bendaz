@@ -4,7 +4,7 @@ import Login from "./profile/Login";
 import Profile from "./profile/Profile";
 import EditProfile from "./profile/EditProfile";
 import HomePage from "./home";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Todos from "./Todos";
 import NoteBoard from "./notes";
@@ -15,18 +15,31 @@ import Page404 from "@/components/mini/404page/404";
 import { LogoutAction } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 
-const CheckUserSinginAndProtectRoutes = ({ userIsSignin, children }) => {
+const CheckUserSinginAndProtectRoutes = ({
+  userIsSignin,
+  children,
+  navigate,
+}) => {
   if (!userIsSignin) {
-    return <Page404 />;
+    navigate(-1);
+
+  }else{
+    return children;
+
   }
-  return children;
 };
 
 const ProtectAuthenticatePages = ({ userIsSignin, children }) => {
-  if (!userIsSignin) {
-    return children;
-  }
-  return <Page404 />;
+  if (userIsSignin) {
+    setTimeout(()=>{
+      if(userIsSignin){
+        return <Page404 />;
+      }
+      else{return children}
+    },1000)
+  } 
+    return children
+   
 };
 
 const RouteBox = () => {
@@ -50,13 +63,6 @@ const RouteBox = () => {
     }
   });
 
-  const [userSignupData, setUserSignupData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
   return (
     <Box
       style={{
@@ -69,10 +75,7 @@ const RouteBox = () => {
           path="signup"
           element={
             <ProtectAuthenticatePages userIsSignin={userSignin}>
-              <Signup
-                userSignupData={userSignupData}
-                setUserSignupData={setUserSignupData}
-              />
+              <Signup />
             </ProtectAuthenticatePages>
           }
         />
@@ -89,7 +92,10 @@ const RouteBox = () => {
         <Route
           path="/"
           element={
-            <CheckUserSinginAndProtectRoutes userIsSignin={userSignin}>
+            <CheckUserSinginAndProtectRoutes
+              navigate={navigate}
+              userIsSignin={userSignin}
+            >
               <HomePage />
             </CheckUserSinginAndProtectRoutes>
           }
@@ -97,8 +103,11 @@ const RouteBox = () => {
         <Route
           path="profile"
           element={
-            <CheckUserSinginAndProtectRoutes userIsSignin={userSignin}>
-              <Profile />{" "}
+            <CheckUserSinginAndProtectRoutes
+              navigate={navigate}
+              userIsSignin={userSignin}
+            >
+              <Profile />
             </CheckUserSinginAndProtectRoutes>
           }
         />
@@ -106,8 +115,11 @@ const RouteBox = () => {
         <Route
           path="edit-profile"
           element={
-            <CheckUserSinginAndProtectRoutes userIsSignin={userSignin}>
-              <EditProfile />{" "}
+            <CheckUserSinginAndProtectRoutes
+              navigate={navigate}
+              userIsSignin={userSignin}
+            >
+              <EditProfile />
             </CheckUserSinginAndProtectRoutes>
           }
         />
@@ -115,7 +127,10 @@ const RouteBox = () => {
         <Route
           path="todos"
           element={
-            <CheckUserSinginAndProtectRoutes userIsSignin={userSignin}>
+            <CheckUserSinginAndProtectRoutes
+              navigate={navigate}
+              userIsSignin={userSignin}
+            >
               <Todos />
             </CheckUserSinginAndProtectRoutes>
           }
@@ -124,7 +139,10 @@ const RouteBox = () => {
         <Route
           path="notes"
           element={
-            <CheckUserSinginAndProtectRoutes userIsSignin={userSignin}>
+            <CheckUserSinginAndProtectRoutes
+              navigate={navigate}
+              userIsSignin={userSignin}
+            >
               <NoteBoard />
             </CheckUserSinginAndProtectRoutes>
           }
