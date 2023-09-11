@@ -22,24 +22,16 @@ const CheckUserSinginAndProtectRoutes = ({
 }) => {
   if (!userIsSignin) {
     navigate(-1);
-
-  }else{
+  } else {
     return children;
-
   }
 };
 
 const ProtectAuthenticatePages = ({ userIsSignin, children }) => {
   if (userIsSignin) {
-    setTimeout(()=>{
-      if(userIsSignin){
-        return <Page404 />;
-      }
-      else{return children}
-    },1000)
-  } 
-    return children
-   
+    return <Navigate to="/login" replace />
+  }
+  return children;
 };
 
 const RouteBox = () => {
