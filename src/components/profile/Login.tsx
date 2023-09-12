@@ -129,7 +129,7 @@ const Login = () => {
           className="container"
         >
           {height > 470 && <Avatar></Avatar>}
-          {height > 430 && <Text style={{ textAlign: "center" }}>Login</Text>}
+          {height > 430 && <Text center>Login</Text>}
 
           <form onSubmit={formik.handleSubmit} style={{ marginTop: "2rem" }}>
             <StyledTextFieldWhite

@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import ThemeContext from "../../context/themeContext";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -37,10 +37,10 @@ const DarkLight = () => {
     <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop"}}>
       <Box
         onClick={handleChangeTheme}
-
-
       >
         {isDarkMode ? (
+        <Tooltip arrow  title="Set theme light">
+          <span>
           <TbSunFilled
             viewBox="0 0 25 25"
             className="d-flex-center"
@@ -51,11 +51,17 @@ const DarkLight = () => {
 
             }}
           />
+          </span>
+          </Tooltip>
         ) : (
+          <Tooltip arrow  title="Set theme dark">
+          <span>
           <BsFillMoonStarsFill
 
             style={{color:pairColors("var(--header)", "var(--text2)", isDarkMode) , fontSize:"3rem"}}
           />
+             </span>
+          </Tooltip>
         )}
       </Box>
     </Box>

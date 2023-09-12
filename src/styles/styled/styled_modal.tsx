@@ -9,15 +9,19 @@ const CustomeStyledModalBox = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--sidebar);
+  background-color: ${(props: any) =>
+    props.dark ? "var(--header)" : "var(--background)"};
   border: 2px solid var(--borders);
   border-radius: 8px;
   outline: none !important;
-  height: min(550px);
   width: min(60rem, 92%);
+  height: min(550px);
+  @media only screen and (max-width: 450px) and (min-height : 750px) {
+    height: min(700px);
+  }
 `;
 
-const Styled_Modal = (props) => {
+const Styled_Modal = (props: any) => {
   return (
     <CustomeStyledModal
       {...props}
@@ -29,7 +33,9 @@ const Styled_Modal = (props) => {
       }}
     >
       <Fade in={props.open}>
-        <CustomeStyledModalBox>{props.children}</CustomeStyledModalBox>
+        <CustomeStyledModalBox dark={props.dark}>
+          {props.children}
+        </CustomeStyledModalBox>
       </Fade>
     </CustomeStyledModal>
   );

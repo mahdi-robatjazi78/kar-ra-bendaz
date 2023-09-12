@@ -35,7 +35,7 @@ const ShortcutsList = (props) => {
         </Text>
       </Box>
       <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
-        <Text> Header Position </Text>
+        <Text> Navigation Menu Position </Text>
         <Text>
           <code>ctrl</code> <code>shift</code> <code>arrow key</code>
         </Text>

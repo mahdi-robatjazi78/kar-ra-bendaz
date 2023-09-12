@@ -20,10 +20,9 @@ const OverridedTheme = createTheme({
           backgroundColor: "var(--foreground)",
           color:"var(--text1)",
           fontFamily:"Space grotesk",
-          border:"1px solid var(--text1)"
+          border:"1px solid var(--text1)",
+          fontSize:"1rem"
         },
-
-
       },
     },
     MuiPopover:{

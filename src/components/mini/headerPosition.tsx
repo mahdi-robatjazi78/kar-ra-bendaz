@@ -53,11 +53,13 @@ const HeaderPosition = () => {
           display="flex"
           justifyContent="center"
           style={{ gap: "1.5rem" }}
-          onClick={() => {
-            dispatch(changeHeaderPosition("left"));
-          }}
+     
         >
-          <Box>
+          <Box
+            onClick={() => {
+              dispatch(changeHeaderPosition("left"));
+            }}
+          >
             <TbArrowBigLeftLines
               style={{
                 color:

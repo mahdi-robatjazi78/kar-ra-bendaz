@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Autocomplete,
   Box,
   Divider,
   IconButton,
+  Paper,
   Stack,
   Tooltip,
 } from "@mui/material";
@@ -25,13 +26,33 @@ import StyledTextFieldWhite from "@/styles/styled/styled_textField";
 import StyledBadge from "@/styles/styled/styled_badge";
 import { BsFlag, BsFolderSymlink } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
-import { soundPlay, truncateText } from "@/util/funcs";
+import { pairColors, soundPlay, truncateText } from "@/util/funcs";
 import "./bulkFunctionStyles.scss";
 import {
   FcHighPriority,
   FcLowPriority,
   FcMediumPriority,
 } from "react-icons/fc";
+import ThemeContext from "@/context/themeContext";
+import useWindowSize from "@/hooks/useWindowSize";
+
+
+const CustomPaper = (props) => {
+  return (
+    <Paper
+      elevation={8}
+      {...props}
+      style={{
+        background: "var(--background)",
+        border: "2px dashed var(--text2)",
+        margin: "3px 0",
+      }}
+    />
+  );
+};
+
+
+
 const BulkFunction = (props) => {
   const {
     data,
@@ -46,20 +67,14 @@ const BulkFunction = (props) => {
     uuid: string;
   }>({ title: "", uuid: "" });
   const { playSound } = useSelector((state: RootState) => state.settings);
-
+  const theme = useContext(ThemeContext);
   const [todoDeleteRequest, todoDeleteResponse] = useTodoDeleteBulkMutation();
-  const [
-    todoSetDoneRequest,
-    todoSetDoneResponse,
-  ] = useTodoSetDoneBulkMutation();
-  const [
-    updatePriorityBulkRequest,
-    updatePriorityBulkResponse,
-  ] = useUpdatePriorityBulkMutation();
-  const [
-    todoAssignBulkRequest,
-    todosAssignBulkResponse,
-  ] = useTodosAssignBulkMutation();
+  const [todoSetDoneRequest, todoSetDoneResponse] =
+    useTodoSetDoneBulkMutation();
+  const [updatePriorityBulkRequest, updatePriorityBulkResponse] =
+    useUpdatePriorityBulkMutation();
+  const [todoAssignBulkRequest, todosAssignBulkResponse] =
+    useTodosAssignBulkMutation();
   const [stateFunction, setStateFunction] = useState(null);
   const {
     active_ws: { id: ActiveWorkspaceID },
@@ -133,22 +148,33 @@ const BulkFunction = (props) => {
       });
   };
 
+  const [w, h] = useWindowSize().size;
+
   return (
     <Styled_Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
+      aria-labelledby="bulk-function-modal"
+      aria-describedby="bulk-function-modal-for-todos functionallity"
       open={open}
       onClose={onClose}
     >
       <Box className="bulk-function-container">
-        <Box className="todo-list-box">
+        <Box
+          sx={{
+            backgroundColor: pairColors(
+              "var(--foreground)",
+              "var(--header)",
+              theme.isDarkMode
+            ),
+          }}
+          className="todo-list-box"
+        >
           {data.items.map((item) => (
             <>
               <Box className="d-flex-between">
                 <Text variant="h6">
                   {truncateText(item.innerTodoText, 120)}
                 </Text>
-                <IconButton
+                <span
                   onClick={() =>
                     dispatch(
                       removeMouseSelectedItemWithId({ id: item.boxTodoId })
@@ -158,7 +184,7 @@ const BulkFunction = (props) => {
                   <Text>
                     <MdOutlineClose />
                   </Text>
-                </IconButton>
+                </span>
               </Box>
               <Text>
                 <Divider />
@@ -166,20 +192,29 @@ const BulkFunction = (props) => {
             </>
           ))}
         </Box>
-        <Box className=" bulk-function-parent-modal bulk-function-operation">
+        <Box
+          sx={{
+            backgroundColor: pairColors(
+              "var(--foreground)",
+              "var(--header)",
+              theme.isDarkMode
+            ),
+          }}
+          className="bulk-function-parent-modal bulk-function-operation"
+        >
           <Box
             className={`drawer-icon-box ${
               stateFunction === "multy-done" ? "bordered" : ""
             }`}
           >
             <Tooltip arrow title="Done All">
-              <IconButton
+              <span
                 onClick={(e) => {
                   setStateFunction("multy-done");
                 }}
               >
                 <MdDone className="drawer-footer-icon" />
-              </IconButton>
+              </span>
             </Tooltip>
           </Box>
 
@@ -189,13 +224,13 @@ const BulkFunction = (props) => {
             }`}
           >
             <Tooltip arrow title="Todos Add To Category">
-              <IconButton
+              <span
                 onClick={() => {
                   setStateFunction("multy-assign");
                 }}
               >
                 <BsFolderSymlink className="drawer-footer-icon" />
-              </IconButton>
+              </span>
             </Tooltip>
           </Box>
 
@@ -205,30 +240,38 @@ const BulkFunction = (props) => {
             }`}
           >
             <Tooltip arrow title="Delete All">
-              <IconButton onClick={() => setStateFunction("multy-delete")}>
+              <span onClick={() => setStateFunction("multy-delete")}>
                 <SlTrash className="drawer-footer-icon" />
-              </IconButton>
+              </span>
             </Tooltip>
           </Box>
-
           <Box
             className={`drawer-icon-box ${
               stateFunction === "multy-priority" ? "bordered" : ""
             }`}
           >
             <Tooltip arrow title="Set new priority">
-              <IconButton
+              <span
                 onClick={(e) => {
                   setStateFunction("multy-priority");
                 }}
               >
                 <BsFlag className="drawer-footer-icon" />
-              </IconButton>
+              </span>
             </Tooltip>
           </Box>
         </Box>
 
-        <Box className={"footer"}>
+        <Box
+          sx={{
+            backgroundColor: pairColors(
+              "var(--foreground)",
+              "var(--header)",
+              theme.isDarkMode
+            ),
+          }}
+          className="footer"
+        >
           {!stateFunction ? (
             <Text variant="h6" onlyWhite={true}>
               You have selected{" "}
@@ -246,53 +289,56 @@ const BulkFunction = (props) => {
               <Text variant="h6" onlyWhite={true}>
                 Do you want remove {data?.count} {data?.entity} item ?
               </Text>
+              <Box className="button-box">
+                <StyledButton
+                  transparent={true}
+                  onClick={() => setStateFunction(null)}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                >
+                  No
+                </StyledButton>
 
-              <StyledButton
-                transparent={true}
-                onClick={() => setStateFunction(null)}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                No
-              </StyledButton>
-
-              <StyledButton
-                transparent={true}
-                onClick={handleDeleteAllSelectedTodoItems}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                Yes
-              </StyledButton>
+                <StyledButton
+                  transparent={true}
+                  onClick={handleDeleteAllSelectedTodoItems}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                >
+                  Yes
+                </StyledButton>
+              </Box>
             </Box>
           ) : stateFunction === "multy-done" ? (
             <Box className="d-flex-between-nowrap">
               <Text variant="h6" onlyWhite={true}>
                 Do you want done all {data?.count} {data?.entity} item ?
               </Text>
+              <Box className="button-box">
+                <StyledButton
+                  transparent={true}
+                  onClick={() => setStateFunction(null)}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                >
+                  No
+                </StyledButton>
 
-              <StyledButton
-                transparent={true}
-                onClick={() => setStateFunction(null)}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                No
-              </StyledButton>
-
-              <StyledButton
-                transparent={true}
-                onClick={handleSetDoneAllSelectedTodoItems}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                Yes
-              </StyledButton>
+                <StyledButton
+                  transparent={true}
+                  onClick={handleSetDoneAllSelectedTodoItems}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                >
+                  Yes
+                </StyledButton>
+              </Box>
             </Box>
           ) : stateFunction === "multy-assign" ? (
             <Box className="d-flex-between-nowrap">
               <Autocomplete
-                disablePortal
+                size={w > 600 ? "medium" : "small"}
+                freeSolo
                 id="category-list-combo-box"
                 options={[{ title: "All", uuid: "other" }, ...categoList]}
                 value={selectedCategoryForAssign}
@@ -304,6 +350,7 @@ const BulkFunction = (props) => {
                 }}
                 getOptionLabel={(option) => option.title}
                 sx={{ width: 300 }}
+                PaperComponent={CustomPaper}
                 renderInput={(params) => (
                   <StyledTextFieldWhite
                     {...params}
@@ -312,23 +359,26 @@ const BulkFunction = (props) => {
                   />
                 )}
               />
-              <StyledButton
-                transparent={true}
-                onClick={() => setStateFunction(null)}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                Cancel
-              </StyledButton>
+              <Box className="button-box">
+                <StyledButton
+                  transparent={true}
+                  onClick={() => setStateFunction(null)}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                >
+                  Cancel
+                </StyledButton>
 
-              <StyledButton
-                transparent={true}
-                onClick={handleAssignAllSelectedTodoItems}
-                className={"active-button"}
-                style={{ textTransform: "capitalize" }}
-              >
-                Assign
-              </StyledButton>
+                <StyledButton
+                  transparent={true}
+                  onClick={handleAssignAllSelectedTodoItems}
+                  className={"active-button"}
+                  style={{ textTransform: "capitalize" }}
+                  disabled={!selectedCategoryForAssign.uuid}
+                >
+                  Assign
+                </StyledButton>
+              </Box>
             </Box>
           ) : stateFunction === "multy-priority" ? (
             <Stack direction="row" justifyContent="space-around">

@@ -290,7 +290,7 @@ const Signup = () => {
           >
             {height > 570 && <Avatar src={selectedAvatarPreview}></Avatar>}
             {height > 530 && (
-              <Text style={{ textAlign: "center" }}>Signup</Text>
+              <Text center >Signup</Text>
             )}
 
             <form noValidate onSubmit={formik.handleSubmit} style={{ marginTop: "2rem" }}>

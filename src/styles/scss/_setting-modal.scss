@@ -5,11 +5,10 @@
     margin: 1rem;
     border-radius: 1rem;
     position: relative;
-    box-shadow: 3px 2px 9px -6px var(--borders);
+    box-shadow: 3px 2px 9px -6px var(--header);
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
-
 
     .head {
       user-select: none;
@@ -18,11 +17,25 @@
       text-align: center;
       color: var(--text1);
       font-family: "Space Grotesk";
+      @media only screen and (max-width: 450px) {
+        display: none;
+      }
+    }
+    .head-navigation {
+      user-select: none;
+      padding: 3rem 1rem 2rem 1rem;
+      font-size: 1.3rem;
+      text-align: center;
+      color: var(--text1);
+      font-family: "Space Grotesk";
+      @media only screen and (max-width: 450px) {
+        display: none;
+      }
     }
 
     .body {
-      .header-position-parent{
-        transform: translateY(-35px);
+      .header-position-parent {
+        // transform: translateY(-35px);
       }
       height: 6rem;
       color: var(--text1);
@@ -39,18 +52,23 @@
     .s-b-footer {
       user-select: none;
       padding: 3rem 1rem;
-      font-size: 1rem;
       text-align: center;
       color: var(--text1);
       font-family: "Space Grotesk";
-
-
-      .switch-custom-small {
-        margin: 0 auto 10px auto
+      p {
+        font-size: 1rem;
+        @media only screen and (max-width: 600px) {
+          font-size: 1.3rem;
+        }
+      }
+      @media only screen and (max-width: 270px) {
+        display: none;
       }
 
+      .switch-custom-small {
+        margin: 0 0 0 12px;
+      }
     }
-
 
     @media only screen and (max-width: 700px) {
       flex-direction: row;
@@ -63,32 +81,27 @@
       }
       .body {
         height: 8rem;
-        .header-position-parent{
-          transform:none
+        .header-position-parent {
+          transform: none;
         }
-        svg:not(.header-alignment)  {
-
+        svg:not(.header-alignment) {
           cursor: pointer;
-          height: 8rem
-
+          height: 8rem;
         }
-        svg[class = "header-alignment"]{
+        svg.header-alignment {
           height: 3.5rem;
           transform: none !important;
         }
-        button{
+        button {
           height: 3.5rem;
           transform: none !important;
-
         }
       }
-      .s-b-footer{
+      .s-b-footer {
         font-size: 1.1rem !important;
       }
     }
   }
-
-
 }
 
 .blurBox {
@@ -97,16 +110,19 @@
   margin: 0 auto 1rem auto;
   padding: 0.2rem 1rem;
   height: 5.5rem;
-  box-shadow: 3px 2px 9px -6px var(--borders);
-
+  box-shadow: 3px 2px 9px -6px gray;
 
   .head {
     padding: 0.4rem 1rem;
-    font-size: 1.1rem;
     font-family: "Space Grotesk";
     user-select: none;
     text-align: center;
     color: var(--text1);
+    font-size: 1.1rem;
+
+    @media only screen and (max-width: 450px) {
+      font-size: 1.3rem;
+    }
   }
 }
 
@@ -116,21 +132,29 @@
   .setting-modal-board {
     height: 29rem;
     overflow-y: auto;
-
+    @media only screen and (max-width: 450px) and (min-height: 750px) {
+      height: 37rem;
+    }
     .general-settings-parent {
       @extend %d-flex-around;
-
-
       @media only screen and (max-width: 700px) {
         flex-direction: column;
       }
-
 
       @extend %setting-box-styles;
     }
 
     .selected-setting-layout {
       @extend %selected-setting;
+    }
+  }
+
+  .todo-settings-parent {
+    margin: auto;
+    width: 80%;
+    padding-top: 2rem;
+    @media only screen and (max-width: 450px) {
+      width: 95%;
     }
   }
 }

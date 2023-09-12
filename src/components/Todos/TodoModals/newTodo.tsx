@@ -28,11 +28,12 @@ const ShowModalNewTodo = (props) => {
       ws: ActiveWorkspaceID,
       ...(intoCategory && { categoId: ActiveCategoryID }),
     })
+      .unwrap()
       .then((resp) => {
         if (playSound) {
           soundPlay("sound2.mp3");
         }
-        Toast(resp.data.msg, true, true, "📝");
+        Toast(resp.msg, true, true, "📝");
         UpdateTodoAndCategories();
       })
       .catch(() => {});

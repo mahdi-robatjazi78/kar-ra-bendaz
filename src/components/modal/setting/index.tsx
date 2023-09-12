@@ -17,16 +17,11 @@ const SettingModal = (props) => {
 
   const theme = useContext(ThemeContext);
 
-  const {todoPageLayout: show} = useSelector(
-    (state: RootState) => state.todoLayout
-  );
   const {
-    modal,
+    modal : {config : { setting }},
   } = useSelector((state: RootState) => state.settings);
-  const setting = modal.config?.setting;
-  const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
-    false
-  );
+
+  const [accordionExpanded, setAccordionExpanded] = useState<string | false>(false);
 
   useLayoutEffect(() => {
     if (setting === "todo-pagination") {

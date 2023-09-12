@@ -72,9 +72,9 @@ const TodoDrawer = (props) => {
   };
 
   const handleSetNewPriority = (n: Number) => {
-    updatePriorityRequest({ todoId: Item?._id, priority: n })
+    updatePriorityRequest({ todoId: Item?._id, priority: n }).unwrap()
       .then((response) => {
-        Toast(response.data.msg, true, true);
+        Toast(response.msg, true, true);
         dispatch(ChangePriorityDrawer(n));
         setChangePriorityBox(false);
         if (playSound) {

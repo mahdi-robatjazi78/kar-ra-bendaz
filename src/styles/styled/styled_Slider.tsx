@@ -1,10 +1,9 @@
-import { Slider, SliderValueLabelProps, Tooltip } from "@mui/material";
 import React from "react";
+import { Slider, SliderValueLabelProps, Tooltip } from "@mui/material";
 import styled from "styled-components";
-
+import {store} from "@/redux/store";
 
 const StyledSlider = styled(Slider)({
-  color: "var(--sidebar) !important",
   height: 8,
   "& .MuiSlider-track": {
     border: "none",

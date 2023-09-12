@@ -35,7 +35,7 @@ const ShowModalNewCategory = (props) => {
         Toast(resp?.msg, true, true, "📂");
 
         if (playSound) {
-          soundPlay("sound3.m4a");
+          soundPlay("sound3.wav");
         }
         UpdateOnlyCategories();
         dispatch(deactiveBlur());

@@ -8,9 +8,9 @@
   display: flex;
   justify-content: flex-start;
   border-radius: 50px;
-  padding: 1.5px;
+  padding: 1px;
   cursor: pointer;
-
+  border:1px solid #c3c1c1;
   .handle-switch-custom {
     width: 27px;
     height: 27px;
@@ -35,8 +35,9 @@
   display: flex;
   justify-content: flex-start;
   border-radius: 50px;
-  padding: 1.5px;
+  padding: 1px;
   cursor: pointer;
+  border:1px solid #c3c1c1;
 
   .handle-switch-custom {
     width: 18px;

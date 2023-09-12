@@ -14,7 +14,12 @@
   #text-area-parent {
     #textAreaTodoDrawer {
       padding: 14px;
-      width: 100%;
+      width: 99%; 
+      min-width: 50%;
+      max-width: 99%;
+      height:50vh;
+      min-height:25vh;
+      max-height: 65vh;
       border: 2px solid var(--secondSidebar);
       color: var(--text3);
       background-color: var(--sidebar);

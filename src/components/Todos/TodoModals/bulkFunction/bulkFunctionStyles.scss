@@ -7,17 +7,27 @@
   grid-row-gap: 1rem;
   padding: 2rem;
 
+  @media only screen and (max-width : 450px) and (min-height : 750px){
+    height:48rem
+  }
+
+  @media only screen and (max-width : 500px){
+    padding: .8rem;
+
+  }
   .todo-list-box {
     grid-column:1/10;
-    grid-row:1/9;
+    grid-row:1/8;
     padding: 1rem;
     border-radius: 0.5rem;
-    // margin: 2rem;
     padding: 1rem;
     height: 100%;
     flex-basis: 72%;
     overflow-y: auto;
-    border: 1px solid var(--borders);
+     box-shadow: 3px 2px 9px -6px var(--text1);
+     @media only screen and (min-width: 500px) and (max-width:1000px) {
+      grid-column:1/9;
+     }
     @media only screen and (max-width: 500px) {
       grid-column:1/11;
       grid-row:1/7;
@@ -26,34 +36,68 @@
   }
   .bulk-function-operation {
     grid-column:10/11;
-    grid-row:1/9;
+    grid-row:1/8;
     border-radius: 0.5rem;
-    border: 1px solid var(--borders);
+    box-shadow: 3px 2px 9px -6px var(--text1);
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
 
+    @media only screen and (min-width: 500px) and (max-width:1000px) {
+      grid-column:9/11;
+    }
     @media only screen and (max-width: 500px) {
       grid-column:1/11;
-      grid-row:7/9;
+      grid-row:7/8;
       padding: .5rem;
-
       display: flex;
       justify-content: space-around;
       flex-direction: row;
     }
-
   }
-}
 
 .footer {
   border-radius: 0.5rem;
   grid-column:1/11;
-  grid-rows:9/11;
-
+  grid-row:8/11;
   padding: 1rem;
   height: 7rem;
-  border: 1px solid var(--borders);
+  box-shadow: 3px 2px 9px -6px var(--text1);
   flex-basis: 100%;
+
+  .d-flex-between-nowrap {
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap:2rem;
+    height:100%;
+    @media only screen and (max-width: 600px) {
+      flex-direction: column;
+      gap:.3rem;
+    
+    }
+
+    @media only screen and (max-width: 500px) {
+      grid-column:1/11;
+      grid-row:8/11;
+    }
+
+    .button-box{
+      display: flex;
+      justify-content: space-around;
+      gap:1rem;
+    }
+  }
+    h6{
+      text-align: center;
+      margin: 1.2rem 0;
+      @media only screen and (max-width : 600px){
+        margin: .7rem 0;
+        font-size:1rem;
+      }
+    }
+}
+
+
 }

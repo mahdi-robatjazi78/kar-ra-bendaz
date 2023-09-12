@@ -33,7 +33,7 @@ const StyledSelectWhiteComponent = (props) => {
               backgroundColor: theme.header,
               color: "white",
               borderRadius: "12px",
-              margin: "3px 10px",
+              margin: "3px 3px",
               "& .MuiMenuItem-root:hover": {
                 backgroundColor: theme.header,
                 color: theme.text1,

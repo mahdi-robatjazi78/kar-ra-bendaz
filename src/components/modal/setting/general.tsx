@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { pairColors } from "@/util/funcs";
 import { GiSoundOff, GiSoundOn } from "react-icons/gi";
 import {
@@ -66,7 +66,7 @@ const GeneralSettings = (props) => {
           className="box"
           sx={{
             backgroundColor: pairColors(
-              "var(--sidebar)",
+              "var(--foreground)",
               "var(--header)",
               theme.isDarkMode
             ),
@@ -76,6 +76,8 @@ const GeneralSettings = (props) => {
           <Box className="head">Sound</Box>
           <Box className="body">
             {playSound ? (
+              <Tooltip arrow  title="Set sound off">
+                <span>
               <GiSoundOff
                 onClick={() => {
                   dispatch(handlePauseSound());
@@ -87,7 +89,11 @@ const GeneralSettings = (props) => {
                   theme.isDarkMode
                 )}
               />
+              </span>
+              </Tooltip>
             ) : (
+              <Tooltip arrow  title="Set sound on">
+                <span>
               <GiSoundOn
                 onClick={() => {
                   dispatch(handlePlaySound());
@@ -100,19 +106,23 @@ const GeneralSettings = (props) => {
                 )}
                 style={{ cursor: "pointer" }}
               />
+              </span>
+              </Tooltip>
+
             )}
           </Box>
           <Box className="s-b-footer">
-            <Text style={{ fontSize: "1em" }} selectable={false}>
-              State : {playSound ? "On" : "Off"}
-            </Text>
+          <Text inline={true} >State : </Text>
+          <Text inline={true} success={playSound} error={!playSound} selectable={false}>
+            {playSound ? " On" : " Off"}
+          </Text>
           </Box>
         </Box>
 
         <Box
           sx={{
             backgroundColor: pairColors(
-              "var(--sidebar)",
+              "var(--foreground)",
               "var(--header)",
               theme.isDarkMode
             ),
@@ -121,10 +131,14 @@ const GeneralSettings = (props) => {
         >
           {" "}
           <Box className="head">Theme</Box>
-          <Box className="body">
+          <Box className="body" style={{marginTop:14}}>
             <DarkLight />
           </Box>
-          <Box className="s-b-footer">
+          <Box className="s-b-footer d-flex-center">
+          <Text selectable={false} >
+              {" "}
+              Os Listen{" "}
+            </Text>
             <StyledSwitch
               smallSwitch={true}
               isOn={OsTheme.listen}
@@ -133,30 +147,26 @@ const GeneralSettings = (props) => {
               toggleSwitch={(checked, id) => {
                 handleChangeListenFromOs(checked);
               }}
-              style
             />
-            <Text selectable={false} style={{ fontSize: "1em" }}>
-              {" "}
-              Os Listen{" "}
-            </Text>
+          
           </Box>
         </Box>
         <Box
           sx={{
             backgroundColor: pairColors(
-              "var(--sidebar)",
+              "var(--foreground)",
               "var(--header)",
               theme.isDarkMode
             ),
           }}
           className="box"
         >
-          <Box className="head">Navigation</Box>
+          <Box className="head-navigation">Navigation</Box>
           <Box className="body">
             <HeaderPosition />
           </Box>
           <Box className="s-b-footer">
-            <Text selectable={false} style={{ fontSize: "1em" }}>
+            <Text center selectable={false} >
               {" "}
               State :{" "}
               {headerPosition === "left"
@@ -174,7 +184,7 @@ const GeneralSettings = (props) => {
       <Box
         sx={{
           backgroundColor: pairColors(
-            "var(--sidebar)",
+            "var(--foreground)",
             "var(--header)",
             theme.isDarkMode
           ),

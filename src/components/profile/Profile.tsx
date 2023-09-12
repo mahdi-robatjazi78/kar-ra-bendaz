@@ -166,16 +166,16 @@ export default function Profile() {
           <section className="section-one">
             {AuthData.me.fname || AuthData.me.lname ? (
               <Text
-                style={{ textAlign: "center" }}
+                center
               >{`${AuthData.me.fname} ${AuthData.me.lname}`}</Text>
             ) : (
               <Text
-                style={{ textAlign: "center" }}
+                center
               >{`${AuthData.me.email}`}</Text>
             )}
             {AuthData.me.fname && AuthData.me.lname && (
               <Text
-                style={{ textAlign: "center" }}
+                center
               >{`${AuthData.me.email}`}</Text>
             )}
           </section>
