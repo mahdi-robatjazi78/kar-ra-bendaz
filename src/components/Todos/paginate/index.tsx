@@ -31,6 +31,7 @@ const PaginationComponent = (props: any) => {
           count={meta?.total_pages || 1}
           page={meta?.page || 1}
           onChange={(e, value) => {
+            
             handleChangeMeta(+value, Number(meta?.limit));
           }}
           renderItem={(item) => (
@@ -57,8 +58,11 @@ const PerPageComponent = (props) => {
         </StyledInputLabelWhite>
         <StyledSelectWhiteComponent
           labelId="per-page-select-label"
-          value={meta?.limit || 5}
-          onChange={(e) => handleChangeMeta(1, Number(e.target.value))}
+          value={meta?.limit || 50}
+          onChange={(e) =>{
+             
+            handleChangeMeta(1, Number(e.target.value))
+          }}
           label={"Per Page"}
         >
           <MenuItem value={5}>5</MenuItem>

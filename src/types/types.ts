@@ -50,7 +50,6 @@ export interface IWsStructure {
   owner:string;
   id:string;
   active:Boolean;
-  categorySum:number;
   todoSum:number;
   __v:number;
 }

@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import SidebarItem from "./sidebarItem";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
+import { SetNoFilter, UnActiveCategory } from "@/redux/features/todoPageConfigSlice";
 import StyledBadge from "@/styles/styled/styled_badge";
 import Text from "@/styles/styled/styled_typography";
 import { truncateText } from "@/util/funcs";
@@ -12,7 +12,7 @@ import { truncateText } from "@/util/funcs";
 const Sidebar = (props: any) => {
   const { categoryList, totalTodoItems } = props;
 
-  const { active_ws: ActiveWs, active_category: ActiveCategory } = useSelector(
+  const { active_ws: ActiveWs, filter_by: {filter_name : FilterName , filter_data : FilterData } } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
   const { headerPosition } = useSelector((state: RootState) => state.settings);
@@ -39,6 +39,9 @@ const Sidebar = (props: any) => {
   const subsetTabsStyle = {
     color: theme.text3,
   };
+
+  const SelectedCategoryId = FilterName === "category" ? FilterData?.id : null
+
 
   return (
     <div
@@ -75,24 +78,32 @@ const Sidebar = (props: any) => {
             }}
             data-testid="dustbin"
             className={`list-category-items ${
-              !ActiveCategory.id ? "active-item" : ""
+              FilterName !== "category" ? "active-item" : ""
             }  `}
             onClick={() => {
               // newCategorySelected();
               dispatch(UnActiveCategory());
+              dispatch(SetNoFilter(""))
             }}
           >
-            <div className="task-title-style">All</div>
+            <div className={(FilterName !== "category" ) ? "task-title-style-active" : "task-title-style"}>All</div>
             <div>
               <StyledBadge
-                bordered={!ActiveCategory.id}
+                bordered={!SelectedCategoryId}
                 style={{ margin: "1.2rem" , userSelect:"none" }}
                 badgeContent={totalTodoItems || "0"}
               ></StyledBadge>
             </div>
           </li>
           {categoryList.map((item, index) => (
-            <SidebarItem key={item.uuid} item={item} />
+            <SidebarItem 
+              key={item.uuid} 
+              item={item} 
+              
+              FilterName={FilterName}
+              FilterData={SelectedCategoryId}
+              
+              />
           ))}
         </ul>
       ) : (

@@ -84,6 +84,8 @@ const SettingModal = (props) => {
             <TodoPageSettings
               accordionExpanded={accordionExpanded}
               setAccordionExpanded={setAccordionExpanded}
+
+              handleCloseModal = {props.handleClose}
             />
           ) : (
             <></>

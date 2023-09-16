@@ -3,49 +3,94 @@
   min-width: 2.5rem;
   background: var(--secondSidebar);
   position: relative;
-
+  width:45px;
   .setting-bar-section {
     text-align: center;
     margin: 3rem 0;
     width:37px;
-    .selected-setting {
-      @extend %selected-setting;
+  }
 
-      width: 35px;
-      height: 35px;
-      .icon-style {
-        margin-top: 7px;
-        font-size: 1.2rem;
-        color: var(--text1);
-      }
 
-      .icon-style2 {
-        margin-top: 7px;
-        font-size: 1.2rem;
-        color: var(--text1);
-      }
+  .selected-setting {
+    @extend %selected-setting;
+    text-align:center;
+
+    width: 35px;
+    height: 35px;
+    .icon-style {
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: var(--text1);
     }
-    .unselected-setting {
-      cursor: pointer;
-      margin: 0.6rem auto;
-      .icon-style {
-        margin-top: 7px;
-        font-size: 1.2rem;
-        color: gray;
-      }
 
-      .icon-style2 {
-        margin-top: 7px;
-        font-size: 1.2rem;
-        color: gray;
-      }
+    .icon-style2 {
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: var(--text1);
     }
-  .selected-category-info-box {
-      position:absolute; left:10px; bottom:6rem;
-      
-      .unselected-setting{
-        margin:.6rem auto;
-      }
+    
+  }
+  .unselected-setting {
+    text-align:center;
+    cursor: pointer;
+    margin: 0.6rem auto;
+    .icon-style {
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: gray;
+    }
+
+    .icon-style2 {
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: gray;
+    }
+    
+  }
+
+  .filter-unselected-setting{
+    text-align:center;
+    cursor: pointer;
+    margin: 0.6rem auto;
+    position:absolute;
+    bottom:80px;
+    width: 35px;
+    height: 35px;
+    .filter-icon-styles{
+ 
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: gray;
     }
   }
+  .filter-selected-setting{
+    @extend %selected-setting;
+
+    position:absolute;
+    bottom:80px;
+ 
+    text-align:center;
+
+    width: 35px;
+    height: 35px;
+    // width: 35px;
+    // height: 35px;
+
+    .filter-icon-styles{
+      margin-top: 7px;
+      font-size: 1.2rem;
+      color: var(--text1);
+ 
+    }
+  }
+
+
+.selected-category-info-box {
+    position:absolute; left:10px; bottom:6rem;
+    
+    .unselected-setting{
+      margin:.6rem auto;
+    }
+  }
+  
 }

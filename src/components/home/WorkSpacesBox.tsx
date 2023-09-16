@@ -43,7 +43,7 @@ import { CategoryRtkService } from "@/redux/api/categories";
 import StyledButton from "@/styles/styled/styled_button";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
-import { soundPlay, truncateText } from "@/util/funcs";
+import { handleCheckPersianAndRemoveHtmlTags, removeHTMLTags, soundPlay, truncateText } from "@/util/funcs";
 import { useNavigate } from "react-router-dom";
 
 interface TabPanelProps {
@@ -453,7 +453,7 @@ const WorkspacesTable = () => {
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          aria-label="note board and todo workspace tabs"
+          aria-label="todo-workspace-tabs"
           scrollButtons="auto"
         >
           <Tab value={0} label="Todo Workspace" />
@@ -502,10 +502,9 @@ const WorkspacesTable = () => {
                       <TableRow>
                         <StyledTableCell>Title</StyledTableCell>
                         {sizeName !== "mobile" && (
-                          <>
-                            <StyledTableCell>Categories</StyledTableCell>
+                 
                             <StyledTableCell>Todos</StyledTableCell>
-                          </>
+           
                         )}
                         <StyledTableCell>Active</StyledTableCell>
                       </TableRow>
@@ -517,20 +516,19 @@ const WorkspacesTable = () => {
                           key={item.id}
                         >
                           <StyledTableCell className="workspace-home-box-title">
-                            {item.title}
+
+                          <span className={`${handleCheckPersianAndRemoveHtmlTags(item.title) ? "text-fa-only" : "text-fa"}`}>{truncateText(removeHTMLTags(item.title), 32)}</span>
                           </StyledTableCell>
                           {sizeName !== "mobile" && (
-                            <>
-                              <StyledTableCell className="workspace-home-box-title">
-                                {item.categorySum}
-                              </StyledTableCell>
+                        
                               <StyledTableCell className="workspace-home-box-title">
                                 {item.todoSum}
                               </StyledTableCell>
-                            </>
+                 
                           )}
                           <StyledTableCell>
                             <StyledSwitch
+                              smallSwitch={sizeName === "mobile" ? true : false}
                               isOn={item.active}
                               name="active-sys-log"
                               id={item.id}

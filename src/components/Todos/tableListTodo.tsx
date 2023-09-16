@@ -21,7 +21,7 @@ import {
 } from "@/redux/features/todoPageConfigSlice";
 import moment from "moment";
 import { removeMouseSelectedItemWithId } from "@/redux/features/todoPageConfigSlice";
-import { truncateText } from "@/util/funcs";
+import { handleCheckPersianAndRemoveHtmlTags, removeHTMLTags, truncateText } from "@/util/funcs";
 import Styled_Checkbox from "@/styles/styled/styled_checkbox";
 import { StyledTableCell, StyledTableRow } from "@/styles/styled/styled_table";
 
@@ -190,11 +190,18 @@ const TableListTodo = (props) => {
                   />
                 </StyledTableCell>
                 <StyledTableCell
-                  width="300 "
+                  
                   size="small"
-                  sx={{ color: "var(--text1)" }}
+                  sx={{ 
+                    color: "var(--text1)", 
+                    width: 200,
+                    maxWidth: 200,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    borderStyle: "border-box"
+                  }}
                 >
-                  {truncateText(row.body, 120)}
+                  <span className={`${handleCheckPersianAndRemoveHtmlTags(row.body) ? "text-fa-only" : "text-fa"}`}>{truncateText(removeHTMLTags(row.body), 120)}</span>
                 </StyledTableCell>
                 <StyledTableCell
                   width="130"

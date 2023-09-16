@@ -43,13 +43,15 @@ const Signup = () => {
 
   const YupObjectValidationFields = Yup.object({}).shape({
     firstName: Yup.string()
-      .min(3, "Must Greater than 2 charachters")
+      .min(3, "Must greater than 2 charachters")
       .max(20, "Must be 20 characters or less"),
     lastName: Yup.string()
-      .min(3, "Must Greater than 2 charachters")
+      .min(3, "Must greater than 2 charachters")
       .max(20, "Must be 20 characters or less"),
     username: Yup.string()
-      .min(6, "Must Greater than 5 charachters")
+      .required("Username is required")
+
+      .min(6, "Must greater than 5 charachters")
       .max(35, "Must be 34 characters or less")
       .test(
         "Must has lowercase letters",
@@ -72,14 +74,13 @@ const Signup = () => {
             return true;
           } else return false;
         }
-      )
-      .required("Username is Required"),
+      ),
 
     password: Yup.string()
-      .min(6, "Must Greater than 5 charachters ")
+      .min(6, "Must greater than 5 charachters ")
       .max(20, "Must be 20 characters or less")
-      .required("Password is Required")
-      .test("isValidPass", " is not valid", (value, context) => {
+      .required("Password is required")
+      .test("isValidPass", " Please check validation rules", (value, context) => {
         const hasUpperCase = /[A-Z]/.test(value);
         const hasLowerCase = /[a-z]/.test(value);
         const hasNumber = /[0-9]/.test(value);
@@ -217,17 +218,22 @@ const Signup = () => {
       if (file) {
         // handle file data keeping
 
-        if(file?.size > 2500000){
-          Toast("Please select avatar image with 2.5mb size or less" ,false , true)
-          return
+        if (file?.size > 2500000) {
+          Toast(
+            "Please select avatar image with 2.5mb size or less",
+            false,
+            true
+          );
+          return;
         }
-        if(file?.type !== "image/png" && file?.type !== "image/jpeg" && file?.type !== "image/jpg" ){
-
-          Toast("Please select png or jpg avatar image" ,false , true)
-          return
-
+        if (
+          file?.type !== "image/png" &&
+          file?.type !== "image/jpeg" &&
+          file?.type !== "image/jpg"
+        ) {
+          Toast("Please select png or jpg avatar image", false, true);
+          return;
         }
-
 
         setAvatarFileData(file);
         // handle preview
@@ -247,17 +253,22 @@ const Signup = () => {
     input.onchange = (e) => {
       var file = e.target.files[0];
       if (file) {
-
-        if(file?.size > 2500000){
-          Toast("Please select banner image with 2.5mb size or less" ,false , true)
-          return
+        if (file?.size > 2500000) {
+          Toast(
+            "Please select banner image with 2.5mb size or less",
+            false,
+            true
+          );
+          return;
         }
 
-        if(file?.type !== "image/png" && file?.type !== "image/jpeg" && file?.type !== "image/jpg" ){
-
-          Toast("Please select png or jpg banner image" ,false , true)
-          return
-
+        if (
+          file?.type !== "image/png" &&
+          file?.type !== "image/jpeg" &&
+          file?.type !== "image/jpg"
+        ) {
+          Toast("Please select png or jpg banner image", false, true);
+          return;
         }
 
         setBannerFileData(file);
@@ -289,11 +300,13 @@ const Signup = () => {
             className="container"
           >
             {height > 570 && <Avatar src={selectedAvatarPreview}></Avatar>}
-            {height > 530 && (
-              <Text center >Signup</Text>
-            )}
+            {height > 530 && <Text center>Signup</Text>}
 
-            <form noValidate onSubmit={formik.handleSubmit} style={{ marginTop: "2rem" }}>
+            <form
+              noValidate
+              onSubmit={formik.handleSubmit}
+              style={{ marginTop: "2rem" }}
+            >
               <Box display="flex" style={{ gap: ".8rem" }}>
                 <StyledTextFieldWhite
                   tabIndex={1}
@@ -374,11 +387,10 @@ const Signup = () => {
                 helperText={
                   formik.touched.username ? formik.errors.username : ""
                 }
-
                 InputProps={{
-                  autocomplete: 'off',
+                  autocomplete: "off",
                   form: {
-                    autocomplete: 'off',
+                    autocomplete: "off",
                   },
                   startAdornment: (
                     <InputAdornment position="start">
@@ -513,7 +525,6 @@ const Signup = () => {
                   </Tooltip>
                 </Box>
                 <Box>
-                 
                   <Tooltip arrow title="Male">
                     <span>
                       <input

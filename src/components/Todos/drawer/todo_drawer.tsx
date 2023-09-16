@@ -20,7 +20,7 @@ import { FaEdit } from "react-icons/fa";
 import ShowModalDelete from "../TodoModals/delete";
 import ShowModalAddToCategory from "../TodoModals/addToCategory";
 import StyledButton from "@/styles/styled/styled_button";
-import { soundPlay } from "@/util/funcs";
+import { handleCheckPersianAndRemoveHtmlTags, soundPlay } from "@/util/funcs";
 import Text from "@/styles/styled/styled_typography";
 import {
   FcLowPriority,
@@ -49,8 +49,6 @@ const TodoDrawer = (props) => {
   const textAreaRef = useRef(null);
   const dispatch = useDispatch();
   const {
-    // active_ws : {id: ActiveWorkspaceID} ,
-    // active_category : {id :ActiveCategoryID ,title : ActiveCategoryTitle},
     drawer: { open: Open, state: State, item: Item, anchor: Anchor },
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { playSound } = useSelector((state: RootState) => state.settings);
@@ -93,10 +91,17 @@ const TodoDrawer = (props) => {
     }
   }, [Open]);
 
+   
+  const [isPersian, setIsPersian] = useState(handleCheckPersianAndRemoveHtmlTags(todoBody))
+  useEffect(()=>{
+    setIsPersian(handleCheckPersianAndRemoveHtmlTags(todoBody))
+  } , [todoBody])
+
   return (
     <Box className="drawer-box">
       <Box id="text-area-parent">
         <TextareaAutosize
+          style={isPersian ? {textAlign:'right'} : {textAlign:"left"}}
           id="textAreaTodoDrawer"
           aria-label="minimum height"
           minRows={24}
@@ -109,6 +114,9 @@ const TodoDrawer = (props) => {
             setTodoBody(e.target.value);
           }}
         />
+
+
+
         <Box id="text-area-footer">
           <Stack
             direction="row"

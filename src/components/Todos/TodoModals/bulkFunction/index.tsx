@@ -84,11 +84,11 @@ const BulkFunction = (props) => {
     todoDeleteRequest({
       list: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
-    }).then((resp) => {
+    }).unwrap().then((resp) => {
       if (playSound) {
         soundPlay("sound1.wav");
       }
-      Toast(resp.data.msg, true, true);
+      Toast(resp.msg, true, true , "🗑️");
     });
     UpdateTodoAndCategories();
     onClose();

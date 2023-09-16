@@ -14,7 +14,7 @@ const UnAuthenticatedModal = () => {
 
   const showAlertExpirationAccout = () => {
     MySwal.fire({
-      title: "Token Expired Please Login",
+      title: "Token Expired",
       icon: "info",
       confirmButtonText: "Go To Login",
       customClass: {

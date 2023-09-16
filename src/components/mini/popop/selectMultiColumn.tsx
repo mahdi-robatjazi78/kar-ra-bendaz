@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const SelectMultiColumn = (props) => {
   const dispatch = useDispatch();
-  const { anchorEl, open, id, handleCloseTodoViewCountTooltip } = props;
+  const { anchorEl, open, id, handleCloseTodoViewCountPopup } = props;
   const sizeName = useWindowSize().sizeName;
   const { todoPageLayout: show } = useSelector(
     (state: RootState) => state.todoLayout
@@ -28,7 +28,7 @@ const SelectMultiColumn = (props) => {
 
   useEffect(() => {
     if (sizeName === "mobile") {
-      handleCloseTodoViewCountTooltip();
+      handleCloseTodoViewCountPopup();
     } else {
       let list = [];
       let activeNumber = null;
@@ -79,7 +79,7 @@ const SelectMultiColumn = (props) => {
       id={id}
       open={open}
       anchorEl={anchorEl}
-      onClose={handleCloseTodoViewCountTooltip}
+      onClose={handleCloseTodoViewCountPopup}
       anchorOrigin={{
         vertical: "center",
         horizontal: "right",
@@ -108,7 +108,7 @@ const SelectMultiColumn = (props) => {
               handlePresentAndFilterTodoLayout("3col", +item.number);
 
               setTimeout(() => {
-                handleCloseTodoViewCountTooltip();
+                handleCloseTodoViewCountPopup();
               }, 500);
             }}
             className={`todo-view-item ${

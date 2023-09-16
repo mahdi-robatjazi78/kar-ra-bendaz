@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { HiPlus } from "react-icons/hi";
+import { HiOutlineFilter, HiPlus } from "react-icons/hi";
 import { Badge, Box, IconButton, InputAdornment, Tooltip } from "@mui/material";
 import { FiSearch } from "react-icons/fi";
 import StyledTextFieldWhite from "@/styles/styled/styled_textField";
@@ -16,22 +16,29 @@ import { RootState } from "@/redux/store";
 import {
   ChangeSearchText,
   EmptySearchText,
+  SetNewFilter,
+  SetNoFilter,
 } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from "@hooks/useDebounce";
 import useWindowSize from "@hooks/useWindowSize";
 import { PaginationComponent, PerPageComponent } from "./paginate";
 import { GrConfigure, GrMultiple } from "react-icons/gr";
 import FooterButton from "../mini/footerButton";
-import BoxIconsPopop from "../mini/boxIconsPopop";
+import BoxIconsPopup from "../mini/popop/boxIconsPopup";
 import { RiTodoLine } from "react-icons/ri";
-import { MdOutlineCategory } from "react-icons/md";
+import {
+  MdDoneOutline,
+  MdPriorityHigh,
+} from "react-icons/md";
+import { BsFolderPlus } from "react-icons/bs";
+import { PiSliders } from "react-icons/pi";
+import { BiSearch } from "react-icons/bi";
+import PriorityFilterPopup from "../mini/popop/priorityFitlerPopup";
 
 const TodoPageFooter = (props) => {
   const {
     setShowModalAddTodo,
-    meta,
     handleChangeMeta,
-    ActiveCategoryID,
     emptyTodoList,
     UpdateOnlyTodos,
     setCloseSidebar,
@@ -45,58 +52,155 @@ const TodoPageFooter = (props) => {
   const dispatch = useDispatch();
 
   const sizeName = useWindowSize().sizeName;
+  const [width, height] = useWindowSize().size;
 
-  const { searchText, layout_nav_show, mouse_selected_items } = useSelector(
-    (state: RootState) => state.todoPageConfig
-  );
+  const {
+    searchText,
+    layout_nav_show,
+    mouse_selected_items,
+    meta: Meta,
+    filter_by: { filter_name: FilterName, filter_data: FilterData },
+  } = useSelector((state: RootState) => state.todoPageConfig);
   useEffect(() => {
     if (searchMode) {
       emptyTodoList();
-      dispatch(customBlur({ head: true, sidebar: true, body: false  }));
+      dispatch(customBlur({ head: true, sidebar: true, body: false }));
       setCloseSidebar();
     }
   }, [searchMode]);
 
+  useEffect(() => {
+    if (FilterName !== "search" && searchMode) {
+      dispatch(SearchModeDeActive());
+      setOpenSidebar();
+    }
+  }, [FilterName]);
+
   const handleBackFromSearchState = () => {
-    dispatch(SearchModeDeActive());
     dispatch(deactiveBlur());
     dispatch(EmptySearchText());
     setOpenSidebar();
     UpdateOnlyTodos();
+    dispatch(SetNoFilter(""));    
+    dispatch(SearchModeDeActive());
   };
 
   // DeBounce Function
- useDebounce(
+  useDebounce(
     () => {
       if (searchText) {
-        UpdateOnlyTodos(null, null, searchText);
+        // UpdateOnlyTodos(null, null, searchText);
+        dispatch(
+          SetNewFilter({
+            filter_name: "search",
+            filter_data: { text: searchText },
+          })
+        );
       }
     },
     [searchText],
     600
   );
 
+  //  new todo or new category popup state
+
   const [anchorElBoxIconsPopop, setAnchorElBoxIconsPopop] =
     React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorElBoxIconsPopop);
   const id = open ? "Box-Icons-Popop" : undefined;
 
-  const handleCloseTodoViewCountTooltip = () => {
+  const handleCloseTodoViewCountPopup = () => {
     dispatch(deactiveBlur());
     setAnchorElBoxIconsPopop(null);
   };
 
-  const handleOpenTodoViewCountTooltip = (event: any) => {
+  const handleOpenTodoViewCounPopup = (event: any) => {
+    dispatch(setBlurPage());
     setAnchorElBoxIconsPopop(event.currentTarget);
   };
 
+  // filte popup state
+
+  const [anchorElFilterBoxIconsPopup, setAnchorElFilterBoxIconsPopup] =
+    React.useState<HTMLButtonElement | null>(null);
+  const openFilterBoxIconsPopup = Boolean(anchorElFilterBoxIconsPopup);
+  const idFilterBoxIconsPopup = openFilterBoxIconsPopup
+    ? "Filter-Box-Icons-Popop"
+    : undefined;
+
+  const handleCloseFilterBoxIconsPopup = () => {
+    dispatch(deactiveBlur());
+    setAnchorElFilterBoxIconsPopup(null);
+  };
+
+  const handleOpenFilterBoxIconsPopup = (event: any) => {
+    dispatch(setBlurPage());
+    setAnchorElFilterBoxIconsPopup(event.currentTarget);
+  };
+
+  // anchor el for todo priority filter
+
+  const [priorityAnchorEl, setPriorityAnchorEl] =
+    React.useState<HTMLButtonElement | null>(null);
+  const openPriorityFilterPopup = Boolean(priorityAnchorEl);
+  const idPriorityFilterPopup = open
+    ? "todo-view-multi-column-popup-id"
+    : undefined;
+
+  const handleClosePriorityFilterPopup = () => {
+    setPriorityAnchorEl(null);
+    handleCloseFilterBoxIconsPopup()
+  };
+
+  const handleOpenPriorityFitlerPopup = (event) => {
+    setPriorityAnchorEl(event.currentTarget);
+  };
+
+
+
+  // some functions
+
+
   const AddNewTodoFunction = () => {
-    handleCloseTodoViewCountTooltip();
+    handleCloseTodoViewCountPopup();
+    handleCloseFilterBoxIconsPopup();
     setShowModalAddTodo(true);
   };
   const AddNewCategoryFunction = () => {
-    handleCloseTodoViewCountTooltip();
+    handleCloseTodoViewCountPopup();
+    handleCloseFilterBoxIconsPopup();
     setShowAddCategoryModal();
+  };
+
+  const handleIsDoneFilter = () => {
+    dispatch(
+      SetNewFilter({
+        filter_name: "done",
+        filter_data: { filter: "is_done_todos" },
+      })
+    );
+    handleCloseFilterBoxIconsPopup();
+  };
+  const handleShowPriorityBox = (event) => {
+    handleOpenPriorityFitlerPopup(event);
+  };
+  const handlePagination = () => {
+    dispatch(
+      SetNewFilter({
+        filter_name: "pagination",
+        filter_data: Meta,
+      })
+    );
+    if (sizeName === "mobile" || sizeName === "tablet") {
+      dispatch(setBlurPage());
+      dispatch(handleSettingModalOpen({ setting: "todo-pagination" }));
+    }
+    handleCloseFilterBoxIconsPopup();
+  };
+  const handleSearch = () => {
+    dispatch(SetNewFilter({ filter_name: "search" }));
+    dispatch(SearchModeActive());
+    handleCloseFilterBoxIconsPopup();
   };
 
   return (
@@ -118,6 +222,7 @@ const TodoPageFooter = (props) => {
           onKeyDown={(e) => {
             e.stopPropagation();
             if (e.keyCode === 27) {
+              // escape key down
               handleBackFromSearchState();
             }
           }}
@@ -126,9 +231,7 @@ const TodoPageFooter = (props) => {
             if (val) {
               dispatch(ChangeSearchText({ text: val }));
             } else {
-              dispatch(ChangeSearchText({ text: val }));
-
-              emptyTodoList();
+              dispatch(ChangeSearchText({ text: "" }));
             }
           }}
           InputProps={{
@@ -137,6 +240,7 @@ const TodoPageFooter = (props) => {
                 <Tooltip title="Close (Esc)">
                   <IconButton
                     onClick={() => {
+                     
                       handleBackFromSearchState();
                     }}
                   >
@@ -149,22 +253,25 @@ const TodoPageFooter = (props) => {
         />
       ) : (
         <>
-          {ActiveCategoryID ||
-          sizeName === "mobile" ||
-          sizeName === "tablet" ? (
+          {sizeName === "mobile" || sizeName === "tablet" ? (
             <Box></Box>
-          ) : (
-            <PerPageComponent meta={meta} handleChangeMeta={handleChangeMeta} />
-          )}
-          {ActiveCategoryID ||
-          sizeName === "mobile" ||
-          sizeName === "tablet" ? (
-            <Box></Box>
-          ) : (
-            <PaginationComponent
-              meta={meta}
+          ) : FilterName === "pagination" ? (
+            <PerPageComponent
+              meta={FilterData}
               handleChangeMeta={handleChangeMeta}
             />
+          ) : (
+            <Box></Box>
+          )}
+          {sizeName === "mobile" || sizeName === "tablet" ? (
+            <Box></Box>
+          ) : FilterName === "pagination" ? (
+            <PaginationComponent
+              meta={FilterData}
+              handleChangeMeta={handleChangeMeta}
+            />
+          ) : (
+            <Box></Box>
           )}
 
           <Box display="flex" alignItems="center" mr={2}>
@@ -186,6 +293,14 @@ const TodoPageFooter = (props) => {
                 onClick={() => {
                   setOpenBulkFunctionModal(true);
                 }}
+              />
+            )}
+
+            {(height < 625 || !layout_nav_show) && (
+              <FooterButton
+                title="Filter"
+                icon={<HiOutlineFilter />}
+                onClick={handleOpenFilterBoxIconsPopup}
               />
             )}
 
@@ -212,36 +327,57 @@ const TodoPageFooter = (props) => {
               />
             ) : null}
             <FooterButton
-              title="Search"
-              icon={<FiSearch />}
-              onClick={() => {
-                dispatch(SearchModeActive());
-              }}
-            />
-            <FooterButton
               title="Add New Todo"
               icon={<HiPlus />}
               onClick={(e) => {
                 if (layout_nav_show) {
                   setShowModalAddTodo(true);
                 } else {
-                  dispatch(setBlurPage());
-                  handleOpenTodoViewCountTooltip(e);
+                  handleOpenTodoViewCounPopup(e);
                 }
               }}
-            />
-            <BoxIconsPopop
-              anchorEl={anchorElBoxIconsPopop}
-              open={open}
-              id={id}
-              handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
-              iconList={[<MdOutlineCategory />, <RiTodoLine />]}
-              titleList={["Add New Category", "Add New Todo"]}
-              onClickList={[AddNewCategoryFunction, AddNewTodoFunction]}
             />
           </Box>
         </>
       )}
+      {/* Popup's  ui handle here */}
+
+      <BoxIconsPopup
+        anchorEl={anchorElBoxIconsPopop}
+        open={open}
+        id={id}
+        handleCloseTodoViewCountPopup={handleCloseTodoViewCountPopup}
+        iconList={[<BsFolderPlus />, <RiTodoLine />]}
+        titleList={["Add New Category", "Add New Todo"]}
+        onClickList={[AddNewCategoryFunction, AddNewTodoFunction]}
+      />
+
+      <BoxIconsPopup
+        anchorEl={anchorElFilterBoxIconsPopup}
+        open={openFilterBoxIconsPopup}
+        id={idFilterBoxIconsPopup}
+        handleCloseTodoViewCountPopup={handleCloseFilterBoxIconsPopup}
+        iconList={[
+          <MdDoneOutline />,
+          <MdPriorityHigh />,
+          <PiSliders />,
+          <BiSearch />,
+        ]}
+        titleList={["Is Done", "Priority", "Pagination", "Search"]}
+        onClickList={[
+          handleIsDoneFilter,
+          handleShowPriorityBox,
+          handlePagination,
+          handleSearch,
+        ]}
+      />
+
+      <PriorityFilterPopup
+        open={openPriorityFilterPopup}
+        id={idPriorityFilterPopup}
+        anchorEl={priorityAnchorEl}
+        handleCloseTodoViewCountPopup={handleClosePriorityFilterPopup}
+      />
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, CSSProperties } from "react";
-import { useDrag } from "react-dnd";
+import { DragPreviewImage, useDrag } from "react-dnd";
 import { Card, CardContent, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 import ThemeContext from "../../context/themeContext";
@@ -10,7 +10,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { setBlurPage } from "@/redux/features/settingSlice";
 import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from "@hooks/useDebounce";
-import { soundPlay } from "@/util/funcs";
+import { handleCheckPersianAndRemoveHtmlTags, soundPlay } from "@/util/funcs";
 
 interface DropResult {
   name: string;
@@ -104,11 +104,12 @@ const TodoBox = (props: any) => {
         prevCategoId: category,
         newCategoId: "other",
       })
+        .unwrap()
         .then((resp) => {
           if (playSound) {
             soundPlay("sound6.wav");
           }
-          Toast(resp.data.msg, true, true);
+          Toast(resp.msg, true, true);
           UpdateTodoAndCategories();
         })
         .catch((error) => {});
@@ -118,15 +119,16 @@ const TodoBox = (props: any) => {
         prevCategoId: category || "",
         newCategoId: dropResult?.id,
       })
+        .unwrap()
         .then((resp) => {
-          Toast(resp.data.msg, true, true);
+          Toast(resp.msg, true, true);
           UpdateTodoAndCategories();
         })
         .catch((error) => {});
     }
   };
 
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag ,preview] = useDrag(
     () => ({
       type: "todo-box",
       item: { todo: category },
@@ -148,7 +150,6 @@ const TodoBox = (props: any) => {
   const getStyle = (isDragging: boolean): CSSProperties => {
     return {
       border: isDragging ? "2px dashed var(--borders)" : "unset",
-
       opacity,
       background:
         flag === "isDone"
@@ -156,10 +157,21 @@ const TodoBox = (props: any) => {
           : isDragging
           ? "gray"
           : theme.isDarkMode
-          ? "rgb(107, 125, 179)"
+          ? "rgb(55, 66, 109)"
           : "white",
     };
   };
+
+ 
+  const [isPersian, setIsPersian] = useState(handleCheckPersianAndRemoveHtmlTags(todoBody))
+  useEffect(()=>{
+    setIsPersian(handleCheckPersianAndRemoveHtmlTags(todoBody))
+  } , [todoBody])
+
+
+  const todoCardDragImageSrc = `${process.env.REACT_APP_BASE_URL}/assets/icons/todo-128.png`
+ 
+
 
   return (
     <Grid
@@ -180,9 +192,11 @@ const TodoBox = (props: any) => {
       }
       className="todo-box-grid"
     >
+      <DragPreviewImage connect={preview} src={todoCardDragImageSrc} />
       <Card
+        dir={isPersian ? "rtl" : "ltr"}
         box-todo-id={id}
-        className="todo-box"
+        className={`todo-box`}
         data-testid="box"
         style={getStyle(isDragging)}
         ref={drag}
@@ -191,25 +205,25 @@ const TodoBox = (props: any) => {
           dispatch(setBlurPage());
         }}
       >
-        <CardContent className="card-content">
-          <motion.div
-            initial={{ x: -30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ ease: "easeOut", duration: 0.7 }}
-            className={
-              priority === 2
-                ? "priority-highlight-high"
-                : priority === 1
-                ? "priority-highlight-medium"
-                : "priority-highlight-low"
-            }
-          ></motion.div>
+        <motion.div
+          initial={{ x: isPersian ? 30 : -30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ ease: "easeOut", duration: 0.7 }}
+          className={
+            priority === 2
+              ? isPersian ? "priority-highlight-high-fa" : "priority-highlight-high"
+              : priority === 1
+              ? isPersian ? "priority-highlight-medium-fa" :"priority-highlight-medium"
+              : isPersian ? "priority-highlight-low-fa" :"priority-highlight-low"
+          }
+        ></motion.div>
 
+        <CardContent className={`card-content ${theme.isDarkMode ? "card-content-dark" : "card-content-light" }`}>
           <div
             className={
               flag === "isDone"
-                ? `todoBoxDone f-f-r-dongle`
-                : "todoBox f-f-r-dongle"
+                ? `todoBoxDone f-f-r-dongle ${isPersian && "todo-box-text-fa"}`
+                : `todoBox f-f-r-dongle ${isPersian && "todo-box-text-fa"}`
             }
             dangerouslySetInnerHTML={{
               __html: todoBody,
@@ -217,6 +231,7 @@ const TodoBox = (props: any) => {
           ></div>
         </CardContent>
       </Card>
+    {/* </Grid> */}
     </Grid>
   );
 };

@@ -21,14 +21,54 @@ export const TodoRtkService = createApi({
     },
   }),
   tagTypes: ["Todos"],
-  endpoints: (builder) => ({
+  endpoints: (builder) => ({ 
     getTodoIndex: builder.query({
-      query: (query) =>
-        `index?ws=${query.wsID}&page=${query.page}&perPage=${query.perPage}&searchText=${query.searchText}`,
+      query: (query) =>{
+        
+        const filter_by = query?.filter_by;
+   
+        
+
+        if(!filter_by){
+          return `index?filter_by=&ws=${query.wsID}`
+        }
+        if(filter_by === "done"){
+          return `index?filter_by=done&ws=${query.wsID}`
+        }
+        if(filter_by === "category"){
+          return `index?filter_by=category&category=${query.category}&ws=${query.wsID}`
+        }
+        if(filter_by === "search"){
+          return `index?filter_by=search&searchText=${query.searchText}&ws=${query.wsID}`
+        }
+
+        if(filter_by === "priority"){
+          const level = query.priority_level ==="low" ? 0 : query.priority_level === "medium"  ? 1 : query.priority_level === "high" ? 2 : null
+          return `index?filter_by=priority&level=${level}&ws=${query.wsID}`
+        }
+
+        if(filter_by === "pagination"){
+          return `index?filter_by=pagination&page=${query.page}&perPage=${query.perPage}&ws=${query.wsID}`
+        }
+        
+        // else{
+        //   return `index?ws=${query.wsID}&page=${query.page}&perPage=${query.perPage}&searchText=${query.searchText}`
+        // }
+      },
       transformErrorResponse: (error) => {
         handleResponseError(error);
       },
     }),
+
+
+
+
+
+
+
+
+
+
     storeNewTodo: builder.mutation({
       query: (payload) => ({
         url: `store`,

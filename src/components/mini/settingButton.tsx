@@ -10,7 +10,7 @@ const SettingButton = (props) => {
       className={`${active ? "mini-card-active" : "mini-card"} d-flex-around`}
       onClick={onClick}
     >
-      <IconButton>{icon}</IconButton>
+      <span>{icon}</span>
       <Text>{text}</Text>
     </Box>
   );

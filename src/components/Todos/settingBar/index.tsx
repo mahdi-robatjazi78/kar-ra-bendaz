@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Popover, Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { CgList } from "react-icons/cg";
-import { MdDoneOutline } from "react-icons/md";
+import { MdDoneOutline, MdPriorityHigh } from "react-icons/md";
 import { FiColumns } from "react-icons/fi";
 import { FaRegSquare, FaRegPlusSquare } from "react-icons/fa";
 import { BsTable, BsInfoSquare, BsFolderPlus } from "react-icons/bs";
@@ -11,34 +11,72 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import useWindowSize from "@/hooks/useWindowSize";
 import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
-import SelectMultiColumn from "../../mini/selectMultiColumn";
+import SelectMultiColumn from "../../mini/popop/selectMultiColumn";
 import { handlePresentAndFilterTodoLayout } from "@utils/funcs";
+import {
+  SetNoFilter,
+  SetNewFilter,
+  SearchModeActive,
+} from "@/redux/features/todoPageConfigSlice";
+import { HiOutlineFilter } from "react-icons/hi";
+import { PiSliders } from "react-icons/pi";
+import { BiSearch } from "react-icons/bi";
+import {
+  handleSettingModalOpen,
+  setBlurPage,
+} from "@/redux/features/settingSlice";
+import PriorityFilterPopup from "@/components/mini/popop/priorityFitlerPopup";
+
 const SettingBar = (props: any) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
   const sizeName = useWindowSize().sizeName;
+  const [widht, hegith] = useWindowSize().size;
   const { setShowAddCategoryModal } = props;
   const dispatch = useDispatch();
   const { todoPageLayout: show } = useSelector(
     (state: RootState) => state.todoLayout
   );
+  const {
+    filter_by: { filter_name: filterName },
+    meta: Meta,
+  } = useSelector((state: RootState) => state.todoPageConfig);
+
+  // anchor el for todo view multi column popup
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? "todo-view-multi-column-popup-id" : undefined;
 
-  const handleCloseTodoViewCountTooltip = () => {
+  const handleCloseTodoViewCountPopup = () => {
     setAnchorEl(null);
   };
 
-  const handleOpenTodoViewCountTooltip = (event) => {
+  const handleOpenTodoViewPopup = (event) => {
     if (sizeName !== "mobile") {
       setAnchorEl(event.currentTarget);
     } else {
       dispatch(setThreeColAll(2));
       handlePresentAndFilterTodoLayout("3col", 2);
     }
+  };
+
+  // anchor el for todo priority filter
+
+  const [priorityAnchorEl, setPriorityAnchorEl] =
+    React.useState<HTMLButtonElement | null>(null);
+  const openPriorityFilterPopup = Boolean(priorityAnchorEl);
+  const idPriorityFilterPopup = open
+    ? "todo-view-multi-column-popup-id"
+    : undefined;
+
+  const handleClosePriorityFilterPopup = () => {
+    setPriorityAnchorEl(null);
+  };
+
+  const handleOpenPriorityFitlerPopup = (event) => {
+    setPriorityAnchorEl(event.currentTarget);
   };
 
   return (
@@ -55,7 +93,11 @@ const SettingBar = (props: any) => {
             }
       }
     >
-      <Box className="setting-bar-section">
+      <Box
+       
+       className={` ${hegith < 205 ? "d-none"  :"setting-bar-section"}`}
+       
+       >
         <Tooltip arrow placement="right" title="New Category">
           <Box
             className="unselected-setting"
@@ -72,7 +114,7 @@ const SettingBar = (props: any) => {
         </Tooltip>
       </Box>
 
-      <Box className="setting-bar-section">
+      <Box className={` ${hegith < 365 ? "d-none" : "setting-bar-section"}`}>
         <Tooltip arrow placement="right" title="Single Column">
           <motion.div
             whileTap={{ scale: 1.2 }}
@@ -89,7 +131,7 @@ const SettingBar = (props: any) => {
             whileTap={{ scale: 1.2 }}
             aria-describedby={id}
             onClick={(e) => {
-              handleOpenTodoViewCountTooltip(e);
+              handleOpenTodoViewPopup(e);
             }}
             className={
               show[0] === "3col" ? "selected-setting" : "unselected-setting"
@@ -99,12 +141,6 @@ const SettingBar = (props: any) => {
           </motion.div>
         </Tooltip>
 
-        <SelectMultiColumn
-          handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
-          open={open}
-          id={id}
-          anchorEl={anchorEl}
-        />
         <Tooltip arrow placement="right" title="Table">
           <motion.div
             whileTap={{ scale: 1.2 }}
@@ -118,13 +154,22 @@ const SettingBar = (props: any) => {
         </Tooltip>
       </Box>
 
-      <Box className="setting-bar-section">
-        <Tooltip arrow placement="right" title="All">
+      <Box className={` ${hegith < 625 ? "d-none" : "setting-bar-section"}`}>
+        <Tooltip arrow placement="right" title="No Filter : (All Todos)">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("all", null)}
+            // onClick={() => handlePresentAndFilterTodoLayout("all", null)}
+            onClick={() => {
+              dispatch(SetNoFilter(""));
+            }}
             className={
-              show[1] === "all" ? "selected-setting" : "unselected-setting"
+              filterName !== "done" &&
+              filterName !== "priority" &&
+              filterName !== "pagination" &&
+              filterName !== "category" &&
+              filterName !== "search"
+                ? "selected-setting"
+                : "unselected-setting"
             }
           >
             <CgList className="icon-style2" />
@@ -133,15 +178,112 @@ const SettingBar = (props: any) => {
         <Tooltip arrow placement="right" title="Is Done">
           <motion.div
             whileTap={{ scale: 1.2 }}
-            onClick={() => handlePresentAndFilterTodoLayout("done", null)}
+            onClick={() => {
+              dispatch(
+                SetNewFilter({
+                  filter_name: "done",
+                  filter_data: { filter: "is_done_todos" },
+                })
+              );
+            }}
             className={
-              show[1] === "done" ? "selected-setting" : "unselected-setting"
+              filterName === "done" ? "selected-setting" : "unselected-setting"
             }
           >
             <MdDoneOutline className="icon-style2" />
           </motion.div>
         </Tooltip>
+
+        <Tooltip arrow placement="right" title="Priority">
+          <motion.div
+            whileTap={{ scale: 1.2 }}
+            onClick={handleOpenPriorityFitlerPopup}
+            className={
+              filterName === "priority"
+                ? "selected-setting"
+                : "unselected-setting"
+            }
+          >
+            <MdPriorityHigh className="icon-style2" />
+          </motion.div>
+        </Tooltip>
+
+        <Tooltip arrow placement="right" title="Pagination">
+          <motion.div
+            whileTap={{ scale: 1.2 }}
+            onClick={() => {
+              dispatch(
+                SetNewFilter({
+                  filter_name: "pagination",
+                  filter_data: Meta,
+                })
+              );
+              if (sizeName === "mobile" || sizeName === "tablet") {
+                dispatch(setBlurPage());
+                dispatch(
+                  handleSettingModalOpen({ setting: "todo-pagination" })
+                );
+              }
+            }}
+            className={
+              filterName === "pagination"
+                ? "selected-setting"
+                : "unselected-setting"
+            }
+          >
+            <PiSliders className="icon-style2" />
+          </motion.div>
+        </Tooltip>
+
+        <Tooltip arrow placement="right" title="Search">
+          <motion.div
+            whileTap={{ scale: 1.2 }}
+            onClick={() => {
+              dispatch(SetNewFilter({ filter_name: "search" }));
+              dispatch(SearchModeActive());
+            }}
+            className={
+              filterName === "search"
+                ? "selected-setting"
+                : "unselected-setting"
+            }
+          >
+            <BiSearch className="icon-style2" />
+          </motion.div>
+        </Tooltip>
       </Box>
+      <Tooltip
+        arrow
+        placement="right"
+        title={filterName !== "" ? `Filter by : ${filterName}` : "No filter"}
+      >
+        <motion.div
+          whileTap={{ scale: 1.2 }}
+          className={
+            !filterName
+              ? "filter-unselected-setting"
+              : "filter-selected-setting"
+          }
+        >
+          <HiOutlineFilter className="filter-icon-styles" />
+        </motion.div>
+      </Tooltip>
+
+      {/* popop section */}
+
+      <SelectMultiColumn
+        open={open}
+        id={id}
+        anchorEl={anchorEl}
+        handleCloseTodoViewCountPopup={handleCloseTodoViewCountPopup}
+      />
+
+      <PriorityFilterPopup
+        open={openPriorityFilterPopup}
+        id={idPriorityFilterPopup}
+        anchorEl={priorityAnchorEl}
+        handleCloseTodoViewCountPopup={handleClosePriorityFilterPopup}
+      />
     </Box>
   );
 };

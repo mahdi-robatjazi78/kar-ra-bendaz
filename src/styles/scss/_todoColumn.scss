@@ -1,6 +1,15 @@
 $HIGH-PRIORITY: red;
 $MEDIUM-PRIORITY: orange;
 $LOW-PRIORITY: var(--hoverSuccess);
+$CARD-BOX-BACKGROUND-COLOR: rgb(55, 66, 109);
+%priority-highlight-styles {
+  min-width: 4px;
+  position: absolute;
+  bottom: 12px;
+  top: 12px;
+  z-index: 2;
+  border-radius: 5px;
+}
 
 %drawer-icon-box {
   .drawer-icon-box {
@@ -47,20 +56,19 @@ $LOW-PRIORITY: var(--hoverSuccess);
 }
 
 %footer-icon-box {
-  width: 38px;
-  height: 38px;
-  margin: 0.8rem 0.5rem 0.3rem 0.5rem;
+  margin: 0.5rem;
 
   .icon-box {
+    width: 38px;
+    height: 38px;
     border-radius: 25%;
     background-color: var(--text1) !important;
-    height:37px;
+
     svg {
       font-size: 1.3rem;
       color: var(--background);
-      margin:.5rem;
-+
-      path {
+      margin: 0.5rem;
+      + path {
         stroke-width: 1;
         stroke: var(--background);
         fill: var(--text1);
@@ -96,7 +104,7 @@ $LOW-PRIORITY: var(--hoverSuccess);
   .parent-ghost-sidebar {
     display: flex;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
   }
   .parent-normal-sidebar {
     display: flex;
@@ -107,7 +115,7 @@ $LOW-PRIORITY: var(--hoverSuccess);
   }
 
   .board {
-    color: var(--text1);
+    // color: var(--text1);
     display: flex;
     width: 100%;
     .todo-page-box {
@@ -126,47 +134,68 @@ $LOW-PRIORITY: var(--hoverSuccess);
               border: 3px solid var(--hoverSuccess) !important;
             }
             .todo-box {
-              @extend %box-styles;
-              min-height: 6rem;
-              max-height: 6rem;
-              border: 2px solid gray;
+              position: relative;
+              border-radius: 10px;
+
+              .priority-highlight-high {
+                @extend %priority-highlight-styles;
+                background-color: $HIGH-PRIORITY;
+                left: 8px;
+              }
+              .priority-highlight-medium {
+                @extend %priority-highlight-styles;
+                background-color: $MEDIUM-PRIORITY;
+                left: 8px;
+              }
+              .priority-highlight-low {
+                @extend %priority-highlight-styles;
+                background-color: $LOW-PRIORITY;
+                left: 8px;
+              }
+
+              .priority-highlight-high-fa {
+                @extend %priority-highlight-styles;
+                background-color: $HIGH-PRIORITY;
+
+                right: 8px;
+              }
+              .priority-highlight-medium-fa {
+                @extend %priority-highlight-styles;
+                background-color: $MEDIUM-PRIORITY;
+
+                right: 8px;
+              }
+              .priority-highlight-low-fa {
+                @extend %priority-highlight-styles;
+                background-color: $LOW-PRIORITY;
+                right: 8px;
+              }
+
               .card-content {
-                position: relative;
                 word-wrap: break-word;
-                display: flex;
-                padding-left: 0.6rem;
-
-                .priority-highlight-high {
-                  margin-right: 9px;
-                  width: 2px;
-                  height: 65px;
-                  background-color: $HIGH-PRIORITY;
-                }
-                .priority-highlight-medium {
-                  margin-right: 9px;
-                  width: 2px;
-                  height: 65px;
-                  background-color: $MEDIUM-PRIORITY;
-                }
-                .priority-highlight-low {
-                  margin-right: 9px;
-                  width: 2px;
-                  height: 65px;
-                  background-color: $LOW-PRIORITY;
-                }
-
+                padding: 0.6rem 1rem;
+                @extend %box-styles;
+                min-height: 8rem;
+                max-height: 8rem;
+                overflow-y: auto;
                 .todoBox {
                   font-size: 1rem;
                   line-height: 1rem;
-                  color: black;
+                  overflow-wrap: anywhere;
+                  padding: 0 10px;
+                  letter-spacing: 0.8px;
+                  line-height: 1.2rem;
+                  font-family: "Space Grotesk", Kalameh;
                 }
-
                 .todoBoxDone {
                   font-size: 1rem;
                   line-height: 1rem;
-                  color: black;
+                  overflow-wrap: anywhere;
+                  padding: 0 10px;
+                  letter-spacing: 0.8px;
+                  line-height: 1.2rem;
+                  font-family: "Space Grotesk", Kalameh;
                 }
-
                 .highlighted-todo-text {
                   background-color: var(--text3);
                   color: var(--foreground);
@@ -175,6 +204,58 @@ $LOW-PRIORITY: var(--hoverSuccess);
                   border-radius: 4px;
                   line-height: 1rem;
                 }
+              }
+
+              .card-content-dark {
+                background-color: $CARD-BOX-BACKGROUND-COLOR;
+                border-radius: 10px;
+
+                * {
+                  color: rgb(255, 243, 112);
+                }
+         
+              }
+
+              .card-content-light {
+                border-radius: 10px;
+                background-color: white;
+                * {
+                  color: black;
+                }
+              }
+
+              .card-content:has(.todoBoxDone) {
+                background: rgba(242, 255, 242, 0.016);
+              }
+
+              .card-content:has(> .todoBoxDone)::-webkit-scrollbar {
+                background: #c1c1c17b;
+                min-height: 20px;
+              }
+
+              .card-content-dark::-webkit-scrollbar {
+                background-color: #c1c1c12b;
+                min-height: 20px;
+              }
+
+              .card-content-light::-webkit-scrollbar {
+                background-color: #d1d1d1;
+                min-height: 20px;
+              }
+
+              .card-content::-webkit-scrollbar-thumb {
+                background-color: var(--header);
+                height: 20px;
+                background-image: -webkit-linear-gradient(
+                  219deg,
+                  var(--header) 25%,
+                  transparent 25%,
+                  transparent 50%,
+                  var(--header) 50%,
+                  var(--header) 75%,
+                  transparent 75%,
+                  transparent
+                );
               }
             }
           }
@@ -187,7 +268,14 @@ $LOW-PRIORITY: var(--hoverSuccess);
     width: 100%;
     height: 60px;
     display: flex;
+    padding-right: 0rem;
 
+    @media only screen and (min-width: 600px) and (max-width: 1000px) {
+      padding-right: 2rem;
+    }
+    @media only screen and (max-width: 600px) {
+      padding-right: 2rem;
+    }
     .search-in-todos-box {
       width: 50%;
 

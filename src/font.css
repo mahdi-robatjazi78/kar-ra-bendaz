@@ -102,3 +102,32 @@
   src: local("Changa"),
     url("../public/fonts/changa/Changa-ExtraBold.ttf") format("truetype");
 }
+
+
+/* Kalameh */
+
+@font-face {
+  font-family: "Kalameh";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Kalameh"),
+    url("../public/fonts/kalameh/KalamehWeb_Black.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Kalameh";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Kalameh"),
+    url("../public/fonts/kalameh/KalamehWeb_Regular.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Kalameh";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Kalameh"),
+    url("../public/fonts/kalameh/KalamehWeb_Bold.ttf") format("truetype");
+}

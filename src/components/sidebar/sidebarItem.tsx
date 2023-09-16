@@ -4,6 +4,7 @@ import ThemeContext from "@context/themeContext";
 import {
   DrawerOpen,
   SetActiveCategory,
+  SetNewFilter,
 } from "@/redux/features/todoPageConfigSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,7 @@ const SidebarItem = (props: any) => {
   const { active_category: ActiveCategory } = useSelector(
     (state: RootState) => state.todoPageConfig
   );
-  const { item } = props;
+  const { item  , FilterName , FilterData } = props;
   const theme = useContext(ThemeContext);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
@@ -41,7 +42,7 @@ const SidebarItem = (props: any) => {
   return (
     <li
       className={`list-category-items ${
-        ActiveCategory.id && ActiveCategory.id === item.uuid
+        FilterData && FilterData === item.uuid
           ? "active-item"
           : ""
       }  `}
@@ -55,7 +56,7 @@ const SidebarItem = (props: any) => {
       }}
       data-testid="category-box"
       onClick={() => {
-        if (ActiveCategory.id === item.uuid) {
+        if (FilterData === item.uuid) {
           dispatch(
             DrawerOpen({
               state: "category",
@@ -64,28 +65,29 @@ const SidebarItem = (props: any) => {
           );
           dispatch(setBlurPage());
         } else {
-          dispatch(
-            SetActiveCategory({
-              id: item.uuid,
-              title: item.title,
-            })
-          );
+          const obj = {
+            id: item.uuid,
+            title: item.title,
+          };
+          // dispatch(SetActiveCategory(obj));
+
+          dispatch(SetNewFilter({ filter_name: "category", filter_data: obj }));
         }
       }}
     >
       <div
         className={`${
-          ActiveCategory.id && ActiveCategory.id === item.uuid
-            ? "task-title-style-active"
-            : "task-title-style"
+          FilterData && FilterData === item.uuid
+            ? "task-title-style-active text-fa-2"
+            : "task-title-style text-fa-2"
         }`}
       >
         {item.title}
       </div>
       <div>
         <StyledBadge
-          bordered={ActiveCategory.id && ActiveCategory.id === item.uuid}
-          style={{ margin: "1.2rem" , userSelect:"none"}}
+          bordered={FilterData && FilterData === item.uuid}
+          style={{ margin: "1.2rem", userSelect: "none" }}
           badgeContent={item.task_count || "0"}
         ></StyledBadge>
       </div>

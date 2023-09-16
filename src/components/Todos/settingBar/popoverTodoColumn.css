@@ -11,6 +11,13 @@
   max-width:50px;
   font-family:"Space Grotesk";
 }
+
+.selected-list-priority-filter-parent  svg{
+  font-size:1.6rem;
+  margin :3px 2px;
+}
+
+
 .todo-view-item {
   padding: 0.5rem 1rem;
   color:var(--text3);

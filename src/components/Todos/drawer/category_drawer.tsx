@@ -18,6 +18,7 @@ import {
 import {
   DrawerClose,
   SetActiveCategory,
+  SetNoFilter,
   UnActiveCategory,
 } from "@/redux/features/todoPageConfigSlice";
 import { deactiveBlur } from "@/redux/features/settingSlice";
@@ -29,7 +30,7 @@ import { soundPlay } from "@/util/funcs";
 const CategoryDrawer = (props) => {
   const { CategoryItem, UpdateOnlyCategories, UpdateOnlyTodos } = props;
   const {
-    active_category: { id: ActiveCategoryId, title: ActiveCategoryTitle },
+    filter_by: { filter_data :  {id: ActiveCategoryId, title: ActiveCategoryTitle} },
     active_ws: { id: ActiveWsId },
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { playSound } = useSelector((state: RootState) => state.settings);
@@ -81,10 +82,18 @@ const CategoryDrawer = (props) => {
     removeOnlyCategoryRequest({
       id: ActiveCategoryId,
       ws: ActiveWsId,
-    });
-    if (playSound) {
-      soundPlay("sound1.wav");
-    }
+    }).unwrap().then((resp)=>{
+      Toast(resp?.msg, true, true , "🗑️");
+      
+      dispatch(SetNoFilter(""))
+      UpdateOnlyCategories();
+      dispatch(DrawerClose());
+      dispatch(deactiveBlur());
+      if (playSound) {
+        soundPlay("sound1.wav");
+      }
+    })
+    
   };
 
   const RemoveCategoryWithAllTodosInsideIt = () => {
@@ -97,17 +106,7 @@ const CategoryDrawer = (props) => {
       soundPlay("sound1.wav");
     }
   };
-
-  useEffect(() => {
-    if (removeOnlyCategoryResponse.isSuccess) {
-      // Remove only category
-      Toast(removeOnlyCategoryResponse?.data?.msg, true, true);
-      UpdateOnlyCategories();
-      dispatch(UnActiveCategory());
-      dispatch(DrawerClose());
-      dispatch(deactiveBlur());
-    }
-  }, [removeCategoryWithTodosResponse.isSuccess]);
+ 
   useEffect(() => {
     if (removeCategoryWithTodosResponse.isSuccess) {
       // Remove only category

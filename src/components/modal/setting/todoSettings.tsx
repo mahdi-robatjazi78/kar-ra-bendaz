@@ -5,11 +5,14 @@ import {
   AccordionSummary,
   Box,
 } from "@mui/material";
-import { MdDoneOutline, MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdDoneOutline, MdOutlineKeyboardArrowDown, MdPriorityHigh } from "react-icons/md";
 import Text from "@/styles/styled/styled_typography";
 import SettingButton from "@compo/mini/settingButton";
-import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+import { HiOutlineEye, HiOutlineEyeOff, HiOutlineFilter } from "react-icons/hi";
 import {
+  SearchModeActive,
+  SetNewFilter,
+  SetNoFilter,
   handleChangeMetaItem,
   hideLayoutNav,
   showLayoutNav,
@@ -19,19 +22,25 @@ import { handlePresentAndFilterTodoLayout } from "@/util/funcs";
 import { FaRegSquare } from "react-icons/fa";
 import { FiColumns } from "react-icons/fi";
 import { BsTable } from "react-icons/bs";
-import SelectMultiColumn from "@compo/mini/selectMultiColumn";
+import SelectMultiColumn from "@/components/mini/popop/selectMultiColumn";
 import { CgList } from "react-icons/cg";
 import { PaginationComponent, PerPageComponent } from "@compo/Todos/paginate";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
 import useWindowSize from "@hooks/useWindowSize";
-
+import { deactiveBlur, handleSettingModalOpen, setBlurPage } from "@/redux/features/settingSlice";
+import BoxIconsPopup from "@/components/mini/popop/boxIconsPopup";
+import { PiSliders } from "react-icons/pi";
+import { BiSearch } from "react-icons/bi";
+import {LuFilterX} from 'react-icons/lu'
+import PriorityFilterPopup from "@/components/mini/popop/priorityFitlerPopup";
 const TodoPageSettings = (props) => {
-  const { accordionExpanded, setAccordionExpanded } = props;
+  const { accordionExpanded, setAccordionExpanded , handleCloseModal } = props;
 
   const {
-    meta,
+    meta:Meta,
+    filter_by:{filter_name : FilterName , filter_data:FilterData},
     layout_nav_show,
     active_category: ActiveCategory,
   } = useSelector((state: RootState) => state.todoPageConfig);
@@ -49,11 +58,11 @@ const TodoPageSettings = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const handleCloseTodoViewCountTooltip = () => {
+  const handleCloseTodoViewCountPopup = () => {
     setAnchorEl(null);
   };
 
-  const handleOpenTodoViewCountTooltip = (event) => {
+  const handleOpenTodoViewPopup = (event) => {
     if (sizeName !== "mobile") {
       setAnchorEl(event.currentTarget);
     } else {
@@ -62,9 +71,91 @@ const TodoPageSettings = (props) => {
     }
   };
 
-  const handleChangeMeta = (page, perPage) => {
-    dispatch(handleChangeMetaItem({ page: page, limit: perPage }));
+  const handleChangeMeta = (page:number, perPage:number) => {
+    const obj = { ...Meta, page: page, limit: perPage };
+    // dispatch(handleChangeMetaItem(obj));
+    dispatch(SetNewFilter({ filter_name: "pagination", filter_data: obj }));
   };
+
+  // anchor el for filter box icons popup
+
+  const [anchorElFilterBoxIconsPopup, setAnchorElFilterBoxIconsPopup] =
+  React.useState<HTMLButtonElement | null>(null);
+const openFilterBoxIconsPopup = Boolean(anchorElFilterBoxIconsPopup);
+const idFilterBoxIconsPopup = openFilterBoxIconsPopup
+  ? "Filter-Box-Icons-Popop"
+  : undefined;
+
+const handleCloseFilterBoxIconsPopup = () => {
+  dispatch(deactiveBlur());
+  setAnchorElFilterBoxIconsPopup(null);
+};
+
+const handleOpenFilterBoxIconsPopup = (event: any) => {
+  dispatch(setBlurPage());
+  setAnchorElFilterBoxIconsPopup(event.currentTarget);
+};
+
+
+
+  // anchor el for todo priority filter
+
+  const [priorityAnchorEl, setPriorityAnchorEl] =
+    React.useState<HTMLButtonElement | null>(null);
+  const openPriorityFilterPopup = Boolean(priorityAnchorEl);
+  const idPriorityFilterPopup = open
+    ? "todo-view-multi-column-popup-id"
+    : undefined;
+
+  const handleClosePriorityFilterPopup = () => {
+    setPriorityAnchorEl(null);
+    handleCloseFilterBoxIconsPopup()
+  };
+
+  const handleOpenPriorityFitlerPopup = (event) => {
+    setPriorityAnchorEl(event.currentTarget);
+  };
+
+
+// filter functions
+
+
+const handleIsDoneFilter = () => {
+  dispatch(
+    SetNewFilter({
+      filter_name: "done",
+      filter_data: { filter: "is_done_todos" },
+    })
+  );
+  handleCloseFilterBoxIconsPopup();
+};
+const handleShowPriorityBox = (event) => {
+  handleOpenPriorityFitlerPopup(event);
+};
+const handlePagination = () => {
+  dispatch(
+    SetNewFilter({
+      filter_name: "pagination",
+      filter_data: Meta,
+    })
+  );
+  if (sizeName === "mobile" || sizeName === "tablet") {
+    dispatch(setBlurPage());
+    setAccordionExpanded("pagination")
+  }
+  handleCloseFilterBoxIconsPopup();
+};
+const handleSearch = () => {
+  dispatch(SetNewFilter({ filter_name: "search" }));
+  dispatch(SearchModeActive());
+  handleCloseFilterBoxIconsPopup();
+  handleCloseModal()
+};
+
+
+const handleSetNoFilter =()=>{
+  dispatch(SetNoFilter(''))
+}
 
   return (
     <Box className="todo-settings-parent" >
@@ -92,6 +183,7 @@ const TodoPageSettings = (props) => {
           <Text>Settings</Text>
         </AccordionSummary>
         <AccordionDetails className="background-style2">
+          <Box className="d-flex-one-gap">
           <SettingButton
             icon={layout_nav_show ? <HiOutlineEyeOff /> : <HiOutlineEye />}
             text={layout_nav_show ? "Hide Layout Nav" : "Show Layout Nav"}
@@ -104,6 +196,33 @@ const TodoPageSettings = (props) => {
               }
             }}
           />
+
+          <SettingButton
+            icon={<HiOutlineFilter />}
+            text={!FilterName ?  `Filter : no filter` : `Filter : ${FilterName}`}
+            active={false}
+            aria-describedby ={idFilterBoxIconsPopup}
+            onClick={handleOpenFilterBoxIconsPopup}
+          />
+
+            {
+              FilterName && (
+                <SettingButton
+                icon={<LuFilterX />}
+                text={"Set no filter"}
+                active={false}
+                
+                onClick={handleSetNoFilter}
+              />
+              )
+            }
+       
+
+
+
+
+
+          </Box>
         </AccordionDetails>
       </Accordion>
 
@@ -141,7 +260,7 @@ const TodoPageSettings = (props) => {
               },
 
               (e) => {
-                handleOpenTodoViewCountTooltip(e);
+                handleOpenTodoViewPopup(e);
               },
               () => {
                 handlePresentAndFilterTodoLayout("table", null);
@@ -157,7 +276,7 @@ const TodoPageSettings = (props) => {
           />
 
           <SelectMultiColumn
-            handleCloseTodoViewCountTooltip={handleCloseTodoViewCountTooltip}
+            handleCloseTodoViewCountPopup={handleCloseTodoViewCountPopup}
             open={open}
             id={id}
             anchorEl={anchorEl}
@@ -165,52 +284,7 @@ const TodoPageSettings = (props) => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        tabIndex={6}
-        expanded={accordionExpanded === "filter"}
-        onChange={(e, val) => {
-          if (val) {
-            setAccordionExpanded("filter");
-          } else {
-            setAccordionExpanded(false);
-          }
-        }}
-        sx={
-          accordionExpanded === "filter" && {
-            border: "2px solid var(--borders)",
-            borderRadios: 8,
-          }
-        }
-      >
-        <AccordionSummary
-          sx={{ background: "var(--background)" }}
-          expandIcon={<MdOutlineKeyboardArrowDown color="var(--borders)" />}
-        >
-          <Text>Filter</Text>
-        </AccordionSummary>
-        <AccordionDetails
-          className="background-style2"
-          style={{ textAlign: "center" }}
-        >
-          <ButtonGroupSetting
-            onClickList={[
-              () => {
-                handlePresentAndFilterTodoLayout("all", null);
-              },
-
-              () => {
-                handlePresentAndFilterTodoLayout("done", null);
-              },
-            ]}
-            textList={["All Todos", "Done Todos"]}
-            iconList={[
-              <CgList style={{ marginRight: "10px" }} />,
-              <MdDoneOutline style={{ marginRight: "10px" }} />,
-            ]}
-            activeItem={show[1] === "all" ? 0 : 1}
-          />
-        </AccordionDetails>
-      </Accordion>
+      
 
       {!ActiveCategory.id && (
         <Accordion
@@ -239,13 +313,13 @@ const TodoPageSettings = (props) => {
           <AccordionDetails className="background-style2">
             <Box className="d-flex-between-wrap">
               <PerPageComponent
-                meta={meta}
+                meta={FilterData}
                 handleChangeMeta={handleChangeMeta}
                 fullWidth={true}
               />
               <Box style={{ margin: "auto" }}>
                 <PaginationComponent
-                  meta={meta}
+                  meta={FilterData}
                   handleChangeMeta={handleChangeMeta}
                 />
               </Box>
@@ -253,6 +327,32 @@ const TodoPageSettings = (props) => {
           </AccordionDetails>
         </Accordion>
       )}
+      <BoxIconsPopup
+        down={true}
+        anchorEl={anchorElFilterBoxIconsPopup}
+        open={openFilterBoxIconsPopup}
+        id={idFilterBoxIconsPopup}
+        handleCloseTodoViewCountPopup={handleCloseFilterBoxIconsPopup}
+        iconList={[
+          <MdDoneOutline />,
+          <MdPriorityHigh />,
+          <PiSliders />,
+          <BiSearch />,
+        ]}
+        titleList={["Is Done", "Priority", "Pagination", "Search"]}
+        onClickList={[
+          handleIsDoneFilter,
+          handleShowPriorityBox,
+          handlePagination,
+          handleSearch,
+        ]}
+      />
+        <PriorityFilterPopup
+        open={openPriorityFilterPopup}
+        id={idPriorityFilterPopup}
+        anchorEl={priorityAnchorEl}
+        handleCloseTodoViewCountPopup={handleClosePriorityFilterPopup}
+      />
     </Box>
   );
 };

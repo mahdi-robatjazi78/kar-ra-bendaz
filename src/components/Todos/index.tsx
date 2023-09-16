@@ -1,66 +1,66 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import TodoPageFooter from "./todoListFooter";
 import TodoList from "./todoList";
-import {Box} from "@mui/material";
+import { Box } from "@mui/material";
 import TableListTodo from "./tableListTodo";
 import SettingBar from "./settingBar";
 import Toast from "@utils/toast";
 import EmptyListAnimation from "@utils/emptyList/emptyListAnimation";
 import TodoPageDrawer from "./drawer";
 import ShowModalNewTodo from "./TodoModals/newTodo";
-import {useHotkeys} from "react-hotkeys-hook";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
+import { useHotkeys } from "react-hotkeys-hook";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import Sidebar from "../sidebar";
 import useWindowSize from "@/hooks/useWindowSize";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AddMouseSelectedItems,
   clearMouseSelectedItems,
   CloseSidebar,
- 
   handleChangeMetaItem,
   OpenSidebar,
   SearchModeActive,
   SearchModeDeActive,
   SetActiveWs,
+  SetNewFilter,
 } from "@/redux/features/todoPageConfigSlice";
-import {useNavigate} from "react-router-dom";
-import {useLazyGetCategoryIndexQuery} from "@/redux/api/categories";
+import { useNavigate } from "react-router-dom";
+import { useLazyGetCategoryIndexQuery } from "@/redux/api/categories";
 import {
   useChangeBodyMutation,
   useLazyGetTodoIndexQuery,
   useTodoAssignToCategoryMutation,
   useTodoDeleteMutation,
 } from "@/redux/api/todos";
-import {AppDispatch, RootState} from "@/redux/store";
-import {deactiveBlur} from "@/redux/features/settingSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
-import {deselectAllTodos, soundPlay} from "@/util/funcs";
-import {setThreeColAll} from "@/redux/features/todoLayoutSlice";
-import {useGetActiveWsQuery} from "@/redux/api/workspaces";
+import { deselectAllTodos, soundPlay } from "@/util/funcs";
+import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
+import { useGetActiveWsQuery } from "@/redux/api/workspaces";
 
 const Todos = () => {
-  const {todoPageLayout: show} = useSelector(
+  const { todoPageLayout: show } = useSelector(
     (state: RootState) => state.todoLayout
   );
 
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const {
-    active_ws: {id: ActiveWorkspaceID},
-    active_category: {id: ActiveCategoryID},
+    filter_by: { filter_name: filterName, filter_data: filterData },
+    active_ws: { id: ActiveWorkspaceID },
     drawer: {
-      item: {_id: DrawerTodoId},
+      item: { _id: DrawerTodoId },
     },
     sidebar_open: open,
     searchMode,
-    meta,
+    meta: Meta,
     layout_nav_show,
     mouse_selected_items,
   } = useSelector((state: RootState) => state.todoPageConfig);
-  const {blur, headerPosition, playSound} = useSelector(
+  const { blur, headerPosition, playSound } = useSelector(
     (state: RootState) => state.settings
   );
   const {
@@ -95,28 +95,38 @@ const Todos = () => {
   const [changeBodyRequest, setChangeBodyRequest] = useChangeBodyMutation();
   const [openBulkFunctionModal, setOpenBulkFunctionModal] =
     React.useState(false);
-  const UpdateOnlyTodos = (p = null, lmt = null, st = null) => {
+  const UpdateOnlyTodos = () => {
     setTodoList([]);
-
+    console.log("filter : ", filterName, filterData);
     triggerGetTodoIndex({
       wsID: ActiveWorkspaceID,
-      page: p ? p : meta?.page || 1,
-      perPage: lmt ? lmt : meta?.limit || 20,
-      searchText: st ? st : "",
+      filter_by: filterName,
+      ...(filterName === "category" && { category: filterData?.id }),
+      ...(filterName === "search" && { searchText: filterData?.text }),
+      ...(filterName === "priority" && { priority_level: filterData?.priority_level }),
+      ...(filterName === "pagination" && {
+        page: filterData.page,
+        perPage: filterData.limit,
+      }),
     })
       .unwrap()
       .then((resp) => {
         setTodoList(resp?.todos);
-        dispatch(
-          handleChangeMetaItem({
+        if (resp?.meta?.page && resp?.meta?.limit) {
+          const obj = {
             page: +resp?.meta?.page,
             limit: +resp?.meta?.limit,
             total_items: resp?.meta?.total_items,
             total_pages: resp?.meta?.total_pages,
-          })
-        );
+          };
+          dispatch(handleChangeMetaItem(obj));
+          dispatch(
+            SetNewFilter({ filter_name: "pagination", filter_data: obj })
+          );
+        }
       });
   };
+
   const UpdateOnlyCategories = () => {
     triggerGetCategoryIndex(ActiveWorkspaceID)
       .unwrap()
@@ -130,20 +140,33 @@ const Todos = () => {
   };
 
   useEffect(() => {
-    UpdateOnlyTodos(meta?.page, meta?.limit);
-  }, [meta.page, meta.limit]);
+    if (
+      filterName === "pagination" &&
+      filterData.page == Meta.page &&
+      filterData.limit == Meta.limit
+    ) {
+      return;
+    }
+
+    UpdateOnlyTodos();
+  }, [filterData]);
 
   const DeleteTodoOperation = () => {
-    todoDeleteRequest({id: DrawerTodoId, ws: ActiveWorkspaceID});
-    UpdateTodoAndCategories();
-    if (playSound) {
-      soundPlay("sound1.wav");
-    }
-    dispatch(deactiveBlur());
+    todoDeleteRequest({ id: DrawerTodoId, ws: ActiveWorkspaceID }).unwrap().then((resp)=>{
+      Toast(resp?.msg , true ,true , "🗑️")
+    
+      UpdateTodoAndCategories();
+      if (playSound) {
+        soundPlay("sound1.wav");
+      }
+      dispatch(deactiveBlur());
+    
+    });
+
   };
 
   const HandleTodoAssignToCategory = (categoId) => {
-    todoAssignRequest({todoId: DrawerTodoId, categoId})
+    todoAssignRequest({ todoId: DrawerTodoId, categoId }).unwrap()
       .then((resp) => {
         if (playSound) {
           soundPlay("sound6.wav");
@@ -151,14 +174,13 @@ const Todos = () => {
         Toast(resp.data.msg, true, true);
         UpdateTodoAndCategories();
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   const HandleTodoChangeBody = (todoId: string, todoBody: string) => {
-    changeBodyRequest({todoId, todoBody})
+    changeBodyRequest({ todoId, todoBody }).unwrap()
       .then((resp) => {
-        Toast(resp?.data?.msg, true, true);
+        Toast(resp?.msg, true, true);
 
         if (playSound) {
           soundPlay("sound4.wav");
@@ -174,27 +196,33 @@ const Todos = () => {
       UpdateTodoAndCategories();
     } else {
       if (iSuccessGetActiveWsQuery && DataGetActiveWsQuery.activeWorkspace.id) {
-        const {id, title} = DataGetActiveWsQuery.activeWorkspace;
+        const { id, title } = DataGetActiveWsQuery.activeWorkspace;
 
-        dispatch(SetActiveWs({id, title}));
-      }else{
-        Toast("Please first active one workspace then go to todo page" , false , true , "⛔")
+        dispatch(SetActiveWs({ id, title }));
+      } else {
+        Toast(
+          "Please first active one workspace then go to todo page",
+          false,
+          true,
+          "⛔"
+        );
         navigate("/");
       }
     }
   }, [ActiveWorkspaceID, iSuccessGetActiveWsQuery]);
 
- 
-
-  const handleChangeMeta = (page, perPage) => {
-    dispatch(handleChangeMetaItem({page: page, limit: perPage}));
+  const handleChangeMeta = (page: number, perPage: number) => { 
+    const obj = { ...Meta, page: page, limit: perPage };
+    // dispatch(handleChangeMetaItem(obj));
+    dispatch(SetNewFilter({ filter_name: "pagination", filter_data: obj }));
   };
 
   useHotkeys("alt+n", () => setShowModalAddTodo(true));
   useHotkeys("alt+c", () =>
-    setShowAddCategoryModal({show: true, state: "add", prevText: ""})
+    setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
   );
   useHotkeys("ctrl+shift+f", () => {
+    dispatch(SetNewFilter({ filter_name: "search" }));
     dispatch(SearchModeActive());
   });
 
@@ -229,19 +257,18 @@ const Todos = () => {
     deselectAllTodos();
   };
 
-
-  useHotkeys("ctrl+a", () => {
-    dispatch(AddMouseSelectedItems(
-      {
+  useHotkeys("ctrl+a", (e) => {
+    e.preventDefault()
+    dispatch(
+      AddMouseSelectedItems({
         count: todoList.length,
         entity: "todo",
-        items: todoList.map(item => {
-          return {boxTodoId: item._id, innerTodoText: item.body}
-        })
-      }
-    ))
+        items: todoList.map((item) => {
+          return { boxTodoId: item._id, innerTodoText: item.body };
+        }),
+      })
+    );
   });
-
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -252,17 +279,17 @@ const Todos = () => {
               ? "parent-ghost-sidebar"
               : "parent-normal-sidebar"
           }`}
-          style={{...(blur.sidebar && {filter: `blur(${blur.size}px)`})}}
+          style={{ ...(blur.sidebar && { filter: `blur(${blur.size}px)` }) }}
         >
           {open && (
             <Sidebar
               categoryList={categoList}
-              totalTodoItems={meta?.total_items}
+              totalTodoItems={Meta?.total_items}
             />
           )}
 
           {layout_nav_show ? (
-            <SettingBar setShowAddCategoryModal={setShowAddCategoryModal}/>
+            <SettingBar setShowAddCategoryModal={setShowAddCategoryModal} />
           ) : null}
         </Box>
         {(sizeName === "mobile" || sizeName === "tablet") &&
@@ -278,45 +305,38 @@ const Todos = () => {
             style={
               headerPosition === "top" || headerPosition === "bottom"
                 ? {
-                  justifyContent: "space-between",
-                  height: window.innerHeight - 70,
-                }
+                    justifyContent: "space-between",
+                    height: window.innerHeight - 70,
+                  }
                 : headerPosition === "left" || headerPosition === "right"
-                  ? {
+                ? {
                     justifyContent: "space-between",
                     height: window.innerHeight,
                   }
-                  : {
+                : {
                     justifyContent: "space-between",
                     height: window.innerHeight,
                   }
             }
           >
             <Box className="todo-list">
-              {!todoList?.length && !searchMode ? (
+              {!todoList?.length ? (
                 <Box>
-                  <EmptyListAnimation text="Empty List 😐"/>
+                  <EmptyListAnimation text="Empty List 😐" />
                 </Box>
               ) : show[0] === "table" ? (
-                <TableListTodo todos={todoList}/>
+                <TableListTodo todos={todoList} />
               ) : (
                 <TodoList
-                  todoList={
-                    !ActiveCategoryID
-                      ? todoList
-                      : todoList.filter(
-                        (item) => item.categoId === ActiveCategoryID
-                      )
-                  }
+                  todoList={todoList}
                   UpdateTodoAndCategories={UpdateTodoAndCategories}
                 />
               )}
             </Box>
             <TodoPageFooter
               setShowModalAddTodo={setShowModalAddTodo}
-              meta={meta}
+              meta={Meta}
               handleChangeMeta={handleChangeMeta}
-              ActiveCategoryID={ActiveCategoryID}
               emptyTodoList={emptyTodoList}
               UpdateOnlyTodos={UpdateOnlyTodos}
               ActiveWorkspaceID={ActiveWorkspaceID}

@@ -12,6 +12,7 @@ import {
 import { store } from "@/redux/store";
 import Toast from "./toast";
 import { clearMouseSelectedItems } from "@/redux/features/todoPageConfigSlice";
+import { franc } from "franc";
 export const truncateText = (text: string, size: number) => {
   return text.length > size ? text.slice(0, size - 1) + "…" : text;
 };
@@ -116,3 +117,15 @@ export const pairColors = (c1, c2, darkmode) => {
     return c2;
   }
 };
+
+
+export const removeHTMLTags=(input)=> {
+  return input.replace(/<[^>]*>/g, '');
+}
+export const checkPersian = (txt:string)=>{
+  return franc(txt) === "prs" || franc(txt) === "pes" || franc(txt) === "urd" ||  franc(txt) === "arb"
+}
+export const handleCheckPersianAndRemoveHtmlTags = (txt:string)=>{
+  if(!txt)return false;
+  return checkPersian(removeHTMLTags(txt))
+}

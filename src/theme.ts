@@ -8,7 +8,7 @@ const themes = {
     secondSidebar: "rgb(38, 18, 49)",
     text1: "rgb(49, 62, 69)",
     text2: "rgb(166, 166, 249)",
-    text3: "rgb(106 56 227)",
+    text3: "rgb(38, 18, 49)",
     header: "rgb(38, 18, 49)",
     hoverSuccess: "rgb(0, 152, 0)",
     disabled:"rgb(165, 165, 165)"

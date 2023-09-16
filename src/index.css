@@ -5,7 +5,7 @@ body{
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: Changa, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
@@ -46,4 +46,24 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
 
 li{
   color: var(--text1);
+}
+.text-fa-only{
+  font-family:Kalameh;
+  font-weight: 400;
+  font-size:1.1rem;
+}
+.text-fa{
+  font-family:'Kalameh' Space Grotesk;
+  font-size:1rem;
+}
+.text-fa-2{
+  font-family:'Kalameh' Changa;
+  font-size:1rem;
+}
+.todo-box-text-fa{
+  font-family:'Kalameh' Space Grotesk;
+  text-align:right;
+  font-size:1.1rem !important;
+  word-spacing:1px;
+  font-weight:600
 }

@@ -11,7 +11,8 @@ export interface IActiveCategory {
 }
 
 export interface ITodoDrawer {
-  open: Boolean;
+  
+  open: boolean;
   state: string;
   anchor: string;
   item: {
@@ -25,32 +26,43 @@ export interface ITodoDrawer {
   };
 }
 export interface IMeta {
-  page: Number | null;
-  limit: Number | null;
-  total_items: Number | null;
-  total_pages: Number | null;
+  page: number ;
+  limit: number ;
+  total_items: number ;
+  total_pages: number ;
 }
 export interface IMouseSelected {
-  count: Number;
-  entity: String; // todo , category
+  count: number;
+  entity: string; // todo , category
   items: { boxTodoId: String; innerTodoText: String }[];
 }
 
+
+export interface IFilterBy {
+  filter_name : string,
+  filter_data :  any
+}
+
 export interface ITodoPage {
+  filter_by:IFilterBy,
   active_ws: IActiveWs;
   active_category: IActiveWs;
   drawer: ITodoDrawer;
   
-  searchMode: Boolean;
-  searchText: String;
-  sidebar_open: Boolean;
+  searchMode: boolean;
+  searchText: string;
+  sidebar_open: boolean;
   meta: IMeta;
-  layout_nav_show: Boolean;
+  layout_nav_show: boolean;
   mouse_selected_items: IMouseSelected;
-  layout: Array<String | Number | null>;
+  layout: Array<string | number | null>;
 }
 
 const initialState: ITodoPage = {
+  filter_by:{
+    filter_name : '',
+    filter_data : {}
+  },
   active_ws: {
     id: null,
     title: null,
@@ -75,7 +87,7 @@ const initialState: ITodoPage = {
   },
   meta: {
     page: 1,
-    limit: 15,
+    limit: 50,
     total_items: null,
     total_pages: null,
   }, 
@@ -95,6 +107,18 @@ export const todoPageConfigSlice = createSlice({
   name: "todo-page-slice",
   initialState,
   reducers: {
+
+    SetNoFilter:(state,action)=>{
+      state.filter_by = {filter_name : '' , filter_data:{}}
+    },
+
+    SetNewFilter:(state,action)=>{
+      state.filter_by = {
+        filter_name : action.payload.filter_name,
+        filter_data : action.payload.filter_data ? action.payload.filter_data : {}
+      }
+    },
+
     SetActiveWs: (state, action) => {
       state.active_ws = {
         id: action.payload.id,
@@ -177,6 +201,7 @@ export const todoPageConfigSlice = createSlice({
       }
     },
     handleChangeMetaItem: (state, action) => {
+      console.log(action.payload);
       state.meta = {
         page: action?.payload?.page ,
         limit: action?.payload?.limit,
@@ -239,7 +264,7 @@ export const {
   UnActiveWs,
   SetActiveCategory,
   UnActiveCategory,
-  NoActiveWorkspace,
+  // NoActiveWorkspace,
  
   DrawerOpen,
   ChangePriorityDrawer,
@@ -259,5 +284,7 @@ export const {
   clearMouseSelectedItems,
   removeMouseSelectedItemWithId,
   todosLayoutChange,
+  SetNoFilter,
+  SetNewFilter
 } = todoPageConfigSlice.actions;
 export default todoPageConfigSlice.reducer;
