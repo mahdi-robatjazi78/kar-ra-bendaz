@@ -14,14 +14,18 @@ const CustomeStyledModalBox = styled(Box)`
   border: 2px solid var(--borders);
   border-radius: 8px;
   outline: none !important;
-  width: min(60rem, 92%);
-  height: min(550px);
+   width:${(props:any)=> props.dimentions[0]};
+   height:${(props:any)=> props.dimentions[1]};
   @media only screen and (max-width: 450px) and (min-height : 750px) {
     height: min(700px);
   }
 `;
 
 const Styled_Modal = (props: any) => {
+
+
+  const dimentions = props.dimentions ? props.dimentions : ["min(60rem , 94%)","min(550px)"] // [width , height]
+
   return (
     <CustomeStyledModal
       {...props}
@@ -33,7 +37,7 @@ const Styled_Modal = (props: any) => {
       }}
     >
       <Fade in={props.open}>
-        <CustomeStyledModalBox dark={props.dark}>
+        <CustomeStyledModalBox dimentions={dimentions} dark={props.dark}>
           {props.children}
         </CustomeStyledModalBox>
       </Fade>

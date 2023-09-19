@@ -27,6 +27,8 @@ const SelectMultiColumn = (props) => {
   };
 
   useEffect(() => {
+
+
     if (sizeName === "mobile") {
       handleCloseTodoViewCountPopup();
     } else {
@@ -71,7 +73,7 @@ const SelectMultiColumn = (props) => {
       }
       setListTodoViewNumbers(result);
     }
-  }, [sizeName]);
+  }, [sizeName , show]);
 
   return (
     <Popover
@@ -88,6 +90,12 @@ const SelectMultiColumn = (props) => {
         vertical: "center",
         horizontal: "center",
       }}
+      sx={{
+        "& .MuiPaper-root" : {
+          transform: `translateX(15px) !important`,
+
+        }}
+      }
     >
       <Box className="selected-list-todo-view-column-parent">
         {listTodoViewNumbers.map((item) => (

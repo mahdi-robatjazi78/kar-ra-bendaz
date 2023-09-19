@@ -11,7 +11,7 @@ import { setBlurPage } from "@/redux/features/settingSlice";
 import { DrawerOpen } from "@/redux/features/todoPageConfigSlice";
 import useDebounce from "@hooks/useDebounce";
 import { handleCheckPersianAndRemoveHtmlTags, soundPlay } from "@/util/funcs";
-
+import './ckeditor-styles.css'
 interface DropResult {
   name: string;
   id: string;

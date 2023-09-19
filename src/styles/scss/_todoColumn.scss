@@ -68,10 +68,10 @@ $CARD-BOX-BACKGROUND-COLOR: rgb(55, 66, 109);
       font-size: 1.3rem;
       color: var(--background);
       margin: 0.5rem;
-      + path {
-        stroke-width: 1;
+      path {
+        // stroke-width: 1;
         stroke: var(--background);
-        fill: var(--text1);
+        // fill: var(--text1);
       }
       circle {
         stroke-width: 1;

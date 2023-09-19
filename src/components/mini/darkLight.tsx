@@ -5,7 +5,7 @@ import { BsFillMoonStarsFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { TbSunFilled } from "react-icons/tb";
-import {pairColors} from "@/util/funcs";
+import { pairColors } from "@/util/funcs";
 
 const DarkLight = () => {
   const { theme: OsTheme } = useSelector((state: RootState) => state.settings);
@@ -34,33 +34,42 @@ const DarkLight = () => {
   }, [OsTheme]);
 
   return (
-    <Box style={{ cursor: !OsTheme.listen ? "pointer" : "no-drop"}}>
-      <Box
-        onClick={handleChangeTheme}
-      >
+    <Box>
+      <Box onClick={handleChangeTheme}>
         {isDarkMode ? (
-        <Tooltip arrow  title="Set theme light">
-          <span>
-          <TbSunFilled
-            viewBox="0 0 25 25"
-            className="d-flex-center"
-            style={{
-              animation: "App-logo-spin infinite 20s linear",
-              fontSize: "4.3rem",
-              color:pairColors("var(--header)", "var(--text2)", isDarkMode),
-
-            }}
-          />
-          </span>
+          <Tooltip arrow title="Set theme light">
+            <span  >
+              <TbSunFilled
+                viewBox="0 0 25 25"
+                className="d-flex-center"
+                style={{
+                  cursor: !OsTheme.listen ? "pointer" : "no-drop",
+                  animation: "App-logo-spin infinite 20s linear",
+                  fontSize: "4.3rem",
+                  color: pairColors(
+                    "var(--header)",
+                    "var(--text2)",
+                    isDarkMode
+                  ),
+                }}
+              />
+            </span>
           </Tooltip>
         ) : (
-          <Tooltip arrow  title="Set theme dark">
-          <span>
-          <BsFillMoonStarsFill
-
-            style={{color:pairColors("var(--header)", "var(--text2)", isDarkMode) , fontSize:"3rem"}}
-          />
-             </span>
+          <Tooltip arrow title="Set theme dark">
+            <span>
+              <BsFillMoonStarsFill
+                style={{
+                  cursor: !OsTheme.listen ? "pointer" : "no-drop",
+                  color: pairColors(
+                    "var(--header)",
+                    "var(--text2)",
+                    isDarkMode
+                  ),
+                  fontSize: "3rem",
+                }}
+              />
+            </span>
           </Tooltip>
         )}
       </Box>

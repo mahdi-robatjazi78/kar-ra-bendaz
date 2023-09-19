@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 
 const StyledButton = styled(Button)`
   align-items: center;
-  background ${(props: any) =>
+  background: ${(props: any) =>
     props.transparent ? "transparent !important" : "transparent !important "};
   border-radius: 0.25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;

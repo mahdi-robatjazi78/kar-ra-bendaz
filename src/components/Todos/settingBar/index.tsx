@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Tooltip } from "@mui/material";
+import { Badge, Box, Tooltip } from "@mui/material";
 import { CgList } from "react-icons/cg";
 import { MdDoneOutline, MdPriorityHigh } from "react-icons/md";
 import { FiColumns } from "react-icons/fi";
@@ -26,6 +26,7 @@ import {
   setBlurPage,
 } from "@/redux/features/settingSlice";
 import PriorityFilterPopup from "@/components/mini/popop/priorityFitlerPopup";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 const SettingBar = (props: any) => {
   const { headerPosition } = useSelector((state: RootState) => state.settings);
@@ -93,11 +94,7 @@ const SettingBar = (props: any) => {
             }
       }
     >
-      <Box
-       
-       className={` ${hegith < 205 ? "d-none"  :"setting-bar-section"}`}
-       
-       >
+      <Box className={` ${hegith < 205 ? "d-none" : "setting-bar-section"}`}>
         <Tooltip arrow placement="right" title="New Category">
           <Box
             className="unselected-setting"
@@ -265,7 +262,41 @@ const SettingBar = (props: any) => {
               : "filter-selected-setting"
           }
         >
-          <HiOutlineFilter className="filter-icon-styles" />
+          <Badge
+            invisible={!filterName}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            badgeContent={
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(SetNoFilter(""));
+                }}
+                style={{ transform: "translateY(2px)" }}
+              >
+                <IoCloseCircleOutline
+                 
+                />
+              </span>
+            }
+            sx={{
+              "& .MuiBadge-badge": {
+                background: "var(--header)",
+                color: "var(--text2)",
+                fontSize: "1.3rem",
+                height: 22,
+                width: 22,
+                border: "1px solid gray",
+                borderRadius: "100%",
+                transform: "translate(20px , -10px)",
+              },
+            
+            }}
+          >
+            <HiOutlineFilter className="filter-icon-styles" />
+          </Badge>
         </motion.div>
       </Tooltip>
 

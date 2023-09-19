@@ -26,14 +26,12 @@ import { GrConfigure, GrMultiple } from "react-icons/gr";
 import FooterButton from "../mini/footerButton";
 import BoxIconsPopup from "../mini/popop/boxIconsPopup";
 import { RiTodoLine } from "react-icons/ri";
-import {
-  MdDoneOutline,
-  MdPriorityHigh,
-} from "react-icons/md";
+import { MdDoneOutline, MdPriorityHigh } from "react-icons/md";
 import { BsFolderPlus } from "react-icons/bs";
 import { PiSliders } from "react-icons/pi";
 import { BiSearch } from "react-icons/bi";
 import PriorityFilterPopup from "../mini/popop/priorityFitlerPopup";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 const TodoPageFooter = (props) => {
   const {
@@ -81,7 +79,7 @@ const TodoPageFooter = (props) => {
     dispatch(EmptySearchText());
     setOpenSidebar();
     UpdateOnlyTodos();
-    dispatch(SetNoFilter(""));    
+    dispatch(SetNoFilter(""));
     dispatch(SearchModeDeActive());
   };
 
@@ -149,17 +147,14 @@ const TodoPageFooter = (props) => {
 
   const handleClosePriorityFilterPopup = () => {
     setPriorityAnchorEl(null);
-    handleCloseFilterBoxIconsPopup()
+    handleCloseFilterBoxIconsPopup();
   };
 
   const handleOpenPriorityFitlerPopup = (event) => {
     setPriorityAnchorEl(event.currentTarget);
   };
 
-
-
   // some functions
-
 
   const AddNewTodoFunction = () => {
     handleCloseTodoViewCountPopup();
@@ -209,48 +204,72 @@ const TodoPageFooter = (props) => {
       style={{ justifyContent: searchMode ? "center" : "space-between" }}
     >
       {searchMode ? (
-        <StyledTextFieldWhite
-          type="text"
-          variant="outlined"
-          label="Search in todos"
-          margin="normal"
-          size="small"
-          lighter={false}
-          className="search-in-todos-box"
-          autoFocus
-          value={searchText}
-          onKeyDown={(e) => {
-            e.stopPropagation();
-            if (e.keyCode === 27) {
-              // escape key down
-              handleBackFromSearchState();
-            }
-          }}
-          onChange={(e) => {
-            let val = e.target.value;
-            if (val) {
-              dispatch(ChangeSearchText({ text: val }));
-            } else {
-              dispatch(ChangeSearchText({ text: "" }));
-            }
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Tooltip title="Close (Esc)">
-                  <IconButton
-                    onClick={() => {
-                     
-                      handleBackFromSearchState();
+        <>
+          <StyledTextFieldWhite
+            type="text"
+            variant="outlined"
+            label="Search in todos"
+            margin="normal"
+            size="small"
+            lighter={false}
+            className="search-in-todos-box"
+            autoFocus
+            value={searchText}
+            onKeyDown={(e) => {
+              e.stopPropagation();
+              if (e.keyCode === 27) {
+                // escape key down
+                handleBackFromSearchState();
+              }
+            }}
+            onChange={(e) => {
+              let val = e.target.value;
+              if (val) {
+                dispatch(ChangeSearchText({ text: val }));
+              } else {
+                dispatch(ChangeSearchText({ text: "" }));
+              }
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Close (Esc)">
+                    <IconButton
+                      onClick={() => {
+                        handleBackFromSearchState();
+                      }}
+                    >
+                      <VscChromeClose color="var(--borders)" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {+mouse_selected_items.count > 0 && (
+            <Box style={{ marginTop: ".4rem" }}>
+              <FooterButton
+                title={`You have selected ${mouse_selected_items?.count} ${mouse_selected_items?.entity} items`}
+                icon={
+                  <Badge
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
                     }}
+                    badgeContent={+mouse_selected_items.count}
+                    color="success"
                   >
-                    <VscChromeClose color="var(--borders)" />
-                  </IconButton>
-                </Tooltip>
-              </InputAdornment>
-            ),
-          }}
-        />
+                    <GrMultiple />
+                  </Badge>
+                }
+                onClick={() => {
+                  setOpenBulkFunctionModal(true);
+                }}
+              />
+            </Box>
+          )}
+        </>
       ) : (
         <>
           {sizeName === "mobile" || sizeName === "tablet" ? (
@@ -282,7 +301,7 @@ const TodoPageFooter = (props) => {
                   <Badge
                     anchorOrigin={{
                       vertical: "top",
-                      horizontal: "left",
+                      horizontal: "right",
                     }}
                     badgeContent={+mouse_selected_items.count}
                     color="success"
@@ -299,7 +318,46 @@ const TodoPageFooter = (props) => {
             {(height < 625 || !layout_nav_show) && (
               <FooterButton
                 title="Filter"
-                icon={<HiOutlineFilter />}
+                icon={
+                  <Badge
+                    invisible={!FilterName}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    badgeContent={
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(SetNoFilter(""));
+                        }}
+                        style={{ transform: "translateY(2px)" }}
+                      >
+                        <Tooltip title="close">
+                        <Box
+                          sx={{
+                            "& svg": {
+                              background: "var(--sidebar)",
+                              borderRadius: "1rem",
+                              cursor: "pointer",
+                              fill: "red",
+                            },
+                            "& path:nth-child(1)":{
+                              fill:"red"
+                            }
+                          }}
+                        >
+                          
+                          <IoCloseCircleOutline />
+                        </Box>
+                        </Tooltip>
+
+                      </span>
+                    }
+                  >
+                    <HiOutlineFilter className="filter-icon-styles" />
+                  </Badge>
+                }
                 onClick={handleOpenFilterBoxIconsPopup}
               />
             )}
@@ -309,10 +367,7 @@ const TodoPageFooter = (props) => {
                 title="Pagination"
                 icon={<HiOutlineViewColumns />}
                 onClick={() => {
-                  dispatch(setBlurPage());
-                  dispatch(
-                    handleSettingModalOpen({ setting: "todo-pagination" })
-                  );
+                  handlePagination();
                 }}
               />
             ) : null}

@@ -22,20 +22,13 @@ export const todoLayoutSlice = createSlice({
     setThreeColAll: (state, action) => {
       state.todoPageLayout = [`3col`, `all`, action.payload];
     },
-    setThreeColDone: (state, action) => {
-      state.todoPageLayout = [`3col`, `done`, action.payload];
-    },
+ 
     setOneColAll: (state) => {
       state.todoPageLayout = [`1col`, `all`, null];
     },
-    setOneColDone: (state) => {
-      state.todoPageLayout = [`1col`, `done`, null];
-    },
+ 
     setTableAll: (state) => {
       state.todoPageLayout = [`table`, `all`, null];
-    },
-    setTableDone: (state) => {
-      state.todoPageLayout = [`table`, `done`, null];
     },
   },
 });
@@ -43,11 +36,8 @@ export const todoLayoutSlice = createSlice({
 export const {
   changeTodoFilterLayout,
   setThreeColAll,
-  setThreeColDone,
   setOneColAll,
-  setOneColDone,
   setTableAll,
-  setTableDone,
 } = todoLayoutSlice.actions;
 
 export default todoLayoutSlice.reducer;

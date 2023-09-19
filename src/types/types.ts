@@ -1,11 +1,8 @@
 export interface ITodoLayoutConfig {
   show: Array<String | Number | null>;
   setThreeColAll?: (number: number) => void;
-  setThreeColDone?: (number: number) => void;
   setOneColAll?: () => void;
-  setOneColDone?: () => void;
   setTableAll?: () => void;
-  setTableDone?: () => void;
   handlePresentAndFilterTodoLayout: (
     id: "1col" | "3col" | "table" | "all" | "done",
     n: null | Number

@@ -74,6 +74,72 @@ const ShortcutsList = (props) => {
           <code>ctrl</code> <code>a</code>
         </Text>
       </Box>
+
+
+
+      <hr/>
+
+
+      
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Single Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>1</code>
+        </Text>
+      </Box>
+
+
+     
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Two Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>2</code>
+        </Text>
+      </Box>
+
+
+ 
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Three Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>3</code>
+        </Text>
+      </Box>
+
+
+ 
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Four Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>4</code>
+        </Text>
+      </Box>
+
+
+ 
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Five Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>5</code>
+        </Text>
+      </Box>
+
+
+ 
+      <Box className="d-flex-between" sx={{m: 2, flexWrap: "nowrap"}}>
+        <Text>Set Six Column </Text>
+        <Text>
+          {" "}
+          <code>ctrl</code> <code>alt</code> <code>6</code>
+        </Text>
+      </Box>
+
+
     </Box>
   )
 }

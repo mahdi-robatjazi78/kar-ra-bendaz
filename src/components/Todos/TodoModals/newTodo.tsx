@@ -16,7 +16,7 @@ const ShowModalNewTodo = (props) => {
   const theme = useContext(ThemeContext);
   const {
     active_ws: { id: ActiveWorkspaceID },
-    active_category: { id: ActiveCategoryID, title: ActiveCategoryTitle },
+    filter_by: { filter_data : { id: ActiveCategoryID, title: ActiveCategoryTitle }},
   } = useSelector((state: RootState) => state.todoPageConfig);
   const { playSound } = useSelector((state: RootState) => state.settings);
 
@@ -35,9 +35,40 @@ const ShowModalNewTodo = (props) => {
         }
         Toast(resp.msg, true, true, "📝");
         UpdateTodoAndCategories();
+        dispatch(deactiveBlur());
+        setShowModalAddTodo(false);
       })
       .catch(() => {});
   };
+
+
+
+  const handleSubmitButton = (selectedCategoryElement , text:string)=>{
+    
+    if (text && text != undefined) {
+     
+      if (
+        !selectedCategoryElement ||
+        selectedCategoryElement.checked == false
+      ) {
+        SubmitNewTodo(text, false);
+      
+      } else if (
+        selectedCategoryElement &&
+        selectedCategoryElement.checked == true
+      ) {
+        SubmitNewTodo(text, true);
+        
+      }
+
+      
+    }else{
+      // click cancel button
+      setShowModalAddTodo(false);
+      dispatch(deactiveBlur());
+
+    }
+  }
 
   const ShowAddTaskModal = async () => {
     try {
@@ -63,38 +94,21 @@ const ShowModalNewTodo = (props) => {
           "aria-label": "Type your message here",
         },
         html: ActiveCategoryTitle
-          ? `<div><input type="checkbox" checked=true  id="Selected-Category-Id" /> <label>${categoryTitle}</label> </div>`
+          ? `<div><input type="checkbox" checked=true  id="Selected-Category-Id" /> <label class="f-f-s-g">${categoryTitle}</label> </div>`
           : null,
 
         inputValue: "",
         showCancelButton: true,
       });
 
-      if (text != undefined) {
-        const selectedCategoryElement: HTMLInputElement =
-          document.querySelector("#Selected-Category-Id");
-        if (
-          !selectedCategoryElement ||
-          selectedCategoryElement.checked == false
-        ) {
-          SubmitNewTodo(text, false);
-        } else if (
-          selectedCategoryElement &&
-          selectedCategoryElement.checked == true
-        ) {
-          SubmitNewTodo(text, true);
-        }
 
-        dispatch(deactiveBlur());
-        setShowModalAddTodo(false);
-      } else {
-        dispatch(deactiveBlur());
-        setShowModalAddTodo(false);
-      }
+      const selectedCategoryElement: HTMLInputElement =
+      document.querySelector("#Selected-Category-Id");
+      handleSubmitButton(selectedCategoryElement,text) 
+
+
     } catch (error) {
       console.log(error);
-      dispatch(deactiveBlur());
-      setShowModalAddTodo(false);
     }
   };
 
@@ -102,6 +116,9 @@ const ShowModalNewTodo = (props) => {
     ShowAddTaskModal();
   }, []);
 
+
+  
+   
   return <></>;
 };
 

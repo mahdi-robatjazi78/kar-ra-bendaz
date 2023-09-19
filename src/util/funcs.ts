@@ -3,11 +3,8 @@ import { setBlurPage } from "@/redux/features/settingSlice";
 import {
   changeTodoFilterLayout,
   setOneColAll,
-  setOneColDone,
   setTableAll,
-  setTableDone,
   setThreeColAll,
-  setThreeColDone,
 } from "@/redux/features/todoLayoutSlice";
 import { store } from "@/redux/store";
 import Toast from "./toast";
@@ -46,30 +43,18 @@ export const handlePresentAndFilterTodoLayout = (id: string, n = null) => {
       if (todoPageLayout[0] === "table") dispatch(setTableAll());
       break;
     }
-    case "done": {
-      dispatch(changeTodoFilterLayout("done"));
-
-      if (todoPageLayout[0] === "3col") dispatch(setThreeColDone(n));
-      if (todoPageLayout[0] === "1col") dispatch(setOneColDone());
-      if (todoPageLayout[0] === "table") dispatch(setTableDone());
-      break;
-    }
+   
     case "3col": {
-      todoPageLayout[1] === "all"
-        ? dispatch(setThreeColAll(n))
-        : dispatch(setThreeColDone(n));
+     
+        dispatch(setThreeColAll(n))
       break;
     }
     case "1col": {
-      todoPageLayout[1] === "all"
-        ? dispatch(setOneColAll())
-        : dispatch(setOneColDone());
+        dispatch(setOneColAll())
       break;
     }
     case "table": {
-      todoPageLayout[1] === "all"
-        ? dispatch(setTableAll())
-        : dispatch(setTableDone());
+        dispatch(setTableAll())
       break;
     }
     default:
@@ -123,7 +108,7 @@ export const removeHTMLTags=(input)=> {
   return input.replace(/<[^>]*>/g, '');
 }
 export const checkPersian = (txt:string)=>{
-  return franc(txt) === "prs" || franc(txt) === "pes" || franc(txt) === "urd" ||  franc(txt) === "arb"
+  return franc(txt) === "prs" || franc(txt) === "pes" || franc(txt) === "urd" ||  franc(txt) === "arb" || franc(txt) === "pbu"
 }
 export const handleCheckPersianAndRemoveHtmlTags = (txt:string)=>{
   if(!txt)return false;

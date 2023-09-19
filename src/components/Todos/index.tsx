@@ -37,8 +37,8 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { deactiveBlur } from "@/redux/features/settingSlice";
 import ShowModalNewCategory from "./TodoModals/newCategory";
 import BulkFunction from "./TodoModals/bulkFunction";
-import { deselectAllTodos, soundPlay } from "@/util/funcs";
-import { setThreeColAll } from "@/redux/features/todoLayoutSlice";
+import { deselectAllTodos, handlePresentAndFilterTodoLayout, soundPlay } from "@/util/funcs";
+import { setOneColAll, setThreeColAll } from "@/redux/features/todoLayoutSlice";
 import { useGetActiveWsQuery } from "@/redux/api/workspaces";
 
 const Todos = () => {
@@ -78,9 +78,8 @@ const Todos = () => {
     setTodoList([]);
   };
   const [categoList, setCategoList] = useState([]);
-  const dimentions = useWindowSize().size;
-  const sizeName = useWindowSize().sizeName;
-  const [widthBoard, setWidthBoard] = useState(0);
+  const [width,height] = useWindowSize().size;
+  const sizeName = useWindowSize().sizeName; 
   const [showModalAddTodo, setShowModalAddTodo] = useState(false);
 
   const [showAddCategoryModal, setShowAddCategoryModal] = useState({
@@ -123,6 +122,11 @@ const Todos = () => {
           dispatch(
             SetNewFilter({ filter_name: "pagination", filter_data: obj })
           );
+        }
+        else if(!filterName){
+          const obj = {...Meta , total_items : resp?.todos?.length}
+          dispatch(handleChangeMetaItem(obj));
+          
         }
       });
   };
@@ -171,7 +175,7 @@ const Todos = () => {
         if (playSound) {
           soundPlay("sound6.wav");
         }
-        Toast(resp.data.msg, true, true);
+        Toast(resp.msg, true, true);
         UpdateTodoAndCategories();
       })
       .catch((error) => {});
@@ -217,7 +221,7 @@ const Todos = () => {
     dispatch(SetNewFilter({ filter_name: "pagination", filter_data: obj }));
   };
 
-  useHotkeys("alt+n", () => setShowModalAddTodo(true));
+  useHotkeys("alt+n", () =>{ setShowModalAddTodo(true)});
   useHotkeys("alt+c", () =>
     setShowAddCategoryModal({ show: true, state: "add", prevText: "" })
   );
@@ -227,6 +231,10 @@ const Todos = () => {
   });
 
   useEffect(() => {
+    if(width && width < 350 ){
+      dispatch(setOneColAll());
+      return
+    }
     if (sizeName === "mobile") {
       if (+show[2] > 2) {
         dispatch(setThreeColAll(2));
@@ -251,6 +259,19 @@ const Todos = () => {
     }
   }, [sizeName]);
 
+
+  useEffect(()=>{
+    // set new settings when todo page shown
+
+    // check blur 
+
+    dispatch(deactiveBlur());
+    
+
+
+  },[])
+
+
   const handleCloseBulkFunctionModal = () => {
     setOpenBulkFunctionModal(false);
     dispatch(clearMouseSelectedItems());
@@ -269,6 +290,59 @@ const Todos = () => {
       })
     );
   });
+
+
+  useHotkeys("ctrl+alt+1", (e) => {
+    e.preventDefault()
+  handlePresentAndFilterTodoLayout("1col");
+
+  });
+
+
+  useHotkeys("ctrl+alt+2", (e) => {
+    e.preventDefault()
+  handlePresentAndFilterTodoLayout("3col" , 2);
+
+  });
+
+
+
+  useHotkeys("ctrl+alt+3", (e) => {
+    e.preventDefault()
+
+    if(sizeName !== "mobile"){
+      handlePresentAndFilterTodoLayout("3col", 3);
+    } 
+
+  });
+
+
+
+  useHotkeys("ctrl+alt+4", (e) => {
+    e.preventDefault() 
+  if(sizeName !== "tablet" && sizeName !== "mobile"){
+    handlePresentAndFilterTodoLayout("3col", 4);
+  }
+  });
+
+
+  useHotkeys("ctrl+alt+5", (e) => {
+    e.preventDefault()
+    if(sizeName !== "tablet" && sizeName !== "mobile"){
+      handlePresentAndFilterTodoLayout("3col", 5);
+    }
+
+  });
+
+  useHotkeys("ctrl+alt+6", (e) => {
+    
+    e.preventDefault()
+    if(sizeName !== "laptop" &&  sizeName !== "tablet" && sizeName !== "mobile"){
+      handlePresentAndFilterTodoLayout("3col", 6);
+    }
+
+  });
+
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -366,12 +440,12 @@ const Todos = () => {
         UpdateOnlyTodos={UpdateOnlyTodos}
         UpdateOnlyCategories={UpdateOnlyCategories}
       />
-      {showModalAddTodo ? (
+      {showModalAddTodo && (
         <ShowModalNewTodo
           setShowModalAddTodo={setShowModalAddTodo}
           UpdateTodoAndCategories={UpdateTodoAndCategories}
         />
-      ) : null}
+      )}
 
       {showAddCategoryModal.show && (
         <ShowModalNewCategory

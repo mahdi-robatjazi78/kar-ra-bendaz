@@ -205,8 +205,8 @@ export const TodoRtkService = createApi({
     }),
 
     todosAssignBulk: builder.mutation({
-      query: ({ todoIdList, categoId }) => ({
-        url: `assign-many`,
+      query: ({ todoIdList, categoId, ws}) => ({
+        url: `assign-many?ws=${ws}`,
         method: "PUT",
         body: {
           todoList: todoIdList,

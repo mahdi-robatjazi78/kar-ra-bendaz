@@ -98,11 +98,11 @@ const BulkFunction = (props) => {
     todoSetDoneRequest({
       ids: data.items.map((item) => item.boxTodoId),
       ws: ActiveWorkspaceID,
-    }).then((resp) => {
+    }).unwrap().then((resp) => {
       if (playSound) {
         soundPlay("sound5.wav");
       }
-      Toast(resp.data.msg, true, true);
+      Toast(resp.msg, true, true);
     });
     UpdateOnlyTodos();
     onClose();
@@ -113,11 +113,15 @@ const BulkFunction = (props) => {
       todoAssignBulkRequest({
         todoIdList: data.items.map((item) => item.boxTodoId),
         categoId: selectedCategoryForAssign?.uuid,
-      }).then((resp) => {
-        Toast(resp.data.msg, true, true);
+        ws : ActiveWorkspaceID,
+      }).unwrap().then((resp) => {
+        Toast(resp.msg, true, true);
+        UpdateTodoAndCategories();
+        if (playSound) {
+          soundPlay("sound6.wav");
+        }
+        onClose();
       });
-      UpdateTodoAndCategories();
-      onClose();
     } else {
       Toast("Something went wrong please try again", false, true);
       onClose();
@@ -134,9 +138,9 @@ const BulkFunction = (props) => {
     updatePriorityBulkRequest({
       list: data.items.map((item) => item.boxTodoId),
       priority: n,
-    })
+    }).unwrap()
       .then((response) => {
-        Toast(response.data.msg, true, true);
+        Toast(response.msg, true, true);
         setStateFunction(null);
         if (playSound) {
           soundPlay("sound5.wav");
@@ -156,6 +160,7 @@ const BulkFunction = (props) => {
       aria-describedby="bulk-function-modal-for-todos functionallity"
       open={open}
       onClose={onClose}
+      dimentions={["min(43rem , 94%)","min(550px)"]}
     >
       <Box className="bulk-function-container">
         <Box
