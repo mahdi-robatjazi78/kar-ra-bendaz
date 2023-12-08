@@ -6,8 +6,6 @@ import { BiLogInCircle } from "react-icons/bi";
 import { RiUserAddLine, RiLogoutCircleRLine } from "react-icons/ri";
 import { SiHomeassistant } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import Toast from "../util/toast";
@@ -23,6 +21,11 @@ import { useUserSignoutMutation } from "@/redux/api/user";
 import { UnActiveWs } from "@/redux/features/todoPageConfigSlice";
 import ThemeContext from "@/context/themeContext";
 import { Avatar } from "@mui/material";
+
+
+
+
+
 const Header = (props) => {
   const { handleOpenSettingModal } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -279,9 +282,10 @@ const Header = (props) => {
                 onClick={() => handleLogoutUser()}
               >
                 <Box className="d-flex-between">
-                  <Box>Logout</Box>
+                  <Box className="logout-text">Logout</Box>
                   <RiLogoutCircleRLine
-                    style={{ padding: ".2rem", fontSize: "1.5rem" }}
+                    className="logout-text"
+                    style={{ padding: ".2rem", fontSize: "1.5rem"  }}
                   />
                 </Box>
               </Box>

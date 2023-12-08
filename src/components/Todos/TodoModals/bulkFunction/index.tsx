@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef} from "react";
 import {
   Autocomplete,
   Box,
@@ -35,7 +35,7 @@ import {
 } from "react-icons/fc";
 import ThemeContext from "@/context/themeContext";
 import useWindowSize from "@/hooks/useWindowSize";
-
+import { GrClose } from "react-icons/gr";
 
 const CustomPaper = (props) => {
   return (
@@ -94,6 +94,9 @@ const BulkFunction = (props) => {
     onClose();
   };
 
+  const bulkFunctionOperationRef = useRef(null)
+
+
   const handleSetDoneAllSelectedTodoItems = () => {
     todoSetDoneRequest({
       ids: data.items.map((item) => item.boxTodoId),
@@ -134,6 +137,15 @@ const BulkFunction = (props) => {
     }
   }, [data?.count]);
 
+  
+  useEffect(() => {
+  
+    setTimeout(()=>{
+      bulkFunctionOperationRef?.current?.classList.add("bulkFunctionOperationAnimation")
+    } , 300)
+
+  }, [theme.isDarkMode]);
+
   const handleSetNewPriority = (n: Number) => {
     updatePriorityBulkRequest({
       list: data.items.map((item) => item.boxTodoId),
@@ -163,6 +175,11 @@ const BulkFunction = (props) => {
       dimentions={["min(43rem , 94%)","min(550px)"]}
     >
       <Box className="bulk-function-container">
+
+        {/* close icon */}
+        <IconButton className="closeIconBox" onClick={onClose}>
+          <GrClose  />
+        </IconButton>
         <Box
           sx={{
             backgroundColor: pairColors(
@@ -205,6 +222,7 @@ const BulkFunction = (props) => {
               theme.isDarkMode
             ),
           }}
+          ref={bulkFunctionOperationRef}
           className="bulk-function-parent-modal bulk-function-operation"
         >
           <Box
@@ -278,10 +296,10 @@ const BulkFunction = (props) => {
           className="footer"
         >
           {!stateFunction ? (
-            <Text variant="h6" onlyWhite={true}>
+            <Text>
               You have selected{" "}
               <StyledBadge
-                fontSize={"1.4rem"}
+                fontSize={"1.1rem"}
                 padding={"1rem .5rem"}
                 bordered={true}
                 style={{ margin: "1.2rem" }}
@@ -291,12 +309,12 @@ const BulkFunction = (props) => {
             </Text>
           ) : stateFunction === "multy-delete" ? (
             <Box className="d-flex-between-nowrap">
-              <Text variant="h6" onlyWhite={true}>
+              <Text>
                 Do you want remove {data?.count} {data?.entity} item ?
               </Text>
               <Box className="button-box">
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={() => setStateFunction(null)}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}
@@ -305,7 +323,7 @@ const BulkFunction = (props) => {
                 </StyledButton>
 
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={handleDeleteAllSelectedTodoItems}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}
@@ -316,12 +334,12 @@ const BulkFunction = (props) => {
             </Box>
           ) : stateFunction === "multy-done" ? (
             <Box className="d-flex-between-nowrap">
-              <Text variant="h6" onlyWhite={true}>
+              <Text>
                 Do you want done all {data?.count} {data?.entity} item ?
               </Text>
               <Box className="button-box">
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={() => setStateFunction(null)}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}
@@ -330,7 +348,7 @@ const BulkFunction = (props) => {
                 </StyledButton>
 
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={handleSetDoneAllSelectedTodoItems}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}
@@ -340,9 +358,9 @@ const BulkFunction = (props) => {
               </Box>
             </Box>
           ) : stateFunction === "multy-assign" ? (
-            <Box className="d-flex-between-nowrap">
+            <Box className="d-flex-between-nowrap" style={{margin:"1rem"}}>
               <Autocomplete
-                size={w > 600 ? "medium" : "small"}
+                size={"small"}
                 freeSolo
                 id="category-list-combo-box"
                 options={[{ title: "All", uuid: "other" }, ...categoList]}
@@ -366,7 +384,7 @@ const BulkFunction = (props) => {
               />
               <Box className="button-box">
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={() => setStateFunction(null)}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}
@@ -375,7 +393,7 @@ const BulkFunction = (props) => {
                 </StyledButton>
 
                 <StyledButton
-                  transparent={true}
+                  
                   onClick={handleAssignAllSelectedTodoItems}
                   className={"active-button"}
                   style={{ textTransform: "capitalize" }}

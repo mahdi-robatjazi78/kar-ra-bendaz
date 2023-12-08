@@ -227,7 +227,10 @@ const TodoPageFooter = (props) => {
               if (val) {
                 dispatch(ChangeSearchText({ text: val }));
               } else {
+                
                 dispatch(ChangeSearchText({ text: "" }));
+                emptyTodoList();
+
               }
             }}
             InputProps={{
@@ -334,24 +337,22 @@ const TodoPageFooter = (props) => {
                         style={{ transform: "translateY(2px)" }}
                       >
                         <Tooltip title="close">
-                        <Box
-                          sx={{
-                            "& svg": {
-                              background: "var(--sidebar)",
-                              borderRadius: "1rem",
-                              cursor: "pointer",
-                              fill: "red",
-                            },
-                            "& path:nth-child(1)":{
-                              fill:"red"
-                            }
-                          }}
-                        >
-                          
-                          <IoCloseCircleOutline />
-                        </Box>
+                          <Box
+                            sx={{
+                              "& svg": {
+                                background: "var(--sidebar)",
+                                borderRadius: "1rem",
+                                cursor: "pointer",
+                                fill: "red",
+                              },
+                              "& path:nth-child(1)": {
+                                fill: "red",
+                              },
+                            }}
+                          >
+                            <IoCloseCircleOutline />
+                          </Box>
                         </Tooltip>
-
                       </span>
                     }
                   >

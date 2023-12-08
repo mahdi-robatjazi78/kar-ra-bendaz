@@ -214,6 +214,7 @@ const Signup = () => {
     input.type = "file";
 
     input.onchange = (e) => {
+
       var file = e.target.files[0];
       if (file) {
         // handle file data keeping

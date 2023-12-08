@@ -31,6 +31,7 @@ const Styled_Menu_Item = (props) => {
           background: "var(--text3)",
           "& a": { color: "var(--background)" },
           "& .logout": { color: "var(--backgorund) !important" },
+          "& .logout .logout-text": { color: "var(--foreground) !important" },
         },
         width: "15rem",
         display: "block",

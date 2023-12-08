@@ -12,9 +12,6 @@ const UsernameStrenghtPopop = (props) => {
   const hasLowerCase = /[a-z]/.test(username);
   let hasAcceptableSeperators = /[-_.]/.test(username);
   let hasAnyNumber = /[0-9]/.test(username);
-
-
-
   let len = username?.length;
   
   const [w, h] = useWindowSize().size;

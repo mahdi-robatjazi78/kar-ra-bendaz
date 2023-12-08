@@ -56,22 +56,16 @@ export const UserRtkService = createApi({
 
     userSignup: builder.mutation({
       query: (payload) => {
-
-
-        console.log("payload"  , payload)
-
         return {
           url: "/signup",
           method: "POST",
-          body: payload,
-          
+          body: payload, 
         }
       } ,
       transformErrorResponse: (error) => {
         handleResponseError(error);
       },
     }),
-
 
     signupUploadAvatarImage: builder.mutation({
       query: ({ file, avatarUploaded , temp_token }) => {
@@ -91,13 +85,7 @@ export const UserRtkService = createApi({
         handleResponseError(error);
       },
     }),
-
-
-
-
-
- 
-
+    
     getProfileMeData: builder.query({
       query: () => "get-profile-me-data",
       transformErrorResponse: (error) => {
