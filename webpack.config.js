@@ -36,7 +36,7 @@ module.exports = (env)=>{
   },
   mode:process.env.NODE_ENV,
   plugins: [
-    // new Dotenv({path : `./${dotenvFilename}`}),
+    new Dotenv({systemvars: true}),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
