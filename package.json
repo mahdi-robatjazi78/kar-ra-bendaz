@@ -8,7 +8,7 @@
     "start": "npm run client",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "cross-env NODE_ENV=production serve dist",
+    "serve": "cross-env NODE_ENV=production serve build",
     "build": "cross-env NODE_ENV=production webpack --mode production"
   },
   "eslintConfig": {
