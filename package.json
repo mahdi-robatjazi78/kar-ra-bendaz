@@ -2,7 +2,7 @@
   "name": "kar-ra-bendaz",
   "version": "0.2.0",
   "private": false,
-  "main": "index.ts",
+  "main": "./src/index.tsx",
   "scripts": {
     "client": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
     "start": "npm run client",
